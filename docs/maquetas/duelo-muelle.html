@@ -1,0 +1,295 @@
+<title>Duelo en el muelle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@400;700&display=swap">
+<style>
+/* Página contenedora neutra; cada escena es 1280x720 escalada. Un solo tema oscuro, a propósito. */
+:root{
+  --page:#26231f; --ink:#ebe4d6; --muted:#a69d8d; --rule:#3d3832;
+  --f-ui:"Zen Kaku Gothic New", system-ui, sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--page);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 80px}
+.wrap{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:72px}
+header.top{display:flex;flex-direction:column;gap:10px;max-width:68ch}
+header.top h1{font-weight:900;font-size:clamp(26px,4vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+header.top p{margin:0;color:var(--muted)}
+section.m{display:flex;flex-direction:column;gap:14px}
+.m-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;border-top:1px solid var(--rule);padding-top:14px}
+.m-head .k{font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.m-head h2{margin:0;font-size:22px;font-weight:900}
+.m-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 32px;color:var(--muted);font-size:14px}
+.m-notes p{margin:0;min-width:0}
+.m-notes b{color:var(--ink)}
+.viewport{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;overflow:hidden;background:#000}
+.stage{position:absolute;top:0;left:0;width:1280px;height:720px;transform-origin:0 0;overflow:hidden}
+.hint{color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ============ 1 · DUELO SIMULADO (pixel) ============ */
+.D{background:#1a1428;font-family:"DotGothic16",monospace;color:#f6e6c8}
+.D canvas.map{position:absolute;left:0;top:0;width:820px;height:720px;image-rendering:pixelated}
+.D .side{position:absolute;left:820px;top:0;width:460px;height:720px;background:#1c1530;border-left:4px solid #e9c48a;box-sizing:border-box;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.D .vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.D .fighter{display:grid;grid-template-columns:44px 1fr;gap:4px 10px;align-items:start;font-size:13px;line-height:1.35;color:#cbbfe0}
+.D .fighter canvas{grid-row:span 4;width:44px;height:88px;image-rendering:pixelated}
+.D .fighter b{font-weight:400;font-size:18px;color:#ffcf7a;line-height:1.1}
+.D .fighter.foe b{color:#ff8f7a}
+.D .will{display:flex;gap:3px;align-items:center}
+.D .will i{width:12px;height:10px;background:#3a2f55}
+.D .will i.on{background:#ffcf7a}
+.D .will em{font-style:normal;font-size:11px;color:#ffcf7a;margin-left:4px}
+.D .lbl{font-size:12px;letter-spacing:.08em;color:#8e80ab;text-transform:uppercase}
+.D .known{font-size:13px;line-height:1.45;border:2px dashed #4b3f6a;padding:6px 10px;color:#cbbfe0}
+.D .known span{color:#9fe0a8}
+.D .log{display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.4;color:#b8a8d2;flex:1;min-height:0;overflow:hidden}
+.D .log p{margin:0;display:grid;grid-template-columns:22px 1fr;gap:6px}
+.D .log p i{font-style:normal;color:#6c5a86}
+.D .log p.hit{color:#ffb0a0}
+.D .log p.new{color:#9fe0a8}
+.D .log p.now{color:#fff}
+.D .ctrl{display:flex;flex-direction:column;gap:8px;border-top:2px solid #3a2f55;padding-top:10px}
+.D .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}
+.D .chip{border:2px solid #4b3f6a;padding:2px 8px;color:#b8a8d2}
+.D .chip.on{background:#e9c48a;border-color:#e9c48a;color:#1c1530}
+.D .pause{position:absolute;left:40px;top:420px;width:740px;background:#120d20;border:4px solid #ff8f7a;box-shadow:0 0 0 4px #120d20,0 0 0 8px #ff8f7a;padding:16px 20px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+.D .pause h3{margin:0 0 4px;font-weight:400;font-size:15px;color:#ff8f7a;letter-spacing:.12em}
+.D .pause p.s{margin:0 0 12px;font-size:19px;line-height:1.4}
+.D .pause .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.D .pause button{font:inherit;color:inherit;text-align:left;background:#1c1530;border:2px solid #4b3f6a;padding:8px 10px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.D .pause button:hover,.D .pause button:focus-visible{border-color:#ffcf7a;outline:none;background:#2a2045}
+.D .pause button b{font-weight:400;font-size:16px;color:#fff}
+.D .pause button span{font-size:12px;color:#9fe0a8}
+.D .pause button span.r{color:#ffb0a0}
+.D .pause .clock{position:absolute;right:18px;top:14px;font-size:13px;color:#ff8f7a}
+.D .tag{position:absolute;font-size:13px;background:#120d20;padding:2px 7px;border:2px solid currentColor}
+
+/* ============ 2 · REMATE (manga) ============ */
+.R{background:#fbfbf8;color:#111;font-family:"Zen Old Mincho",serif}
+.R .pn{position:absolute;border:4px solid #111;overflow:hidden;background:#fff}
+.R .p1{left:24px;top:24px;width:388px;height:300px}
+.R .p2{left:426px;top:24px;width:398px;height:300px}
+.R .p3{left:24px;top:338px;width:800px;height:358px}
+.R .speed{position:absolute;inset:0;background:repeating-linear-gradient(-12deg,#111 0 2px,transparent 2px 14px);-webkit-mask-image:linear-gradient(90deg,#000 0%,transparent 70%);mask-image:linear-gradient(90deg,#000 0%,transparent 70%)}
+.R .focus{position:absolute;inset:-60px;background:repeating-conic-gradient(from 0deg at 50% 45%,#111 0deg .8deg,transparent .8deg 5deg);-webkit-mask-image:radial-gradient(circle at 50% 45%,transparent 0 90px,#000 220px);mask-image:radial-gradient(circle at 50% 45%,transparent 0 90px,#000 220px)}
+.R .tone{position:absolute;inset:0;background-image:radial-gradient(circle,#111 1.15px,transparent 1.35px);background-size:6px 6px}
+.R svg{position:absolute;inset:0;width:100%;height:100%}
+.R .sfx{position:absolute;font-family:"Dela Gothic One",sans-serif;color:#fff;-webkit-text-stroke:2.5px #111;paint-order:stroke fill;line-height:1}
+.R .narr{position:absolute;background:#fff;border:2px solid #111;font-size:15px;line-height:1.5;padding:8px 12px}
+.R .bub{position:absolute;font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;font-size:17px;text-align:center;line-height:1.2}
+.R .side{position:absolute;left:846px;top:24px;width:410px;height:672px;display:flex;flex-direction:column;gap:12px}
+.R .q{font-family:"Dela Gothic One",sans-serif;font-size:30px;line-height:1;padding-bottom:10px;border-bottom:4px solid #111}
+.R .q small{display:block;font-family:"Zen Old Mincho",serif;font-size:15px;margin-top:8px}
+.R .stamp{border:3px solid #111;padding:8px 12px;display:flex;flex-direction:column;gap:2px;transform:rotate(-1.2deg);background:#fff;box-shadow:4px 4px 0 #111}
+.R .stamp .t{font-family:"Dela Gothic One",sans-serif;font-size:14px;letter-spacing:.1em}
+.R .stamp p{margin:0;font-size:15px;line-height:1.45}
+.R dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;line-height:1.4}
+.R dt{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;font-size:12px;letter-spacing:.08em;padding-top:2px}
+.R dd{margin:0}
+.R .opts{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.R .opts .h{font-family:"Dela Gothic One",sans-serif;font-size:20px}
+.R .opt{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:8px 10px;border:2px solid #111;background:#fff;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.R .opt:hover,.R .opt:focus-visible{background:#111;color:#fff;outline:none}
+.R .opt .n{width:26px;height:26px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-family:"Dela Gothic One",sans-serif;font-size:13px}
+.R .opt:hover .n,.R .opt:focus-visible .n{background:#fff;color:#111}
+.R .opt .t{font-size:15px;font-weight:700;line-height:1.3}
+.R .opt .c{display:block;font-family:"Zen Kaku Gothic New",sans-serif;font-size:12px;font-weight:700;opacity:.75;margin-top:2px}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Duelo en el muelle</h1>
+    <p>Día 14, 19:10. Ilo bajó al muelle a mirar la bandera de cerca y "Garra" Dorne lo vio. Primero la pelea simulada sobre el mapa, en el momento en que se frena para que decidas. Después, la página de manga del remate y lo que queda.</p>
+    <p class="hint">Pantallas estáticas para mirar. Se ven mejor en pantalla grande.</p>
+  </header>
+
+  <section class="m">
+    <div class="m-head"><span class="k">Vista B · pelea simulada</span><h2>La pausa: medio segundo para decidir</h2></div>
+    <div class="viewport"><div class="stage D">
+      <canvas class="map" id="dmap" width="205" height="180" aria-label="Muelle de Kalé visto desde arriba: Ilo contra el borde, Dorne cargando, piratas mirando desde su barco"></canvas>
+      <span class="tag" style="left:300px;top:372px;color:#ff8f7a">borde · agua</span>
+      <span class="tag" style="left:470px;top:248px;color:#9fe0a8">pierna derecha: apoya poco</span>
+
+      <div class="pause" role="dialog" aria-label="Momento de decisión">
+        <span class="clock">intercambio 7 · pausa</span>
+        <h3>¡MOMENTO!</h3>
+        <p class="s">Dorne baja el hombro y carga para tirarte del muelle. El agua está a un paso detrás tuyo.</p>
+        <div class="opts">
+          <button type="button" id="d1"><b>Agacharte y barrerle la pierna mala</b><span>usa: la cojera que observaste</span></button>
+          <button type="button" id="d2"><b>Agarrar el garfio y caer juntos al agua</b><span class="r">riesgo alto · ¿él sabe nadar?</span></button>
+          <button type="button" id="d3"><b>Gritarle: "¿Esa pierna te la dejó la Marina?"</b><span>provocar · Dorne es orgulloso</span></button>
+          <button type="button" id="d4"><b>Tirarte al agua y nadar hasta los pilotes</b><span class="r">huir · los piratas se reirán</span></button>
+        </div>
+      </div>
+
+      <div class="side">
+        <div class="vs">
+          <div class="fighter">
+            <canvas id="bodyIlo" width="11" height="22" aria-label="Heridas de Ilo"></canvas>
+            <b>ILO</b>
+            <span>Aguante: tambaleando</span>
+            <span class="will" aria-label="Voluntad 3 de 5"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><em>▲ te miran</em></span>
+            <span>Mazo de calafatear</span>
+          </div>
+          <div class="fighter foe">
+            <canvas id="bodyDorne" width="11" height="22" aria-label="Heridas de Dorne"></canvas>
+            <b>"GARRA" DORNE</b>
+            <span>Aguante: entero</span>
+            <span>Parece querer humillarte, no matarte</span>
+            <span>฿ 8.000.000</span>
+          </div>
+        </div>
+        <div class="known"><div class="lbl">Lo que sabés de él</div>
+          Pelea con el garfio en la izquierda · <span>apoya poco la pierna derecha (recién observado)</span> · ¿algo más? todavía no</div>
+        <div class="lbl">Lo que pasó</div>
+        <div class="log" aria-live="polite">
+          <p class="hit"><i>4</i><span>Dorne amaga con la derecha y te clava el garfio en el hombro izquierdo.</span></p>
+          <p><i>5</i><span>Retrocedés. Los tablones crujen: el borde está detrás tuyo.</span></p>
+          <p class="new"><i>5</i><span>Cuando gira, Dorne casi no apoya la pierna derecha.</span></p>
+          <p><i>6</i><span>Le das con el mazo en la mandíbula. Escupe sangre y se ríe.</span></p>
+          <p><i>6</i><span>Desde el barco golpean la baranda: "¡Al agua con él, capitán!"</span></p>
+          <p class="now"><i>7</i><span>Dorne baja el hombro…</span></p>
+        </div>
+        <div class="ctrl">
+          <div class="row"><span class="lbl">Control</span><span class="chip on">Instinto</span><span class="chip">Al mando</span></div>
+          <div class="row"><span class="lbl">Intención</span><span class="chip">Con todo</span><span class="chip on">Medido</span><span class="chip">Defensa</span><span class="chip">Buscar salida</span><span class="chip">Capturar</span></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="m-notes">
+      <p><b>Instinto:</b> Ilo pelea solo según lo que sabe hacer (es aprendiz de carpintero y usa un mazo). Vos fijaste la intención "medido" y mirás.</p>
+      <p><b>Pausa automática:</b> la simulación se frena en un momento crítico. La opción 1 aparece solo porque antes observaste la cojera: es conocimiento ganado en la misma pelea.</p>
+      <p><b>Heridas por zona, sin barra de vida:</b> cada figura muestra qué parte está herida. El aguante y la voluntad se dicen con palabras y marcas, no con números.</p>
+    </div>
+  </section>
+
+  <section class="m">
+    <div class="m-head"><span class="k">Página A · remate</span><h2>Elegiste la pierna mala</h2></div>
+    <div class="viewport"><div class="stage R">
+      <div class="pn p1">
+        <div class="speed"></div>
+        <svg viewBox="0 0 388 300" aria-hidden="true">
+          <path d="M60 250 C110 230 190 236 300 196" stroke="#111" stroke-width="30" stroke-linecap="round" fill="none"/>
+          <path d="M300 196 L346 176" stroke="#111" stroke-width="22" stroke-linecap="round"/>
+          <path d="M40 216 C120 190 220 196 330 150" stroke="#111" stroke-width="3" fill="none" stroke-dasharray="14 8"/>
+          <circle cx="70" cy="190" r="34" fill="#111"/>
+        </svg>
+        <div class="sfx" style="left:190px;top:40px;font-size:54px;transform:rotate(-10deg)">ズザッ</div>
+        <div class="narr" style="left:12px;top:12px">Abajo. Donde cojea.</div>
+      </div>
+      <div class="pn p2">
+        <div class="focus"></div>
+        <svg viewBox="0 0 398 300" aria-hidden="true">
+          <g transform="rotate(-38 200 150)">
+            <rect x="160" y="110" width="80" height="110" rx="12" fill="#111"/>
+            <circle cx="200" cy="88" r="28" fill="#111"/>
+            <path d="M240 130 L300 112 L318 96" stroke="#111" stroke-width="16" stroke-linecap="round" fill="none"/>
+            <path d="M318 96 C334 84 338 106 324 110" stroke="#111" stroke-width="7" fill="none"/>
+            <path d="M178 216 L170 280 M222 216 L250 270" stroke="#111" stroke-width="20" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <div class="bub" style="left:24px;top:20px;width:150px;padding:16px 10px;background:#fff;border:3px solid #111;border-radius:50%">¡¿Q-QUÉ…?!</div>
+      </div>
+      <div class="pn p3">
+        <div class="tone" style="opacity:.35"></div>
+        <svg viewBox="0 0 800 358" aria-hidden="true">
+          <g fill="none" stroke="#111" stroke-width="3">
+            <ellipse cx="400" cy="270" rx="320" ry="60"/><ellipse cx="400" cy="270" rx="230" ry="42"/><ellipse cx="400" cy="270" rx="140" ry="26"/>
+          </g>
+          <path d="M270 270 L300 120 L330 250 L360 60 L392 240 L420 40 L446 238 L480 90 L506 250 L540 140 L560 270 Z" fill="#fff" stroke="#111" stroke-width="4" stroke-linejoin="round"/>
+          <g fill="#fff" stroke="#111" stroke-width="3"><circle cx="250" cy="150" r="9"/><circle cx="590" cy="120" r="12"/><circle cx="620" cy="190" r="6"/><circle cx="210" cy="210" r="6"/><circle cx="560" cy="60" r="7"/></g>
+        </svg>
+        <div class="sfx" style="left:70px;top:40px;font-size:96px;transform:rotate(-6deg)">ドボォン!!</div>
+        <div class="narr" style="right:16px;bottom:16px;width:290px">"Garra" Dorne se hundió como una piedra. No volvió a salir.</div>
+      </div>
+      <div class="side">
+        <div class="q">GANASTE<small>Dorne cayó al mar delante de su tripulación.</small></div>
+        <div class="stamp"><span class="t">DATO NUEVO</span><p>Dorne no flota. Nadie que haya comido una Fruta del Diablo puede nadar.</p></div>
+        <dl>
+          <dt>CICATRIZ</dt><dd>Hombro izquierdo: el garfio de "Garra" Dorne. Muelle de Kalé, día 14.</dd>
+          <dt>HERIDA</dt><dd>Costillas golpeadas: tres a cinco días.</dd>
+          <dt>VOLUNTAD</dt><dd>+1: lo enfrentaste delante de todos.</dd>
+          <dt>TE VIERON</dt><dd>La Medusa Rota, el viejo Brin y dos pescadores.</dd>
+        </dl>
+        <div class="opts">
+          <span class="h">¿Lo sacás del agua?</span>
+          <button class="opt" type="button" id="r1"><span class="n">1</span><span><span class="t">Tirarte a buscarlo</span><span class="c">la Medusa Rota te debería la vida de su capitán</span></span></button>
+          <button class="opt" type="button" id="r2"><span class="n">2</span><span><span class="t">Dejarlo</span><span class="c">si muere, su fruta vuelve al mundo… en algún lugar</span></span></button>
+          <button class="opt" type="button" id="r3"><span class="n">3</span><span><span class="t">Gritar para que venga la Marina</span><span class="c">฿ 8.000.000 de recompensa · la tripulación no lo va a olvidar</span></span></button>
+        </div>
+      </div>
+    </div></div>
+    <div class="m-notes">
+      <p><b>El remate pasa a la página de manga:</b> el momento decisivo se cuenta en viñetas con su onomatopeya.</p>
+      <p><b>Lo que queda:</b> cicatriz con historia, heridas que duran días, voluntad y testigos que van a contar lo que vieron.</p>
+      <p><b>Todo se conecta:</b> descubriste que Dorne es usuario de una fruta, y la decisión de salvarlo o no toca la regla de que la fruta reaparece cuando su usuario muere.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const fit=()=>document.querySelectorAll('.viewport').forEach(v=>{v.firstElementChild.style.transform=`scale(${v.clientWidth/1280})`});
+new ResizeObserver(fit).observe(document.body);fit();
+
+// Dibuja un sprite desde un mapa de caracteres.
+function spr(c,x,y,map,pal){map.forEach((row,j)=>[...row].forEach((ch,i)=>{if(pal[ch]){c.fillStyle=pal[ch];c.fillRect(x+i,y+j,1,1)}}))}
+const ILO=["..hhh..",".hhhhh.",".hsssh.","..sss..",".rrrrr.","rrrrrrr","s.rrr.m","..rrr.m","..ppp..","..p.p..","..p.p..","..b.b.."];
+const ILOP={h:'#4a2a18',s:'#e6b98e',r:'#c23b2e',p:'#2a1d3a',b:'#1a1326',m:'#8a6a3a'};
+const DORNE=["...kkk...","..kkkkk..","..ksssk..","..sssss..","...sss...",".ccccccc.","ccccwcccc","ccccwcccc","s.ccccc.g","..ccccc.g","..ddddd..","..dd.dd..","..dd.dd..","..dd.dd..","..ee.ee.."];
+const DORNEP={k:'#7a1f1f',s:'#c48a5e',c:'#2c2a40',w:'#e8e2d6',d:'#3b2a1a',e:'#1a1326',g:'#c9c9d6'};
+
+(()=>{
+  const c=document.getElementById('dmap').getContext('2d'),W=205,H=180;
+  const R=(x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(x|0,y|0,w|0,h|0)};
+  const rnd=i=>{const s=Math.sin(i*127.1)*43758.5;return s-Math.floor(s)};
+  const crew=(x,y,hair,shirt,bob)=>{y+=bob;R(x+1,y,3,2,hair);R(x+1,y+2,3,2,'#e6b98e');R(x,y+4,5,3,shirt)};
+  function draw(t){
+    R(0,0,W,H,'#3a3d7c');
+    for(let y=0;y<H;y+=3)R(0,y,W,1,'#34366f');
+    for(let i=0;i<90;i++){const y=(rnd(i)*H)|0,x=((rnd(i+7)*W+t*3*(0.5+rnd(i+2)))%W)|0;if(Math.sin(t*2+i)>.45)R(x,y,2+(i%3),1,i%4?'#5258a0':'#ffb36b')}
+    c.save();c.translate(0,-30);
+    // barco pirata (arriba a la izquierda)
+    R(0,12,58,50,'#4c2b17');R(0,14,54,44,'#704228');for(let x=2;x<54;x+=4)R(x,14,1,44,'#5a3420');R(54,14,4,48,'#3a1f10');
+    R(18,8,5,40,'#1a1326');R(19,22,3,3,'#f4efe6');
+    const b=k=>Math.sin(t*5+k)>0?-1:0;
+    crew(30,46,'#1a1326','#e8e2d6',b(1));crew(38,47,'#7a3a1a','#e8e2d6',b(2));crew(46,46,'#1a1326','#2c2a40',b(3));
+    // muelle
+    for(let x=0;x<W;x+=4)R(x,70,4,60,(x/4)%2?'#704228':'#7c4b2e');
+    for(let x=0;x<W;x+=4)R(x,70,1,60,'#4c2b17');
+    R(0,68,W,3,'#4c2b17');R(0,129,W,3,'#4c2b17');
+    for(let x=6;x<W;x+=24)R(x,132,4,6,'#3a1f10');
+    // grilla tenue
+    c.fillStyle='rgba(255,230,180,.07)';for(let x=0;x<W;x+=10)c.fillRect(x,71,1,58);for(let y=71;y<129;y+=10)c.fillRect(0,y,W,1);
+    // objetos
+    R(150,74,12,10,'#a0743c');R(150,74,12,2,'#c08a52');R(155,74,1,10,'#7a5428');
+    R(172,110,9,9,'#6e4126');R(172,113,9,1,'#3a1f10');R(172,116,9,1,'#3a1f10');
+    R(58,116,8,6,'#c9b58a');R(60,118,4,2,'#8a7a5a');
+    // casilla de peligro (borde)
+    const pulse=(Math.sin(t*4)+1)/2;
+    c.fillStyle=`rgba(255,110,90,${.18+.22*pulse})`;c.fillRect(80,120,20,9);
+    // personajes
+    spr(c,88,108,ILO,ILOP);
+    spr(c,102,93,DORNE,DORNEP);
+    // apertura: pierna derecha de Dorne
+    c.fillStyle=`rgba(140,240,160,${.25+.4*pulse})`;c.fillRect(104,104,2,4);
+    // flecha de carga
+    c.fillStyle='#ff8f7a';for(let i=0;i<4;i++)R(100-i*3,104+i*2,2,1,'#ff8f7a');
+    // Brin al fondo
+    crew(194,92,'#d8d0c0','#5e6f8a',0);
+    c.restore();
+    // tinte de atardecer
+    const s=c.createLinearGradient(0,0,W,H);s.addColorStop(0,'rgba(255,140,60,.18)');s.addColorStop(1,'rgba(40,20,90,.3)');c.fillStyle=s;c.fillRect(0,0,W,H);
+  }
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const loop=ms=>{draw(ms/1000);if(!reduce)requestAnimationFrame(loop)};requestAnimationFrame(loop);
+
+  // Figuras de heridas: zonas como las ve el espectador (el lado izquierdo del personaje queda a la derecha).
+  const BODY=["....hhh....","...hhhhh...","...hhhhh...","....hhh....",".lltttttrr.",".lltttttrr.",".l.ttttt.r.",".l.ttttt.r.",".l.ttttt.r.","...ttttt...","...ttttt...","...xx.yy...","...xx.yy...","...xx.yy...","...xx.yy...","...xx.yy...","...xx.yy...","...xx.yy...","..xxx.yyy.."];
+  const ok='#5d5680',hurt='#e0a040',grave='#d8443a';
+  const fig=(id,z)=>{const g=document.getElementById(id).getContext('2d');spr(g,0,2,BODY,Object.assign({h:ok,l:ok,r:ok,t:ok,x:ok,y:ok},z))};
+  fig('bodyIlo',{r:grave,t:hurt});
+  fig('bodyDorne',{h:hurt,x:'#9a7a5a'});
+})();
+</script>

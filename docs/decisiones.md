@@ -91,7 +91,13 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
-- **Sistema de combate.** Merece una sesión propia.
+- **Sistema de combate** (propuesta en curso; maqueta en `docs/maquetas/duelo-muelle.html`):
+  - Un solo motor simula la pelea sobre el mapa B. Cada acción la decide el personaje (*instinto*, por defecto, con una intención fijada por el jugador) o el jugador (*al mando*, por turnos). Se puede cambiar de modo en cualquier momento.
+  - La simulación se frena sola en los momentos críticos y ofrece decisiones. Hay una narración en texto al costado que muestra solo lo que importa, y el remate se abre como página de manga.
+  - Los encuentros son más amplios que la pelea: hablar, mentir, sobornar, provocar, intimidar, huir o rendirse. Lo social cambia el combate.
+  - Heridas por zona y órganos que quitan capacidades, calibradas al aguante de un shōnen. Cicatrices con historia, miedos y traumas superables. Las debilidades del rival se aprenden y son conocimiento.
+  - Las frutas definen verbos de los que salen las técnicas. El Haki lo usa el personaje cuando lo necesita y puede despertar en una situación extrema.
+  - Pendiente: peleas grupales (propuesta: una sola pelea donde los duelos aparecen solos, con órdenes a la tripulación).
 - Cómo se reparte el formato A dentro del B: qué dispara una página de manga y qué se resuelve en el mapa.
 - Mapa del mundo: ¿hay un modo con el mapa entero conocido desde el inicio?
 - Detalle de la simulación del pasado: cuántos años, qué eventos, qué escala.
