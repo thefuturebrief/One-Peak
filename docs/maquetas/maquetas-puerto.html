@@ -1,0 +1,409 @@
+<title>Maquetas del puerto</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Kalam:wght@400;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Old+Mincho:wght@400;700&display=swap">
+<style>
+/* Página contenedora neutra y oscura; cada maqueta es un mundo visual propio a 1280x720 escalado. Un solo tema, a propósito. */
+:root{
+  --page:#26231f; --ink:#ebe4d6; --muted:#a69d8d; --rule:#3d3832;
+  --f-ui:"Zen Kaku Gothic New", system-ui, sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--page);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 80px}
+.wrap{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:72px}
+header.top{display:flex;flex-direction:column;gap:10px;max-width:68ch}
+header.top h1{font-weight:900;font-size:clamp(26px,4vw,40px);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+header.top p{margin:0;color:var(--muted)}
+section.m{display:flex;flex-direction:column;gap:14px}
+.m-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;border-top:1px solid var(--rule);padding-top:14px}
+.m-head .k{font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.m-head h2{margin:0;font-size:22px;font-weight:900}
+.m-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 32px;color:var(--muted);font-size:14px}
+.m-notes p{margin:0;min-width:0}
+.m-notes b{color:var(--ink);font-weight:700}
+.viewport{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;overflow:hidden;background:#000}
+.stage{position:absolute;top:0;left:0;width:1280px;height:720px;transform-origin:0 0;overflow:hidden}
+.hint{color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ================= A · MANGA ================= */
+.A{background:#fbfbf8;color:#111;font-family:"Zen Old Mincho",serif}
+.A .page{position:absolute;left:24px;top:24px;width:800px;height:672px}
+.A .pn{position:absolute;border:4px solid #111;overflow:hidden;background:#fff}
+.A .p1{left:0;top:0;width:800px;height:300px}
+.A .p2{left:0;top:314px;width:380px;height:358px}
+.A .p3{left:394px;top:314px;width:406px;height:358px}
+.A .tone{position:absolute;inset:0;background-image:radial-gradient(circle,#111 1.15px,transparent 1.35px);background-size:6px 6px}
+.A .p1 .sky{-webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.55) 40%,transparent 62%);mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.55) 40%,transparent 62%)}
+.A .sun{position:absolute;left:250px;top:130px;width:150px;height:150px;border-radius:50%;background:#fff;border:3px solid #111;box-shadow:0 0 0 10px #fff}
+.A .sea{position:absolute;left:0;right:0;top:206px;bottom:0;background:repeating-linear-gradient(to bottom,#111 0 2px,transparent 2px 9px);border-top:3px solid #111}
+.A .sea::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0 9px,#fff 9px 14px);-webkit-mask-image:linear-gradient(90deg,transparent 20%,#000 34%,#000 48%,transparent 60%);mask-image:linear-gradient(90deg,transparent 20%,#000 34%,#000 48%,transparent 60%)}
+.A .ship{position:absolute;left:470px;top:60px;width:300px;height:180px}
+.A .cap{position:absolute;background:#111;color:#fff;font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;font-size:13px;letter-spacing:.12em;padding:7px 12px}
+.A .p1 .cap{left:14px;top:14px}
+.A .narr{position:absolute;background:#fff;border:2px solid #111;font-size:15px;line-height:1.5;padding:9px 12px}
+.A .p1 .narr{left:14px;bottom:16px;width:280px}
+.A .sfx{position:absolute;font-family:"Dela Gothic One",sans-serif;color:#fff;-webkit-text-stroke:2px #111;paint-order:stroke fill;line-height:1}
+.A .p1 .sfx{left:420px;top:252px;font-size:40px;transform:rotate(-6deg);letter-spacing:.06em}
+.A .p2 .tone{opacity:.5}
+.A .poster{position:absolute;left:66px;top:28px;width:240px;height:290px;background:#fff;border:2px solid #111;transform:rotate(-4deg);display:flex;flex-direction:column;align-items:center;padding:12px 14px;gap:6px;box-shadow:6px 6px 0 #111}
+.A .poster .w{font-family:"Dela Gothic One",sans-serif;font-size:40px;letter-spacing:.04em;line-height:1}
+.A .poster .ph{width:100%;height:118px;border:2px solid #111;background:repeating-linear-gradient(45deg,#111 0 1.5px,#fff 1.5px 6px);position:relative}
+.A .poster .ph::after{content:"";position:absolute;left:50%;top:18px;width:70px;height:84px;margin-left:-35px;background:#fff;border:2px solid #111;border-radius:48% 48% 40% 40%}
+.A .poster .doa{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;font-size:12px;letter-spacing:.2em}
+.A .poster .nm{font-family:"Dela Gothic One",sans-serif;font-size:20px;letter-spacing:.02em}
+.A .poster .b{font-family:"Dela Gothic One",sans-serif;font-size:22px}
+.A .poster .mr{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;font-size:11px;letter-spacing:.3em;margin-top:auto}
+.A .nail{position:absolute;width:10px;height:10px;border-radius:50%;background:#111}
+.A .p2 .narr{left:12px;bottom:12px;width:250px;font-size:14px}
+.A .focus{position:absolute;inset:-40px;background:repeating-conic-gradient(from 0deg at 62% 52%,#111 0deg .7deg,transparent .7deg 5deg);-webkit-mask-image:radial-gradient(circle at 62% 52%,transparent 0 110px,#000 230px);mask-image:radial-gradient(circle at 62% 52%,transparent 0 110px,#000 230px)}
+.A .who{position:absolute;left:170px;top:120px;width:220px;height:240px}
+.A .bubble{position:absolute;left:12px;top:22px;width:230px;height:150px}
+.A .bubble span{position:absolute;left:30px;top:34px;width:170px;font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;font-size:15px;line-height:1.3;text-align:center;text-transform:uppercase}
+.A .p3 .sfx{right:18px;top:16px;font-size:30px;transform:rotate(8deg)}
+.A .side{position:absolute;left:846px;top:24px;width:410px;height:672px;display:flex;flex-direction:column;gap:14px}
+.A .q{font-family:"Dela Gothic One",sans-serif;font-size:34px;line-height:1;letter-spacing:.02em;padding-bottom:10px;border-bottom:4px solid #111}
+.A .q small{display:block;font-family:"Zen Old Mincho",serif;font-size:14px;letter-spacing:0;margin-top:8px;font-weight:400}
+.A .opts{display:flex;flex-direction:column;gap:10px}
+.A .opt{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;padding:10px 12px;border:2px solid #111;background:#fff;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.A .opt:hover,.A .opt:focus-visible{background:#111;color:#fff;outline:none}
+.A .opt:hover .n,.A .opt:focus-visible .n{background:#fff;color:#111}
+.A .opt .n{width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-family:"Dela Gothic One",sans-serif;font-size:15px}
+.A .opt .t{font-size:16px;line-height:1.35;font-weight:700}
+.A .opt .c{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:4px;font-family:"Zen Kaku Gothic New",sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;opacity:.75}
+.A .who-am-i{margin-top:auto;border-top:4px solid #111;padding-top:10px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px}
+.A .who-am-i b{font-family:"Dela Gothic One",sans-serif;font-weight:400;font-size:18px}
+.A .who-am-i .r{text-align:right;font-variant-numeric:tabular-nums}
+.A .skip{grid-column:1/-1;margin-top:6px;display:flex;justify-content:space-between;align-items:center;background:#111;color:#fff;padding:8px 12px;font-weight:700;letter-spacing:.06em}
+.A .skip i{font-style:normal;font-family:"Dela Gothic One",sans-serif;letter-spacing:.1em}
+
+/* ================= B · PIXEL ================= */
+.B{background:#1a1428;font-family:"DotGothic16",monospace;color:#f6e6c8}
+.B canvas{position:absolute;left:0;top:0;width:1280px;height:720px;image-rendering:pixelated;image-rendering:crisp-edges}
+.B .px{position:absolute;background:#1c1530;border:4px solid #e9c48a;box-shadow:0 0 0 4px #1c1530;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px),0 8px)}
+.B .clock{left:24px;top:24px;padding:10px 16px 12px;display:flex;gap:14px;align-items:center}
+.B .clock .d{font-size:16px;line-height:1.2}
+.B .clock .d b{display:block;font-size:26px;font-weight:400;color:#ffcf7a}
+.B .speed{display:flex;gap:4px;margin-left:6px}
+.B .speed span{width:30px;height:26px;display:grid;place-items:center;border:2px solid #6c5a86;font-size:13px;color:#b8a8d2}
+.B .speed span.on{background:#e9c48a;color:#1c1530;border-color:#e9c48a}
+.B .purse{right:24px;top:24px;padding:10px 16px;font-size:22px;color:#ffcf7a}
+.B .purse small{display:block;font-size:13px;color:#b8a8d2}
+.B .toast{right:24px;top:108px;padding:10px 14px;width:290px;font-size:14px;line-height:1.45;border-color:#d8584a}
+.B .toast b{color:#ff8f7a;font-weight:400}
+.B .prompt{position:absolute;left:504px;top:350px;font-size:15px;background:#1c1530;color:#fff;padding:3px 8px;border:2px solid #fff}
+.B .prompt::after{content:"";position:absolute;left:50%;bottom:-8px;margin-left:-5px;border:5px solid transparent;border-top-color:#fff}
+.B .talk{left:180px;bottom:28px;width:920px;padding:18px 22px 16px 150px;font-size:19px;line-height:1.5}
+.B .talk .nm{position:absolute;left:150px;top:-2px;transform:translateY(-100%);background:#e9c48a;color:#1c1530;padding:2px 12px;font-size:15px}
+.B .talk .por{position:absolute;left:20px;top:18px;width:108px;height:108px;image-rendering:pixelated;border:3px solid #6c5a86}
+.B .talk .ch{display:flex;gap:28px;margin-top:10px;font-size:16px;color:#b8a8d2}
+.B .talk .ch span:first-child{color:#ffcf7a}
+
+/* ================= C · CARTA ================= */
+.C{background:#d9dccb;color:#2b2318;font-family:"IM Fell English",Georgia,serif}
+.C svg.chart{position:absolute;left:0;top:0;width:860px;height:720px}
+.C .log{box-sizing:border-box;position:absolute;left:860px;top:0;width:420px;height:720px;background:#e9e4d3;border-left:2px solid #2b2318;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 27px,rgba(43,35,24,.13) 27px 28px);padding:22px 24px;display:flex;flex-direction:column;gap:14px}
+.C .log h3{margin:0;font-family:"IM Fell English SC",serif;font-weight:400;font-size:26px;letter-spacing:.04em;line-height:1}
+.C .log h3 small{display:block;font-family:"IM Fell English",serif;font-style:italic;font-size:15px;letter-spacing:0;margin-top:4px;color:#5a4d3a}
+.C .day{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;height:18px;position:relative;margin-top:6px}
+.C .day i{background:#2b2318;opacity:.82}
+.C .day i.f{background:transparent;border:1px solid rgba(43,35,24,.45);opacity:1}
+.C .day .now{position:absolute;top:-6px;bottom:-6px;width:3px;background:#a3261f;left:calc(18.66/24*100%)}
+.C .day .ev{position:absolute;top:22px;right:0;font-family:"Kalam",cursive;font-size:13px;color:#a3261f;white-space:nowrap}
+.C .hours{display:flex;justify-content:space-between;font-size:12px;color:#5a4d3a;margin-top:-6px}
+.C .place{margin-top:14px;border-top:2px solid #2b2318;padding-top:10px}
+.C .place .pt{font-family:"IM Fell English SC",serif;font-size:19px}
+.C .place .ps{font-style:italic;font-size:14px;color:#5a4d3a}
+.C ul.ppl{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+.C ul.ppl li{display:grid;grid-template-columns:1fr auto;gap:12px;font-size:16px;line-height:1.25}
+.C ul.ppl li em{font-size:14px;color:#5a4d3a}
+.C ul.ppl li .rel{font-family:"Kalam",cursive;font-size:14px;color:#a3261f;text-align:right}
+.C .acts{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.C .act{display:flex;justify-content:space-between;gap:12px;font-size:16px;padding:6px 10px;border:1.5px solid #2b2318;background:rgba(255,255,255,.35);cursor:pointer;font-family:inherit;color:inherit;text-align:left}
+.C .act:hover,.C .act:focus-visible{background:#2b2318;color:#e9e4d3;outline:none}
+.C .act span:last-child{font-style:italic;white-space:nowrap}
+.C .news{margin-top:auto;border:2px solid #2b2318;padding:8px 12px;background:#f3efe2}
+.C .news .nt{display:flex;justify-content:space-between;font-family:"IM Fell English SC",serif;font-size:13px;letter-spacing:.08em;border-bottom:1px solid #2b2318;padding-bottom:3px}
+.C .news .nh{font-size:19px;line-height:1.2;margin-top:5px}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>La misma escena, tres juegos distintos</h1>
+    <p>Día 14 de 1522, 18:40. Sos Ilo, 17 años, aprendiz en la carpintería de barcos de tu tío en la isla Kalé, en el East Blue. Al atardecer entra al puerto un barco con bandera negra que no conocés… o que quizás sí. Cada maqueta combina un formato de juego con una dirección visual; después se pueden mezclar.</p>
+    <p class="hint">Son pantallas estáticas para mirar, no prototipos jugables. Se ven mejor en pantalla grande.</p>
+  </header>
+
+  <!-- ===================== A ===================== -->
+  <section class="m">
+    <div class="m-head"><span class="k">Formato A · Tinta de manga</span><h2>Carrera por decisiones</h2></div>
+    <div class="viewport"><div class="stage A">
+      <div class="page">
+        <div class="pn p1">
+          <div class="tone sky"></div>
+          <div class="sun"></div>
+          <div class="sea"></div>
+          <svg class="ship" viewBox="0 0 300 180" aria-hidden="true">
+            <path d="M40 140 L270 140 L250 170 L62 170 Z" fill="#111"/>
+            <rect x="105" y="20" width="6" height="122" fill="#111"/>
+            <rect x="190" y="38" width="6" height="104" fill="#111"/>
+            <path d="M112 32 L168 38 Q180 80 168 122 L112 116 Q122 74 112 32 Z" fill="#fff" stroke="#111" stroke-width="4"/>
+            <path d="M104 40 L66 46 Q56 80 66 112 L104 108 Q96 74 104 40 Z" fill="#fff" stroke="#111" stroke-width="4"/>
+            <path d="M197 52 L240 58 Q250 90 240 120 L197 116 Q205 84 197 52 Z" fill="#fff" stroke="#111" stroke-width="4"/>
+            <rect x="111" y="2" width="44" height="26" fill="#111"/>
+            <circle cx="133" cy="13" r="6" fill="#fff"/><path d="M122 22 L144 8 M122 8 L144 22" stroke="#fff" stroke-width="3"/>
+          </svg>
+          <div class="cap">DÍA 14 · 18:40 · PUERTO DE KALÉ, EAST BLUE</div>
+          <div class="sfx">ザザァ…</div>
+          <div class="narr">El sol se hundía cuando apareció la vela negra. Nadie en el muelle dijo nada.</div>
+        </div>
+        <div class="pn p2">
+          <div class="tone"></div>
+          <div class="poster">
+            <span class="nail" style="left:50%;top:-6px;margin-left:-5px"></span>
+            <div class="w">WANTED</div>
+            <div class="ph"></div>
+            <div class="doa">DEAD OR ALIVE</div>
+            <div class="nm">"GARRA" DORNE</div>
+            <div class="b">฿ 8.000.000</div>
+            <div class="mr">MARINE</div>
+          </div>
+        </div>
+        <div class="pn p3">
+          <div class="focus"></div>
+          <svg class="who" viewBox="0 0 220 240" aria-hidden="true">
+            <path d="M40 240 C40 180 70 160 110 158 C150 160 180 180 180 240 Z" fill="#111"/>
+            <path d="M70 92 C66 40 100 20 128 28 C160 36 168 70 160 100 C154 128 136 150 112 150 C88 150 74 124 70 92 Z" fill="#111"/>
+            <path d="M64 80 L56 56 L78 62 L80 38 L100 52 L112 30 L124 50 L144 36 L146 58 L168 52 L160 82 Z" fill="#111"/>
+            <path d="M150 82 C158 92 158 108 150 118" stroke="#fff" stroke-width="3" fill="none"/>
+          </svg>
+          <svg class="bubble" viewBox="0 0 230 150" aria-hidden="true">
+            <path d="M115 6 C176 6 224 34 224 70 C224 104 180 130 126 132 L150 150 L104 131 C48 128 6 102 6 70 C6 34 54 6 115 6 Z" fill="#fff" stroke="#111" stroke-width="3"/>
+          </svg>
+          <div class="bubble" style="pointer-events:none"><span>¿Esa bandera… no es la del cuento de papá?</span></div>
+          <div class="sfx">ドクン</div>
+        </div>
+      </div>
+      <div class="side">
+        <div class="q">¿QUÉ HACÉS?<small>La Medusa Rota acaba de atracar en el muelle 2. Tu tío cierra el taller a las 19:00.</small></div>
+        <div class="opts">
+          <button class="opt" type="button" id="a1"><span class="n">1</span><span><span class="t">Ir a la taberna a escuchar qué dicen los recién llegados.</span><span class="c"><span>1 hora</span><span>Conocimiento</span></span></span></button>
+          <button class="opt" type="button" id="a2"><span class="n">2</span><span><span class="t">Avisar al destacamento de la Marina.</span><span class="c"><span>Marina +</span><span>Piratas −</span><span>¿Alguien te ve?</span></span></span></button>
+          <button class="opt" type="button" id="a3"><span class="n">3</span><span><span class="t">Acercarte al muelle a mirar la bandera de cerca.</span><span class="c"><span>Riesgo</span><span>Recuerdo de papá</span></span></span></button>
+          <button class="opt" type="button" id="a4"><span class="n">4</span><span><span class="t">Seguir trabajando: mañana hay que entregar el casco.</span><span class="c"><span>Tío Aurelio +</span><span>3 días pasan</span></span></span></button>
+        </div>
+        <div class="who-am-i">
+          <b>ILO</b><span class="r">฿ 3.200</span>
+          <span>17 años · aprendiz de carpintero</span><span class="r">Ánimo: inquieto</span>
+          <span>Sueño: <em>todavía no lo sabe</em></span><span class="r">Recompensa: —</span>
+          <div class="skip"><span>Dejar pasar la semana</span><i>▸▸▸</i></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="m-notes">
+      <p><b>Cómo se juega:</b> situaciones y decisiones, con el tiempo comprimido entre una y otra. Es un Copero con mundo, familia y memoria.</p>
+      <p><b>Lo bueno:</b> es lo más barato de construir y da más amplitud. Cada página se puede generar o escribir como datos, y el estilo manga sale casi gratis.</p>
+      <p><b>Lo que cuesta:</b> casi no hay sensación de estar en un lugar. El mundo se cuenta, no se recorre.</p>
+    </div>
+  </section>
+
+  <!-- ===================== B ===================== -->
+  <section class="m">
+    <div class="m-head"><span class="k">Formato B · Pixel al atardecer</span><h2>Caminar la isla</h2></div>
+    <div class="viewport"><div class="stage B">
+      <canvas id="bmap" width="320" height="180" aria-label="Puerto de la isla Kalé visto desde arriba, con un barco pirata atracado"></canvas>
+      <div class="px clock">
+        <div class="d">Año 1522 · Día 14<b>18:40</b></div>
+        <div class="speed" aria-label="Velocidad del tiempo"><span>II</span><span class="on">▸</span><span>▸▸</span><span>▸▸▸</span></div>
+      </div>
+      <div class="px purse">฿ 3.200<small>aprendiz · Kalé</small></div>
+      <div class="px toast"><b>Muelle 2</b> · Atracó un barco con bandera negra. Los pescadores guardan las redes.</div>
+      <div class="prompt">E · Hablar</div>
+      <div class="px talk">
+        <span class="nm">VIEJO BRIN</span>
+        <canvas class="por" id="bpor" width="18" height="18" aria-hidden="true"></canvas>
+        Esa calavera con tentáculos la vi una vez, hace veinte años. Ese día tu padre volvió del mar sin su bote… ¿Nunca te contó?
+        <div class="ch"><span>▶ ¿Qué pasó ese día?</span><span>¿Quién es Dorne?</span><span>Irse</span></div>
+      </div>
+    </div></div>
+    <div class="m-notes">
+      <p><b>Cómo se juega:</b> controlás a Ilo directamente, en vista cenital. La gente camina con sus rutinas y vos te acercás a hablar.</p>
+      <p><b>Lo bueno:</b> es lo que más te hace estar ahí, y el mundo vivo se ve.</p>
+      <p><b>Lo que cuesta:</b> cada lugar, persona y animación necesita arte. Multiplica varias veces el costo de cada contenido nuevo, y el combate pasa a tiempo real.</p>
+    </div>
+  </section>
+
+  <!-- ===================== C ===================== -->
+  <section class="m">
+    <div class="m-head"><span class="k">Formato C · Carta náutica</span><h2>La isla como mapa de lugares</h2></div>
+    <div class="viewport"><div class="stage C">
+      <svg class="chart" viewBox="0 0 860 720" aria-label="Carta de la isla Kalé dibujada a mano, con lugares marcados">
+        <defs>
+          <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="3" seed="7"/>
+            <feDisplacementMap in="SourceGraphic" scale="9"/>
+          </filter>
+          <filter id="wash">
+            <feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="2" seed="3" result="n"/>
+            <feColorMatrix in="n" type="matrix" values="0 0 0 0 .78  0 0 0 0 .64  0 0 0 0 .38  0 0 0 .9 -.1"/>
+            <feComposite in2="SourceGraphic" operator="in"/>
+          </filter>
+          <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2b2318" stroke-width=".8" opacity=".55"/></pattern>
+          <path id="isle" d="M190 430 C176 350 230 268 318 246 C378 231 404 186 478 178 C556 170 604 214 664 236 C744 264 792 330 782 410 C774 476 722 522 652 546 C602 563 590 612 520 622 C446 632 404 590 340 580 C318 576 306 552 282 548 C254 544 240 566 214 556 C186 544 196 492 190 430 Z"/>
+          <clipPath id="known"><path d="M0 0 H560 C520 110 480 200 520 280 C600 330 760 300 860 340 V720 H0 Z"/></clipPath>
+        </defs>
+        <g fill="none" stroke="#2b2318" filter="url(#rough)">
+          <use href="#isle" transform="translate(486 400) scale(1.2) translate(-486 -400)" stroke-width=".7" opacity=".35" stroke-dasharray="2 5"/>
+          <use href="#isle" transform="translate(486 400) scale(1.1) translate(-486 -400)" stroke-width=".8" opacity=".5"/>
+        </g>
+        <g clip-path="url(#known)">
+          <use href="#isle" fill="#c9a362" filter="url(#wash)"/>
+          <use href="#isle" fill="none" stroke="#2b2318" stroke-width="2.4" filter="url(#rough)"/>
+          <use href="#isle" transform="translate(486 400) scale(.82) translate(-486 -400)" fill="none" stroke="#2b2318" stroke-width=".9" opacity=".6" filter="url(#rough)"/>
+          <use href="#isle" transform="translate(500 380) scale(.55) translate(-500 -380)" fill="url(#hatch)" stroke="#2b2318" stroke-width=".9" opacity=".8" filter="url(#rough)"/>
+        </g>
+        <use href="#isle" fill="none" stroke="#2b2318" stroke-width="1.4" stroke-dasharray="3 7" opacity=".55"/>
+        <text x="560" y="300" font-family="Kalam" font-size="16" fill="#a3261f" transform="rotate(6 560 300)">sin recorrer… ¿qué hay detrás del monte?</text>
+        <g font-family="IM Fell English" font-style="italic" font-size="14" fill="#2b2318" opacity=".75">
+          <text x="80" y="160">12</text><text x="130" y="300">9</text><text x="70" y="420">15</text><text x="110" y="560">7</text><text x="210" y="640">4</text><text x="330" y="680">6</text><text x="520" y="690">11</text><text x="700" y="640">14</text><text x="800" y="560">18</text><text x="160" y="470">3</text><text x="230" y="600">2½</text>
+        </g>
+        <g transform="translate(110 90)" stroke="#2b2318" fill="none">
+          <circle r="46" stroke-width="1"/><circle r="40" stroke-width=".6"/>
+          <path d="M0 -58 L7 0 L0 58 L-7 0 Z" fill="#2b2318"/><path d="M-58 0 L0 -6 L58 0 L0 6 Z" fill="#2b2318" opacity=".7"/>
+          <path d="M-30 -30 L30 30 M30 -30 L-30 30" stroke-width=".8"/>
+          <text x="-6" y="-64" font-family="IM Fell English SC" font-size="16" fill="#2b2318" stroke="none">N</text>
+        </g>
+        <!-- muelles y barco -->
+        <g stroke="#2b2318" stroke-width="3"><path d="M236 540 L180 584"/><path d="M262 548 L226 612"/></g>
+        <g transform="translate(176 618) rotate(-30)">
+          <path d="M-22 0 L22 0 L16 9 L-16 9 Z" fill="#2b2318"/><line x1="0" y1="0" x2="0" y2="-26" stroke="#2b2318" stroke-width="2"/><rect x="0" y="-26" width="13" height="8" fill="#111"/>
+        </g>
+        <!-- lugares -->
+        <g font-family="IM Fell English SC" font-size="17" fill="#2b2318">
+          <g transform="translate(300 500)"><rect x="-9" y="-9" width="18" height="18" fill="#2b2318"/><text x="16" y="5">Taberna El Ancla Seca</text></g>
+          <g transform="translate(372 432)"><rect x="-11" y="-8" width="22" height="16" fill="none" stroke="#2b2318" stroke-width="2.5"/><path d="M-11 -8 L11 8" stroke="#2b2318" stroke-width="1.5"/><text x="18" y="5">Destacamento de la Marina</text></g>
+          <g transform="translate(250 380)"><rect x="-8" y="-8" width="16" height="16" fill="#2b2318"/><text x="-16" y="5" text-anchor="end">Carpintería Aurelio</text></g>
+          <g transform="translate(420 560)"><circle r="8" fill="none" stroke="#2b2318" stroke-width="2.5"/><circle r="2.5" fill="#2b2318"/><text x="14" y="5">Mercado</text></g>
+          <g transform="translate(560 470)"><path d="M0 -14 L7 10 L-7 10 Z" fill="#2b2318"/><text x="12" y="5" font-family="IM Fell English" font-style="italic" font-size="15">Monte Kalé</text></g>
+          <g transform="translate(244 300)"><path d="M-5 10 L-3 -12 L3 -12 L5 10 Z" fill="#2b2318"/><circle cy="-16" r="4" fill="none" stroke="#2b2318" stroke-width="1.5"/><text x="12" y="0">Faro viejo</text></g>
+          <text x="160" y="660" font-family="IM Fell English" font-style="italic" font-size="15">Muelles</text>
+        </g>
+        <!-- notas en rojo -->
+        <g fill="none" stroke="#a3261f" stroke-width="2" stroke-linecap="round">
+          <ellipse cx="250" cy="380" rx="22" ry="18" transform="rotate(-8 250 380)"/>
+          <path d="M150 640 C120 662 90 668 64 660"/><path d="M70 652 L62 661 L74 665"/>
+          <path d="M270 285 C300 250 330 240 360 236"/>
+        </g>
+        <g font-family="Kalam" fill="#a3261f">
+          <text x="210" y="352" font-size="15">vos</text>
+          <text x="22" y="690" font-size="16">la vela negra · ¿la de papá?</text>
+          <text x="364" y="232" font-size="16">Brin: "preguntale al farero por el mapa"</text>
+        </g>
+        <!-- cartela -->
+        <g transform="translate(560 600)">
+          <rect x="0" y="0" width="270" height="88" fill="#e3e1d0" stroke="#2b2318" stroke-width="2"/>
+          <rect x="5" y="5" width="260" height="78" fill="none" stroke="#2b2318" stroke-width=".8"/>
+          <text x="135" y="36" text-anchor="middle" font-family="IM Fell English SC" font-size="26" fill="#2b2318">Isla Kalé</text>
+          <text x="135" y="60" text-anchor="middle" font-family="IM Fell English" font-style="italic" font-size="14" fill="#2b2318">East Blue · levantada a mano por Ilo</text>
+          <text x="135" y="77" text-anchor="middle" font-family="IM Fell English" font-size="12" fill="#2b2318">sondas en brazas · año 1522</text>
+        </g>
+      </svg>
+      <div class="log">
+        <h3>Bitácora<small>Día 14 · 18:40 · el sol ya toca el agua</small></h3>
+        <div class="day" aria-label="Horas del día"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><span class="now"></span><span class="ev">ronda de la Marina</span></div>
+        <div class="hours"><span>0 h</span><span>6</span><span>12</span><span>18</span><span>24</span></div>
+        <div class="place">
+          <div class="pt">Taberna El Ancla Seca</div>
+          <div class="ps">ahora mismo · 6 personas · huele a ron y a pescado frito</div>
+          <ul class="ppl">
+            <li><span>Tres de la Medusa Rota <em>· beben y no pagan</em></span><span class="rel">no te conocen</span></li>
+            <li><span>Viejo Brin <em>· pescador</em></span><span class="rel">te vio crecer</span></li>
+            <li><span>Mara <em>· la dueña</em></span><span class="rel">le debés ฿ 400</span></li>
+            <li><span>Un hombre con capa <em>· no deja de mirar el muelle</em></span><span class="rel">?</span></li>
+          </ul>
+        </div>
+        <div class="acts">
+          <button class="act" type="button" id="c1"><span>Entrar y escuchar</span><span>1 hora</span></button>
+          <button class="act" type="button" id="c2"><span>Invitar una ronda a los piratas</span><span>− ฿ 600</span></button>
+          <button class="act" type="button" id="c3"><span>Hablar con Brin a solas</span><span>media hora</span></button>
+        </div>
+        <div class="news">
+          <div class="nt"><span>News Coo · ayer</span><span>฿ 100</span></div>
+          <div class="nh">Shells Town: el capitán Morgan, arrestado por sus propios hombres</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="m-notes">
+      <p><b>Cómo se juega:</b> la isla es una carta de lugares. Elegís a dónde ir y en cada lugar está quien esté a esa hora, según su rutina. La carta la vas completando vos.</p>
+      <p><b>Lo bueno:</b> cuesta casi lo mismo que A y da bastante de la presencia de B. Encaja con el tiempo elástico, con el mapa que se descubre y con personajes que se mueven.</p>
+      <p><b>Lo que cuesta:</b> no hay control directo del cuerpo. La aventura física (persecuciones, combate) necesita su propia pantalla.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+// Escala cada escena de 1280x720 al ancho disponible.
+const fit=()=>document.querySelectorAll('.viewport').forEach(v=>{v.firstElementChild.style.transform=`scale(${v.clientWidth/1280})`});
+new ResizeObserver(fit).observe(document.body);fit();
+
+// ---- B: mapa en pixel, dibujado por código ----
+(()=>{
+  const cv=document.getElementById('bmap'),c=cv.getContext('2d'),W=320,H=180;
+  const P={deep:'#2a2452',sea:'#3a3d7c',sea2:'#5258a0',gl:'#ffb36b',gl2:'#ffe2a8',sand:'#dca76a',sand2:'#bf8a52',gr:'#617c3b',gr2:'#4b672e',wd:'#704228',wd2:'#4c2b17',wall:'#e1c39a',roof1:'#a8423a',roof2:'#e8e2d6',roof3:'#7c6a3a',roof4:'#3f5e78',ink:'#1a1326',win:'#ffd27a'};
+  const coast=y=>150+10*Math.sin(y/14)+5*Math.sin(y/5+1);
+  const rect=(x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(x|0,y|0,w|0,h|0)};
+  const rnd=i=>{const s=Math.sin(i*127.1)*43758.5;return s-Math.floor(s)};
+  function person(x,y,hair,shirt,pants,skin,bob){
+    y+=bob;rect(x+1,y,3,2,hair);rect(x+1,y+2,3,2,skin);rect(x,y+4,5,3,shirt);rect(x+1,y+7,1,1,pants);rect(x+3,y+7,1,1,pants);
+  }
+  function house(x,y,w,h,roof,lit){
+    rect(x+2,y+3,w,h,'rgba(20,10,40,.35)');rect(x,y,w,h,P.wall);rect(x,y,w,h-5,roof);
+    c.fillStyle='rgba(0,0,0,.18)';c.fillRect(x,y+((h-5)/2|0),w,1);
+    if(lit){rect(x+3,y+h-4,3,2,P.win);rect(x+w-6,y+h-4,3,2,P.win)}
+  }
+  function draw(t){
+    rect(0,0,W,H,P.sea);
+    for(let y=0;y<H;y+=2){const cx=coast(y);c.fillStyle=y%6<2?P.deep:P.sea;c.fillRect(0,y,cx-30,1)}
+    for(let i=0;i<160;i++){const y=(rnd(i)*H)|0,x=((rnd(i+9)*150+t*4*(0.4+rnd(i+3)))%150)|0;if(x<coast(y)-4&&Math.sin(t*2+i)>.4)rect(x,y,2+(i%3),1,i%5?P.sea2:P.gl)}
+    for(let y=0;y<H;y++){const cx=coast(y)|0;rect(cx-3,y,3,1,(y+((t*6)|0))%5<2?P.gl2:P.sea2);rect(cx,y,8,1,y%3?P.sand:P.sand2);rect(cx+8,y,W,1,(y>>2)%2?P.gr:P.gr2)}
+    // muelles
+    for(let x=80;x<coast(100);x+=3)rect(x,96,3,8,(x/3)%2?P.wd:P.wd2);
+    for(let x=104;x<coast(44);x+=3)rect(x,40,3,6,(x/3)%2?P.wd:P.wd2);
+    for(let x=80;x<coast(100);x+=12){rect(x,104,2,2,P.wd2)}
+    // barco
+    const bx=22,by=108+Math.round(Math.sin(t*1.4));
+    rect(bx+2,by+3,66,18,'rgba(10,6,30,.45)');rect(bx,by,66,18,P.wd2);rect(bx+2,by+2,62,14,P.wd);
+    for(let x=bx+4;x<bx+62;x+=4)rect(x,by+2,1,14,P.wd2);
+    rect(bx+66,by+6,6,6,P.wd2);rect(bx+72,by+8,4,2,P.wd2);
+    rect(bx+16,by-6,6,30,P.ink);rect(bx+40,by-4,6,26,P.ink);
+    rect(bx+17,by+7,4,4,'#f4efe6');rect(bx+18,by+11,1,1,P.ink);rect(bx+20,by+11,1,1,P.ink);
+    rect(bx+16,by+3,1,1,'#f4efe6');rect(bx+21,by+14,1,1,'#f4efe6');
+    // casas
+    house(186,58,40,26,P.roof1,true);house(244,14,54,34,P.roof2,true);rect(270,10,1,6,P.ink);rect(271,10,5,3,'#2f4f8f');
+    house(194,120,46,30,P.roof3,false);house(250,74,24,18,P.roof4,true);house(282,104,26,20,P.roof1,true);house(262,140,30,22,P.roof4,false);
+    for(let y=0;y<H;y+=2)rect(176+((y/9)|0)%2,y,2,1,P.sand2);
+    rect(176,92,coast(96)>0?120:0,3,P.sand2);
+    // luz de la taberna
+    const g=c.createRadialGradient(206,86,1,206,86,22);g.addColorStop(0,'rgba(255,200,110,.45)');g.addColorStop(1,'rgba(255,200,110,0)');c.fillStyle=g;c.fillRect(180,62,52,48);
+    // gente
+    const b=k=>Math.sin(t*3+k)>.6?-1:0;
+    person(150,92,'#3a2214','#c23b2e','#2a1d3a',P.wall,b(1));
+    person(98,88,'#d8d0c0','#5e6f8a','#3b2a1a','#c48a5e',0);
+    person(70,94,'#1a1326','#e8e2d6','#1a1326','#e6b98e',b(2));person(62,99,'#7a3a1a','#e8e2d6','#1a1326','#a86a42',b(3));person(48,96,'#1a1326','#2c2a40','#1a1326','#e6b98e',b(4));
+    person(266,52,'#2a1d10','#f0ece4','#2f4f8f','#e6b98e',b(5));
+    person(214,90,'#4a2a18','#6b4f8a','#2a1d3a','#e6b98e',b(6));
+    rect(151,88,3,1,'#fff');
+    // atardecer
+    const s=c.createLinearGradient(0,0,W,H);s.addColorStop(0,'rgba(255,140,60,.22)');s.addColorStop(.6,'rgba(200,80,90,.08)');s.addColorStop(1,'rgba(40,20,90,.28)');c.fillStyle=s;c.fillRect(0,0,W,H);
+  }
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const loop=ms=>{draw(ms/1000);if(!reduce)requestAnimationFrame(loop)};requestAnimationFrame(loop);
+  // retrato de Brin
+  const p=document.getElementById('bpor').getContext('2d'),q=(x,y,w,h,col)=>{p.fillStyle=col;p.fillRect(x,y,w,h)};
+  q(0,0,18,18,'#3a2c58');q(4,3,10,11,'#c48a5e');q(3,2,12,3,'#d8d0c0');q(3,4,2,5,'#d8d0c0');q(13,4,2,5,'#d8d0c0');
+  q(6,7,2,1,'#1a1326');q(10,7,2,1,'#1a1326');q(5,10,8,4,'#d8d0c0');q(7,11,4,1,'#8a4a32');q(2,14,14,4,'#5e6f8a');q(6,5,2,1,'#a06a46');
+})();
+</script>
