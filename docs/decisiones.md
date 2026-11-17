@@ -31,8 +31,12 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ### Mundo y simulación
 - **Simulación en dos niveles.** La isla donde estás se simula en detalle (personas con rutinas, relaciones y necesidades). El resto del mundo se simula de forma abstracta: facciones, poder, territorios y eventos.
 - Te enterás de lo que pasa lejos por el diario de los News Coo, los rumores y los carteles de recompensa.
-- **Época de inicio: cuando Luffy zarpa (1522).** Cómo entran los personajes canon está en discusión.
-- Puede haber personajes y tripulaciones originales, con sus propios poderes y frutas.
+- **Época de inicio: 22 años después de la ejecución de Roger,** en plena Gran Era Pirata.
+
+### Nueva generación: personajes canon
+- **El mundo es canon hasta la ejecución de Roger:** instituciones, geografía, reglas, el One Piece como tesoro, el Siglo Vacío. Las figuras históricas se mencionan por nombre, solo en texto, y nunca aparecen en pantalla.
+- **Todos los personajes vivos son originales,** incluidos los grandes puestos: Emperadores, almirantes, Shichibukai, Gorosei, etc. Los importantes se diseñan en conjunto con el estilo de One Piece y el resto lo genera el juego.
+- Ventajas: libertad total para la simulación, sin canon que se rompa ni spoilers, y el jugador puede llegar a ocupar esos puestos de forma creíble.
 
 ### Mapa y conocimiento
 - El mapa no se tiene desde el inicio: **se encuentra y se va completando** con lo que descubrís viajando y lo que la gente te cuenta o te muestra.
@@ -47,11 +51,11 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ### Personaje
 - Personaje propio y muy personalizable: cuerpo, piel, pelo, ojos, rasgos y accesorios.
 - **Origen aleatorio.** Familia de composición variable (padres, hermanos, de 0 a muchos), cada miembro con pocos rasgos. Son personas reales dentro de la simulación: pueden aparecer en el diario, tener una recompensa, ser capturadas.
-- Los familiares pueden tener secretos y vínculos con personajes del mundo, canon u originales.
+- Los familiares pueden tener secretos y vínculos con personajes del mundo, o con leyendas del pasado (por ejemplo, haber cruzado el camino de Roger).
 - **Linaje "D."**: aleatorio, ultra raro y oculto. Nunca se sabe al empezar; se descubre jugando.
 - **Prólogo de infancia y adolescencia** jugado de forma comprimida. Ahí se forman el sueño, las habilidades heredadas (por ejemplo, armas del dojo familiar) y los vínculos.
 - **El oficio se resuelve en el prólogo, no se juega.** Es una simulación de piratas, no de carpinteros. Sale de tu origen y de tus decisiones de infancia, y define tus habilidades, tu rol en un barco (navegante, cocinero, carpintero naval, médico…) y parte de tu estilo de pelea. Se usa cuando hace falta; no hay "trabajar 4 horas".
-- **El juego empieza con el personaje listo para zarpar,** o ya zarpando si su historia lo llevó a eso (ver "En discusión").
+- **El final del prólogo decide dónde empezás:** *listo para zarpar* (en tu isla, con la salida disponible entre los días 10 y 15) o *ya zarpaste* (te escapaste, te reclutaron, te llevaron a la fuerza), y entonces arrancás en el mar o en tu primer destino.
 - **Sueño**: se construye a partir de las decisiones del prólogo y se conecta con algo de tu vida que le dé sentido. Ejemplo: querer una familia por haber crecido huérfano.
 - **Rol emergente.** No hay clases: pirata, marine, ciudadano, revolucionario, etc. surgen de lo que hacés. El mundo reacciona con reputación por facción y por isla.
 - **Personajes que atraviesan tu historia**, generados desde tu origen: un rival, un amigo perdido que buscás, alguien que conociste de chico y que reaparece.
@@ -72,9 +76,9 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ### Frutas del Diablo
 - Se respetan las categorías canon: Paramecia, Zoan (incluidas antiguas y míticas) y Logia.
-- Hay frutas canon y frutas originales. Las originales tienen que sentirse de One Piece, ni rebuscadas ni fuera de tono.
+- Hay frutas canon (como objetos del mundo, con dueños originales) y frutas originales. Las originales tienen que sentirse de One Piece, ni rebuscadas ni fuera de tono.
 - **Cada fruta es un objeto del mundo**, con estado: tiene dueño, está en tránsito, escondida o perdida. Se venden, se roban y aparecen donde nadie las espera.
-- **Cuando un usuario muere, la fruta reaparece** y la puede conseguir cualquiera: el jugador, un NPC original o un personaje canon.
+- **Cuando un usuario muere, la fruta reaparece** y la puede conseguir cualquiera: el jugador o cualquier personaje del mundo.
 - **No sabés qué comiste** salvo que tengas acceso al catálogo de frutas, un objeto raro.
 - Muy pocas en el East Blue.
 
@@ -86,14 +90,9 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ---
 
 ## En discusión
-- **Personajes canon.** Dos opciones:
-  - *Opción 2, nueva generación:* el mundo, las instituciones, los lugares y la historia hasta la ejecución de Roger son canon y se mencionan por nombre, solo en texto. Todos los personajes vivos son originales, incluidos los grandes puestos (Emperadores, almirantes, Shichibukai). Recomendación de Claude.
-  - *Opción 3, canon a distancia:* los personajes canon existen solo en el diario, los rumores y las recompensas, y nunca aparecen en persona salvo que el autor aporte sus sprites. El autor duda: no tiene sentido que estén y nunca se los vea. Está probando herramientas de pixel art para ver si le resulta viable.
-- **Punto de inicio:** si el juego arranca en la isla de origen con la salida disponible en 10 a 15 días, o si el prólogo puede terminar directamente con el zarpe.
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
 - **Sistema de combate.** Merece una sesión propia.
 - Cómo se reparte el formato A dentro del B: qué dispara una página de manga y qué se resuelve en el mapa.
-- Si los personajes canon siguen el canon después de la fecha de inicio o actúan según la simulación (quizás como opción de partida).
 - Mapa del mundo: ¿hay un modo con el mapa entero conocido desde el inicio?
 - Detalle de la simulación del pasado: cuántos años, qué eventos, qué escala.
 - Lista de razas, rarezas y costos (hay que verificar contra el canon).
@@ -101,12 +100,13 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - Stack técnico: web con TypeScript y una librería 2D (propuesta, sin cerrar).
 
 ## Descartado
+- Personajes canon vivos en el juego, ya sea dibujados o solo a distancia. Reemplazado por la nueva generación.
 - Formato C (carta náutica) como formato principal. Puede quedar alguna idea suelta, por ejemplo para el mapa del mundo.
 - Copiar las estructuras de RimWorld o Project Zomboid. Son referencias de gráficos simples con sistemas complejos, no de mecánicas.
 
 ---
 
 ## Límites conocidos
-- **Arte de personajes canon:** Claude no dibuja personajes canon reconocibles, ni siquiera simplificados o en pixel, porque lo que cuenta es que se reconozcan, no el nivel de detalle. Si el autor quiere sprites canon, los hace o los encarga él (no usar sprites sacados de juegos oficiales). Ver "En discusión".
+- **Arte de personajes canon:** Claude no dibuja personajes canon reconocibles, ni siquiera simplificados o en pixel, porque lo que cuenta es que se reconozcan, no el nivel de detalle. Por eso se eligió la nueva generación: todos los personajes vivos son originales.
 - **Separar motor y contenido:** el motor es un simulador de mundo pirata y One Piece es un paquete de datos. Facilita una publicación futura.
 - **Lore:** los datos canon que aporte Claude se verifican antes de darlos por buenos. El autor tiene la última palabra sobre el canon.
