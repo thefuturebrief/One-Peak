@@ -104,6 +104,14 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ### Gráficos
 - **Referencia:** juegos fan de Pokémon y Pokémon de mitad de generaciones, en estilo, no en contenido. Vista cenital con tiles, sprites de 4 direcciones, paleta colorida y nivel de detalle intermedio. Nunca se usan recursos sacados de juegos de Pokémon.
 - Lo que viene después en combate se muestra en movimiento, no en maquetas estáticas.
+- **La prueba de estilo 1 no alcanza el estándar** (`prototipos/prueba-estilo/`): interfaces sin personalidad, diseños insípidos, gráficos pobres. Hace falta una identidad visual propia antes de producir más arte.
+
+### Diálogos
+- Los personajes hablan con estilo One Piece: exagerados, con gritos, nombres de técnicas, risas propias y apodos. Nada de registro rioplatense en los textos del juego.
+
+### Escalas de poder y efectos
+- Hay que definir con claridad las escalas de poder y cómo se organizan. Un aprendiz no le gana a un usuario de fruta poderoso al principio.
+- **Cada fruta, Haki y habilidad tiene su propia identidad visual,** y la magnitud del efecto refleja su poder real. Las frutas originales no pueden parecerse visualmente a una fruta canon conocida (las grietas en el aire se leen como la fruta sísmica).
 
 ### Haki
 - El Haki no está disponible al principio. Se aprende tras experiencias fuertes.
@@ -114,6 +122,9 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
+- **Biblia visual y pantalla objetivo:** definir paleta, proporciones, contornos, luz y lenguaje de interfaz propio, y cerrar una pantalla de calidad final antes de producir arte.
+- **Escala de poder:** niveles por mar, recompensas, potencial de la fruta por dominio del usuario, Haki.
+- **Variante de español de los diálogos.**
 - **Peleas grupales:** propuesta de una sola pelea donde los duelos aparecen solos, con órdenes a la tripulación.
 - **Cómo se representa la voluntad** sin números (ver propuesta en la conversación: expresión del retrato, postura y aura del sprite).
 - **Cómo se producen las páginas de manga** si el protagonista es personalizable (propuesta: componer con entorno, objetos, rivales y el protagonista de espaldas, en silueta o en primer plano parcial).
