@@ -31,8 +31,15 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ### Mundo y simulación
 - **Simulación en dos niveles.** La isla donde estás se simula en detalle (personas con rutinas, relaciones y necesidades). El resto del mundo se simula de forma abstracta: facciones, poder, territorios y eventos.
 - Te enterás de lo que pasa lejos por el diario de los News Coo, los rumores y los carteles de recompensa.
-- **Época de inicio: cuando Luffy zarpa (1522).** Los personajes canon existen en el mundo.
+- **Época de inicio: cuando Luffy zarpa (1522).** Los personajes canon existen en el mundo (ver "Personajes canon").
 - Puede haber personajes y tripulaciones originales, con sus propios poderes y frutas.
+
+### Personajes canon: canon a distancia, original de cerca
+- **En el mundo lejano, los personajes canon existen con su nombre.** Esa capa no tiene sprites: aparecen en el diario, los rumores, las recompensas y los eventos. Sus carteles muestran el nombre y la cifra, sin retrato.
+- **En la isla donde estás, todos los que conocés en persona son originales:** familia, rivales, tripulación, marines locales, piratas de paso.
+- **Regla de diseño:** los personajes que más pesan en tu historia siempre son originales. El canon es el contexto y el horizonte.
+- **Encuentros en persona con personajes canon** solo si su sprite existe en el paquete de contenido. Ese arte lo aporta el autor; Claude no lo dibuja. Sin ese arte, el personaje nunca aparece en pantalla y sigue viviendo en la capa lejana.
+- El motor define un formato de sprite único (tamaño, capas, cuadros por acción, paleta) para que cualquier arte se pueda cargar sin tocar código.
 
 ### Mapa y conocimiento
 - El mapa no se tiene desde el inicio: **se encuentra y se va completando** con lo que descubrís viajando y lo que la gente te cuenta o te muestra.
@@ -92,6 +99,6 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ---
 
 ## Límites conocidos
-- **Arte de personajes canon:** Claude no dibuja personajes canon reconocibles, ni siquiera en pixel. El motor va a cargar sus sprites desde el paquete de contenido. Hasta que exista ese arte, los personajes canon usan un sprite genérico.
+- **Arte de personajes canon:** Claude no dibuja personajes canon reconocibles, ni siquiera simplificados o en pixel, porque lo que cuenta es que se reconozcan, no el nivel de detalle. Si el autor quiere sprites canon, los hace o los encarga él (no usar sprites sacados de juegos oficiales). Ver "Personajes canon".
 - **Separar motor y contenido:** el motor es un simulador de mundo pirata y One Piece es un paquete de datos. Facilita una publicación futura.
 - **Lore:** los datos canon que aporte Claude se verifican antes de darlos por buenos. El autor tiene la última palabra sobre el canon.
