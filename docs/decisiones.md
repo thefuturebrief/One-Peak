@@ -31,15 +31,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ### Mundo y simulación
 - **Simulación en dos niveles.** La isla donde estás se simula en detalle (personas con rutinas, relaciones y necesidades). El resto del mundo se simula de forma abstracta: facciones, poder, territorios y eventos.
 - Te enterás de lo que pasa lejos por el diario de los News Coo, los rumores y los carteles de recompensa.
-- **Época de inicio: cuando Luffy zarpa (1522).** Los personajes canon existen en el mundo (ver "Personajes canon").
+- **Época de inicio: cuando Luffy zarpa (1522).** Cómo entran los personajes canon está en discusión.
 - Puede haber personajes y tripulaciones originales, con sus propios poderes y frutas.
-
-### Personajes canon: canon a distancia, original de cerca
-- **En el mundo lejano, los personajes canon existen con su nombre.** Esa capa no tiene sprites: aparecen en el diario, los rumores, las recompensas y los eventos. Sus carteles muestran el nombre y la cifra, sin retrato.
-- **En la isla donde estás, todos los que conocés en persona son originales:** familia, rivales, tripulación, marines locales, piratas de paso.
-- **Regla de diseño:** los personajes que más pesan en tu historia siempre son originales. El canon es el contexto y el horizonte.
-- **Encuentros en persona con personajes canon** solo si su sprite existe en el paquete de contenido. Ese arte lo aporta el autor; Claude no lo dibuja. Sin ese arte, el personaje nunca aparece en pantalla y sigue viviendo en la capa lejana.
-- El motor define un formato de sprite único (tamaño, capas, cuadros por acción, paleta) para que cualquier arte se pueda cargar sin tocar código.
 
 ### Mapa y conocimiento
 - El mapa no se tiene desde el inicio: **se encuentra y se va completando** con lo que descubrís viajando y lo que la gente te cuenta o te muestra.
@@ -56,10 +49,20 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **Origen aleatorio.** Familia de composición variable (padres, hermanos, de 0 a muchos), cada miembro con pocos rasgos. Son personas reales dentro de la simulación: pueden aparecer en el diario, tener una recompensa, ser capturadas.
 - Los familiares pueden tener secretos y vínculos con personajes del mundo, canon u originales.
 - **Linaje "D."**: aleatorio, ultra raro y oculto. Nunca se sabe al empezar; se descubre jugando.
-- **Prólogo de infancia** jugado de forma comprimida. Ahí se forman el sueño, las habilidades heredadas (por ejemplo, armas del dojo familiar) y los vínculos.
+- **Prólogo de infancia y adolescencia** jugado de forma comprimida. Ahí se forman el sueño, las habilidades heredadas (por ejemplo, armas del dojo familiar) y los vínculos.
+- **El oficio se resuelve en el prólogo, no se juega.** Es una simulación de piratas, no de carpinteros. Sale de tu origen y de tus decisiones de infancia, y define tus habilidades, tu rol en un barco (navegante, cocinero, carpintero naval, médico…) y parte de tu estilo de pelea. Se usa cuando hace falta; no hay "trabajar 4 horas".
+- **El juego empieza con el personaje listo para zarpar,** o ya zarpando si su historia lo llevó a eso (ver "En discusión").
 - **Sueño**: se construye a partir de las decisiones del prólogo y se conecta con algo de tu vida que le dé sentido. Ejemplo: querer una familia por haber crecido huérfano.
 - **Rol emergente.** No hay clases: pirata, marine, ciudadano, revolucionario, etc. surgen de lo que hacés. El mundo reacciona con reputación por facción y por isla.
 - **Personajes que atraviesan tu historia**, generados desde tu origen: un rival, un amigo perdido que buscás, alguien que conociste de chico y que reaparece.
+
+### Necesidades
+- **La salud es central:** las heridas pesan en las peleas y en todo lo demás.
+- Hambre, cansancio, plata y ánimo son **presión**: si se descuidan mucho, condicionan las decisiones y el día a día.
+
+### Ritmo de exploración
+- En la isla de origen, la posibilidad de zarpar aparece entre los días 10 y 15. Con barco propio hay más libertad.
+- **El juego invita a tomarse el tiempo.** El mundo tiene que ser lo bastante interesante para querer explorarlo entero sin apurarse.
 
 ### Razas
 - Están todas, con distinta rareza. Las raras son posibles pero poco frecuentes.
@@ -83,6 +86,11 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ---
 
 ## En discusión
+- **Personajes canon.** Dos opciones:
+  - *Opción 2, nueva generación:* el mundo, las instituciones, los lugares y la historia hasta la ejecución de Roger son canon y se mencionan por nombre, solo en texto. Todos los personajes vivos son originales, incluidos los grandes puestos (Emperadores, almirantes, Shichibukai). Recomendación de Claude.
+  - *Opción 3, canon a distancia:* los personajes canon existen solo en el diario, los rumores y las recompensas, y nunca aparecen en persona salvo que el autor aporte sus sprites. El autor duda: no tiene sentido que estén y nunca se los vea. Está probando herramientas de pixel art para ver si le resulta viable.
+- **Punto de inicio:** si el juego arranca en la isla de origen con la salida disponible en 10 a 15 días, o si el prólogo puede terminar directamente con el zarpe.
+- **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
 - **Sistema de combate.** Merece una sesión propia.
 - Cómo se reparte el formato A dentro del B: qué dispara una página de manga y qué se resuelve en el mapa.
 - Si los personajes canon siguen el canon después de la fecha de inicio o actúan según la simulación (quizás como opción de partida).
@@ -99,6 +107,6 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ---
 
 ## Límites conocidos
-- **Arte de personajes canon:** Claude no dibuja personajes canon reconocibles, ni siquiera simplificados o en pixel, porque lo que cuenta es que se reconozcan, no el nivel de detalle. Si el autor quiere sprites canon, los hace o los encarga él (no usar sprites sacados de juegos oficiales). Ver "Personajes canon".
+- **Arte de personajes canon:** Claude no dibuja personajes canon reconocibles, ni siquiera simplificados o en pixel, porque lo que cuenta es que se reconozcan, no el nivel de detalle. Si el autor quiere sprites canon, los hace o los encarga él (no usar sprites sacados de juegos oficiales). Ver "En discusión".
 - **Separar motor y contenido:** el motor es un simulador de mundo pirata y One Piece es un paquete de datos. Facilita una publicación futura.
 - **Lore:** los datos canon que aporte Claude se verifican antes de darlos por buenos. El autor tiene la última palabra sobre el canon.
