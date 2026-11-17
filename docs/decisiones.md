@@ -82,7 +82,30 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **No sabés qué comiste** salvo que tengas acceso al catálogo de frutas, un objeto raro.
 - Muy pocas en el East Blue.
 
-### Haki y combate
+### Combate
+- **La pelea la simula el motor** sobre el mapa B, en movimiento y con impacto. Tu personaje actúa por instinto según sus habilidades, su personalidad y su estado. No hay modo por turnos.
+- **Tres o cuatro pausas por pelea** en momentos clave. Las opciones dependen del rival y de tu personaje: lo que tiene cada uno, lo que sabés del otro y el estado de ambos.
+- **Pantalla limpia:** carteles breves que anuncian un ataque o una acción importante. El estado físico (cansancio general, heridas por zona) y el estado mental se despliegan solo cuando el jugador quiere verlos.
+- **Heridas por zona con color:** cuanto más roja la zona, más probable quedar fuera de combate en el próximo golpe. Cabeza, órganos, piernas y zonas sensibles pesan más. Una fractura puede obligarte a retirarte según varios factores.
+- **Chances de ganar como indicador general** (pocas, parejas, altas), que resume tu estado completo frente al rival. Sin porcentajes y sin explicar el porqué: el jugador lo deduce mirando su estado. Siempre podés seguir peleando aunque las chances sean pocas.
+- **Voluntad sin números:** el jugador entiende si está alta o baja por cómo se ve y se comporta su personaje.
+- **Efectos visuales característicos obligatorios:** grietas en el aire de una fruta sísmica, fuego, la onda del Haki del rey, etc. Son parte del ambiente de la pelea.
+- **Encuentros, no solo peleas:** hablar, mentir, sobornar, provocar, intimidar, huir o rendirse. Lo social cambia el combate.
+- Las frutas definen verbos de los que salen las técnicas. Las debilidades del rival se aprenden y son conocimiento.
+
+### Cicatrices
+- Cada cicatriz guarda quién, con qué y cuándo, y puede dejar nada (solo marca), dolor, miedo o debilidad. El miedo y el dolor se pueden superar.
+- Al mirar una cicatriz se abre el recuerdo.
+
+### Páginas de manga
+- **No se usan en combate.** Son para lo narrativo: recuerdos y flashbacks (también los de las cicatrices), momentos del prólogo, revelaciones, el primer cartel de recompensa y títulos de capítulo.
+- Tienen que estar muy bien diseñadas y ser fieles a lo que pasa: el jugador tiene que celebrarlas cuando aparecen.
+
+### Gráficos
+- **Referencia:** juegos fan de Pokémon y Pokémon de mitad de generaciones, en estilo, no en contenido. Vista cenital con tiles, sprites de 4 direcciones, paleta colorida y nivel de detalle intermedio. Nunca se usan recursos sacados de juegos de Pokémon.
+- Lo que viene después en combate se muestra en movimiento, no en maquetas estáticas.
+
+### Haki
 - El Haki no está disponible al principio. Se aprende tras experiencias fuertes.
 - **La derrota casi nunca mata.** Cada rival tiene una intención (matar, derrotar, capturar, humillar, reclutar) según su personalidad, su facción y el contexto.
 - La derrota abre caminos: prisión, subasta, perder el barco, rescatar a un compañero. Podés perderlo todo y quedar marcado.
@@ -91,21 +114,19 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
-- **Sistema de combate** (propuesta en curso; maqueta en `docs/maquetas/duelo-muelle.html`):
-  - Un solo motor simula la pelea sobre el mapa B. Cada acción la decide el personaje (*instinto*, por defecto, con una intención fijada por el jugador) o el jugador (*al mando*, por turnos). Se puede cambiar de modo en cualquier momento.
-  - La simulación se frena sola en los momentos críticos y ofrece decisiones. Hay una narración en texto al costado que muestra solo lo que importa, y el remate se abre como página de manga.
-  - Los encuentros son más amplios que la pelea: hablar, mentir, sobornar, provocar, intimidar, huir o rendirse. Lo social cambia el combate.
-  - Heridas por zona y órganos que quitan capacidades, calibradas al aguante de un shōnen. Cicatrices con historia, miedos y traumas superables. Las debilidades del rival se aprenden y son conocimiento.
-  - Las frutas definen verbos de los que salen las técnicas. El Haki lo usa el personaje cuando lo necesita y puede despertar en una situación extrema.
-  - Pendiente: peleas grupales (propuesta: una sola pelea donde los duelos aparecen solos, con órdenes a la tripulación).
-- Cómo se reparte el formato A dentro del B: qué dispara una página de manga y qué se resuelve en el mapa.
+- **Peleas grupales:** propuesta de una sola pelea donde los duelos aparecen solos, con órdenes a la tripulación.
+- **Cómo se representa la voluntad** sin números (ver propuesta en la conversación: expresión del retrato, postura y aura del sprite).
+- **Cómo se producen las páginas de manga** si el protagonista es personalizable (propuesta: componer con entorno, objetos, rivales y el protagonista de espaldas, en silueta o en primer plano parcial).
 - Mapa del mundo: ¿hay un modo con el mapa entero conocido desde el inicio?
 - Detalle de la simulación del pasado: cuántos años, qué eventos, qué escala.
 - Lista de razas, rarezas y costos (hay que verificar contra el canon).
 - Catálogo de frutas: cuántas, cuáles canon, cómo diseñar las originales.
-- Stack técnico: web con TypeScript y una librería 2D (propuesta, sin cerrar).
+- Stack técnico: web con TypeScript y Phaser (motor 2D con mapas de tiles, animación, partículas y cámara), con mapas en Tiled. Propuesta, sin cerrar.
+- **Origen del arte:** dibujado por Claude como pixel art a mano, paquetes con licencia libre, generado con IA y retocado, o una mezcla. Se decide con una prueba de estilo.
 
 ## Descartado
+- Modo de combate "al mando" por turnos. El instinto con pausas es el sistema.
+- Página de manga para el remate de las peleas.
 - Personajes canon vivos en el juego, ya sea dibujados o solo a distancia. Reemplazado por la nueva generación.
 - Formato C (carta náutica) como formato principal. Puede quedar alguna idea suelta, por ejemplo para el mapa del mundo.
 - Copiar las estructuras de RimWorld o Project Zomboid. Son referencias de gráficos simples con sistemas complejos, no de mecánicas.
