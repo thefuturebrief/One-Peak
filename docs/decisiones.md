@@ -158,6 +158,12 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ---
 
 ## En discusión
+- **Edificios entrables:** no todos, pero una gran variedad (casas, tabernas, tiendas, astilleros, edificios de la Marina si sos marine), siempre con gente y vida adentro; alguien puede tener algo importante que decir, o no.
+- **Razas jugables:** Humano, Mink y Gyojin. Brazos largos y Piernas largas quedan para más adelante.
+- **Origen según raza:** los Mink vienen de Zou y los Gyojin de la Isla Gyojin, o arrancan en un barco. Gyojin y Mink, por regla general, no pueden ser marines.
+- **Lugar de inicio:** idealmente al azar entre los cuatro Blues. Se empieza por el East Blue (Kalé) y se suman los demás.
+- **Islas:** todas las canon de los arcos principales y las secundarias más importantes, más algunas generadas. El autor va a pasar su lista.
+- **SpriteCook** (plugin conectado, cuenta gratuita con créditos limitados) se usa para piezas puntuales que LPC no tiene, como interiores y objetos. Primer resultado: `assets/interiores/casa-familia.png`.
 - **La familia se descubre jugando, no en el prólogo:** al terminar el prólogo despertás en tu casa; tu familia está ahí como gente que ya conocés. Lo que sabés de ellos y de tu historia se va revelando al hablar, con objetos de la casa y en tu diario.
 - **Casi todos los edificios se pueden entrar,** con gente adentro.
 - **Comentarios y conversaciones ambientales:** los NPCs dicen frases sobre su cabeza según el contexto y conversan entre sí; lo que escuchás puede darte información.
