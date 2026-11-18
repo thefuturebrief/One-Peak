@@ -55,6 +55,7 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **Linaje "D."**: aleatorio, ultra raro y oculto. Nunca se sabe al empezar; se descubre jugando.
 - **Prólogo de infancia y adolescencia** jugado de forma comprimida. Ahí se forman el sueño, las habilidades heredadas (por ejemplo, armas del dojo familiar) y los vínculos.
 - **El oficio se resuelve en el prólogo, no se juega.** Es una simulación de piratas, no de carpinteros. Sale de tu origen y de tus decisiones de infancia, y define tus habilidades, tu rol en un barco (navegante, cocinero, carpintero naval, médico…) y parte de tu estilo de pelea. Se usa cuando hace falta; no hay "trabajar 4 horas".
+- **El oficio del prólogo es un dato de tu historia,** con influencia en tu rol a bordo (navegante, espadachín, cocinero, músico, médico, arqueólogo…). No define estadísticas ni afinidades.
 - **El final del prólogo decide dónde empezás:** *listo para zarpar* (en tu isla, con la salida disponible entre los días 10 y 15) o *ya zarpaste* (te escapaste, te reclutaron, te llevaron a la fuerza), y entonces arrancás en el mar o en tu primer destino.
 - **Sueño**: se construye a partir de las decisiones del prólogo y se conecta con algo de tu vida que le dé sentido. Ejemplo: querer una familia por haber crecido huérfano.
 - **Rol emergente.** No hay clases: pirata, marine, ciudadano, revolucionario, etc. surgen de lo que hacés. El mundo reacciona con reputación por facción y por isla.
@@ -105,6 +106,7 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **Referencias concretas del autor:** Pokémon Añil (RPG Maker XP, estilo cercano a la tercera generación) y "Revelations" (a confirmar cuál). Se toma el aspecto, no los recursos, y se suma nuestra propia impronta.
 - **Referencia:** juegos fan de Pokémon y Pokémon de mitad de generaciones, en estilo, no en contenido. Vista cenital con tiles, sprites de 4 direcciones, paleta colorida y nivel de detalle intermedio. Nunca se usan recursos sacados de juegos de Pokémon.
 - Lo que viene después en combate se muestra en movimiento, no en maquetas estáticas.
+- **Biblia visual v1** en `docs/biblia-visual/`: concepto "dos tintas" (mundo en píxel a color, historia en tinta sobre papel), paleta, luz por hora, sistema de personajes, materiales de interfaz (madera, lona, papel, latón) y organización de cada pantalla. Pendiente de aprobación del autor.
 - **La prueba de estilo 1 no alcanza el estándar** (`prototipos/prueba-estilo/`): interfaces sin personalidad, diseños insípidos, gráficos pobres. Hace falta una identidad visual propia antes de producir más arte.
 
 ### Diálogos
@@ -114,7 +116,10 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ### Escalas de poder y efectos
 - **Al principio, la diferencia entre tener fruta y no tenerla es abismal.** Quien no tiene fruta solo gana en circunstancias raras: debilidades (mar, kairoseki), terreno, ingenio, ayuda o un usuario con poco dominio.
-- **Personajes y NPCs tienen estadísticas medibles** (fuerza, resistencia, ingenio, voluntad y otras a definir). La voluntad pasa a ser también una estadística con función mecánica.
+- **Siete estadísticas de 1 a 100:** Fuerza, Resistencia, Agilidad, IQ de combate, Intelecto, Voluntad y Carisma. Crecen haciendo. 100 es la cima del mundo; referencia orientativa: en el East Blue un marine raso ronda 20 y un capitán pirata chico entre 35 y 45 (a calibrar).
+- **IQ de combate e Intelecto son distintos:** se puede ser torpe fuera de la pelea y brillante dentro (como Luffy). El IQ de combate pesa mucho en el uso de las frutas.
+- **Voluntad:** es una estadística de fondo. Dentro de la pelea se ve como temple (aura, postura, expresión), sin números.
+- **La afinidad no impide comer ninguna fruta:** acelera el dominio.
 - **Compatibilidad con las frutas** según las características del personaje. Las frutas se agrupan por afinidad (por ejemplo, una fruta compleja de tipo quirúrgico pide ingenio; una sísmica, fuerza bruta). Esto resuelve el dominio.
 - **Poder por mar como distribución:** el East Blue es bajo y parejo; el Nuevo Mundo tiene enorme variedad, con gente de todos los calibres.
 - Hay que definir con claridad las escalas de poder y cómo se organizan. Un aprendiz no le gana a un usuario de fruta poderoso al principio.
@@ -129,9 +134,9 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
-- **Biblia visual y pantalla objetivo:** definir paleta, proporciones, contornos, luz y lenguaje de interfaz propio, y cerrar una pantalla de calidad final antes de producir arte.
+- **Aprobación de la biblia visual v1** y ajustes de la pantalla objetivo.
 - **Escala de poder:** niveles por mar, recompensas, potencial de la fruta por dominio del usuario, Haki.
-- **Estadísticas y afinidad** (propuesta de Claude en la conversación): qué estadísticas, escala, cómo crecen, y si la afinidad limita el techo de dominio o solo su velocidad.
+- **Afinidad:** si además de la velocidad limita el techo del dominio, y qué grupos de frutas pesan sobre qué estadísticas.
 - **Peleas grupales:** propuesta de una sola pelea donde los duelos aparecen solos, con órdenes a la tripulación.
 - **Cómo se representa la voluntad** sin números (ver propuesta en la conversación: expresión del retrato, postura y aura del sprite).
 - **Cómo se producen las páginas de manga** si el protagonista es personalizable (propuesta: componer con entorno, objetos, rivales y el protagonista de espaldas, en silueta o en primer plano parcial).
