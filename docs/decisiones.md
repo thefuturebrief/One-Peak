@@ -53,7 +53,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **Origen aleatorio.** Familia de composición variable (padres, hermanos, de 0 a muchos), cada miembro con pocos rasgos. Son personas reales dentro de la simulación: pueden aparecer en el diario, tener una recompensa, ser capturadas.
 - Los familiares pueden tener secretos y vínculos con personajes del mundo, o con leyendas del pasado (por ejemplo, haber cruzado el camino de Roger).
 - **Linaje "D."**: aleatorio, ultra raro y oculto. Nunca se sabe al empezar; se descubre jugando.
-- **Prólogo de infancia y adolescencia** jugado de forma comprimida. Ahí se forman el sueño, las habilidades heredadas (por ejemplo, armas del dojo familiar) y los vínculos.
+- **Prólogo como cuestionario de vida** (ver `docs/prologo.md`): diez preguntas de los 6 a los 17 años que forman carácter (cinco ejes), rasgos, estadísticas iniciales, oficio, vínculos, sueño y punto de partida. En Destino solo ves dos respuestas por pregunta y hay golpes del destino; en Libre ves todas y elegís el sueño.
+- **La familia se sortea y no depende del prólogo.** Es igual en ambos modos; las preguntas se adaptan a ella.
 - **El oficio se resuelve en el prólogo, no se juega.** Es una simulación de piratas, no de carpinteros. Sale de tu origen y de tus decisiones de infancia, y define tus habilidades, tu rol en un barco (navegante, cocinero, carpintero naval, médico…) y parte de tu estilo de pelea. Se usa cuando hace falta; no hay "trabajar 4 horas".
 - **El oficio del prólogo es un dato de tu historia,** con influencia en tu rol a bordo (navegante, espadachín, cocinero, músico, médico, arqueólogo…). No define estadísticas ni afinidades.
 - **El final del prólogo decide dónde empezás:** *listo para zarpar* (en tu isla, con la salida disponible entre los días 10 y 15) o *ya zarpaste* (te escapaste, te reclutaron, te llevaron a la fuerza), y entonces arrancás en el mar o en tu primer destino.
@@ -156,6 +157,7 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ---
 
 ## En discusión
+- **Base de personajes:** los sprites hechos por código no alcanzan el estándar. Propuesta: partir de una base profesional gratuita y sumarle piezas propias. Mana Seed descartado (lo gratuito es una muestra, el sistema completo es pago y su licencia prohíbe combinarlo con recursos generados por IA). Candidato: Universal LPC Character Generator (gratis, licencias CC-BY-SA/OGA-BY/GPL con crédito). Pendiente de que el autor lo mire.
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
 - **Iteración visual 4** (`docs/iteracion-4/`), pendiente de devolución: personajes reconstruidos con volumen por luz, contorno del color de la pieza, formas de cara, capas de ropa en orden y vista lateral coherente. Tres proporciones para elegir (A compacta, B intermedia, C estilizada). Plan de mejoras en `docs/plan.md`.
 - Iteración visual 3 (`docs/iteracion-3/`), con devolución recibida: personajes sobre una plantilla común (seis complexiones, cuatro direcciones, caminata), mezclas al azar, elenco rehecho, interfaz más chica y bajo demanda, panel del cuerpo por zonas.

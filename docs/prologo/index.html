@@ -1,0 +1,292 @@
+<title>Prólogo de vida</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Rubik:wght@400;500;600;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap">
+<style>
+/* Mesa de madera oscura con una hoja de bitácora en el centro: el prólogo se lee como un cuaderno. Un solo tema, a propósito. */
+:root{--bg:#1d1611;--wood:#2a1d15;--paper:#f4e9cf;--paper2:#e9dab6;--ink:#2a1d1a;--ink2:#6a5444;--line:#d5c29a;--red:#b8402e;--amber:#d99a2e;--green:#4f8a5a;--blue:#3e6a96;
+  --f:"Rubik",system-ui,sans-serif;--ft:"Lilita One","Rubik",sans-serif;--fp:"IM Fell English",Georgia,serif;--fsc:"IM Fell English SC",Georgia,serif;color-scheme:dark}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+body{background:repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 2px,transparent 2px 140px),linear-gradient(#2a1d15,#1d1611);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.55;min-height:100%;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 80px}
+.top{max-width:760px;margin:0 auto 18px;color:#e8d8b4;display:flex;flex-direction:column;gap:6px}
+.top .k{font-family:var(--fsc);color:var(--amber);letter-spacing:.1em}
+.top h1{margin:0;font-family:var(--ft);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1;color:#fff1d2}
+.top p{margin:0;color:#c8b48e;max-width:68ch;font-size:15px}
+.sheet{max-width:760px;margin:0 auto;background:repeating-linear-gradient(0deg,transparent 0 31px,rgba(62,106,150,.12) 31px 32px),var(--paper);border-radius:6px;box-shadow:0 14px 0 rgba(0,0,0,.4),inset 0 0 60px rgba(140,90,30,.18);padding:30px clamp(18px,5vw,48px) 34px;position:relative}
+.sheet::before{content:"";position:absolute;left:clamp(10px,3vw,30px);top:0;bottom:0;width:2px;background:rgba(184,64,46,.35)}
+.prog{display:flex;gap:5px;margin-bottom:18px}
+.prog i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+.prog i.d{background:var(--ink2)}.prog i.c{background:var(--red)}
+.age{font-family:var(--fsc);color:var(--red);font-size:17px;letter-spacing:.06em}
+h2{margin:2px 0 12px;font-family:var(--ft);font-weight:400;font-size:clamp(24px,4vw,32px);line-height:1.15;text-wrap:balance}
+.narr{font-family:var(--fp);font-style:italic;font-size:18px;color:var(--ink2);margin:0 0 14px;max-width:60ch}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{font:500 17px/1.35 var(--f);color:var(--ink);text-align:left;background:#fffaf0;border:2px solid #b9a37a;border-radius:10px;padding:11px 14px 11px 46px;cursor:pointer;position:relative;transition:transform .08s,border-color .08s}
+.opt::before{content:attr(data-n);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font:400 14px var(--ft);border:2px solid #b9a37a;color:#8a7044}
+.opt:hover,.opt:focus-visible{border-color:var(--red);outline:none;transform:translateX(3px)}
+.opt:hover::before,.opt:focus-visible::before{background:var(--red);border-color:var(--red);color:#fff}
+.hint{margin-top:14px;font-size:13.5px;color:var(--ink2)}
+.fate{border:3px solid var(--ink);background:#fff8e6;border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+.fate b{font-family:var(--ft);font-weight:400;font-size:22px;color:var(--red)}
+.fate p{margin:0;font-family:var(--fp);font-size:19px;line-height:1.45}
+.fate small{color:var(--ink2);font-size:13.5px}
+.btn{font:600 16px var(--f);color:#fff;background:var(--red);border:0;border-radius:9px;padding:11px 20px;cursor:pointer;box-shadow:0 4px 0 #7a2418}
+.btn:hover{background:#cc4a36}.btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.btn.alt{background:#fffaf0;color:var(--ink);border:2px solid #b9a37a;box-shadow:none}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:8px 0 16px}
+.mode{text-align:left;font:inherit;color:inherit;background:#fffaf0;border:2px solid #b9a37a;border-radius:12px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.mode b{font-family:var(--ft);font-weight:400;font-size:22px}
+.mode span{font-size:14.5px;color:var(--ink2)}
+.mode.on{border-color:var(--red);box-shadow:inset 0 0 0 2px var(--red)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--ink2);font-weight:600}
+input,select{font:500 16px var(--f);color:var(--ink);background:#fffaf0;border:2px solid #b9a37a;border-radius:8px;padding:8px 10px;min-width:0}
+input:focus-visible,select:focus-visible{outline:2px solid var(--red)}
+.fam{font-family:var(--fp);font-size:18.5px;line-height:1.5;margin:0 0 14px}
+.secret{font-family:var(--fp);font-style:italic;color:var(--red)}
+/* ficha final */
+.res{display:flex;flex-direction:column;gap:20px}
+.res h3{margin:0 0 8px;font-family:var(--fsc);font-weight:400;font-size:20px;color:var(--red);letter-spacing:.04em;border-bottom:1px solid var(--line);padding-bottom:3px}
+.who{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.who b{font-family:var(--ft);font-weight:400;font-size:38px;line-height:1}
+.who span{color:var(--ink2);font-size:15px}
+.axes{display:flex;flex-direction:column;gap:7px}
+.ax{display:grid;grid-template-columns:110px 1fr 110px;gap:10px;align-items:center;font-size:14px}
+.ax span:last-child{text-align:right}
+.ax .tr{height:10px;border-radius:5px;background:var(--line);position:relative}
+.ax .tr::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:2px;background:#a08a60}
+.ax .tr i{position:absolute;top:-4px;width:18px;height:18px;border-radius:50%;background:var(--ink);border:3px solid var(--paper);margin-left:-9px}
+.ax .on{font-weight:700;color:var(--ink)}.ax .off{color:#9a8566}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:14px;font-weight:600;padding:3px 11px;border-radius:999px;background:#fffaf0;border:1.5px solid #b9a37a}
+.chip.r{border-color:var(--red);color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 18px}
+.st{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:baseline;border-bottom:1px dotted #c8b48e;padding-bottom:2px;font-size:15px}
+.st b{font:400 22px var(--ft);font-variant-numeric:tabular-nums}
+.bonds{display:flex;flex-direction:column;gap:8px;font-size:15.5px}
+.bonds b{font-weight:600}
+.dreams{display:flex;flex-direction:column;gap:8px}
+.dream{text-align:left;font:500 17px/1.35 var(--fp);color:var(--ink);background:#fffaf0;border:2px solid #b9a37a;border-radius:10px;padding:12px 14px;cursor:pointer}
+.dream small{display:block;font:500 13.5px var(--f);color:var(--ink2);margin-top:3px}
+.dream.on{border-color:var(--red);background:#fff1e6}
+.dream:disabled{cursor:default}
+.start{display:flex;gap:12px;align-items:center;font-size:16px}
+.start b{font-family:var(--ft);font-weight:400;font-size:22px;color:var(--blue)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px 28px}
+.two > *{min-width:0}
+@media (prefers-reduced-motion:reduce){.opt{transition:none}}
+</style>
+
+<div class="top">
+  <div class="k">One-Peak · prototipo del prólogo</div>
+  <h1>Tu vida antes del mar</h1>
+  <p>Prototipo jugable. Tu familia se sortea sola; tu carácter, tu oficio, tus vínculos y tu sueño salen de diez preguntas sobre tu infancia y adolescencia. Probalo en los dos modos: en Destino la vida decide más por vos.</p>
+</div>
+<main class="sheet" id="app" aria-live="polite"></main>
+
+<script>
+// ===================== DATOS =====================
+const AX={coraje:['Cauto','Temerario'],corazon:['Frío','Compasivo'],orgullo:['Humilde','Orgulloso'],libertad:['Disciplinado','Libre'],ambicion:['Sereno','Ambicioso']};
+const STATS=[['fuerza','Fuerza'],['resistencia','Resistencia'],['agilidad','Agilidad'],['iq','IQ de combate'],['intelecto','Intelecto'],['voluntad','Voluntad'],['carisma','Carisma']];
+const OFICIOS={carpintero:['Aprendiz de carpintero naval','Carpintero de a bordo'],cocinero:['Pinche de cocina','Cocinero'],navegante:['Ayudante del cartógrafo','Navegante'],medico:['Ayudante del médico','Médico'],arqueologo:['Lector del faro','Arqueólogo'],combatiente:['Pendenciero del puerto','Combatiente'],musico:['Músico callejero','Músico'],tirador:['Cazador de gaviotas','Tirador']};
+const RAZAS=[['Humano',85],['Gyojin',5],['Mink',4],['Tribu de brazos largos',2],['Tribu de piernas largas',2],['Gigante',1],['Tontatta',1]];
+const NOM_M=['Tobías','Gaspar','Bruno','Otto','Darío','Ivo','Corin','Pío','Lucio','Galo','Elio','Teo'],NOM_F=['Marta','Rina','Nell','Lía','Sela','Mina','Tess','Ada','Vera','Nora','Zoe','Irma'],NOMBRES=[...NOM_M,...NOM_F];
+const OCUP=[['pescador','pescadora',4],['panadero','panadera',2],['carpintero de ribera','carpintera de ribera',2],['tabernero','tabernera',2],['comerciante','comerciante',1],['marine','marine',1],['maestro','maestra',1],['médico','médica',.6],['antiguo pirata','antigua pirata',.4]];
+// pregunta: edad, texto, opciones {t, ax, st, of, tr, tags, bond, start}
+const Q=[
+ {age:'6 años',q:'Cuando el mar se embravecía, ¿dónde estabas?',o:[
+  {t:'En el muelle, mirando romper las olas.',ax:{coraje:1},st:{voluntad:1},tags:['mar']},
+  {t:'Bajo la manta, contando los truenos.',ax:{coraje:-1},st:{intelecto:1},tr:['Miedo a las tormentas']},
+  {t:'Ayudando a los mayores a amarrar los botes.',ax:{corazon:1,libertad:-1},st:{fuerza:1,resistencia:1}},
+  {t:'En la taberna, escuchando historias de marineros.',st:{carisma:1,intelecto:1},tags:['historias']}]},
+ {age:'7 años',q:'Un chico mayor te quitó algo que querías mucho. ¿Qué hiciste?',o:[
+  {t:'Pelear, aunque supieras que ibas a perder.',ax:{orgullo:1,coraje:1},st:{voluntad:2},bond:'rival'},
+  {t:'Recuperarlo con una trampa.',ax:{libertad:1},st:{iq:2},bond:'rival'},
+  {t:'Dejarlo estar. No valía la pena.',ax:{orgullo:-1,coraje:-1},st:{intelecto:1}},
+  {t:'Contárselo a {cuidador}.',ax:{libertad:-1},st:{carisma:1}}]},
+ {age:'8 años',q:'¿Qué historia te contaban para dormir?',o:[
+  {t:'La del Rey de los Piratas y su tesoro al final del mundo.',ax:{libertad:1,ambicion:1},tags:['tesoro']},
+  {t:'La de un marine que defendió una isla él solo.',ax:{libertad:-1,corazon:1},tags:['justicia']},
+  {t:'La de un barco que navegó más allá de todos los mapas.',of:{navegante:2},tags:['explorar']},
+  {t:'Ninguna. En tu casa nadie contaba historias.',ax:{corazon:-1},st:{resistencia:1},tags:['soledad']}]},
+ {age:'10 años',q:'¿En qué se te iban las tardes?',o:[
+  {t:'Entre virutas, en el astillero.',of:{carpintero:3},st:{fuerza:1}},
+  {t:'En la cocina de la taberna, probándolo todo.',of:{cocinero:3},st:{resistencia:1}},
+  {t:'Mirando las estrellas y dibujando la costa.',of:{navegante:3},st:{intelecto:1}},
+  {t:'Con el médico del pueblo, sujetando vendas.',of:{medico:3},ax:{corazon:1}},
+  {t:'Leyendo los libros viejos del faro.',of:{arqueologo:3},st:{intelecto:2}},
+  {t:'Peleándote en el puerto con quien se dejara.',of:{combatiente:3},st:{fuerza:1,agilidad:1}},
+  {t:'Tocando cualquier cosa que sonara.',of:{musico:3},st:{carisma:1}},
+  {t:'Tirando piedras a las gaviotas sin fallar una.',of:{tirador:3},st:{agilidad:2}}]},
+ {age:'11 años',q:'Tu mejor amigo de la infancia…',o:[
+  {t:'…era más fuerte que tú y te protegía.',bond:'amigo:protector'},
+  {t:'…era más listo que tú y te metía en líos.',st:{iq:1},bond:'amigo:listo'},
+  {t:'…era alguien a quien nadie quería cerca.',ax:{corazon:1},bond:'amigo:paria'},
+  {t:'No tenías. Te bastabas solo.',ax:{corazon:-1,orgullo:1},st:{voluntad:1}}]},
+ {age:'12 años',q:'¿Qué era lo que más miedo te daba?',o:[
+  {t:'El mar de noche.',tr:['Miedo al mar de noche']},
+  {t:'Quedarte solo.',ax:{corazon:1},tr:['Miedo a la soledad']},
+  {t:'La Marina.',ax:{libertad:1},tr:['Desconfía de la Marina']},
+  {t:'Nada. O eso decías.',ax:{orgullo:1,coraje:1}}]},
+ {age:'14 años',q:'Viste a un marine pegarle a un pescador viejo. ¿Qué hiciste?',o:[
+  {t:'Te metiste en medio.',ax:{coraje:1,corazon:1},st:{voluntad:1},tags:['justicia']},
+  {t:'Le tiraste una piedra desde lejos y saliste corriendo.',ax:{libertad:1},st:{agilidad:1}},
+  {t:'Nada. Los marines son la ley.',ax:{libertad:-2}},
+  {t:'Fuiste a buscar ayuda.',ax:{corazon:1},st:{carisma:1}}]},
+ {age:'15 años',q:'La primera vez que tuviste dinero de verdad…',o:[
+  {t:'…lo guardaste para un barco.',ax:{ambicion:1},tags:['barco']},
+  {t:'…lo gastaste en una noche con tus amigos.',ax:{ambicion:-1},st:{carisma:1}},
+  {t:'…se lo diste a tu familia.',ax:{corazon:1}},
+  {t:'…lo apostaste. Y ganaste el triple.',ax:{coraje:1,ambicion:1},tr:['Suerte de jugador']}]},
+ {age:'16 años',q:'Hay una frase que nunca olvidaste. ¿Quién te la dijo?',o:[
+  {t:'{Cuidador}: «El mar no se le niega a nadie».',tags:['mar','familia']},
+  {t:'Un pirata de paso: «Ser libre cuesta caro».',ax:{libertad:1},tags:['libertad']},
+  {t:'Un marine: «La justicia no es lo mismo que la ley».',tags:['justicia']},
+  {t:'Tu rival: «Nunca vas a salir de esta isla».',ax:{orgullo:1},st:{voluntad:2},bond:'rival'}]},
+ {age:'17 años',q:'Esta noche zarpa un barco del puerto. ¿Qué haces?',o:[
+  {t:'Te escondes en la bodega.',ax:{libertad:1,coraje:1},start:'zarpado'},
+  {t:'Lo miras irse. Tu momento todavía no llegó.',ax:{coraje:-1},start:'listo'},
+  {t:'Te despides de alguien que se va en él.',ax:{corazon:1},bond:'perdido',start:'listo'},
+  {t:'Le preguntas al capitán si necesita a alguien.',st:{carisma:1},start:'zarpado'}]}
+];
+// golpes del destino (solo en modo Destino); cada uno puede depender de la familia
+const FATES=[
+ {when:s=>s.fam.adults.some(a=>a.vivo&&a.oc.startsWith('pescad')),t:s=>{const a=s.fam.adults.find(a=>a.vivo&&a.oc.startsWith('pescad'));a.vivo=false;a.desap=true;return`Una tormenta se llevó la barca de ${a.rel}. Nunca volvió, y nadie encontró los restos.`},fx:{ax:{corazon:1},tags:['desaparecido'],tr:['Miedo a las tormentas']}},
+ {when:()=>true,t:()=>'Un forastero pasó un verano entero en la isla. Antes de irse, te enseñó a pelear de verdad.',fx:{st:{fuerza:2,iq:1},of:{combatiente:1},bond:'maestro'}},
+ {when:()=>true,t:()=>'La marea dejó en la playa un trozo de mapa envuelto en hule. Nadie supo decirte de dónde era.',fx:{tags:['explorar'],item:'Trozo de mapa sin descifrar'}},
+ {when:()=>true,t:()=>'Casi te ahogas en el puerto. Te sacó del agua alguien a quien nunca volviste a ver.',fx:{tr:['Miedo al mar de noche'],bond:'salvador',st:{voluntad:1}}},
+ {when:s=>s.fam.sibs.some(h=>h.edad>s.age),t:s=>{const h=s.fam.sibs.find(h=>h.edad>s.age);h.oc='marine';return`La Marina pasó reclutando por la isla y ${h.nom}, ${h.fem?'tu hermana mayor':'tu hermano mayor'}, se fue con ellos.`},fx:{tags:['justicia','familia']}}
+];
+const DREAMS=[
+ {t:'Encontrar el gran tesoro y vivir sin que nadie te diga qué hacer.',sc:s=>s.ax.libertad+s.ax.ambicion+2*s.tag('tesoro')+s.tag('libertad')},
+ {t:'Llegar a lo más alto de la Marina y cambiarla desde dentro.',sc:s=>-s.ax.libertad+s.ax.corazon+2*s.tag('justicia')},
+ {t:'Navegar hasta donde ningún mapa llega.',sc:s=>2*s.tag('explorar')+s.of.navegante/2+s.ax.coraje},
+ {t:'Tener una tripulación que sea tu familia.',sc:s=>s.ax.corazon+2*s.tag('soledad')+(s.fam.huerfano?2:0)},
+ {t:'Que tu nombre se cuente en todas las tabernas del mundo.',sc:s=>s.ax.orgullo+s.ax.ambicion+s.tag('historias')},
+ {t:'Proteger tu isla para que nadie vuelva a pasar miedo.',sc:s=>s.ax.corazon-s.ax.libertad*.5+s.trs.length*.3},
+ {t:'Tener un barco propio y no deberle nada a nadie.',sc:s=>2*s.tag('barco')+s.ax.ambicion+s.ax.libertad*.5},
+ {t:'Construir el barco que cruce el Grand Line.',sc:s=>s.of.carpintero/1.5+s.ax.ambicion},
+ {t:'Cocinar para gente de todos los mares.',sc:s=>s.of.cocinero/1.5+s.ax.corazon*.5},
+ {t:'Curar lo que nadie sabe curar.',sc:s=>s.of.medico/1.5+s.ax.corazon},
+ {t:'Leer lo que el Gobierno quiere que nadie lea.',sc:s=>s.of.arqueologo/1.5+s.ax.libertad},
+ {t:'Encontrar a {desaparecido}.',sc:s=>s.desap()?4+s.ax.corazon:-99}
+];
+
+// ===================== MOTOR =====================
+let rnd=Math.random;
+const pick=a=>a[Math.floor(rnd()*a.length)];
+const wpick=a=>{const tot=a.reduce((s,x)=>s+x[x.length-1],0);let r=rnd()*tot;for(const x of a){r-=x[x.length-1];if(r<=0)return x}return a[0]};
+const S={};
+function newFamily(){
+  const used=new Set(),nom=fem=>{let n;do n=pick(fem?NOM_F:NOM_M);while(used.has(n));used.add(n);return n};
+  const adult=(rel,fem)=>{const r=rnd(),o=wpick(OCUP);return{rel,nom:nom(fem),oc:fem?o[1]:o[0],vivo:r<.72,desap:r>=.72&&r<.86}};
+  const adults=[adult('tu madre',true),adult('tu padre',false)];
+  const n=wpick([[0,3],[1,4],[2,3],[3,2],[4,1],[6,.4],[9,.15],[14,.05]])[0];
+  const sibs=Array.from({length:n},()=>{const fem=rnd()<.5;const o=wpick(OCUP);let e;do e=Math.max(1,Math.round(17+(rnd()-.5)*18));while(e===17);return{nom:nom(fem),fem,edad:e,oc:fem?o[1]:o[0]}});
+  let crianza=null;const vivos=adults.filter(a=>a.vivo);
+  if(!vivos.length)crianza=pick(['tu abuela','la vieja Doria, una vecina','el orfanato del pueblo','tu tío, el tabernero']);
+  const secret=rnd()<.35;
+  return{adults,sibs,crianza,huerfano:!vivos.length,secret};
+}
+function cuidador(){const v=S.fam.adults.filter(a=>a.vivo);return v.length?v[0].rel:S.fam.crianza.replace(/^el orfanato del pueblo$/,'la encargada del orfanato')}
+const fill=t=>t.replace('{cuidador}',cuidador()).replace('{Cuidador}',(c=>c[0].toUpperCase()+c.slice(1))(cuidador()));
+function famText(){const f=S.fam,parts=[];
+  for(const a of f.adults){parts.push(a.vivo?`${cap(a.rel)}, ${a.nom}, es ${a.oc}.`:a.desap?`${cap(a.rel)}, ${a.nom}, desapareció cuando eras muy pequeño.`:`${cap(a.rel)}, ${a.nom}, murió cuando eras muy pequeño.`)}
+  if(f.crianza)parts.push(`Te crió ${f.crianza}.`);
+  if(!f.sibs.length)parts.push('No tienes hermanos.');
+  else if(f.sibs.length<=3)parts.push('Tus hermanos: '+f.sibs.map(h=>`${h.nom} (${h.edad}${h.edad>17?', mayor':h.edad<17?', menor':''})`).join(', ')+'.');
+  else parts.push(`Sois ${f.sibs.length+1} hermanos. En casa nunca hubo silencio.`);
+  return parts.join(' ')}
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+function apply(fx){if(!fx)return;for(const k in fx.ax||{})S.ax[k]+=fx.ax[k];for(const k in fx.st||{})S.st[k]+=fx.st[k];for(const k in fx.of||{})S.of[k]+=fx.of[k];
+  (fx.tr||[]).forEach(t=>{if(!S.trs.includes(t))S.trs.push(t)});(fx.tags||[]).forEach(t=>S.tags.push(t));if(fx.bond)S.bonds.push(fx.bond);if(fx.item)S.items.push(fx.item);if(fx.start)S.start=fx.start}
+function reset(mode){
+  Object.assign(S,{mode,step:0,ax:{coraje:0,corazon:0,orgullo:0,libertad:0,ambicion:0},st:{},of:{},trs:[],tags:[],bonds:[],items:[],start:'listo',dream:null,fates:[],queue:[]});
+  STATS.forEach(([k])=>S.st[k]=mode==='destino'?6+Math.floor(rnd()*5):8);Object.keys(OFICIOS).forEach(k=>S.of[k]=0);
+  S.fam=newFamily();S.raza=mode==='destino'?wpick(RAZAS)[0]:'Humano';S.nombre=pick(['Ilo','Nara','Cato','Brisa','Teodor','Amaia','Joel','Sira']);
+  S.tag=t=>S.tags.filter(x=>x===t).length;S.desap=()=>S.fam.adults.find(a=>a.desap)||null;
+  // en Destino, dos golpes del destino en momentos al azar
+  if(mode==='destino'){const at=[2,6];at.forEach(i=>S.queue[i]=true)}
+}
+// ===================== PANTALLAS =====================
+const app=document.getElementById('app');
+function prog(){const n=Q.length;return`<div class="prog" aria-label="Pregunta ${Math.min(S.step+1,n)} de ${n}">${Q.map((_,i)=>`<i class="${i<S.step?'d':i===S.step?'c':''}"></i>`).join('')}</div>`}
+function screenStart(){
+  app.innerHTML=`<div class="age">Antes de empezar</div><h2>¿Cómo quieres vivir tu infancia?</h2>
+  <div class="modes"><button class="mode on" data-m="destino" type="button"><b>Destino</b><span>La vida decide más por ti: tu raza se sortea, en cada pregunta solo ves dos respuestas y a veces pasan cosas que no elegiste.</span></button>
+  <button class="mode" data-m="libre" type="button"><b>Libre</b><span>Eliges tu raza y ves todas las respuestas. Tu familia igual se sortea: nadie elige dónde nace.</span></button></div>
+  <div class="row" id="libreRow" hidden><label class="f" for="raza">Raza<select id="raza">${RAZAS.map(r=>`<option>${r[0]}</option>`).join('')}</select></label></div>
+  <div class="row" style="margin-top:16px"><button class="btn" id="go" type="button">Empezar</button></div>`;
+  let m='destino';app.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{m=b.dataset.m;app.querySelectorAll('.mode').forEach(x=>x.classList.toggle('on',x===b));document.getElementById('libreRow').hidden=m!=='libre'});
+  document.getElementById('go').onclick=()=>{reset(m);if(m==='libre')S.raza=document.getElementById('raza').value;screenFamily()};
+}
+function screenFamily(){
+  app.innerHTML=`<div class="age">Naciste en Kalé, en el East Blue</div><h2>Tu familia</h2>
+  <p class="fam">${famText()}</p>${S.raza!=='Humano'?`<p class="fam">Naciste ${S.raza==='Gigante'?'gigante':'de la raza '+S.raza.toLowerCase()}. En Kalé, eso no pasa desapercibido.</p>`:''}
+  ${S.fam.secret?'<p class="secret">Hay algo de tu familia que nadie te ha contado. Todavía.</p>':''}
+  <p class="hint">La familia no se elige: es la misma en los dos modos. Lo que hagas con ella, sí.</p>
+  <div class="row"><button class="btn" id="go" type="button">Empezar a crecer</button></div>`;
+  document.getElementById('go').onclick=screenQuestion;
+}
+function screenQuestion(){
+  if(S.step>=Q.length)return screenDream();
+  if(S.queue[S.step]){S.queue[S.step]=false;const opts=FATES.filter(f=>f.when(S)&&!S.fates.includes(f));if(opts.length){const f=pick(opts);S.fates.push(f);const txt=f.t(S);apply(f.fx);
+      app.innerHTML=`${prog()}<div class="fate"><b>Golpe del destino</b><p>${txt}</p><small>No lo elegiste. Pero te cambió.</small></div><div class="row" style="margin-top:12px"><button class="btn" id="go" type="button">Seguir</button></div>`;
+      document.getElementById('go').onclick=screenQuestion;document.getElementById('go').focus();return}}
+  const q=Q[S.step];let opts=q.o.map((o,i)=>({...o,i}));
+  if(S.mode==='destino'){opts=opts.sort(()=>rnd()-.5).slice(0,2)}
+  app.innerHTML=`${prog()}<div class="age">${q.age}</div><h2>${fill(q.q)}</h2><div class="opts">${opts.map((o,k)=>`<button class="opt" type="button" data-n="${k+1}" data-i="${o.i}">${fill(o.t)}</button>`).join('')}</div>
+  ${S.mode==='destino'?'<p class="hint">En Destino solo te llegan dos caminos posibles.</p>':''}`;
+  app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{apply(q.o[+b.dataset.i]);S.step++;screenQuestion()});
+  app.querySelector('.opt').focus({preventScroll:true});
+}
+function dreamList(){const desap=S.desap();return DREAMS.map(d=>({t:d.t.replace('{desaparecido}',desap?desap.rel:''),s:d.sc(S)})).filter(d=>d.s>-50).sort((a,b)=>b.s-a.s)}
+function motive(){const d=S.desap();if(d)return`Desde que ${d.rel} desapareció, algo te empuja mar adentro.`;
+  if(S.fam.huerfano)return'Creciste sin padres. Lo que no tuviste, lo vas a buscar.';
+  if(S.tag('justicia')>=2)return'Viste demasiadas veces cómo la ley y la justicia no eran lo mismo.';
+  if(S.tag('tesoro'))return'Desde aquella historia para dormir, no has dejado de pensar en lo que hay al final del mar.';
+  if(S.bonds.includes('rival'))return'Alguien te dijo que nunca saldrías de esta isla. Le vas a demostrar lo contrario.';
+  return'No sabes bien de dónde viene. Pero está ahí, todas las mañanas.'}
+function screenDream(){
+  const list=dreamList().slice(0,3);
+  if(S.mode==='destino'){S.dream=list[0].t;return screenResult()}
+  app.innerHTML=`${prog()}<div class="age">El final del prólogo</div><h2>¿Qué sueño te llevas al mar?</h2><p class="narr">${motive()}</p>
+  <div class="dreams">${list.map((d,i)=>`<button class="dream" type="button" data-i="${i}">${d.t}<small>${i===0?'Lo que más se parece a tu vida':'También podría ser'}</small></button>`).join('')}</div>`;
+  app.querySelectorAll('.dream').forEach(b=>b.onclick=()=>{S.dream=list[+b.dataset.i].t;screenResult()});
+}
+function bondText(b){
+  const n=()=>pick(NOMBRES.filter(x=>![...S.fam.adults.map(a=>a.nom),...S.fam.sibs.map(h=>h.nom)].includes(x)));
+  if(b==='rival')return`<b>${n()}, tu rival.</b> Te ganó más veces de las que quieres recordar. Dicen que ahora entrena con la Marina.`;
+  if(b==='amigo:protector')return`<b>${n()}, tu mejor amigo.</b> Siempre fue más fuerte que tú. Sigue en la isla, trabajando en el puerto.`;
+  if(b==='amigo:listo')return`<b>${n()}, tu mejor amigo.</b> Te metió en todos los líos posibles. Hace un año se fue sin despedirse.`;
+  if(b==='amigo:paria')return`<b>${n()}, tu amigo.</b> Nadie en Kalé quería acercarse a él. Tú sí. Él no lo ha olvidado.`;
+  if(b==='perdido')return`<b>${n()}, alguien que se fue.</b> Esa noche zarpó en aquel barco. Le prometiste que os volveríais a ver.`;
+  if(b==='maestro')return`<b>El forastero.</b> Nunca te dijo su nombre. Llevaba una cicatriz en forma de ancla.`;
+  if(b==='salvador')return`<b>Quien te sacó del agua.</b> Solo recuerdas un brazalete de cuentas rojas.`;
+  return''}
+function screenResult(){
+  const top=Object.entries(S.of).sort((a,b)=>b[1]-a[1])[0],of=top[1]>0?OFICIOS[top[0]]:['Sin oficio fijo','Grumete'];
+  const bonds=[...new Set(S.bonds)].map(bondText).filter(Boolean);
+  const axHtml=Object.entries(AX).map(([k,[a,b]])=>{const v=Math.max(-4,Math.min(4,S.ax[k]));return`<div class="ax"><span class="${v<0?'on':'off'}">${a}</span><span class="tr"><i style="left:${50+v*12}%"></i></span><span class="${v>0?'on':'off'}">${b}</span></div>`}).join('');
+  app.innerHTML=`<div class="res">
+   <div><div class="age">Tu ficha de vida · 17 años</div>
+    <div class="who"><b id="nm">${S.nombre}</b><span>${S.raza} · Kalé, East Blue · modo ${S.mode==='destino'?'Destino':'Libre'}</span></div>
+    <div class="row" style="margin-top:8px"><label class="f" for="name">Tu nombre<input id="name" value="${S.nombre}" maxlength="18"></label></div></div>
+   <div><h3>Familia</h3><p class="fam" style="margin:0">${famText()}</p>${S.fam.secret?'<p class="secret" style="margin:6px 0 0">Hay cosas de tu origen que todavía no sabes.</p>':''}</div>
+   <div class="two"><div><h3>Carácter</h3><div class="axes">${axHtml}</div></div>
+    <div><h3>Rasgos</h3><div class="chips">${S.trs.length?S.trs.map(t=>`<span class="chip r">${t}</span>`).join(''):'<span class="chip">Ninguno destacable</span>'}${S.items.map(t=>`<span class="chip">${t}</span>`).join('')}</div>
+     <h3 style="margin-top:16px">Oficio</h3><p style="margin:0">${of[0]}. A bordo, tu sitio sería: <b>${of[1]}</b>.</p></div></div>
+   <div><h3>Estadísticas iniciales</h3><div class="stats">${STATS.map(([k,n])=>`<div class="st"><span>${n}</span><b>${S.st[k]}</b></div>`).join('')}</div></div>
+   <div><h3>Vínculos</h3><div class="bonds">${bonds.length?bonds.map(b=>`<div>${b}</div>`).join(''):'<div>Nadie que te ate a esta isla. Por ahora.</div>'}</div></div>
+   <div><h3>Sueño</h3><p class="narr" style="margin:0 0 6px">${motive()}</p><p style="font-family:var(--fp);font-size:21px;margin:0">${S.dream}</p>${S.mode==='destino'?'<p class="hint" style="margin-top:4px">En Destino, el sueño te lo da tu vida.</p>':''}</div>
+   <div><h3>Punto de partida</h3><div class="start"><b>${S.start==='zarpado'?'Ya has zarpado':'Listo para zarpar'}</b><span>${S.start==='zarpado'?'Empiezas en el mar, escondido en una bodega o como grumete.':'Empiezas en Kalé. En unos días, alguna puerta al mar se abrirá.'}</span></div></div>
+   <div class="row"><button class="btn" id="again" type="button">Vivir otra vida</button><button class="btn alt" id="same" type="button">Misma familia, otras respuestas</button></div></div>`;
+  document.getElementById('name').oninput=e=>{document.getElementById('nm').textContent=e.target.value||'Sin nombre'};
+  document.getElementById('again').onclick=screenStart;
+  document.getElementById('same').onclick=()=>{const fam=S.fam,raza=S.raza,mode=S.mode;reset(mode);S.fam=fam;S.raza=raza;screenQuestion()};
+}
+screenStart();
+</script>
