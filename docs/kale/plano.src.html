@@ -1,0 +1,227 @@
+<title>Plano de Kalé</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Plano de obra: papel de calco azulado con tinta, rojo para puertas, azul para ventanas y oro para el sol. Columna de lectura con láminas anchas. */
+:root{
+  --bg:#eef1f3;--paper:#f8fafb;--ink:#1c2733;--soft:#54616f;--line:#2c4560;--grid:rgba(44,69,96,.09);
+  --door:#c8402e;--win:#2f78b7;--sun:#d39418;--sea:#cfe0ec;--sea2:#b9d1e2;--land:#e7ead8;--sand:#efe2bf;--rock:#c9c4b8;--wood:#c79a63;--stone:#d3d6db;--floorw:#f1e6d4;--floors:#e3e6ea;--road:#dcc9a3;--tree:#9fbf8a;--shade:rgba(20,30,40,.24);
+  --f:"IBM Plex Sans",system-ui,sans-serif;--fd:"Archivo","IBM Plex Sans",sans-serif;--fm:"IBM Plex Mono",ui-monospace,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1822;--paper:#15212d;--ink:#e3eaf1;--soft:#9fb0c1;--line:#9cc0e0;--grid:rgba(156,192,224,.08);
+  --door:#ff7a5c;--win:#6db4f0;--sun:#f0bb45;--sea:#13314a;--sea2:#0f2940;--land:#24302a;--sand:#3d3829;--rock:#3a3a3a;--wood:#7a5a36;--stone:#3a4048;--floorw:#2e2a22;--floors:#283038;--road:#4a3f2c;--tree:#2f4a2c;--shade:rgba(160,185,210,.2);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1822;--paper:#15212d;--ink:#e3eaf1;--soft:#9fb0c1;--line:#9cc0e0;--grid:rgba(156,192,224,.08);
+  --door:#ff7a5c;--win:#6db4f0;--sun:#f0bb45;--sea:#13314a;--sea2:#0f2940;--land:#24302a;--sand:#3d3829;--rock:#3a3a3a;--wood:#7a5a36;--stone:#3a4048;--floorw:#2e2a22;--floors:#283038;--road:#4a3f2c;--tree:#2f4a2c;--shade:rgba(160,185,210,.2);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--f);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+main{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:48px}
+h1,h2,h3{font-family:var(--fd);margin:0;text-wrap:balance;line-height:1.1}
+h1{font-size:clamp(34px,6vw,56px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:26px;font-weight:800}
+h3{font-size:19px;font-weight:700}
+p{margin:0;max-width:68ch}
+.lead{font-size:18px;color:var(--soft)}
+.tag{font:500 12px var(--fm);letter-spacing:.12em;text-transform:uppercase;color:var(--line)}
+header{display:flex;flex-direction:column;gap:10px}
+section{display:flex;flex-direction:column;gap:18px}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px 28px;margin:0;padding:0;list-style:none}
+.rules li{display:grid;grid-template-columns:38px 1fr;gap:10px;padding-top:12px;border-top:1px solid var(--grid)}
+.rules b{font:500 13px var(--fm);color:var(--line)}
+.rules span{min-width:0}
+.sheet{background:var(--paper);border:1px solid var(--grid);border-radius:6px;padding:14px;overflow-x:auto;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:13px 13px}
+.sheet svg{display:block;max-width:none}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px 20px;font-size:14px;color:var(--soft);margin:0;padding:0;list-style:none}
+.legend li{display:flex;gap:8px;align-items:baseline}
+.legend i{font:500 12px var(--fm);font-style:normal;color:var(--paper);background:var(--line);border-radius:9px;min-width:20px;height:18px;display:inline-grid;place-items:center;padding:0 4px}
+.bld{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;padding-top:24px;border-top:2px solid var(--line)}
+@media (max-width:760px){.bld{grid-template-columns:1fr}}
+.meta{display:flex;flex-direction:column;gap:10px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:14px;margin:0}
+.facts dt{color:var(--soft)}.facts dd{margin:0;font-family:var(--fm);font-size:13px}
+.notes{font-size:15px;color:var(--soft)}
+.key{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--soft)}
+.key span{display:inline-flex;gap:6px;align-items:center}
+.key svg{flex:none}
+.state{font:500 12px var(--fm);padding:2px 8px;border-radius:10px;border:1px solid var(--line);color:var(--line);width:max-content}
+.state.off{opacity:.6}
+ol.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;max-width:72ch}
+svg text{font-family:var(--f)}
+</style>
+
+<main>
+  <header>
+    <span class="tag">East Blue · Isla de partida</span>
+    <h1>Plano de Kalé</h1>
+    <p class="lead">Cómo es la isla, dónde va cada edificio y cómo es cada casa por dentro. Es la referencia para construir: el juego va a leer este mismo plano.</p>
+  </header>
+
+  <section>
+    <h2>Reglas</h2>
+    <ul class="rules" id="rules"></ul>
+  </section>
+
+  <section>
+    <h2>La isla</h2>
+    <p>64 × 44 casillas de 32 píxeles. El norte queda arriba. Los números corresponden a la lista de abajo.</p>
+    <div class="sheet" id="map"></div>
+    <ul class="legend" id="legend"></ul>
+  </section>
+
+  <section>
+    <h2>El sol y las sombras</h2>
+    <p>El sol sale por el este, pasa por el sur al mediodía y se pone por el oeste. La sombra cae siempre del lado contrario y es más larga cuanto más bajo está el sol. Por dentro, solo entra sol directo por las ventanas que miran hacia donde está el sol; las del norte dan luz pareja, sin rayo.</p>
+    <div class="sheet" id="sun"></div>
+  </section>
+
+  <section id="buildings">
+    <h2>Edificios</h2>
+    <div class="key" id="key"></div>
+  </section>
+
+  <section>
+    <h2>Orden de construcción</h2>
+    <ol class="steps">
+      <li>Revisar y aprobar este plano.</li>
+      <li>Rehacer el motor del mapa por casillas y por capas, para que techos y copas de árbol tapen a quien pasa por detrás, con colisiones tomadas de las plantas y sombras que se mueven con la hora.</li>
+      <li>Construir el exterior de Kalé siguiendo el mapa, revisando cada edificio contra su fachada.</li>
+      <li>Construir los interiores de a uno, en este orden: casa de la familia, taberna, casa de Brin, tienda, médico y faro. Cada uno se revisa contra su planta antes de pasar al siguiente.</li>
+    </ol>
+  </section>
+</main>
+
+<script>
+const P=/*PLANO*/;
+const RULES=[
+  ['Vista','Desde arriba en tres cuartos: de cada edificio se ve el techo entero y la fachada sur. Los costados quedan bajo el alero, que sobresale media casilla a cada lado y tiene su faldón lateral sombreado.'],
+  ['Puertas','Toda puerta de calle va en la fachada sur, apoyada en el suelo y con un escalón. Si un edificio queda al sur de una calle, el camino lo rodea hasta su puerta.'],
+  ['Caminos','Cada camino termina en una puerta o en otro camino. Ninguno muere contra una pared.'],
+  ['Escala','Una casilla son 32 píxeles. Una persona ocupa 1 × 2 casillas, una puerta 1 × 1,5 y una planta de altura son 3 casillas de fachada.'],
+  ['Dentro y fuera','El interior respeta al exterior: la puerta, las ventanas y la chimenea están en el mismo lado. Por dentro puede ser más amplio, como en todos los juegos de este tipo, pero la distribución es la misma.'],
+  ['Cuartos','Cada cuarto tiene sus paredes. Las puertas interiores solo van en paredes entre dos cuartos y las ventanas solo en paredes que dan afuera.'],
+  ['Luz','Ventana al este: sol de mañana. Al sur: sol del mediodía. Al oeste: sol de la tarde. Al norte: luz difusa, sin rayo. De noche, fuego y lámparas.'],
+  ['Capas','Suelo, sombras, base de los edificios, personajes, y encima techos y copas. Quien pasa por detrás de una casa queda tapado.'],
+];
+const ns='http://www.w3.org/2000/svg';
+const el=(t,a={},p)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const txt=(p,x,y,s,a={})=>{const e=el('text',{x,y,...a},p);e.textContent=s;return e};
+const css=v=>`var(--${v})`;
+document.getElementById('rules').innerHTML=RULES.map((r,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><span><strong>${r[0]}.</strong> ${r[1]}</span></li>`).join('');
+const ROOF={paja:'#d9b45a',tejas:'#b8553c',pizarra:'#6b7280','pizarra-azul':'#4a6890',tablas:'#8a6440',linterna:'#c9c4b8'};
+
+// ---------- mapa ----------
+(function(){
+  const M=P.mapa,S=13,W=M.w*S,H=M.h*S,svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Mapa de Kalé'});
+  const pts=a=>a.map(([x,y])=>`${x*S},${y*S}`).join(' ');
+  el('rect',{width:W,height:H,fill:css('sea')},svg);
+  for(let y=1;y<M.h;y+=3)el('path',{d:`M0 ${y*S} q ${S*2} -4 ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0 t ${S*4} 0`,fill:'none',stroke:css('sea2'),'stroke-width':1},svg);
+  el('polygon',{points:pts(M.costa),fill:css('land'),stroke:css('line'),'stroke-width':1.5},svg);
+  el('polygon',{points:pts(M.playa),fill:css('sand')},svg);
+  el('polygon',{points:pts(M.acantilado),fill:css('rock')},svg);
+  el('polygon',{points:pts(M.bosque),fill:'none'},svg);
+  for(let i=0;i<26;i++){const x=53.6+((i*37)%70)/10,y=7.6+((i*53)%50)/10;el('circle',{cx:x*S,cy:y*S,r:S*.75,fill:css('tree'),stroke:css('line'),'stroke-width':.6,opacity:.9},svg)}
+  for(const c of M.caminos)el('polyline',{points:pts(c.p),fill:'none',stroke:c.madera?css('wood'):css('road'),'stroke-width':S*2,'stroke-linecap':'round','stroke-linejoin':'round'},svg);
+  const pz=M.plaza;el('circle',{cx:pz.x*S,cy:pz.y*S,r:pz.r*S,fill:css('stone'),stroke:css('line'),'stroke-width':1},svg);
+  for(const[x,y,w,h]of M.muelle)el('rect',{x:x*S,y:y*S,width:w*S,height:h*S,fill:css('wood'),stroke:css('line'),'stroke-width':1},svg);
+  for(const[x,y]of M.botes)el('ellipse',{cx:x*S,cy:y*S,rx:S*1.2,ry:S*.45,fill:css('wood'),stroke:css('line'),'stroke-width':.8},svg);
+  const[bx,by,bw,bh]=M.barcoNegro;el('path',{d:`M${bx*S} ${(by+bh/2)*S} Q ${(bx+1)*S} ${by*S} ${(bx+bw*.8)*S} ${by*S} L ${(bx+bw)*S} ${(by+bh/2)*S} L ${(bx+bw*.8)*S} ${(by+bh)*S} Q ${(bx+1)*S} ${(by+bh)*S} ${bx*S} ${(by+bh/2)*S}Z`,fill:'#1a1a1f',stroke:css('line')},svg);
+  txt(svg,(bx+bw/2)*S,(by+bh+1.4)*S,'Barco de Dorne (fondeado)',{'text-anchor':'middle','font-size':11,fill:css('ink')});
+  const items=[];
+  for(const o of M.objetos){
+    if(o.t==='empalizada'){el('rect',{x:o.x*S,y:o.y*S,width:o.w*S,height:o.h*S,fill:'none',stroke:css('line'),'stroke-width':2,'stroke-dasharray':'4 3'},svg);el('rect',{x:(o.puerta-1)*S,y:(o.y+o.h)*S-2,width:2*S,height:4,fill:css('paper')},svg);continue}
+    if(o.w){el('rect',{x:o.x*S,y:o.y*S,width:o.w*S,height:o.h*S,fill:o.t==='huerto'?css('tree'):o.t==='grada'?css('wood'):css('paper'),stroke:css('line'),'stroke-width':1,'stroke-dasharray':o.t==='astillero'?'5 3':''},svg)}
+    else if(o.t==='monumento'){el('path',{d:`M${o.x*S} ${(o.y-1.3)*S} v ${2.2*S} m ${-S} ${-0.6*S} q ${S} ${S} ${2*S} 0 M${(o.x-.7)*S} ${(o.y-.8)*S} h ${1.4*S}`,stroke:css('ink'),'stroke-width':2,fill:'none'},svg)}
+    else el('circle',{cx:o.x*S,cy:o.y*S,r:S*.6,fill:o.t==='pozo'?css('win'):css('door'),stroke:css('line')},svg);
+    items.push(o);
+  }
+  // edificios
+  let n=0;const leg=[];
+  for(const b of P.edificios){const e=b.ext;n++;
+    const g=el('g',{},svg);
+    if(e.redondo)el('circle',{cx:(e.x+e.w/2)*S,cy:(e.y+e.d/2)*S,r:e.w/2*S,fill:ROOF[e.techo],stroke:css('line'),'stroke-width':1.5},g);
+    else{el('rect',{x:(e.x-.5)*S,y:e.y*S,width:(e.w+1)*S,height:e.d*S,fill:ROOF[e.techo],stroke:css('line'),'stroke-width':1.5},g);
+      el('rect',{x:e.x*S,y:(e.y+e.d)*S-4,width:e.w*S,height:4,fill:css('ink')},g);
+      if(e.chimenea!=null)el('rect',{x:(e.x+e.chimenea-.4)*S,y:(e.y+e.d*.35)*S,width:.8*S,height:.8*S,fill:css('stone'),stroke:css('line')},g)}
+    el('rect',{x:(e.x+e.puerta-.5)*S,y:(e.y+e.d)*S-3,width:S,height:6,fill:css('door')},g);
+    const cx=(e.x+e.w/2)*S,cy=(e.y+e.d/2)*S;el('circle',{cx,cy,r:9,fill:css('paper'),stroke:css('line')},g);txt(g,cx,cy+4,n,{'text-anchor':'middle','font-size':11,'font-weight':600,fill:css('ink')});
+    leg.push(`<li><i>${n}</i><span>${b.n}${b.entrable?'':' (por fuera)'}</span></li>`)}
+  for(const o of items){n++;const x=(o.w?o.x+o.w/2:o.x)*S,y=(o.w?o.y+o.h/2:o.y)*S+(o.w?0:16);el('circle',{cx:x,cy:y,r:8,fill:css('line')},svg);txt(svg,x,y+4,n,{'text-anchor':'middle','font-size':10,fill:css('paper')});leg.push(`<li><i>${n}</i><span>${o.n}</span></li>`)}
+  for(const c of M.caminos)if(c.n){const[a,b]=c.p;const mx=(a[0]+b[0])/2*S,my=(a[1]+b[1])/2*S;const ang=Math.abs(b[0]-a[0])>Math.abs(b[1]-a[1])?0:-90;txt(svg,mx,my+4,c.n,{'text-anchor':'middle','font-size':10,fill:css('soft'),transform:`rotate(${ang} ${mx} ${my})`,'font-style':'italic'})}
+  txt(svg,7*S,24.5*S,'Muelle',{'text-anchor':'middle','font-size':10,fill:css('ink')});
+  // brújula
+  const g=el('g',{transform:`translate(${W-46},${H-46})`},svg);el('circle',{r:26,fill:css('paper'),stroke:css('line')},g);el('path',{d:'M0 -20 L5 0 L0 20 L-5 0Z',fill:css('line')},g);txt(g,0,-28,'N',{'text-anchor':'middle','font-size':11,'font-weight':600,fill:css('ink')});
+  document.getElementById('map').appendChild(svg);
+  document.getElementById('legend').innerHTML=leg.join('');
+})();
+
+// ---------- sol y sombras ----------
+(function(){
+  const W=780,H=230,svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Sombra de una casa por la mañana, al mediodía y por la tarde'});
+  // planta vista desde arriba; la sombra es la planta corrida hacia el lado contrario al sol
+  const hull=pts=>{pts=pts.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);const lo=[],up=[];
+    for(const p of pts){while(lo.length>1&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p)}
+    for(const p of pts.reverse()){while(up.length>1&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p)}return lo.slice(0,-1).concat(up.slice(0,-1))};
+  [['Mañana','sol al este, sombra al oeste',[-46,-6],[150,0]],['Mediodía','sol al sur, sombra corta al norte',[0,-16],[0,82]],['Tarde','sol al oeste, sombra al este',[46,-6],[-150,0]]].forEach(([t,s,[sx,sy],[ux,uy]],i)=>{
+    const g=el('g',{transform:`translate(${i*260+130},${88})`},svg),w=110,d=56,x0=-w/2,y0=-d/2;
+    const c=[[x0,y0],[x0+w,y0],[x0+w,y0+d],[x0,y0+d]];el('polygon',{points:hull([...c,...c.map(([x,y])=>[x+sx,y+sy])]).map(p=>p.join(',')).join(' '),fill:css('shade')},g);
+    el('rect',{x:x0-5,y:y0,width:w+10,height:d*.62,fill:ROOF.paja,stroke:css('line')},g);el('rect',{x:x0,y:y0+d*.62,width:w,height:d*.38,fill:css('paper'),stroke:css('line')},g);el('rect',{x:-6,y:y0+d*.62+4,width:12,height:d*.38-4,fill:css('door')},g);
+    const sxp=Math.max(-84,Math.min(84,ux)),syp=uy?d/2+34:0;el('circle',{cx:sxp,cy:syp,r:11,fill:css('sun')},g);
+    txt(g,0,-54,t,{'text-anchor':'middle','font-size':15,'font-weight':700,fill:css('ink'),'font-family':'Archivo'});txt(g,0,d/2+(uy?70:34),s,{'text-anchor':'middle','font-size':12,fill:css('soft')});
+  });
+  document.getElementById('sun').appendChild(svg);
+})();
+
+// ---------- edificios ----------
+const keySvg=(draw)=>{const s=el('svg',{width:26,height:14,viewBox:'0 0 26 14'});draw(s);return s.outerHTML};
+document.getElementById('key').innerHTML=[
+  ['Pared',s=>el('rect',{x:0,y:5,width:26,height:4,fill:css('ink')},s)],
+  ['Puerta',s=>{el('rect',{x:0,y:5,width:26,height:4,fill:css('ink')},s);el('rect',{x:7,y:4,width:12,height:6,fill:css('door')},s)}],
+  ['Ventana con sol',s=>{el('rect',{x:0,y:5,width:26,height:4,fill:css('ink')},s);el('rect',{x:6,y:4,width:14,height:6,fill:css('sun')},s)}],
+  ['Ventana al norte, luz difusa',s=>{el('rect',{x:0,y:5,width:26,height:4,fill:css('ink')},s);el('rect',{x:6,y:4,width:14,height:6,fill:css('win')},s)}],
+  ['Piso de madera',s=>el('rect',{x:1,y:1,width:24,height:12,fill:css('floorw'),stroke:css('line')},s)],
+  ['Piso de piedra',s=>el('rect',{x:1,y:1,width:24,height:12,fill:css('floors'),stroke:css('line')},s)],
+].map(([n,d])=>`<span>${keySvg(d)}${n}</span>`).join('');
+function facade(b){const e=b.ext,S=14,W=e.w*S+40,H=6*S+16,svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Fachada sur de '+b.n});
+  const ox=20,base=H-10,wallH=3*S,top=base-wallH;
+  el('line',{x1:0,y1:base,x2:W,y2:base,stroke:css('line'),'stroke-width':1.5},svg);
+  if(e.redondo){el('rect',{x:ox,y:base-5*S,width:e.w*S,height:5*S,fill:css('stone'),stroke:css('line')},svg);el('rect',{x:ox-4,y:base-5*S-S*1.2,width:e.w*S+8,height:S*1.2,fill:ROOF.linterna,stroke:css('line')},svg);el('circle',{cx:ox+e.w*S/2,cy:base-5*S-S*.6,r:S*.4,fill:css('sun')},svg)}
+  else{el('polygon',{points:`${ox-S*.5},${top} ${ox+e.w*S+S*.5},${top} ${ox+e.w*S-S},${top-2.2*S} ${ox+S},${top-2.2*S}`,fill:ROOF[e.techo],stroke:css('line')},svg);
+    el('rect',{x:ox,y:top,width:e.w*S,height:wallH,fill:css('paper'),stroke:css('line')},svg);
+    if(e.chimenea!=null)el('rect',{x:ox+(e.chimenea-.4)*S,y:top-2.9*S,width:.8*S,height:1.3*S,fill:css('stone'),stroke:css('line')},svg);
+    for(const w of e.ventanas)el('rect',{x:ox+(w-.5)*S,y:top+.8*S,width:S,height:S,fill:css('win'),stroke:css('line')},svg);
+    if(e.cartel)el('rect',{x:ox+(e.puerta+.7)*S,y:top+.5*S,width:S*1.2,height:S*.6,fill:css('wood'),stroke:css('line')},svg);
+    if(e.bandera){el('line',{x1:ox+e.w*S+6,y1:base,x2:ox+e.w*S+6,y2:top-3*S,stroke:css('line')},svg);el('rect',{x:ox+e.w*S+6,y:top-3*S,width:S*1.4,height:S*.9,fill:css('win')},svg)}
+    if(e.pilotes)for(let i=0;i<=e.w;i+=2)el('rect',{x:ox+i*S-2,y:base,width:4,height:8,fill:css('wood')},svg)}
+  el('rect',{x:ox+(e.puerta-.5)*S,y:base-1.5*S,width:S,height:1.5*S,fill:css('door'),stroke:css('line')},svg);
+  el('rect',{x:ox+(e.puerta-.7)*S,y:base-2,width:S*1.4,height:4,fill:css('stone'),stroke:css('line')},svg);
+  return svg}
+function plan(b){const I=b.int,S=34,pad=26,W=I.w*S+pad*2,H=I.h*S+pad*2,svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Planta de '+b.n});
+  const g=el('g',{transform:`translate(${pad},${pad})`},svg),X=v=>v*S;
+  if(I.redondo){el('circle',{cx:X(I.w/2),cy:X(I.h/2),r:X(I.w/2),fill:css('floors')},g)}
+  else for(const[n,x,y,w,h,f]of I.cuartos)el('rect',{x:X(x),y:X(y),width:X(w),height:X(h),fill:f==='piedra'?css('floors'):css('floorw')},g);
+  for(const[n,x,y,w,h]of I.muebles){el('rect',{x:X(x),y:X(y),width:X(w),height:X(h),rx:3,fill:css('paper'),stroke:css('soft'),'stroke-width':1},g);
+    const fs=Math.min(11,Math.max(8,X(w)/Math.max(4,n.length)*1.7));const t=txt(g,X(x+w/2),X(y+h/2)+fs*.35,n,{'text-anchor':'middle','font-size':fs,fill:css('soft')});if(X(h)<X(w)&&false)t}
+  const wall=(x1,y1,x2,y2)=>el('line',{x1:X(x1),y1:X(y1),x2:X(x2),y2:X(y2),stroke:css('ink'),'stroke-width':6,'stroke-linecap':'square'},g);
+  if(I.redondo)el('circle',{cx:X(I.w/2),cy:X(I.h/2),r:X(I.w/2),fill:'none',stroke:css('ink'),'stroke-width':6},g);
+  else{wall(0,0,I.w,0);wall(I.w,0,I.w,I.h);wall(0,I.h,I.w,I.h);wall(0,0,0,I.h)}
+  for(const[x1,y1,x2,y2]of I.paredes)wall(x1,y1,x2,y2);
+  const onWall=(x,y,o,len,col,h=8)=>o==='h'?el('rect',{x:X(x),y:X(y)-h/2,width:X(len),height:h,fill:col},g):el('rect',{x:X(x)-h/2,y:X(y),width:h,height:X(len),fill:col},g);
+  for(const[x,y,o,len,c]of I.ventanas){onWall(x,y,o,len,c==='N'?css('win'):css('sun'));const lx=o==='h'?X(x+len/2):X(x)+(x===0?-14:14),ly=o==='h'?X(y)+(y===0?-11:20):X(y+len/2)+4;txt(g,lx,ly,c,{'text-anchor':'middle','font-size':11,'font-weight':600,fill:c==='N'?css('win'):css('sun')})}
+  for(const[x,y,o,len,to]of I.puertas){onWall(x,y,o,len,css('paper'),9);onWall(x,y,o,len,css('door'),5);
+    if(o==='h'){const sx=X(x),sy=X(y),r=X(len),dn=y===I.h?-1:1;el('path',{d:`M${sx} ${sy} L${sx} ${sy+dn*r} A ${r} ${r} 0 0 ${dn>0?0:1} ${sx+r} ${sy}`,fill:'none',stroke:css('door'),'stroke-width':1},g);
+      if(y===I.h)txt(g,X(x+len/2),X(y)+20,'entrada',{'text-anchor':'middle','font-size':11,fill:css('door'),'font-weight':600})}
+    else{const sx=X(x),sy=X(y),r=X(len);el('path',{d:`M${sx} ${sy} L${sx+r} ${sy} A ${r} ${r} 0 0 1 ${sx} ${sy+r}`,fill:'none',stroke:css('door'),'stroke-width':1},g)}}
+  for(const[n,x,y,w,h]of I.cuartos)if(I.cuartos.length>1||I.redondo){const t=txt(g,I.redondo?X(x+w/2)-30:X(x)+7,I.redondo?X(y+h/2)+X(1.6):X(y+h)-7,n,{'font-size':12,'font-weight':700,fill:css('line'),'font-family':'Archivo'})}
+  return svg}
+const host=document.getElementById('buildings');
+for(const b of P.edificios){const e=b.ext,d=document.createElement('article');d.className='bld';
+  const roofN={paja:'paja',tejas:'tejas rojas',pizarra:'pizarra','pizarra-azul':'pizarra azul',tablas:'tablas',linterna:'linterna'}[e.techo],facN={entramado:'entramado de madera',piedra:'piedra',madera:'tablas de madera'}[e.fachada];
+  d.innerHTML=`<div class="meta"><h3>${b.n}</h3><span class="state${b.entrable?'':' off'}">${b.entrable?'Se entra':'Por ahora, solo por fuera'}</span>
+    <dl class="facts"><dt>En el mapa</dt><dd>${e.w} × ${e.d} casillas</dd><dt>Techo</dt><dd>${roofN}</dd><dt>Fachada</dt><dd>${facN}${e.pilotes?', sobre pilotes':''}</dd>${b.int?`<dt>Interior</dt><dd>${b.int.w} × ${b.int.h} casillas</dd>`:''}</dl>
+    ${b.int&&b.int.notas?`<p class="notes">${b.int.notas}</p>`:''}<div class="sheet fac"></div></div><div class="sheet pl"></div>`;
+  d.querySelector('.fac').appendChild(facade(b));
+  if(b.int)d.querySelector('.pl').appendChild(plan(b));else d.querySelector('.pl').remove();
+  host.appendChild(d)}
+</script>
