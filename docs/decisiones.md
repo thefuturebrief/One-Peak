@@ -108,6 +108,10 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - Lo que viene después en combate se muestra en movimiento, no en maquetas estáticas.
 - **Devolución de la biblia v1:** lo mejor encaminado es el ambiente y la luz por hora. El arte del mundo está "a pocos pasos".
 - **Interfaz en alta definición:** HUD, menús y textos tienen que verse modernos, nítidos y legibles, no pixelados. El mundo sigue en píxel; la interfaz no.
+- **Nada de cámara lenta en la pausa:** la pelea se detiene para decidir, como en la prueba de estilo 1.
+- **Zoom:** la cámara por defecto está más cerca, con un nivel para alejarse y otro para acercarse; siempre se vuelve al normal.
+- **Referencias de interfaz:** Eastward (calidez y terminación) y RimWorld (información completa). La interfaz es original.
+- **Marines con equipo variado:** chaqueta sobre los hombros para oficiales, sables al cinto o cruzados, pistolas, mosquetes. Caras humanas con ojos elaborados.
 - **La pausa de la pelea acompaña, no tapa:** formato compacto como en la prueba de estilo 1, mejor resuelto. La viñeta grande en el centro queda descartada.
 - **Personajes con diseño propio:** los importantes se diseñan uno por uno, con la rareza y la personalidad de los diseños de One Piece. El generador queda para la multitud.
 - **Biblia visual v1** en `docs/biblia-visual/`: concepto "dos tintas" (mundo en píxel a color, historia en tinta sobre papel), paleta, luz por hora, sistema de personajes, materiales de interfaz (madera, lona, papel, latón) y organización de cada pantalla. Pendiente de aprobación del autor.
@@ -145,8 +149,7 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
-- **Iteración 2 de lo visual:** interfaz en alta definición, diseño de personajes clave, barco nuevo y pausa compacta.
-- **Tamaño de los personajes:** si se mantienen en unos 25 px o se agranda la escala para que entren diseños más particulares.
+- **Iteración visual 2** (`docs/iteracion-2/`), pendiente de devolución: casillas de 32 px, personajes de unos 52 px, zoom de tres niveles (alejado, normal, cerca), interfaz en alta definición, ocho personajes originales diseñados uno por uno, barco nuevo con mascarón y pausa compacta.
 - **Escala de poder:** niveles por mar, recompensas, potencial de la fruta por dominio del usuario, Haki.
 - **Afinidad:** si además de la velocidad limita el techo del dominio, y qué grupos de frutas pesan sobre qué estadísticas.
 - **Peleas grupales:** propuesta de una sola pelea donde los duelos aparecen solos, con órdenes a la tripulación.

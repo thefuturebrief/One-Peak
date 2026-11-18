@@ -1,0 +1,724 @@
+<title>Iteración visual 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Rubik:wght@400;500;600;700&family=IM+Fell+English+SC&display=swap">
+<style>
+/* Documento oscuro y cálido; las pantallas son 1280x720 escaladas. El mundo es píxel (480x270 visibles); la interfaz es HTML en alta definición. Un solo tema, a propósito. */
+:root{
+  --bg:#1b1714; --bg2:#241e19; --txt:#efe3c8; --dim:#b9ab90; --muted:#8e826d; --line:#3b332b; --brass:#e0b24e;
+  --wood-1:#3a2216; --wood-2:#5a3522; --wood-3:#7a4a2c; --wood-hi:#a8703e;
+  --paper:#f6ecd4; --paper-2:#eadbb8; --ink:#2a1d1a; --ink-2:#5e4a3a;
+  --red:#d24a32; --red-d:#9a2e22; --green:#5fae6e; --amber:#e8a53a; --sea:#2c6aae;
+  --f-doc:"Rubik", system-ui, sans-serif; --f-ui:"Rubik", system-ui, sans-serif; --f-title:"Lilita One", "Rubik", sans-serif; --f-print:"IM Fell English SC", Georgia, serif;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:var(--f-doc);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:44px 120px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:84px}
+header{display:flex;flex-direction:column;gap:10px;max-width:74ch}
+header .k{font-family:var(--f-print);color:var(--brass);letter-spacing:.1em}
+h1{margin:0;font-family:var(--f-title);font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1;letter-spacing:.01em;text-wrap:balance}
+header p{margin:0;color:var(--dim)}
+.changes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2px;background:var(--line);border:2px solid var(--line);margin-top:8px}
+.changes div{background:var(--bg2);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.changes b{font-family:var(--f-title);font-weight:400;font-size:19px;color:var(--brass)}
+.changes span{font-size:14.5px;color:var(--dim)}
+section{display:flex;flex-direction:column;gap:20px}
+.sh{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;border-top:2px solid var(--line);padding-top:14px}
+.sh .n{font-family:var(--f-print);color:var(--brass);font-size:18px}
+.sh h2{margin:0;font-family:var(--f-title);font-weight:400;font-size:clamp(26px,3.4vw,38px);line-height:1.05}
+.lead{margin:0;max-width:72ch;color:var(--dim)}
+.viewport{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;overflow:hidden;background:#000;border:2px solid #000}
+.stage{position:absolute;top:0;left:0;width:1280px;height:720px;transform-origin:0 0;overflow:hidden}
+.stage canvas.w{position:absolute;inset:0;width:1280px;height:720px;image-rendering:pixelated}
+.screen{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:18px 28px;align-items:start}
+@media (max-width:980px){.screen{grid-template-columns:1fr}}
+.legend{display:flex;flex-direction:column;gap:10px;font-size:14.5px;color:var(--dim)}
+.legend h3{margin:0;font-family:var(--f-title);font-weight:400;font-size:24px;color:var(--txt)}
+.legend ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+.legend b{color:var(--txt);font-weight:600}
+.cast{position:relative;width:100%;aspect-ratio:400/112;background:#000;border:2px solid #000}
+.cast canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.cast-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 22px}
+.cast-notes div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cast-notes b{font-family:var(--f-title);font-weight:400;font-size:19px}
+.cast-notes span{font-size:14px;color:var(--dim)}
+.zooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.zooms figure{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.zooms .vp{position:relative;aspect-ratio:16/9;background:#000;border:2px solid #000}
+.zooms canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.zooms figcaption{font-size:14px;color:var(--dim)}
+.zooms figcaption b{color:var(--txt);font-weight:600}
+.rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:74ch;color:var(--dim)}
+.rules b{color:var(--txt);font-weight:600}
+.note{font-size:13.5px;color:var(--muted);max-width:74ch}
+
+/* =================== INTERFAZ DEL JUEGO (alta definición) =================== */
+.ui{position:absolute;inset:0;font-family:var(--f-ui);color:var(--paper);pointer-events:none}
+/* madera */
+.wood{background:
+   repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 13px),
+   repeating-linear-gradient(90deg,rgba(255,220,170,.05) 0 2px,transparent 2px 9px),
+   linear-gradient(180deg,var(--wood-3),var(--wood-2) 60%,#4a2b1b);
+  border:3px solid #1e110b;border-radius:10px;box-shadow:inset 0 2px 0 rgba(255,210,150,.35),inset 0 -3px 0 rgba(0,0,0,.35),0 6px 0 rgba(0,0,0,.35)}
+.rivets{position:relative}
+.rivets::before,.rivets::after{content:"";position:absolute;top:7px;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3c4,#d6a23e 45%,#7a5214 80%);box-shadow:0 1px 0 rgba(0,0,0,.5)}
+.rivets::before{left:8px}.rivets::after{right:8px}
+/* lona / papel */
+.canvas-panel{background:
+   repeating-linear-gradient(45deg,rgba(120,90,50,.06) 0 2px,transparent 2px 5px),
+   repeating-linear-gradient(-45deg,rgba(120,90,50,.05) 0 2px,transparent 2px 5px),var(--paper);
+  color:var(--ink);border:3px solid #3a281c;border-radius:14px;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 7px rgba(140,104,62,.55),0 8px 0 rgba(0,0,0,.35)}
+/* latón */
+.brass{position:relative;border-radius:50%;background:conic-gradient(from 210deg,#fff0b8,#d9a440,#8a5e1a,#c89436,#fff0b8);padding:7px;box-shadow:0 5px 0 rgba(0,0,0,.4),inset 0 0 0 2px #5a3a10}
+.brass > .dial,.brass > .face{border-radius:50%;width:100%;height:100%;box-shadow:inset 0 0 0 2px #5a3a10,inset 0 4px 10px rgba(0,0,0,.35)}
+
+/* -- explorar -- */
+.time{position:absolute;left:22px;top:20px;display:flex;align-items:center;gap:0}
+.time .brass{width:96px;height:96px;z-index:1}
+.time .dial{background:linear-gradient(#ffd9a0 0 54%,#3d86c6 54% 100%);position:relative;overflow:hidden}
+.time .dial .arc{position:absolute;left:12px;right:12px;top:16px;height:68px;border:2px dashed rgba(90,58,16,.55);border-bottom:0;border-radius:60px 60px 0 0}
+.time .dial .sun{position:absolute;left:12px;top:38px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff6c8,#ffb43a 60%,#e2701c);box-shadow:0 0 14px 4px rgba(255,170,60,.7)}
+.time .dial .wave{position:absolute;left:0;right:0;top:54%;height:4px;background:repeating-linear-gradient(90deg,#cdeef6 0 8px,transparent 8px 14px)}
+.time .plate{margin-left:-18px;padding:10px 18px 10px 30px;display:flex;flex-direction:column;line-height:1.05}
+.time .plate b{font-family:var(--f-title);font-weight:400;font-size:28px;letter-spacing:.02em;color:#fff3d6;text-shadow:0 2px 0 #1e110b}
+.time .plate span{font-size:15px;font-weight:600;color:#ffcf8a}
+.money{position:absolute;right:22px;top:24px;display:flex;align-items:center;gap:10px;padding:8px 20px 8px 12px}
+.coin{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6cc,#f0c450 40%,#b07a1e 75%);display:grid;place-items:center;box-shadow:inset 0 0 0 2px #7a5214,0 2px 0 rgba(0,0,0,.4)}
+.coin svg{width:18px;height:26px}
+.money b{font-family:var(--f-title);font-weight:400;font-size:30px;color:#fff3d6;text-shadow:0 2px 0 #1e110b;font-variant-numeric:tabular-nums}
+.toast{position:absolute;left:50%;top:22px;transform:translateX(-50%) rotate(-.6deg);width:440px;padding:12px 18px 12px 64px;border-radius:6px;background:var(--paper);color:var(--ink);box-shadow:0 6px 0 rgba(0,0,0,.3);font-size:17px;line-height:1.3}
+.toast::before{content:"";position:absolute;left:50%;top:-8px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9a8a,#c8402e 55%,#7a1e14);box-shadow:0 2px 0 rgba(0,0,0,.4)}
+.toast svg{position:absolute;left:16px;top:50%;width:34px;height:34px;margin-top:-17px}
+.toast small{display:block;font-size:13px;color:var(--ink-2);margin-top:2px}
+.me{position:absolute;left:22px;bottom:22px;display:flex;align-items:flex-end}
+.me .brass{width:132px;height:132px;z-index:1}
+.me .face{background:#2c3e5e;position:relative;overflow:hidden}
+.me .face canvas{position:absolute;left:50%;top:52%;width:120px;height:120px;transform:translate(-50%,-50%);image-rendering:pixelated}
+.me .glow{position:absolute;inset:-6px;border-radius:50%;box-shadow:0 0 0 3px rgba(255,222,120,.85),0 0 22px 6px rgba(255,200,80,.45)}
+.me .plate{margin-left:-22px;margin-bottom:10px;padding:10px 16px 12px 34px;display:flex;flex-direction:column;gap:6px;min-width:260px}
+.me .plate .nm{font-family:var(--f-title);font-weight:400;font-size:26px;line-height:1;color:#fff3d6;text-shadow:0 2px 0 #1e110b}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;padding:3px 10px 3px 6px;border-radius:999px;background:rgba(20,10,6,.55);border:1.5px solid rgba(255,220,160,.35);color:#ffeacc}
+.chip i{width:16px;height:16px;border-radius:50%;display:block}
+.actions{position:absolute;right:22px;bottom:22px;display:flex;gap:10px;align-items:flex-end}
+.act{width:82px;height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative}
+.act svg{width:38px;height:38px}
+.act span{font-size:13px;font-weight:600;color:#ffe2b0}
+.act kbd{position:absolute;top:-10px;right:-8px;font-family:var(--f-title);font-size:15px;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;background:var(--paper);color:var(--ink);border:2px solid #1e110b;box-shadow:0 2px 0 #1e110b}
+.act.off{filter:grayscale(.8) brightness(.7)}
+.zoomctl{position:absolute;right:388px;bottom:30px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 8px;border-radius:12px}
+.zoomctl i{display:block;width:6px;height:6px;border-radius:50%;background:#7a5236}
+.zoomctl i.on{background:#ffd27a;box-shadow:0 0 6px #ffd27a;width:10px;height:10px}
+.zoomctl span{font-family:var(--f-title);color:#ffe2b0;font-size:18px;line-height:1}
+.prompt{position:absolute;display:flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;border-radius:10px;background:var(--paper);color:var(--ink);font-size:15px;font-weight:600;box-shadow:0 4px 0 rgba(0,0,0,.35);transform:translate(-50%,-100%);white-space:nowrap}
+.prompt::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-8px;border:8px solid transparent;border-top-color:var(--paper);border-bottom:0}
+.prompt kbd{font-family:var(--f-title);font-size:16px;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;background:var(--wood-3);color:#fff3d6;border:2px solid #1e110b}
+.prompt small{color:var(--ink-2);font-weight:500}
+
+/* -- diálogo -- */
+.talk{position:absolute;left:236px;right:70px;bottom:28px;height:236px;padding:30px 36px 22px 56px;display:flex;flex-direction:column;gap:10px}
+.talk p{margin:0;font-size:22px;line-height:1.42;max-width:58ch}
+.talk .opts{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.talk .opt{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:500;color:var(--ink-2);padding:4px 10px;border-radius:8px}
+.talk .opt kbd{font-family:var(--f-title);font-size:15px;width:24px;height:24px;border-radius:6px;display:grid;place-items:center;border:2px solid #8a6a46;color:#8a6a46}
+.talk .opt.on{background:rgba(210,74,50,.12);color:var(--red-d);font-weight:600}
+.talk .opt.on kbd{background:var(--red);border-color:var(--red-d);color:#fff}
+.talk .opt.on::before{content:"";width:0;height:0;border:8px solid transparent;border-left:11px solid var(--red);margin-left:-26px;margin-right:2px}
+.portrait{position:absolute;left:48px;bottom:44px;width:228px;height:252px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2}
+.portrait .pic{width:196px;height:196px;border-radius:10px;background:radial-gradient(circle at 50% 35%,#4a6a9a,#22344e);border:3px solid #1e110b;position:relative;overflow:hidden}
+.portrait .pic canvas{position:absolute;left:0;top:0;width:196px;height:196px;image-rendering:pixelated}
+.portrait .mood{font-size:13px;font-weight:600;color:#ffcf8a;letter-spacing:.04em;text-transform:uppercase}
+.nameplate{position:absolute;left:258px;bottom:248px;padding:7px 22px 7px 20px;z-index:3;display:flex;align-items:baseline;gap:10px}
+.nameplate b{font-family:var(--f-title);font-weight:400;font-size:26px;color:#fff3d6;text-shadow:0 2px 0 #1e110b}
+.nameplate span{font-size:14px;color:#ffcf8a;font-weight:500}
+.rel{position:absolute;right:96px;bottom:248px;z-index:3;display:flex;gap:8px}
+.rel .chip{background:#2a1d1a;border-color:#8a6a46}
+.learned{position:absolute;right:94px;top:300px;transform:rotate(-4deg);padding:10px 16px 10px 54px;border-radius:8px;background:#fff8e6;color:var(--ink);border:3px solid var(--red);box-shadow:0 6px 0 rgba(0,0,0,.3);font-size:15px;max-width:330px}
+.learned b{display:block;font-family:var(--f-title);font-weight:400;font-size:19px;color:var(--red)}
+.learned svg{position:absolute;left:12px;top:50%;width:30px;height:30px;margin-top:-15px}
+
+/* -- pausa compacta -- */
+.frame-red{position:absolute;inset:0;box-shadow:inset 0 0 0 6px rgba(210,74,50,.85),inset 0 0 120px 30px rgba(20,8,6,.55)}
+.pausetag{position:absolute;left:50%;top:22px;transform:translateX(-50%);font-family:var(--f-title);font-size:20px;letter-spacing:.2em;color:#fff3d6;background:var(--red);padding:4px 18px;border-radius:999px;border:3px solid #5a160e;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.callout{position:absolute;z-index:2;transform:translate(-50%,-100%);font-family:var(--f-title);font-size:22px;color:#fff3d6;background:#2a1d1a;border:3px solid var(--red);padding:3px 12px;border-radius:10px;white-space:nowrap;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.callout.g{border-color:var(--green)}
+.pz{position:absolute;left:40px;right:40px;bottom:26px;display:grid;grid-template-columns:330px 1fr;gap:16px;align-items:stretch}
+.pz .sit{padding:18px 22px;display:flex;flex-direction:column;gap:10px;border-color:#5a160e}
+.pz .sit h4{margin:0;font-family:var(--f-title);font-weight:400;font-size:32px;line-height:1;color:var(--red-d)}
+.pz .sit p{margin:0;font-size:17.5px;line-height:1.38}
+.meter{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:auto}
+.meter span{font-size:13px;font-weight:700;text-align:center;padding:5px 0;border-radius:6px;background:#e3d2ac;color:#8a6a46;text-transform:uppercase;letter-spacing:.06em}
+.meter span.on{background:var(--amber);color:#2a1606;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
+.pz .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pz .card{padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;position:relative}
+.pz .card kbd{position:absolute;top:-12px;left:14px;font-family:var(--f-title);font-size:17px;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--wood-3);color:#fff3d6;border:2px solid #1e110b;box-shadow:0 3px 0 #1e110b}
+.pz .card b{font-size:19px;line-height:1.25;font-weight:600;margin-top:6px}
+.pz .card .why{font-size:14px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.pz .card .why i{width:10px;height:10px;border-radius:50%;background:var(--green);flex:none}
+.pz .card .why i.r{background:var(--red)}
+.pz .card .why i.a{background:var(--amber)}
+.pz .card.on{border-color:var(--red);box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 7px var(--red),0 8px 0 rgba(0,0,0,.35);transform:translateY(-6px)}
+.foe{position:absolute;right:40px;top:76px;padding:12px 16px;display:flex;flex-direction:column;gap:4px;width:300px}
+.foe .nm{font-family:var(--f-title);font-size:22px;color:#fff3d6;text-shadow:0 2px 0 #1e110b}
+.foe span{font-size:14px;color:#ffe2b0}
+.foe span b{color:#ffb9a8;font-weight:600}
+.selfst{position:absolute;left:40px;top:76px;padding:12px 16px;display:flex;gap:12px;align-items:center}
+.selfst svg{width:40px;height:76px}
+.selfst div{display:flex;flex-direction:column;gap:2px;font-size:14px;color:#ffe2b0}
+.selfst div b{font-family:var(--f-title);font-weight:400;font-size:22px;color:#fff3d6}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="k">One-Peak · iteración visual 2</div>
+    <h1>Más cerca, más nítido, con más carácter</h1>
+    <p>Esta vuelta responde a tu devolución de la biblia v1. Lo que funcionaba (el ambiente y la luz) se mantiene; lo demás se rehízo.</p>
+    <div class="changes">
+      <div><b>Interfaz en alta definición</b><span>El mundo sigue en píxel; la interfaz ya no. Texto nítido y paneles con terminación de juego actual.</span></div>
+      <div><b>Cámara más cerca</b><span>Personajes de unos 52 px de alto, con la mitad de cuadros por casilla que antes. Zoom de tres niveles.</span></div>
+      <div><b>Personajes diseñados a mano</b><span>Ocho diseños originales con silueta propia, caras con ojos de verdad y equipo de pirata o de marine.</span></div>
+      <div><b>Barco nuevo y pausa compacta</b><span>La Medusa Rota con proporciones y mascarón. La pausa vuelve al formato que te gustó, mejor armada.</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sh"><span class="n">§ 1</span><h2>Elenco: personajes con diseño propio</h2></div>
+    <p class="lead">Ocho personajes originales, todos a la misma escala. La meta no es el detalle, sino que cada uno se reconozca de un vistazo y tenga el aire del mundo de One Piece: proporciones exageradas, un rasgo fuerte y un equipo que dice quién es.</p>
+    <div class="cast"><canvas id="cast" width="400" height="112" aria-label="Ocho personajes originales en fila"></canvas></div>
+    <div class="cast-notes">
+      <div><b>Ilo</b><span>Protagonista de ejemplo. Peto de trabajo, vincha naranja, mazo de calafatear al cinto.</span></div>
+      <div><b>Viejo Brin</b><span>Bajito y encorvado. Bigote de morsa, gorro de lana y botas de agua amarillas.</span></div>
+      <div><b>"Garra" Dorne</b><span>Hombros enormes y cintura fina. Tricornio, abrigo con galones, garra de hierro de tres dedos.</span></div>
+      <div><b>Tonel</b><span>Pirata de la Medusa Rota: cuerpo de barril, cabeza diminuta y un hacha a la espalda.</span></div>
+      <div><b>Silbo</b><span>Pirata flaco y altísimo, con chistera llena de cuchillos clavados en la cinta.</span></div>
+      <div><b>Capitana Velda</b><span>Oficial de la Marina. Chaqueta sobre los hombros, sable a la cintura, trenza en corona.</span></div>
+      <div><b>Soldado raso</b><span>Gorra, cuello marinero azul y mosquete al hombro. La Marina de a pie.</span></div>
+      <div><b>Sargento Muro</b><span>Corpulento, con bigote, palillo en la boca y pistola en el cinturón. Mangas arremangadas.</span></div>
+    </div>
+    <ul class="rules">
+      <li><b>Caras humanas:</b> ojos con blanco, iris, brillo y párpado, cejas que cambian con la expresión, nariz y boca. Los ojos van juntos al centro de la cara, no a los costados.</li>
+      <li><b>La Marina se reconoce por equipo variado:</b> chaqueta sobre los hombros para oficiales, sable al cinto o cruzado, pistola, mosquete, gorra.</li>
+      <li><b>Los piratas, por silueta:</b> cada tripulación tiene cuerpos que no se repiten. Un barril, un palo, un gigante con cintura de avispa.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">§ 2</span><h2>Escala y zoom</h2></div>
+    <p class="lead">Probé tu idea: la cámara por defecto está más cerca que antes, así los personajes ganan tamaño sin quedar desproporcionados respecto de puertas, barriles y casas, porque todo el mundo se dibujó a la misma escala nueva. Hay tres niveles de zoom, y el normal es al que siempre volvés.</p>
+    <div class="zooms">
+      <figure><div class="vp"><canvas class="zc" data-zoom="out" width="640" height="360" aria-label="Zoom alejado"></canvas></div><figcaption><b>Alejado</b> · para orientarte y ver quién anda cerca. Unas 20 casillas de ancho.</figcaption></figure>
+      <figure><div class="vp"><canvas class="zc" data-zoom="mid" width="480" height="270" aria-label="Zoom normal"></canvas></div><figcaption><b>Normal</b> · el de siempre. Unas 15 casillas, personajes legibles.</figcaption></figure>
+      <figure><div class="vp"><canvas class="zc" data-zoom="in" width="320" height="180" aria-label="Zoom cercano"></canvas></div><figcaption><b>Cerca</b> · para conversaciones y momentos. Unas 10 casillas.</figcaption></figure>
+    </div>
+    <ul class="rules">
+      <li><b>Casillas de 32 px:</b> el doble de detalle que en la biblia v1. Un personaje adulto mide algo más de una casilla y media, como una persona frente a una puerta.</li>
+      <li><b>En pantalla Full HD,</b> el zoom normal muestra el mundo a 4 píxeles de pantalla por píxel de arte: exacto, sin deformaciones.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">§ 3</span><h2>Pantallas con interfaz nueva</h2></div>
+
+    <div class="screen">
+      <div class="viewport"><div class="stage"><canvas class="w" data-scene="port" width="480" height="270" aria-label="Exploración en el puerto de Kalé"></canvas>
+        <div class="ui">
+          <div class="time"><div class="brass"><div class="dial"><div class="arc"></div><div class="sun"></div><div class="wave"></div></div></div><div class="plate wood"><b>Día 14</b><span>18:40 · atardecer</span></div></div>
+          <div class="money wood rivets"><div class="coin"><svg viewBox="0 0 18 26" aria-hidden="true"><path d="M5 2 V24 M10 2 V24" stroke="#5a3a10" stroke-width="2.2"/><path d="M2 5 H11 Q16 5 16 9.5 Q16 13 11 13 H2 M2 13 H12 Q17 13 17 17.5 Q17 22 12 22 H2" fill="none" stroke="#5a3a10" stroke-width="2.6"/></svg></div><b>3.200</b></div>
+          <div class="toast"><svg viewBox="0 0 34 34" aria-hidden="true"><path d="M17 4 V28 M9 12 H25 M6 22 Q17 34 28 22" fill="none" stroke="#2a1d1a" stroke-width="3" stroke-linecap="round"/><circle cx="17" cy="5" r="3" fill="none" stroke="#2a1d1a" stroke-width="2.5"/></svg>Atracó un barco con bandera negra en el muelle.<small>Hace un momento · muelle 2</small></div>
+          <div class="prompt" id="prompt"><kbd>E</kbd>Hablar <small>· Viejo Brin</small></div>
+          <div class="me"><div class="brass"><div class="face"><canvas class="pf" data-who="ilo" width="48" height="48" aria-label="Retrato de Ilo"></canvas></div><div class="glow"></div></div>
+            <div class="plate wood"><span class="nm">Ilo</span><div class="chips"><span class="chip"><i style="background:#ffd27a"></i>Firme</span><span class="chip"><i style="background:var(--amber)"></i>Hambre leve</span></div></div></div>
+          <div class="zoomctl wood"><span>+</span><i></i><i class="on"></i><i></i><span>−</span></div>
+          <div class="actions">
+            <div class="act wood rivets"><svg viewBox="0 0 38 38" aria-hidden="true"><rect x="7" y="5" width="24" height="29" rx="3" fill="#f6ecd4" stroke="#1e110b" stroke-width="2.5"/><path d="M12 13 H26 M12 19 H26 M12 25 H21" stroke="#5e4a3a" stroke-width="2.4"/><path d="M7 5 V34" stroke="#c8402e" stroke-width="4"/></svg><span>Bitácora</span><kbd>B</kbd></div>
+            <div class="act wood rivets"><svg viewBox="0 0 38 38" aria-hidden="true"><path d="M5 9 L14 5 L24 9 L33 5 V29 L24 33 L14 29 L5 33 Z" fill="#f6ecd4" stroke="#1e110b" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 5 V29 M24 9 V33" stroke="#1e110b" stroke-width="2"/><path d="M17 16 L21 20 M21 16 L17 20" stroke="#c8402e" stroke-width="2.5"/></svg><span>Mapa</span><kbd>M</kbd></div>
+            <div class="act wood rivets"><svg viewBox="0 0 38 38" aria-hidden="true"><path d="M8 14 Q8 32 19 33 Q30 32 30 14 Z" fill="#a8703e" stroke="#1e110b" stroke-width="2.5"/><path d="M8 14 H30 L26 7 H12 Z" fill="#7a4a2c" stroke="#1e110b" stroke-width="2.5" stroke-linejoin="round"/><circle cx="19" cy="22" r="4" fill="#f0c450" stroke="#1e110b" stroke-width="2"/></svg><span>Bolsa</span><kbd>I</kbd></div>
+            <div class="act wood rivets off"><svg viewBox="0 0 38 38" aria-hidden="true"><circle cx="13" cy="14" r="5" fill="#f6ecd4" stroke="#1e110b" stroke-width="2.5"/><circle cx="25" cy="14" r="5" fill="#f6ecd4" stroke="#1e110b" stroke-width="2.5"/><path d="M4 32 Q13 20 22 32 M16 32 Q25 20 34 32" fill="#f6ecd4" stroke="#1e110b" stroke-width="2.5"/></svg><span>Tripulación</span><kbd>T</kbd></div>
+          </div>
+        </div></div></div>
+      <div class="legend">
+        <h3>Explorar</h3>
+        <ol>
+          <li><b>Reloj de sol</b> arriba a la izquierda, con el día y la franja horaria.</li>
+          <li><b>Berries</b> arriba a la derecha.</li>
+          <li><b>Aviso fijado</b> arriba al centro, con ícono, hora y lugar. Se va solo.</li>
+          <li><b>Tu medallón</b> abajo a la izquierda: retrato, temple con brillo cuando está alto, y solo las necesidades que importan ahora.</li>
+          <li><b>Accesos con su tecla</b> abajo a la derecha. Tripulación aparece apagado hasta que tengas una.</li>
+          <li><b>Zoom</b> de tres puntos. El del medio es el normal.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="viewport"><div class="stage"><canvas class="w" data-scene="port" width="480" height="270" aria-label="Diálogo con el viejo Brin"></canvas>
+        <div class="ui">
+          <div class="portrait wood rivets"><div class="pic"><canvas class="pf" data-who="brin" width="48" height="48" aria-label="Retrato del viejo Brin"></canvas></div><span class="mood">Preocupado</span></div>
+          <div class="nameplate wood"><b>Viejo Brin</b><span>pescador del muelle</span></div>
+          <div class="rel"><span class="chip"><i style="background:var(--green)"></i>Te vio crecer</span><span class="chip"><i style="background:#8ab4e6"></i>Sabe algo de tu padre</span></div>
+          <div class="talk canvas-panel">
+            <p>Esa bandera de la medusa… la vi hace veinte años, el día que tu padre volvió del mar sin su bote. ¿Nunca te lo contó?</p>
+            <div class="opts">
+              <div class="opt on"><kbd>1</kbd>¿Qué pasó aquel día?</div>
+              <div class="opt"><kbd>2</kbd>¿Y quién es ese tío de la garra?</div>
+              <div class="opt"><kbd>3</kbd>Nada, Brin. Me voy.</div>
+            </div>
+          </div>
+          <div class="learned"><svg viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="12" fill="none" stroke="#d24a32" stroke-width="3"/><path d="M15 8 V17 M15 21 V22" stroke="#d24a32" stroke-width="3.5" stroke-linecap="round"/></svg><b>Dato nuevo</b>Tu padre se cruzó con la Medusa Rota hace veinte años.</div>
+        </div></div></div>
+      <div class="legend">
+        <h3>Hablar</h3>
+        <ol>
+          <li><b>Retrato grande en marco de madera,</b> con la expresión del momento escrita debajo.</li>
+          <li><b>Nombre y oficio</b> en un tablón.</li>
+          <li><b>Vínculos</b> arriba a la derecha: qué relación tiene con vos y qué podría saber. Es información a lo RimWorld, sin abrir menús.</li>
+          <li><b>Texto grande y legible,</b> en castellano de España. Opciones con su tecla; la elegida se marca en rojo.</li>
+          <li><b>Dato nuevo:</b> lo que aprendés pasa a la bitácora.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="viewport"><div class="stage"><canvas class="w" data-scene="fight" width="480" height="270" aria-label="Pelea pausada en el muelle"></canvas>
+        <div class="ui">
+          <div class="frame-red"></div>
+          <div class="pausetag">PAUSA</div>
+          <div class="callout" id="c1">¡Krakaka!</div>
+          <div class="callout g" id="c2">Cojea de la derecha</div>
+          <div class="selfst wood"><svg viewBox="0 0 40 76" aria-hidden="true"><circle cx="20" cy="10" r="8" fill="#e8dcc0"/><rect x="10" y="20" width="20" height="24" rx="4" fill="#e8a53a"/><rect x="3" y="21" width="6" height="22" rx="3" fill="#e8dcc0"/><rect x="31" y="21" width="6" height="22" rx="3" fill="#d24a32"/><rect x="11" y="45" width="8" height="28" rx="3" fill="#e8dcc0"/><rect x="21" y="45" width="8" height="28" rx="3" fill="#e8dcc0"/></svg><div><b>Ilo</b><span>Hombro izquierdo: grave</span><span>Costillas: golpeadas</span><span>Temple: firme</span></div></div>
+          <div class="foe wood"><span class="nm">"Garra" Dorne</span><span>Recompensa: 8.000.000</span><span>Parece querer <b>humillarte</b>, no matarte</span><span>Usuario de fruta: <b>sospechás que sí</b></span></div>
+          <div class="pz">
+            <div class="sit canvas-panel"><h4>¡Momento!</h4><p>Dorne baja el hombro para lanzarte del muelle. Las tablas crujen bajo sus pies.</p>
+              <div class="meter"><span>Pocas</span><span class="on">Parejas</span><span>Altas</span></div></div>
+            <div class="opts">
+              <div class="card canvas-panel on"><kbd>1</kbd><b>Barrerle la pierna mala</b><span class="why"><i></i>Viste que cojea</span><span class="why"><i class="a"></i>Riesgo medio</span></div>
+              <div class="card canvas-panel"><kbd>2</kbd><b>«¿Eso es todo lo que tienes, Garra?»</b><span class="why"><i></i>Es orgulloso</span><span class="why"><i class="a"></i>Puede enfurecerlo</span></div>
+              <div class="card canvas-panel"><kbd>3</kbd><b>Retroceder hacia la orilla</b><span class="why"><i class="a"></i>Defensa</span><span class="why"><i class="r"></i>Le das terreno</span></div>
+            </div>
+          </div>
+        </div></div></div>
+      <div class="legend">
+        <h3>Pausa en la pelea</h3>
+        <ol>
+          <li><b>Vuelve el formato de la prueba de estilo:</b> la pelea se detiene y decidís, pero la escena se sigue viendo.</li>
+          <li><b>Abajo, la decisión:</b> la situación, las chances en una barra de tres (pocas, parejas, altas) y tres cartas de opción con su tecla.</li>
+          <li><b>Cada carta dice de dónde sale y qué arriesga,</b> con puntos de color: verde a favor, ámbar con riesgo, rojo en contra.</li>
+          <li><b>Arriba, los dos estados:</b> tus heridas por zona y lo que sabés del rival, incluida su intención.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">§ 4</span><h2>El barco: la Medusa Rota</h2></div>
+    <p class="lead">Rehecho con proporciones de barco: casco largo con borda, castillo de popa, dos palos con velas recogidas y jarcia, y un mascarón de proa que lo identifica. Se ve en las capturas de arriba, atracado junto al muelle. Su mascarón es una medusa de madera con la campana rajada, que explica el nombre.</p>
+    <ul class="rules">
+      <li><b>El mascarón es la firma del barco:</b> será la pieza más personalizable cuando armes o encargues el tuyo.</li>
+      <li><b>Partes intercambiables:</b> casco por tamaño, color de casco y franja, velas, número de palos, castillo de popa, cañones y mascarón. Así salen los modelos prediseñados y los encargos al carpintero naval.</li>
+    </ul>
+  </section>
+
+  <p class="note">Todos los personajes, barcos, lugares y textos de esta página son originales. Las referencias de interfaz (Eastward, RimWorld) se usaron solo como dirección general, no como modelo a copiar.</p>
+</div>
+
+<script>
+// =====================================================================
+// MOTOR DE PIXEL ART (mismo de la biblia, escala nueva)
+// =====================================================================
+const WW=640,WH=360;
+const C={out:0x2a1c26,
+  g1:0x2c5a3c,g2:0x3e7c40,g3:0x5aa04a,g4:0x8ac85a,g5:0xc6e47e,d1:0x5e3a2a,d2:0x8e6040,d3:0xbc8e5c,d4:0xdcb882,
+  s1:0xa8845a,s2:0xd4b07a,s3:0xead09a,s4:0xfaecc4,w0:0x13295a,w1:0x1d4686,w2:0x2a64a8,w3:0x3d86c6,w4:0x74b6e0,w5:0xcdeef6,wf:0xf4ffff,
+  k1:0x3a2018,k2:0x6a3a24,k3:0x9a5c34,k4:0xc68a52,k5:0xe6b67e,p1:0x9a8ca0,p2:0xc9c0c8,p3:0xece3da,p4:0xfff8ee,
+  r1:0x5a1e26,r2:0x8c2f2e,r3:0xc0503c,r4:0xe27e58,r5:0xf4b07e,t1:0x1c3c48,t2:0x2c6470,t3:0x489896,t4:0x86cabe,
+  n1:0x383648,n2:0x5c586e,n3:0x8a8698,n4:0xbcb6c6,b1:0x6a4618,b2:0xb0842e,b3:0xe6c25e,b4:0xfff0b0,
+  v1:0x2a1e34,v2:0x3e2e4e,v3:0x56426c,v4:0x725a8a,pink:0xf08aa8,red:0xc8402e,cream:0xefe4cc,cream2:0xddcca8,white:0xfff8ee};
+function hash(x,y,s=0){let h=(Math.imul(x,374761393)+Math.imul(y,668265263)+Math.imul(s,982451653))|0;h=Math.imul(h^(h>>>13),1274126177);return((h^(h>>>16))>>>0)/4294967296}
+class PB{
+  constructor(w,h){this.w=w;this.h=h;this.d=new Int32Array(w*h).fill(-1)}
+  set(x,y,c){x=Math.floor(x);y=Math.floor(y);if(x<0||y<0||x>=this.w||y>=this.h||c==null)return;this.d[y*this.w+x]=c}
+  get(x,y){x=Math.floor(x);y=Math.floor(y);if(x<0||y<0||x>=this.w||y>=this.h)return -1;return this.d[y*this.w+x]}
+  rect(x,y,w,h,c){for(let j=0;j<h;j++)for(let i=0;i<w;i++)this.set(x+i,y+j,c)}
+  ell(cx,cy,rx,ry,c,cond){for(let y=Math.floor(cy-ry-1);y<=cy+ry+1;y++)for(let x=Math.floor(cx-rx-1);x<=cx+rx+1;x++){const dx=(x+.5-cx)/rx,dy=(y+.5-cy)/ry;if(dx*dx+dy*dy<=1&&(!cond||cond(x,y)))this.set(x,y,c)}}
+  poly(pts,c,cond){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const[x,y]of pts){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)}
+    for(let y=Math.floor(y0);y<=y1;y++)for(let x=Math.floor(x0);x<=x1;x++){const px=x+.5,py=y+.5;let ins=false;
+      for(let i=0,j=pts.length-1;i<pts.length;j=i++){const[xi,yi]=pts[i],[xj,yj]=pts[j];if((yi>py)!==(yj>py)&&px<(xj-xi)*(py-yi)/(yj-yi)+xi)ins=!ins}
+      if(ins&&(!cond||cond(x,y)))this.set(x,y,c)}}
+  line(x0,y0,x1,y1,c){x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);const dx=Math.abs(x1-x0),dy=-Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1;let e=dx+dy;
+    for(;;){this.set(x0,y0,c);if(x0===x1&&y0===y1)break;const e2=2*e;if(e2>=dy){e+=dy;x0+=sx}if(e2<=dx){e+=dx;y0+=sy}}}
+  thick(x0,y0,x1,y1,w,c){const n=Math.max(Math.abs(x1-x0),Math.abs(y1-y0))*2+1;for(let i=0;i<=n;i++){const x=x0+(x1-x0)*i/n,y=y0+(y1-y0)*i/n;this.rect(Math.round(x-w/2),Math.round(y-w/2),w,w,c)}}
+  recolor(from,to,cond){for(let y=0;y<this.h;y++)for(let x=0;x<this.w;x++)if(this.d[y*this.w+x]===from&&cond(x,y))this.d[y*this.w+x]=to}
+  blit(s,ox,oy,flip=false){ox=Math.round(ox);oy=Math.round(oy);for(let y=0;y<s.h;y++)for(let x=0;x<s.w;x++){const c=s.d[y*s.w+(flip?s.w-1-x:x)];if(c>=0)this.set(ox+x,oy+y,c)}}
+  outline(c){const o=new Int32Array(this.d);for(let y=0;y<this.h;y++)for(let x=0;x<this.w;x++){if(this.d[y*this.w+x]>=0)continue;
+      if(this.get(x-1,y)>=0||this.get(x+1,y)>=0||this.get(x,y-1)>=0||this.get(x,y+1)>=0)o[y*this.w+x]=c}this.d=o;return this}
+}
+
+// =====================================================================
+// PERSONAJES (diseñados uno por uno sobre una base común)
+// =====================================================================
+const SK={a:[0xf8d6b0,0xe4ae86,0xbc7c5c],b:[0xdcA474,0xbc7e52,0x8e5638],c:[0x9e6842,0x7c4c2e,0x58341e],d:[0xf2c8a0,0xd8a07a,0xa8704e]};
+const INK=0x2a1c26;
+// Cara: ojos juntos al centro, con blanco, iris, brillo y párpado.
+function face(p,cx,hy,o){
+  const sk=o.skin,ey=hy+1,iris=o.eye||0x3c2a4a,lip=o.lip||sk[2],ex=o.expr||'neutral',bc=o.brow||INK;
+  p.rect(cx-4,ey-1,3,1,INK);p.rect(cx+2,ey-1,3,1,INK);
+  p.rect(cx-4,ey,1,2,C.white);p.rect(cx-3,ey,2,3,iris);p.set(cx-3,ey,C.white);
+  p.rect(cx+4,ey,1,2,C.white);p.rect(cx+2,ey,2,3,iris);p.set(cx+2,ey,C.white);
+  const by=ey-3;
+  if(ex==='enojado'){p.rect(cx-5,by,2,1,bc);p.rect(cx-3,by+1,2,1,bc);p.rect(cx+2,by+1,2,1,bc);p.rect(cx+4,by,2,1,bc)}
+  else if(ex==='preocupado'){p.rect(cx-5,by+1,2,1,bc);p.rect(cx-3,by,2,1,bc);p.rect(cx+2,by,2,1,bc);p.rect(cx+4,by+1,2,1,bc)}
+  else{p.rect(cx-5,by,4,1,bc);p.rect(cx+2,by,4,1,bc)}
+  p.set(cx,ey+3,sk[1]);p.set(cx,ey+4,sk[2]);p.set(cx+1,ey+4,sk[1]);
+  if(o.mouth==='sonrisa'){p.rect(cx-1,ey+6,3,1,lip);p.set(cx-2,ey+5,lip);p.set(cx+2,ey+5,lip)}
+  else if(o.mouth==='mueca'){p.rect(cx-3,ey+5,7,2,0x5a2a2a);p.rect(cx-3,ey+5,7,1,C.white);p.set(cx-1,ey+5,C.b3);p.set(cx+2,ey+5,C.b3)}
+  else p.rect(cx-1,ey+6,3,1,lip);
+}
+// Cuerpo base: piernas, torso (trapecio o barril), brazos, cuello, cabeza.
+function body(p,o){
+  const cx=o.cx,feet=o.feet,sk=o.skin,legTop=feet-o.legH;
+  const lx=cx-Math.floor(o.gap/2)-o.legW,rx=cx+Math.ceil(o.gap/2);
+  p.rect(lx,legTop,o.legW,o.legH-o.bootH,o.pants[0]);p.rect(rx,legTop,o.legW,o.legH-o.bootH,o.pants[1]);p.rect(lx+o.legW-1,legTop,1,o.legH-o.bootH,o.pants[1]);
+  p.rect(lx-1,feet-o.bootH,o.legW+1,o.bootH,o.boots[0]);p.rect(rx,feet-o.bootH,o.legW+1,o.bootH,o.boots[1]);p.rect(lx-1,feet-o.bootH,o.legW+1,1,o.boots[2]||o.boots[0]);p.rect(rx,feet-o.bootH,o.legW+1,1,o.boots[2]||o.boots[1]);
+  const tb=legTop+2,tt=tb-o.torsoH,sh=o.shirt;
+  if(o.barrel){p.ell(cx,tt+o.torsoH/2,o.sw/2,o.torsoH/2+1,sh[1]);}
+  else p.poly([[cx-o.sw/2,tt],[cx+o.sw/2,tt],[cx+o.ww/2,tb],[cx-o.ww/2,tb]],sh[1]);
+  p.recolor(sh[1],sh[2],(x)=>x>cx+o.sw*.16);p.recolor(sh[1],sh[0],(x)=>x<cx-o.sw*.32);
+  const hands=[];
+  for(const s of[-1,1]){const sx=cx+s*(o.sw/2-1),hx=cx+s*(o.sw/2+(o.armOut||1)),hy2=tt+o.armL;
+    p.thick(sx,tt+2,hx,hy2-2,o.armW,s<0?(o.sleeve||sh)[0]:(o.sleeve||sh)[2]);
+    if(o.bare){p.thick(sx+s*0,tt+o.armL*.45,hx,hy2-2,o.armW,s<0?sk[0]:sk[1])}
+    p.ell(hx,hy2,o.armW/2+.6,o.armW/2+.6,s<0?sk[0]:sk[1]);hands.push([Math.round(hx),Math.round(hy2)])}
+  if(o.belt){p.rect(cx-o.ww/2,tb-3,o.ww,3,o.belt);p.rect(cx-1,tb-3,3,3,C.b3);p.set(cx,tb-2,C.b1)}
+  const hy=tt-o.neck-o.hry+1;
+  p.rect(cx-2,tt-o.neck-1,5,o.neck+2,sk[1]);
+  p.ell(cx-o.hrx,hy+1,1.6,2.6,sk[1]);p.ell(cx+o.hrx,hy+1,1.6,2.6,sk[2]);
+  p.ell(cx,hy,o.hrx,o.hry,sk[0]);p.recolor(sk[0],sk[1],(x,y)=>x>cx+o.hrx*.42||y>hy+o.hry-2);
+  if(!o.noFace)face(p,cx,hy,o);
+  return{hy,tt,tb,legTop,hands};
+}
+const hairCap=(p,cx,hy,rx,ry,line,c,lift=0)=>{p.ell(cx,hy-lift,rx,ry,c[0],(x,y)=>y<line);p.recolor(c[0],c[1],(x,y)=>x>cx+rx*.35&&y<line)};
+const mk=(w,h)=>new PB(w,h);
+const CAST={};
+// --- Ilo
+CAST.ilo=()=>{const p=mk(48,72),cx=24;
+  const o={cx,feet:70,legH:17,legW:4,gap:2,bootH:3,torsoH:15,sw:16,ww:13,armL:14,armW:3,neck:2,hrx:7.5,hry:8,skin:SK.a,
+    pants:[0x4a6aa0,0x34507e],boots:[0x6a4228,0x4a2c18,0x8a5a36],shirt:[0xffffff,0xeee8de,0xc8c0b4],sleeve:[0xffffff,0xeee8de,0xd6cec2],eye:0x3a5a2a,brow:0x3a2014,mouth:'sonrisa'};
+  const b=body(p,o);
+  p.rect(cx-6,b.tt+5,13,b.tb-b.tt-5,0x4a6aa0);p.rect(cx+2,b.tt+5,5,b.tb-b.tt-5,0x34507e);p.rect(cx-6,b.tt,2,6,0x4a6aa0);p.rect(cx+5,b.tt,2,6,0x34507e);p.set(cx-5,b.tt+5,C.b3);p.set(cx+5,b.tt+5,C.b3);p.rect(cx-2,b.tt+8,5,3,0x5a7ab0);
+  p.rect(cx-6,b.legTop+11,4,2,0x6a8ac0);p.rect(cx+1,b.legTop+11,5,2,0x4a6aa0);
+  p.rect(cx+8,b.tb-5,2,8,C.k3);p.rect(cx+6,b.tb-8,6,4,C.k2);p.rect(cx+6,b.tb-8,6,1,C.k4);
+  hairCap(p,cx,b.hy,8.5,7.5,b.hy-1,[0x5a3018,0x3e200e]);
+  for(const[x,y,w]of[[-7,-1,2],[-5,0,2],[3,0,2],[6,-1,2],[-2,-1,2]])p.rect(cx+x,b.hy+y,w,2,0x5a3018);
+  for(const[x,y]of[[-3,-10],[-2,-11],[0,-10],[1,-12],[2,-11],[4,-10]])p.set(cx+x,b.hy+y,0x5a3018);
+  p.rect(cx-8,b.hy-4,17,2,0xf08a2a);p.rect(cx-8,b.hy-4,17,1,0xffb05a);p.rect(cx+8,b.hy-3,3,1,0xf08a2a);p.rect(cx+9,b.hy-2,2,2,0xd06a1a);
+  p.rect(cx+3,b.hy+4,3,1,C.white);p.set(cx+4,b.hy+3,0xe8e0d0);
+  return p.outline(C.out)};
+// --- Brin
+CAST.brin=()=>{const p=mk(48,72),cx=24;
+  const o={cx,feet:70,legH:12,legW:5,gap:2,bootH:7,torsoH:14,sw:18,ww:18,armL:15,armW:4,neck:0,hrx:7.5,hry:7.5,skin:SK.b,
+    pants:[0x5a4a3a,0x463a2c],boots:[0xf2c230,0xd4a018,0xffe27a],shirt:[0x7aa0a8,0x5a8088,0x3e6068],eye:0x3a3a4a,brow:0xf2eee4,expr:'preocupado'};
+  const b=body(p,o);
+  for(let x=cx-7;x<cx+8;x+=3)for(let y=b.tt+2;y<b.tb-1;y+=2)p.set(x,y,0x8ab4bc);
+  p.ell(cx,b.hy-5,8.5,4.5,0x2c6470,(x,y)=>y<b.hy-2);p.recolor(0x2c6470,0x1c3c48,(x)=>x>cx+3);p.rect(cx-8,b.hy-3,17,2,0x489896);for(let x=cx-8;x<cx+9;x+=2)p.set(x,b.hy-3,0x86cabe);p.ell(cx,b.hy-10,2,1.5,0xc8402e);
+  p.rect(cx-6,b.hy-3,4,1,C.p4);p.rect(cx+3,b.hy-3,4,1,C.p4);p.set(cx-7,b.hy-2,C.p4);p.set(cx+7,b.hy-2,C.p4);
+  p.poly([[cx-7,b.hy+3],[cx+8,b.hy+3],[cx+9,b.hy+8],[cx+5,b.hy+6],[cx,b.hy+7],[cx-4,b.hy+6],[cx-8,b.hy+8]],0xf2eee4);p.recolor(0xf2eee4,0xd0c8bc,(x)=>x>cx+3);
+  p.rect(cx+6,b.hy+4,4,1,0x6a3a24);p.rect(cx+9,b.hy+1,3,4,0x6a3a24);p.rect(cx+9,b.hy+1,3,1,0x3a2018);
+  p.set(cx-6,b.hy+1,SK.b[2]);p.set(cx+6,b.hy+1,SK.b[2]);
+  return p.outline(C.out)};
+// --- Dorne
+CAST.dorne=()=>{const p=mk(56,84),cx=28;
+  const o={cx,feet:82,legH:24,legW:5,gap:3,bootH:9,torsoH:21,sw:26,ww:12,armL:21,armW:5,neck:2,hrx:7.5,hry:8,skin:SK.c,
+    pants:[0x3b2a1a,0x2c1e12],boots:[0x2a2028,0x1a141c,0x4a3a48],shirt:[0x8a6aa8,0x6a4e8a,0x46325e],eye:0x8a1a1a,brow:INK,expr:'enojado',mouth:'mueca'};
+  const b=body(p,o);
+  p.poly([[cx-13,b.tt],[cx-8,b.tt],[cx-9,b.legTop+15],[cx-14,b.legTop+15]],0x6a4e8a);p.poly([[cx+8,b.tt],[cx+13,b.tt],[cx+14,b.legTop+15],[cx+9,b.legTop+15]],0x46325e);
+  p.rect(cx-14,b.legTop+14,6,1,C.b3);p.rect(cx+9,b.legTop+14,6,1,C.b2);p.line(cx-8,b.tt,cx-9,b.legTop+14,C.b3);p.line(cx+8,b.tt,cx+9,b.legTop+14,C.b2);
+  p.rect(cx-6,b.tt+1,12,b.torsoH-4,0xf2e8d8);p.recolor(0xf2e8d8,0xd8ccb8,(x)=>x>cx+2);for(let y=b.tt+2;y<b.tb-4;y+=3)p.set(cx,y,C.b3);
+  p.rect(cx-6,b.tb-5,13,4,0xc8402e);p.rect(cx+5,b.tb-2,3,5,0xa8302a);
+  p.rect(cx-14,b.tt-1,6,3,C.b3);p.rect(cx+9,b.tt-1,6,3,C.b2);for(let x=cx-14;x<cx-8;x+=2)p.set(x,b.tt+2,C.b3);
+  const[h2x,h2y]=b.hands[1];p.rect(h2x-2,h2y-2,5,4,0x8a8698);p.rect(h2x-2,h2y+1,1,4,0xd8d8e8);p.rect(h2x,h2y+1,1,5,0xd8d8e8);p.rect(h2x+2,h2y+1,1,4,0xd8d8e8);p.set(h2x-3,h2y+5,0xd8d8e8);p.set(h2x+3,h2y+5,0xd8d8e8);
+  p.rect(cx-7,b.hy-5,15,2,0xc8402e);p.rect(cx+7,b.hy-4,4,2,0xa8302a);
+  p.poly([[cx-15,b.hy-5],[cx+15,b.hy-5],[cx+9,b.hy-11],[cx,b.hy-16],[cx-9,b.hy-11]],0x2a2028);p.recolor(0x2a2028,0x1a141c,(x)=>x>cx+4);
+  p.line(cx-15,b.hy-5,cx-9,b.hy-11,C.b3);p.line(cx+15,b.hy-5,cx+9,b.hy-11,C.b2);p.line(cx-9,b.hy-11,cx,b.hy-16,C.b3);p.line(cx,b.hy-16,cx+9,b.hy-11,C.b2);
+  for(let i=0;i<9;i++){p.set(cx-4-i,b.hy-14-Math.round(i*.6),i<6?0xf2eee4:0xd8d0c0);p.set(cx-4-i,b.hy-13-Math.round(i*.6),0xc8c0b0)}
+  p.rect(cx-9,b.hy-1,2,6,0x3a2018);p.rect(cx+8,b.hy-1,2,6,0x2a1408);
+  return p.outline(C.out)};
+// --- Tonel
+CAST.tonel=()=>{const p=mk(56,72),cx=28;
+  const o={cx,feet:70,legH:11,legW:6,gap:5,bootH:3,torsoH:28,sw:34,ww:30,armL:20,armW:6,armOut:4,neck:0,hrx:5,hry:5.5,skin:SK.d,barrel:true,
+    pants:[0x8a6a4a,0x6a4e34],boots:[0x3a2a20,0x2a1e16],shirt:[0xffffff,0xeceae4,0xc8c6c0],sleeve:[0xf8d6b0,0xf2c8a0,0xd8a07a],eye:0x2a2a3a,brow:INK,expr:'enojado'};
+  const b=body(p,o);
+  for(let y=b.tt+2;y<b.tb;y+=4)for(let x=cx-18;x<cx+18;x++){const c=p.get(x,y);if(c===0xffffff||c===0xeceae4)p.set(x,y,0x2f4f8f);else if(c===0xc8c6c0)p.set(x,y,0x22396a)}
+  p.rect(cx-1,b.hy-9,3,4,0x2a1c1a);p.ell(cx,b.hy-10,2,1.6,0x2a1c1a);
+  p.thick(cx+10,b.tt-14,cx+17,b.tt+12,2,C.k3);p.poly([[cx+6,b.tt-17],[cx+12,b.tt-19],[cx+15,b.tt-10],[cx+9,b.tt-10]],C.n4);p.recolor(C.n4,C.n3,(x)=>x>cx+11);
+  p.rect(cx-2,b.hy+4,5,1,0x8a5a3a);
+  return p.outline(C.out)};
+// --- Silbo
+CAST.silbo=()=>{const p=mk(48,92),cx=24;
+  const o={cx,feet:90,legH:30,legW:3,gap:3,bootH:5,torsoH:20,sw:13,ww:9,armL:22,armW:2,neck:3,hrx:6,hry:7.5,skin:SK.a,
+    pants:[0x3a3a4a,0x2a2a38],boots:[0x5a3a24,0x3e2818],shirt:[0x4a8a6a,0x3a6e54,0x26503c],eye:0x6a1a1a,brow:INK};
+  const b=body(p,o);
+  p.line(cx-6,b.tt+1,cx+4,b.tb-2,0x3a2018);p.line(cx-5,b.tt+1,cx+5,b.tb-2,0x6a3a24);
+  for(let i=0;i<4;i++){const x=cx-4+i*2.6,y=b.tt+3+i*3.6;p.rect(x,y-2,1,3,C.n4);p.set(x,y+1,C.k2)}
+  p.rect(cx-7,b.hy-6,15,2,0x1a141c);p.rect(cx-5,b.hy-18,11,12,0x1a141c);p.rect(cx+2,b.hy-18,4,12,0x0e0a10);p.rect(cx-5,b.hy-9,11,2,0xc8402e);
+  for(const x of[-4,-1,2,4]){p.rect(cx+x,b.hy-21,1,5,C.n4);p.set(cx+x,b.hy-16,C.k2)}
+  p.rect(cx-6,b.hy-4,2,9,0x1a141c);p.rect(cx+5,b.hy-4,2,9,0x0e0a10);
+  p.rect(cx-3,b.hy+6,7,1,0x8a5a5a);for(let x=cx-3;x<=cx+3;x+=2)p.set(x,b.hy+5,0x8a5a5a);
+  return p.outline(C.out)};
+// --- Capitana Velda
+CAST.velda=()=>{const p=mk(56,72),cx=28;
+  const o={cx,feet:70,legH:18,legW:4,gap:2,bootH:5,torsoH:15,sw:15,ww:11,armL:14,armW:3,neck:2,hrx:7,hry:8,skin:SK.d,
+    pants:[0x2a3658,0x1e2844],boots:[0x2a2028,0x1a141c],shirt:[0x3a4a78,0x2a3658,0x1e2844],eye:0x2a5a8a,brow:0x8a3a1a,lip:0xb85a4a};
+  const b=body(p,o);
+  p.poly([[cx-12,b.tt-1],[cx-6,b.tt-1],[cx-8,b.legTop+12],[cx-15,b.legTop+12]],0xffffff);p.poly([[cx+6,b.tt-1],[cx+12,b.tt-1],[cx+15,b.legTop+12],[cx+8,b.legTop+12]],0xdcdce4);
+  p.rect(cx-15,b.legTop+11,8,1,0x2f4f8f);p.rect(cx+8,b.legTop+11,8,1,0x22396a);p.line(cx-6,b.tt,cx-8,b.legTop+11,0x2f4f8f);p.line(cx+6,b.tt,cx+8,b.legTop+11,0x22396a);
+  p.rect(cx-13,b.tt-2,7,3,0xffffff);p.rect(cx+7,b.tt-2,7,3,0xdcdce4);p.rect(cx-3,b.tt,7,4,0xffffff);p.rect(cx,b.tt+1,1,5,0x2f4f8f);
+  p.thick(cx-10,b.tb-3,cx-16,b.legTop+10,2,0x2a2028);p.rect(cx-9,b.tb-5,3,3,C.b3);p.rect(cx-10,b.tb-4,5,1,C.b2);
+  p.ell(cx,b.hy-3,8,6,0x9a4a22,(x,y)=>y<b.hy-1);p.recolor(0x9a4a22,0x7a3416,(x)=>x>cx+3);
+  for(let x=cx-8;x<=cx+8;x++){const y=b.hy-7+Math.round(Math.abs(x-cx)*.35);p.set(x,y,(x%2)?0xc8682e:0x9a4a22);p.set(x,y-1,0x7a3416)}
+  p.rect(cx-8,b.hy-1,2,5,0x9a4a22);p.rect(cx+7,b.hy-1,2,5,0x7a3416);
+  return p.outline(C.out)};
+// --- Soldado raso
+CAST.soldado=()=>{const p=mk(48,80),cx=22;
+  const o={cx,feet:78,legH:17,legW:4,gap:2,bootH:4,torsoH:15,sw:16,ww:13,armL:14,armW:3,neck:2,hrx:7.5,hry:8,skin:SK.a,
+    pants:[0xf2f2ee,0xd8dae0],boots:[0x2a2028,0x1a141c],shirt:[0xffffff,0xeeeeea,0xc8ccd6],eye:0x3a3a4a,brow:0x5a3a20};
+  const b=body(p,o);
+  p.poly([[cx-8,b.tt],[cx+8,b.tt],[cx+5,b.tt+5],[cx-5,b.tt+5]],0x2f4f8f);p.rect(cx-1,b.tt+4,3,3,0x2f4f8f);p.set(cx,b.tt+7,0xc8402e);
+  p.rect(cx-8,b.hy-6,17,4,0xffffff);p.rect(cx-7,b.hy-7,15,1,0xffffff);p.rect(cx+3,b.hy-6,6,4,0xdcdce4);p.rect(cx-9,b.hy-3,19,2,0x2f4f8f);
+  p.rect(cx-7,b.hy-1,3,2,0x5a3a20);p.rect(cx+5,b.hy-1,3,2,0x3e2814);
+  p.thick(cx+12,b.tt-20,cx+8,b.tb+2,2,0x3a3848);p.thick(cx+8,b.tt+6,cx+7,b.tb+4,3,C.k3);p.rect(cx+11,b.tt-22,2,3,0xbcb6c6);
+  return p.outline(C.out)};
+// --- Sargento Muro
+CAST.muro=()=>{const p=mk(56,76),cx=28;
+  const o={cx,feet:74,legH:17,legW:5,gap:3,bootH:5,torsoH:19,sw:22,ww:20,armL:16,armW:5,neck:1,hrx:8,hry:8,skin:SK.b,bare:true,
+    pants:[0x2f4f8f,0x22396a],boots:[0x2a2028,0x1a141c],shirt:[0xffffff,0xeeeeea,0xc8ccd6],sleeve:[0xffffff,0xeeeeea,0xc8ccd6],eye:0x3a3a4a,brow:INK,expr:'enojado',belt:0x3a2018};
+  const b=body(p,o);
+  p.poly([[cx-10,b.tt],[cx+10,b.tt],[cx+6,b.tt+6],[cx-6,b.tt+6]],0x2f4f8f);
+  p.rect(cx-10,b.tt+5,4,2,0xdcdce4);p.rect(cx+7,b.tt+5,4,2,0xb8bcc8);
+  p.rect(cx+6,b.tb-4,5,3,0x3a3848);p.rect(cx+9,b.tb-2,2,4,C.k2);p.rect(cx+5,b.tb-5,3,2,0x5c586e);
+  p.poly([[cx-9,b.hy-5],[cx+10,b.hy-6],[cx+9,b.hy-10],[cx-7,b.hy-9]],0xffffff);p.recolor(0xffffff,0xdcdce4,(x,y)=>x>cx+4&&y<b.hy-3);p.rect(cx-10,b.hy-4,21,2,0x2f4f8f);
+  p.poly([[cx-5,b.hy+4],[cx+6,b.hy+4],[cx+7,b.hy+6],[cx+2,b.hy+5],[cx-1,b.hy+5],[cx-6,b.hy+6]],0x3a2014);
+  p.line(cx+2,b.hy+7,cx+7,b.hy+8,0xe6c890);
+  return p.outline(C.out)};
+CAST.nino=()=>{const p=mk(40,56),cx=20;
+  const o={cx,feet:54,legH:8,legW:3,gap:2,bootH:2,torsoH:10,sw:12,ww:11,armL:9,armW:3,neck:1,hrx:7,hry:7.5,skin:SK.a,
+    pants:[0x9a5c34,0x6a3a24],boots:[0x4a3020,0x3a2418],shirt:[0x8cc6e6,0x5aa0cc,0x3a78a8],eye:0x3a5a8a,brow:0xb0842e,mouth:'sonrisa'};
+  const b=body(p,o);hairCap(p,cx,b.hy,8,7.5,b.hy-1,[0xe6c25e,0xb0842e]);for(const[x,y]of[[-4,-9],[-1,-10],[2,-9],[5,-8]])p.set(cx+x,b.hy+y,0xe6c25e);
+  return p.outline(C.out)};
+CAST.pesca=()=>{const p=mk(48,76),cx=24;
+  const o={cx,feet:74,legH:17,legW:4,gap:2,bootH:3,torsoH:15,sw:16,ww:16,armL:14,armW:3,neck:2,hrx:7.5,hry:8,skin:SK.c,
+    pants:[0xb08a6a,0x8a6a4e],boots:[0x4a3020,0x3a2418],shirt:[0xe8a53a,0xd08a24,0xa86a14],eye:0x2a1a14,brow:INK,mouth:'sonrisa'};
+  const b=body(p,o);p.rect(cx-8,b.tb-8,17,10,0xf2eee4);p.recolor(0xf2eee4,0xd8d0c4,(x)=>x>cx+3);
+  hairCap(p,cx,b.hy,8.5,7.5,b.hy-1,[0x2a1c1a,0x1a1210]);p.rect(cx-9,b.hy-12,19,4,C.k4);p.rect(cx-9,b.hy-12,19,1,C.k5);for(let x=cx-9;x<cx+10;x+=2)p.set(x,b.hy-10,C.k3);p.rect(cx-4,b.hy-14,3,2,C.n4);p.rect(cx+1,b.hy-14,4,2,C.n3);
+  return p.outline(C.out)};
+const SPR={};for(const k in CAST)SPR[k]=CAST[k]();
+
+// Retratos de 48 px
+function portrait(who){const p=new PB(48,48),cx=24,hy=24;
+  const sp={ilo:{skin:SK.a,hair:[0x5a3018,0x3e200e],shirt:[0xffffff,0xeee8de,0xc8c0b4],eye:0x3a5a2a,brow:0x3a2014},brin:{skin:SK.b,shirt:[0x7aa0a8,0x5a8088,0x3e6068],eye:0x3a3a4a,brow:0xf2eee4}}[who];
+  const sk=sp.skin;
+  p.ell(cx,50,20,12,sp.shirt[1]);p.recolor(sp.shirt[1],sp.shirt[2],(x)=>x>cx+6);
+  p.rect(cx-4,36,9,6,sk[1]);
+  p.ell(cx-14,hy+3,2.6,4,sk[1]);p.ell(cx+14,hy+3,2.6,4,sk[2]);
+  p.ell(cx,hy,14,15,sk[0]);p.recolor(sk[0],sk[1],(x,y)=>x>cx+6||y>hy+12);
+  const ey=hy+3,ir=sp.eye;
+  for(const s of[-1,1]){const x0=s<0?cx-10:cx+3;p.rect(x0,ey-1,8,2,INK);p.rect(x0,ey+1,7,5,C.white);const ix=s<0?x0+3:x0+1;p.rect(ix,ey+1,4,5,ir);p.rect(ix+1,ey+2,2,3,INK);p.rect(ix,ey+1,2,2,C.white);p.rect(x0,ey+6,7,1,sk[2])}
+  p.rect(cx,ey+8,2,3,sk[1]);p.rect(cx+1,ey+10,2,1,sk[2]);
+  if(who==='ilo'){
+    p.rect(cx-10,ey-5,7,2,sp.brow);p.rect(cx+4,ey-5,7,2,sp.brow);
+    p.rect(cx-3,ey+14,8,2,0x9a4a3a);p.set(cx-4,ey+13,0x9a4a3a);p.set(cx+5,ey+13,0x9a4a3a);p.rect(cx-2,ey+14,6,1,0xfff8ee);
+    p.ell(cx,hy-8,15.5,9,sp.hair[0],(x,y)=>y<hy-3);p.recolor(sp.hair[0],sp.hair[1],(x,y)=>x>cx+5&&y<hy-3);
+    for(const[x,y,w,h]of[[-14,-4,4,9],[-10,-3,4,5],[-4,-3,4,4],[3,-3,4,5],[10,-4,5,8],[-6,-20,3,3],[0,-22,3,4],[5,-20,3,3]])p.rect(cx+x,hy+y,w,h,x>4?sp.hair[1]:sp.hair[0]);
+    p.rect(cx-15,hy-10,31,4,0xf08a2a);p.rect(cx-15,hy-10,31,1,0xffb05a);p.rect(cx+15,hy-8,5,2,0xf08a2a);p.rect(cx+17,hy-6,3,4,0xd06a1a);
+    p.rect(cx+6,ey+9,6,2,C.white);p.rect(cx+7,ey+8,4,1,0xe8e0d0);
+  }else{
+    p.rect(cx-12,ey-6,9,3,0xf2eee4);p.rect(cx+4,ey-6,9,3,0xf2eee4);p.rect(cx-13,ey-4,3,2,0xf2eee4);p.rect(cx+11,ey-4,3,2,0xf2eee4);
+    p.poly([[cx-13,ey+9],[cx+14,ey+9],[cx+16,ey+18],[cx+9,ey+14],[cx+1,ey+16],[cx-7,ey+14],[cx-15,ey+18]],0xf2eee4);p.recolor(0xf2eee4,0xd0c8bc,(x,y)=>x>cx+6&&y>ey+8);
+    p.ell(cx,hy-9,15,8,0x2c6470,(x,y)=>y<hy-4);p.recolor(0x2c6470,0x1c3c48,(x,y)=>x>cx+5&&y<hy-4);p.rect(cx-15,hy-6,31,4,0x489896);for(let x=cx-15;x<cx+16;x+=2)p.rect(x,hy-6,1,4,0x86cabe);p.ell(cx,hy-18,3,2,0xc8402e);
+    p.rect(cx+12,ey+13,8,2,0x6a3a24);p.rect(cx+17,ey+8,5,6,0x6a3a24);p.rect(cx+17,ey+8,5,1,0x3a2018);
+    for(const[x,y]of[[-9,10],[9,10],[-11,12],[10,12]])p.set(cx+x,ey+y,sk[2]);
+    for(let x=cx-7;x<cx+8;x+=3)for(let y=40;y<48;y+=2)p.set(x,y,0x8ab4bc);
+  }
+  return p.outline(C.out)}
+
+// =====================================================================
+// MUNDO: PUERTO DE KALÉ A ESCALA NUEVA (640x360)
+// =====================================================================
+const shoreX=y=>Math.round(250+12*Math.sin(y/34)+6*Math.sin(y/11));
+const grassX=y=>shoreX(y)+48+Math.round(8*Math.sin(y/18+1));
+function tuft(p,x,y){for(const[dx,dy,c]of[[0,0,C.g4],[-1,1,C.g4],[1,1,C.g5],[-2,2,C.g4],[2,2,C.g4],[0,1,C.g2],[-1,2,C.g2],[1,2,C.g2],[-1,3,C.g2],[1,3,C.g2]])p.set(x+dx,y+dy,c)}
+function crate(p,x,y,w=22,h=20){p.rect(x,y,w,h,C.k4);p.rect(x,y,w,4,C.k5);p.rect(x+2,y+4,w-4,1,C.k3);p.rect(x,y+h-2,w,2,C.k2);p.rect(x,y,2,h,C.k3);p.rect(x+w-2,y,2,h,C.k2);
+  p.thick(x+3,y+6,x+w-4,y+h-4,2,C.k3);p.thick(x+w-4,y+6,x+3,y+h-4,2,C.k3);for(const[a,b2]of[[x+2,y+5],[x+w-4,y+5],[x+2,y+h-4],[x+w-4,y+h-4]])p.rect(a,b2,2,2,C.n2);
+  p.rect(x-1,y-1,w+2,1,C.k1);p.rect(x-1,y+h,w+2,1,C.k1);p.rect(x-1,y,1,h,C.k1);p.rect(x+w,y,1,h,C.k1)}
+function barrel(p,x,y){p.ell(x+9,y+11,9,11,C.k3);p.recolor(C.k3,C.k2,(xx,yy)=>xx>x+12&&yy>y);p.recolor(C.k3,C.k4,(xx,yy)=>xx<x+5&&yy>y);
+  for(const yy of[y+5,y+16])for(let xx=x;xx<x+19;xx++)if(p.get(xx,yy)>=0)p.set(xx,yy,xx>x+12?C.n1:C.n2);
+  p.ell(x+9,y+3,7,3,C.k4);p.ell(x+9,y+3,5,2,C.k3);p.rect(x+5,y+2,6,1,C.k5);p.ell(x+9,y+11,9.4,11.4,C.k1,(xx,yy)=>p.get(xx,yy)<0)}
+function lampPost(p,x,y){p.rect(x,y,3,40,C.n1);p.rect(x+2,y,1,40,0x26243a);p.rect(x-2,y+38,7,3,C.n2);p.rect(x-6,y-6,15,2,C.n1);p.rect(x-4,y-14,11,10,C.b2);p.rect(x-3,y-13,9,8,C.b3);p.rect(x-1,y-11,5,4,C.b4);p.rect(x-5,y-16,13,2,C.n1);p.rect(x,y-18,3,2,C.n1)}
+function house(p,o){
+  const{x,y,w,rh,wh,roof:R}=o;
+  p.rect(x-8,y,w+16,rh,R[2]);
+  for(let j=0;j<rh-4;j+=8){p.rect(x-8,y+j+7,w+16,1,R[1]);for(let i=((j/8)%2)*6;i<w+16;i+=12){p.rect(x-8+i,y+j+1,5,2,R[3]);p.set(x-8+i,y+j+3,R[3]);p.rect(x-8+i+10,y+j+2,1,5,R[1]);p.rect(x-8+i+1,y+j+5,8,1,R[1])}}
+  p.rect(x-8,y,w+16,4,R[1]);for(let i=0;i<w+16;i+=10){p.rect(x-8+i,y,6,2,R[3]);p.set(x-8+i,y+2,R[0])}
+  p.rect(x-10,y,2,rh,R[0]);p.rect(x+w+8,y,2,rh,R[0]);p.rect(x-10,y+rh,w+20,4,R[0]);p.rect(x-8,y+rh-2,w+16,2,R[1]);
+  const wy=y+rh+4;p.rect(x,wy,w,wh,C.p3);for(let i=0;i<w*wh/14;i++){p.set(x+hash(i,x,1)*w,wy+hash(i,wy,2)*wh,C.p2)}
+  p.rect(x,wy,w,6,C.p1);p.rect(x,wy+6,w,2,C.p2);
+  p.rect(x,wy+wh-10,w,10,C.n3);for(let i=0;i<w;i+=10){p.rect(x+i,wy+wh-10,1,5,C.n2);p.rect(x+i+5,wy+wh-5,1,5,C.n2)}p.rect(x,wy+wh-5,w,1,C.n2);p.rect(x,wy+wh-1,w,1,C.n1);p.rect(x,wy+wh-10,w,1,C.n4);
+  p.rect(x,wy,4,wh-10,C.k2);p.rect(x+w-4,wy,4,wh-10,C.k2);p.rect(x,wy+Math.floor((wh-10)/2)-1,w,3,C.k2);
+  (o.beams||[]).forEach(bx=>{p.rect(x+bx,wy,4,wh-10,C.k2);p.rect(x+bx,wy,1,wh-10,C.k3)});
+  (o.braces||[]).forEach(([a,b,c,d])=>p.thick(x+a,wy+b,x+c,wy+d,2,C.k2));
+  (o.wins||[]).forEach(([wx,wy2])=>{const X=x+wx,Y=wy+wy2;p.rect(X-6,Y,6,20,C.t3);p.rect(X+24,Y,6,20,C.t3);for(let j=2;j<20;j+=3){p.rect(X-5,Y+j,4,1,C.t2);p.rect(X+25,Y+j,4,1,C.t2)}
+    p.rect(X,Y,24,20,C.k2);p.rect(X+2,Y+2,20,16,C.w1);p.rect(X+3,Y+3,5,2,C.w3);p.rect(X+3,Y+5,2,3,C.w3);p.rect(X+11,Y+2,2,16,C.k2);p.rect(X+2,Y+9,20,2,C.k2);
+    p.rect(X-2,Y+20,28,6,C.k3);p.rect(X-2,Y+20,28,2,C.k4);for(let i=0;i<24;i+=3){p.rect(X+i,Y+17,2,2,[C.r4,C.b3,C.pink][i%3]);p.set(X+i+1,Y+19,C.g3);p.set(X+i,Y+19,C.g2)}});
+  if(o.door){const[dx,dw,col]=o.door,X=x+dx,Y=wy+wh-36;p.rect(X,Y+4,dw,36,col[1]);p.rect(X+2,Y+2,dw-4,2,col[1]);p.rect(X+4,Y,dw-8,2,col[1]);for(let i=X+3;i<X+dw;i+=6)p.rect(i,Y+4,1,32,col[0]);p.rect(X,Y+10,dw,2,C.n1);p.rect(X,Y+28,dw,2,C.n1);p.rect(X+dw-7,Y+20,3,3,C.b3);p.rect(X-4,Y+36,dw+8,4,C.n3);p.rect(X-4,Y+39,dw+8,1,C.n2)}
+}
+function ship(p,t){
+  const V=[C.v1,C.v2,C.v3,C.v4];
+  // casco visto en 3/4: borda arriba, costado hacia la cámara abajo
+  p.poly([[6,96],[30,70],[200,66],[226,78],[246,96],[226,150],[204,170],[40,170],[14,150]],V[2]);
+  p.poly([[16,94],[36,76],[198,72],[220,82],[236,96],[220,112],[198,118],[36,118],[16,104]],C.k4);
+  for(let y=78;y<118;y+=4)for(let x=16;x<238;x++)if(p.get(x,y)===C.k4)p.set(x,y,C.k3);
+  for(let x=0;x<250;x++)for(let y=118;y<172;y++){const c=p.get(x,y);if(c===V[2]&&y>150)p.set(x,y,V[1]);if(c===V[2]&&y>162)p.set(x,y,V[0])}
+  for(let x=10;x<244;x++){if(p.get(x,124)===V[2]){p.set(x,123,C.b3);p.set(x,124,C.b2);p.set(x,125,C.b1)}if(p.get(x,146)===V[2]||p.get(x,146)===V[1])p.set(x,146,C.b2)}
+  for(let x=46;x<200;x+=26){p.rect(x,130,10,9,C.v1);p.rect(x,130,10,2,C.b2);p.rect(x+3,133,4,4,0x0e0a14)}
+  const rail=[[16,94],[36,76],[198,72],[220,82],[236,96],[220,112],[198,118],[36,118],[16,104],[16,94]];for(let i=0;i<rail.length-1;i++){p.thick(...rail[i],...rail[i+1],2,C.k2)}
+  // castillo de popa
+  p.rect(20,74,48,30,C.k3);p.rect(20,74,48,4,C.k2);p.rect(20,100,48,6,C.k1);p.rect(32,86,10,14,C.k1);p.rect(48,84,8,6,C.b3);p.rect(24,84,6,6,C.b3);p.rect(18,70,52,4,C.k2);
+  for(let x=20;x<68;x+=6)p.rect(x,66,2,4,C.k2);p.rect(18,66,52,2,C.k2);
+  // escotilla, barriles, rollos de soga
+  p.rect(110,90,24,14,C.k2);for(let i=112;i<134;i+=4)p.rect(i,92,2,10,C.k1);
+  barrel(p,150,86);barrel(p,168,92);p.ell(92,104,6,3,0xc8a46a);p.ell(92,104,3,1.5,0x8a6a3a);
+  // palos, vergas, velas recogidas y jarcia
+  for(const[mx,top,base]of[[100,0,96],[176,10,92]]){p.rect(mx,top,4,base-top,C.k2);p.rect(mx,top,1,base-top,C.k3);p.rect(mx-2,base-3,8,4,C.k1)}
+  for(const[x,y,w]of[[66,22,72],[64,48,76],[150,30,56],[148,56,60]]){p.rect(x,y,w,3,C.k2);p.rect(x+2,y-5,w-4,6,C.cream);p.rect(x+2,y-1,w-4,2,C.cream2);for(let i=x+8;i<x+w-6;i+=12)p.rect(i,y-5,1,6,0xb8a888)}
+  for(const[x0,y0,x1,y1]of[[102,4,40,100],[102,4,70,112],[102,4,140,112],[178,14,150,112],[178,14,212,104],[178,14,236,96]])p.line(x0,y0,x1,y1,C.k1);
+  // bauprés y mascarón: medusa de madera con la campana rajada
+  p.thick(236,96,276,80,3,C.k2);p.line(276,80,178,14,C.k1);
+  p.ell(250,104,10,9,C.v4);p.ell(248,101,6,5,0x9a82b0);p.recolor(C.v4,C.v3,(x,y)=>x>252);
+  p.line(244,96,250,104,C.v1);p.line(250,104,247,111,C.v1);
+  for(let i=0;i<4;i++){const x=243+i*4;for(let j=0;j<9;j++)p.set(x+Math.round(Math.sin(j*.9+i)),113+j,j<5?C.b3:C.b2)}
+  p.rect(246,99,2,2,0x2a1c26);p.rect(252,99,2,2,0x2a1c26);
+  // linterna de popa
+  p.rect(10,84,6,9,C.b2);p.rect(11,85,4,7,C.b3);
+}
+function flag(p,t){const ph=Math.floor(t*6)%3;
+  for(let y=0;y<16;y++){const off=Math.round(Math.sin(y*.6+ph)*1.5);p.rect(180,8+y,26+off,1,C.v1)}
+  p.ell(192,13,5,4.5,C.p4);p.rect(189,17,7,2,C.p4);p.rect(190,12,2,2,C.v1);p.rect(194,12,2,2,C.v1);p.line(190,9,196,16,C.v1);
+  for(let i=0;i<5;i++)for(let j=0;j<5;j++)p.set(187+i*3+Math.round(Math.sin(j+i)),20+j,C.p4)}
+
+function portStatic(fight){
+  const p=new PB(WW,WH);
+  for(let y=0;y<WH;y++){const sx=shoreX(y),gx=grassX(y);
+    for(let x=sx;x<WW;x++){
+      if(x<gx){let c=C.s3;const h=hash(x,y,3);if(h<.06)c=C.s2;else if(h<.085)c=C.s4;if(x<sx+4)c=h<.5?C.s1:C.s2;p.set(x,y,c)}
+      else{let c=C.g3;const h=hash(x>>1,y>>1,4);if(h<.04)c=C.g2;p.set(x,y,c)}}
+    for(let dx=-3;dx<=0;dx++)if(hash(gx+dx,y,5)>.45)p.set(gx+dx,y,C.g3);if(hash(gx,y,6)>.6)p.set(gx-2,y,C.g4)}
+  for(let by=0;by<WH;by+=18)for(let bx=0;bx<WW;bx+=18)for(let k=0;k<2;k++){const x=bx+Math.floor(hash(bx,by,k+10)*18),y=by+Math.floor(hash(bx,by,k+20)*18);if(x>grassX(y)+4)tuft(p,x,y)}
+  for(let i=0;i<90;i++){const x=Math.floor(hash(i,1,30)*WW),y=Math.floor(hash(i,2,30)*WH);if(x>grassX(y)+6&&!(y>190&&y<240)){const col=[C.p4,C.b3,C.pink][i%3];for(const[dx,dy]of[[0,-1],[-1,0],[1,0],[0,1]])p.set(x+dx,y+dy,col);p.set(x,y,C.b4);p.set(x,y+2,C.g2)}}
+  // caminos
+  for(let y=196;y<232;y++)for(let x=grassX(y)-6;x<WW;x++){let c=C.d3;const h=hash(x>>1,y>>1,7);if(h<.08)c=C.d2;else if(h<.11)c=C.d4;if((y<198||y>229)&&hash(x,y,8)<.5)c=C.g2;p.set(x,y,c)}
+  for(let y=160;y<198;y++)for(let x=406;x<442;x++){let c=C.d3;const h=hash(x>>1,y>>1,9);if(h<.08)c=C.d2;else if(h<.11)c=C.d4;if((x<408||x>439)&&hash(x,y,10)<.5)c=C.g2;p.set(x,y,c)}
+  for(let x=shoreX(212)+6,i=0;x<grassX(212)-6;x+=9,i++){const y=206+(i%2)*9;p.rect(x,y,3,2,C.s1);p.set(x+1,y+2,C.s2)}
+  // sombras sobre el agua
+  for(let x=0;x<shoreX(244);x++){p.set(x,244,C.w0);p.set(x,245,C.w0);p.set(x,246,C.w1);if(x%3)p.set(x,247,C.w1)}
+  for(let x=20;x<230;x++)for(let y=172;y<180;y++)p.set(x,y,y<176?C.w0:C.w1);
+  // muelle
+  for(let y=182;y<244;y++)for(let x=0;x<=shoreX(y)+12;x++){let c=Math.floor(x/8)%2?C.k3:C.k4;if(x%8===0)c=C.k1;else if(x%8===1)c=C.k2;
+    if(y<184)c=C.k5;else if(y<186&&x%8>1)c=C.k4;if(y>=236)c=y<239?C.k2:C.k1;
+    if((y===190||y===228)&&x%8===4)c=C.k1;if(hash(x>>1,y>>2,11)<.05&&y<236&&y>186&&x%8>1)c=C.k2;p.set(x,y,c)}
+  for(let x=14;x<shoreX(250);x+=36){p.rect(x,243,6,14,C.k1);p.rect(x,243,2,14,C.k2)}
+  p.rect(24,172,10,14,C.n2);p.rect(24,172,4,14,C.n3);p.rect(22,170,14,3,C.n4);
+  crate(p,58,190);crate(p,82,192);crate(p,68,170,22,20);barrel(p,150,192);
+  p.rect(116,170,16,22,C.k4);for(let y=172;y<192;y+=3)p.rect(116,y,16,1,C.k3);p.rect(115,170,1,22,C.k2);p.rect(132,170,1,22,C.k2);
+  ship(p);
+  // taberna y casa
+  house(p,{x:332,y:30,w:184,rh:62,wh:66,roof:[C.r1,C.r2,C.r3,C.r4],door:[76,34,[C.k2,C.k3]],wins:[[22,12],[136,12]],beams:[60,118],braces:[[4,4,52,24],[128,4,178,24]]});
+  p.rect(488,6,20,34,C.n3);p.rect(498,6,10,34,C.n2);for(let y=8;y<40;y+=5)p.rect(488,y,20,1,C.n2);p.rect(486,4,24,4,C.n4);p.rect(490,4,16,2,C.n1);
+  p.rect(452,124,2,6,C.k1);p.rect(452,124,10,2,C.k1);p.rect(456,126,10,14,C.b2);p.rect(458,128,6,10,C.b3);p.rect(459,130,3,5,C.b4);
+  p.rect(398,122,2,8,C.k1);p.rect(380,122,20,2,C.k1);p.rect(374,128,30,20,C.k4);p.rect(374,128,30,2,C.k5);p.rect(374,146,30,2,C.k2);p.rect(374,128,2,20,C.k2);p.rect(402,128,2,20,C.k2);
+  p.rect(382,132,10,10,C.b3);p.rect(382,132,10,2,C.p4);p.rect(392,134,4,6,C.b2);p.rect(384,140,6,2,C.b2);
+  barrel(p,486,166);barrel(p,500,176);
+  p.rect(340,178,44,4,C.k3);p.rect(340,178,44,1,C.k4);p.rect(342,182,4,7,C.k2);p.rect(378,182,4,7,C.k2);
+  house(p,{x:548,y:52,w:110,rh:56,wh:64,roof:[C.t1,C.t2,C.t3,C.t4],door:[50,26,[C.t1,C.t2]],wins:[[14,12]],beams:[44]});
+  p.line(518,118,548,120,C.k1);
+  lampPost(p,282,172);lampPost(p,526,186);
+  // secadero, bote, redes, cerca, rocas
+  p.rect(316,268,4,34,C.k2);p.rect(380,268,4,34,C.k2);p.rect(314,270,72,4,C.k3);p.rect(314,270,72,1,C.k4);
+  for(let i=0;i<8;i++){const x=322+i*7;p.rect(x,274,4,12,C.n4);p.rect(x+2,276,2,8,C.n3);p.rect(x,286,4,2,C.s1);p.set(x+1,288,C.s1);p.set(x+1,273,C.k1)}
+  p.ell(300,328,30,12,C.t2);p.ell(300,326,28,9,C.t3);p.rect(272,326,56,2,C.t1);p.rect(280,320,40,1,C.t4);for(let x=280;x<322;x+=8)p.rect(x,320,1,14,C.t1);
+  for(let y=310;y<326;y++)for(let x=338;x<366;x++)if((x+y)%4===0||(x-y)%4===0)p.set(x,y,C.n3);
+  for(let x=440;x<WW;x++){p.rect(x,318,1,2,C.k4);p.rect(x,326,1,2,C.k4);p.set(x,328,C.k2)}for(let x=440;x<WW;x+=18){p.rect(x,312,4,20,C.k3);p.rect(x,312,4,2,C.k5);p.rect(x+3,312,1,20,C.k2)}
+  for(const[x,y,rx,ry]of[[220,336,14,8],[204,352,18,9],[240,350,10,6]]){p.ell(x,y,rx,ry,C.n2);p.ell(x-2,y-2,rx-4,ry-3,C.n3);p.rect(x-5,y-5,3,2,C.n4)}
+  if(fight){for(let k=0;k<8;k++){const a=k/8*Math.PI*2;let x=220,y=224;for(let i=0;i<5;i++){const nx=x+Math.cos(a+hash(k,i,40)-.5)*7,ny=y+Math.sin(a+hash(k,i,41)-.5)*3;p.thick(x,y,nx,ny,1,C.k1);x=nx;y=ny}}
+    for(const[x,y]of[[206,212],[236,232],[200,228],[244,214]]){p.rect(x,y,4,2,C.k5);p.rect(x+4,y-1,2,1,C.k5)}}
+  return p;
+}
+function water(p,t){const sh=Math.floor(t*6);
+  for(let y=0;y<WH;y++){const sx=shoreX(y);for(let x=0;x<sx;x++){const dist=sx-x;let c=dist>140?C.w1:dist<12?C.w3:C.w2;
+    if(dist<6&&hash(x,y,12)<.5)c=C.w4;
+    const row=y%12;const band=(x+Math.floor(y/12)*17+sh)%38;
+    if(row===4&&band<8)c=dist>140?C.w2:C.w3;if(row===5&&band>1&&band<9)c=dist>140?C.w2:C.w3;if(row===6&&((x+Math.floor(y/12)*17+sh+4)%38)<6)c=dist>140?C.w0:C.w1;
+    if(hash(x>>1,y>>1,Math.floor(t*3))<.002)c=C.w5;p.set(x,y,c)}}}
+function foam(p,t){for(let y=0;y<WH;y++){const sx=shoreX(y),o=Math.round(2+2*Math.sin(t*2+y*.18));p.set(sx-o,y,C.wf);p.set(sx-o-1,y,C.wf);if(hash(y,o,13)<.6)p.set(sx-o-2,y,C.w5)}
+  for(let x=14;x<shoreX(250);x+=36){const o=Math.round(t*3)%2;p.rect(x-2-o,256,2,1,C.w5);p.rect(x+6+o,256,2,1,C.w5)}
+  for(let x=24;x<228;x++){if(Math.sin(x*.2+t*3)>.6)p.set(x,172,C.wf)}}
+function smoke(p,t){for(let i=0;i<8;i++){const a=((t*.3+i/8)%1),x=498+Math.sin(a*6+i)*5+a*18,y=4-a*30,r=2+a*7;
+  const c=a<.4?C.p4:a<.7?C.p3:C.p2;p.ell(x,y,r,r,c,(xx,yy)=>a<.6||(xx+yy)%2===0)}}
+function laundry(p,t){[[522,0xc8402e,9,12],[536,C.p4,11,16],[552,0x2f4f8f,8,13]].forEach(([x,c,w,h],i)=>{const o=Math.round(Math.sin(t*3+i)*1.5);for(let j=0;j<h;j++){const dx=j>h-5?o:0;p.rect(x+dx,120+j,w,1,c)}p.rect(x,119,2,2,C.k1);p.rect(x+w-2,119,2,2,C.k1)})}
+function gull(p,x,y,t,i){const f=Math.floor(t*5+i)%2;x=Math.round(x);y=Math.round(y);p.rect(x-2,y+60,5,1,C.w0);
+  const wing=f?-1:1;for(const[dx,dy,c]of[[-6,wing,C.n4],[-5,wing,C.p4],[-4,0,C.p4],[-3,0,C.p4],[-2,0,C.p4],[-1,0,C.p4],[0,1,C.p4],[1,0,C.p4],[2,0,C.p4],[3,0,C.p4],[4,0,C.p4],[5,wing,C.p4],[6,wing,C.n4],[0,0,C.p4],[1,1,C.b3]])p.set(x+dx,y+dy,c)}
+function cat(p,x,y,t){const f=Math.floor(t*8)%2;p.rect(x,y,12,6,0x3a3040);p.rect(x+10,y-4,6,6,0x3a3040);p.set(x+10,y-5,0x3a3040);p.set(x+15,y-5,0x3a3040);p.set(x+13,y-2,C.b3);p.rect(x-4,y-2-f,4,2,0x3a3040);p.rect(x+1,y+6,2,2-f,0x3a3040);p.rect(x+8,y+6,2,1+f,0x3a3040)}
+const statics={};
+function drawPort(p,t,fight){
+  const key=fight?'fight':'port';statics[key]=statics[key]||portStatic(fight);
+  water(p,t);p.blit(statics[key],0,0);foam(p,t);flag(p,t);smoke(p,t);laundry(p,t);
+  for(let i=0;i<2;i++)gull(p,(40+t*22+i*260)%720-40,30+i*44+Math.sin(t+i)*6,t,i);
+  const actors=fight
+    ?[['dorne',200,236],['ilo',240,236],['brin',318,236],['tonel',70,124],['silbo',150,124],['pesca',380,226]]
+    :[['brin',200,232],['dorne',112,234],['ilo',272,236],['tonel',70,124],['silbo',150,124],['velda',522,262],['soldado',560,264],['muro',420,190],['pesca',356,304],['nino',560,336]];
+  actors.sort((a,b)=>a[2]-b[2]).forEach(([k,x,y])=>{const s=SPR[k],bob=(k==='tonel'||k==='silbo')&&!fight?(Math.floor(t*2+x)%2):0;p.blit(s,x-Math.floor(s.w/2),y-s.h+2+bob)});
+  if(!fight){p.line(210,214,236,250,C.k2);p.line(236,250,236,262,C.p2);const by=262+Math.round(Math.sin(t*3));p.rect(235,by,3,2,C.red);p.rect(235,by+2,3,1,C.p4);cat(p,590,346,t)}
+}
+// luz por hora (mismo sistema que la biblia)
+const LIGHTS=[[372,116,60,[255,190,90]],[480,116,60,[255,190,90]],[460,132,40,[255,210,120]],[284,150,56,[255,200,110]],[528,166,52,[255,200,110]],[13,88,32,[255,180,90]],[574,118,44,[255,190,90]]];
+function render(img,p,mode){const d=img.data,lk={dia:0,atardecer:.55,noche:1.25}[mode]||0;
+  for(let y=0;y<WH;y++)for(let x=0;x<WW;x++){const i=y*WW+x,c=p.d[i]<0?0:p.d[i];let r=c>>16&255,g=c>>8&255,b=c&255;
+    if(mode==='atardecer'){const sun=(1-x/WW)*24;r=r*1.05+8+sun;g=g*.86+sun*.25;b=b*.74+4}
+    if(lk)for(const[lx,ly,lr,lc]of LIGHTS){const dx=x-lx,dy=(y-ly)*1.3,dd=dx*dx+dy*dy;if(dd<lr*lr){const f=1-Math.sqrt(dd)/lr,k=f*f*lk;r+=lc[0]*k*.5;g+=lc[1]*k*.5;b+=lc[2]*k*.35}}
+    d[i*4]=Math.min(255,r);d[i*4+1]=Math.min(255,g);d[i*4+2]=Math.min(255,b);d[i*4+3]=255}}
+function toCanvas(pb){const c=document.createElement('canvas');c.width=pb.w;c.height=pb.h;const g=c.getContext('2d'),img=g.createImageData(pb.w,pb.h);
+  for(let i=0;i<pb.d.length;i++){const v=pb.d[i];if(v<0)continue;img.data[i*4]=v>>16&255;img.data[i*4+1]=v>>8&255;img.data[i*4+2]=v&255;img.data[i*4+3]=255}g.putImageData(img,0,0);return c}
+
+// =====================================================================
+// MONTAJE
+// =====================================================================
+function fitAll(){document.querySelectorAll('.viewport').forEach(v=>{v.firstElementChild.style.transform=`scale(${v.clientWidth/1280})`})}
+new ResizeObserver(fitAll).observe(document.body);fitAll();
+const CROP={mid:[120,74,480,270],out:[0,0,640,360],in:[200,140,320,180]};
+// posiciones de la interfaz que siguen al mundo (en coordenadas del recorte normal)
+const toStage=(x,y)=>[(x-CROP.mid[0])*1280/480,(y-CROP.mid[1])*720/270];
+function place(id,x,y){const el=document.getElementById(id);if(!el)return;const[sx,sy]=toStage(x,y);el.style.left=sx+'px';el.style.top=sy+'px'}
+place('prompt',200,170);place('c1',170,170);place('c2',196,252);
+// elenco
+(function(){const pb=new PB(400,112);for(let y=0;y<112;y++)for(let x=0;x<400;x++)pb.set(x,y,y<92?(hash(x>>1,y>>1,90)<.05?C.g2:C.g3):(hash(x>>1,y>>1,91)<.08?C.d2:C.d3));
+  for(let i=0;i<40;i++)tuft(pb,Math.floor(hash(i,5,92)*396),Math.floor(hash(i,6,92)*80));
+  const order=['ilo','brin','dorne','tonel','silbo','velda','soldado','muro'];order.forEach((k,i)=>{const s=SPR[k],x=25+i*50;for(let dx=-9;dx<10;dx++)pb.set(x+dx,103,C.d2);pb.blit(s,x-Math.floor(s.w/2),104-s.h)});
+  const c=document.getElementById('cast'),g=c.getContext('2d'),img=g.createImageData(400,112);for(let i=0;i<pb.d.length;i++){const v=pb.d[i];img.data[i*4]=v>>16&255;img.data[i*4+1]=v>>8&255;img.data[i*4+2]=v&255;img.data[i*4+3]=255}g.putImageData(img,0,0)})();
+// retratos
+document.querySelectorAll('canvas.pf').forEach(c=>{const pc=toCanvas(portrait(c.dataset.who));c.getContext('2d').drawImage(pc,0,0)});
+// mundos
+const full=document.createElement('canvas');full.width=WW;full.height=WH;const fg=full.getContext('2d');const fimg=fg.createImageData(WW,WH);
+const fightC=document.createElement('canvas');fightC.width=WW;fightC.height=WH;
+{const pb=new PB(WW,WH);drawPort(pb,0,true);const g=fightC.getContext('2d'),img=g.createImageData(WW,WH);render(img,pb,'atardecer');g.putImageData(img,0,0)}
+const targets=[...document.querySelectorAll('canvas.w, canvas.zc')].map(c=>({c,g:c.getContext('2d'),vis:true,scene:c.dataset.scene||'port',zoom:c.dataset.zoom||'mid'}));
+const io=new IntersectionObserver(es=>es.forEach(e=>{const t=targets.find(t=>t.c===e.target);if(t)t.vis=e.isIntersecting}));targets.forEach(t=>io.observe(t.c));
+targets.filter(t=>t.scene==='fight').forEach(t=>{const[x,y,w,h]=CROP.mid;t.g.drawImage(fightC,x,y,w,h,0,0,w,h)});
+const pb=new PB(WW,WH);const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let last=-1;
+function frame(ms){const t=ms/1000,step=Math.floor(t*8);
+  if(step!==last&&targets.some(x=>x.vis&&x.scene==='port')){last=step;pb.d.fill(-1);drawPort(pb,t,false);render(fimg,pb,'atardecer');fg.putImageData(fimg,0,0);
+    for(const tg of targets){if(tg.scene!=='port'||!tg.vis)continue;const[x,y,w,h]=CROP[tg.zoom];tg.g.drawImage(full,x,y,w,h,0,0,tg.c.width,tg.c.height)}}
+  if(!reduce)requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+</script>
