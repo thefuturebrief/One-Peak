@@ -434,7 +434,8 @@ function newFamily(){const used=new Set(),nom=fem=>{let n;do n=pick(fem?NOM_F:NO
   const sibs=Array.from({length:n},()=>{const fem=rnd()<.5,o=wpick(OCUP);let e;do e=Math.max(1,Math.round(17+(rnd()-.5)*18));while(e===17);return{nom:nom(fem),fem,edad:e,oc:fem?o[1]:o[0]}});
   const vivos=adults.filter(a=>a.vivo);
   return{adults,sibs,crianza:vivos.length?null:pick(['tu abuela','Doria, una vecina','tu tío, el tabernero']),huerfano:!vivos.length,secret:rnd()<.35}}
-function cuidador(){const v=S.fam.adults.filter(a=>a.vivo);return v.length?v[0].rel:S.fam.crianza}
+// si una tormenta se lleva al último adulto, alguien tiene que haberte criado
+function cuidador(){const v=S.fam.adults.filter(a=>a.vivo);return v.length?v[0].rel:(S.fam.crianza||=pick(['tu abuela','Doria, una vecina','tu tío, el tabernero']))}
 const fill=t=>t.replace('{cuidador}',cuidador()).replace('{Cuidador}',cap(cuidador()));
 function reset(){Object.assign(S,{step:0,ax:{coraje:0,corazon:0,orgullo:0,libertad:0,ambicion:0},st:{},of:{},trs:[],tags:[],bonds:[],items:[],start:'listo',dream:null,ev:2+Math.floor(rnd()*6),evDone:false});
   STATS.forEach(([k])=>S.st[k]=8);Object.keys(OFICIOS).forEach(k=>S.of[k]=0);S.fam=newFamily();
