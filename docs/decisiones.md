@@ -158,6 +158,10 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ---
 
 ## En discusión
+- **La familia se descubre jugando, no en el prólogo:** al terminar el prólogo despertás en tu casa; tu familia está ahí como gente que ya conocés. Lo que sabés de ellos y de tu historia se va revelando al hablar, con objetos de la casa y en tu diario.
+- **Casi todos los edificios se pueden entrar,** con gente adentro.
+- **Comentarios y conversaciones ambientales:** los NPCs dicen frases sobre su cabeza según el contexto y conversan entre sí; lo que escuchás puede darte información.
+- **Diario del protagonista:** lo más relevante sobre vos, tu familia, la gente y los rumores, escrito a medida que lo descubrís.
 - **Base de personajes: LPC en prueba** (`docs/menu/`). Piezas del Universal LPC Character Generator (gratis; CC-BY-SA 3.0, GPL 3.0, OGA-BY 3.0; obliga a dar crédito y a compartir bajo la misma licencia lo derivado). Créditos incluidos en la pantalla de Créditos. Mana Seed descartado (pago y su licencia prohíbe combinarlo con recursos generados por IA). Limitación de LPC: pocas complexiones (hombre, mujer, musculoso, adolescente, niño).
 - **Menú principal e interfaz moderna:** fondo vivo del puerto, interfaz en vidrio oscuro cálido con oro, tipografías Rammetto One (logo) y Outfit (todo lo demás). Pendiente de aprobación.
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
