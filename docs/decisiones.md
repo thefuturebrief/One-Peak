@@ -53,7 +53,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **Origen aleatorio.** Familia de composición variable (padres, hermanos, de 0 a muchos), cada miembro con pocos rasgos. Son personas reales dentro de la simulación: pueden aparecer en el diario, tener una recompensa, ser capturadas.
 - Los familiares pueden tener secretos y vínculos con personajes del mundo, o con leyendas del pasado (por ejemplo, haber cruzado el camino de Roger).
 - **Linaje "D."**: aleatorio, ultra raro y oculto. Nunca se sabe al empezar; se descubre jugando.
-- **Prólogo como cuestionario de vida** (ver `docs/prologo.md`): diez preguntas de los 6 a los 17 años que forman carácter (cinco ejes), rasgos, estadísticas iniciales, oficio, vínculos, sueño y punto de partida. En Destino solo ves dos respuestas por pregunta y hay golpes del destino; en Libre ves todas y elegís el sueño.
+- **Prólogo como cuestionario de vida** (ver `docs/prologo.md` y `docs/menu/`): diez preguntas de los 6 a los 17 años que forman carácter (cinco ejes), rasgos, estadísticas iniciales, oficio, vínculos, sueño y punto de partida. **Sin modos Destino/Libre:** el jugador elige raza y ve todas las respuestas; un suceso de vida al azar aparece sin anunciarse. Sin explicaciones de más: el juego habla solo.
+- **Razas jugables al inicio:** Humano, Gyojin, Mink, Brazos largos y Piernas largas. Los Tontatta existen en el mundo, pero no se juegan.
 - **La familia se sortea y no depende del prólogo.** Es igual en ambos modos; las preguntas se adaptan a ella.
 - **El oficio se resuelve en el prólogo, no se juega.** Es una simulación de piratas, no de carpinteros. Sale de tu origen y de tus decisiones de infancia, y define tus habilidades, tu rol en un barco (navegante, cocinero, carpintero naval, médico…) y parte de tu estilo de pelea. Se usa cuando hace falta; no hay "trabajar 4 horas".
 - **El oficio del prólogo es un dato de tu historia,** con influencia en tu rol a bordo (navegante, espadachín, cocinero, músico, médico, arqueólogo…). No define estadísticas ni afinidades.
@@ -74,7 +75,7 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - Están todas, con distinta rareza. Las raras son posibles pero poco frecuentes.
 - **Más rara, más poderosa, pero más perseguida.** Cada raza tiene ventajas y costos, también sociales.
 - La ventaja de la raza pesa al principio. Haki y voluntad igualan la cancha al final.
-- **Dos modos de inicio:** *Destino* (raza sorteada según cuánta gente de cada raza hay en el mundo; es el preferido) y *Libre* (elegís).
+- La raza se elige al crear el personaje.
 
 ### Frutas del Diablo
 - Se respetan las categorías canon: Paramecia, Zoan (incluidas antiguas y míticas) y Logia.
@@ -157,7 +158,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 ---
 
 ## En discusión
-- **Base de personajes:** los sprites hechos por código no alcanzan el estándar. Propuesta: partir de una base profesional gratuita y sumarle piezas propias. Mana Seed descartado (lo gratuito es una muestra, el sistema completo es pago y su licencia prohíbe combinarlo con recursos generados por IA). Candidato: Universal LPC Character Generator (gratis, licencias CC-BY-SA/OGA-BY/GPL con crédito). Pendiente de que el autor lo mire.
+- **Base de personajes: LPC en prueba** (`docs/menu/`). Piezas del Universal LPC Character Generator (gratis; CC-BY-SA 3.0, GPL 3.0, OGA-BY 3.0; obliga a dar crédito y a compartir bajo la misma licencia lo derivado). Créditos incluidos en la pantalla de Créditos. Mana Seed descartado (pago y su licencia prohíbe combinarlo con recursos generados por IA). Limitación de LPC: pocas complexiones (hombre, mujer, musculoso, adolescente, niño).
+- **Menú principal e interfaz moderna:** fondo vivo del puerto, interfaz en vidrio oscuro cálido con oro, tipografías Rammetto One (logo) y Outfit (todo lo demás). Pendiente de aprobación.
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
 - **Iteración visual 4** (`docs/iteracion-4/`), pendiente de devolución: personajes reconstruidos con volumen por luz, contorno del color de la pieza, formas de cara, capas de ropa en orden y vista lateral coherente. Tres proporciones para elegir (A compacta, B intermedia, C estilizada). Plan de mejoras en `docs/plan.md`.
 - Iteración visual 3 (`docs/iteracion-3/`), con devolución recibida: personajes sobre una plantilla común (seis complexiones, cuatro direcciones, caminata), mezclas al azar, elenco rehecho, interfaz más chica y bajo demanda, panel del cuerpo por zonas.
