@@ -108,6 +108,12 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - Lo que viene después en combate se muestra en movimiento, no en maquetas estáticas.
 - **Devolución de la biblia v1:** lo mejor encaminado es el ambiente y la luz por hora. El arte del mundo está "a pocos pasos".
 - **Interfaz en alta definición:** HUD, menús y textos tienen que verse modernos, nítidos y legibles, no pixelados. El mundo sigue en píxel; la interfaz no.
+- **Personajes con aspecto de juego, no de cuento:** proporciones compactas (cabeza grande, cuerpo chico), brazos pegados al cuerpo, una plantilla común para todos, cuatro direcciones y caminata. Cuerpos y cabezas combinables que mantienen la misma línea.
+- **El protagonista y sus opciones de diseño tienen el mismo estándar que el resto:** no es mejor ni peor que los demás personajes.
+- **Nada de detalles de más:** la información se da en el diálogo o la narración, no en carteles ("preocupado", "dato nuevo"). Tu estado y el del rival se abren a pedido.
+- **"Momento decisivo"** en lugar de "pausa".
+- **El panel del cuerpo es una figura bien dibujada por zonas:** al tocar una zona dice qué tiene; al costado, solo lo general.
+- **Ficha del protagonista al tocar su retrato:** edad, origen, tripulación, recompensa y estado.
 - **Nada de cámara lenta en la pausa:** la pelea se detiene para decidir, como en la prueba de estilo 1.
 - **Zoom:** la cámara por defecto está más cerca, con un nivel para alejarse y otro para acercarse; siempre se vuelve al normal.
 - **Referencias de interfaz:** Eastward (calidez y terminación) y RimWorld (información completa). La interfaz es original.
@@ -149,7 +155,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
-- **Iteración visual 2** (`docs/iteracion-2/`), pendiente de devolución: casillas de 32 px, personajes de unos 52 px, zoom de tres niveles (alejado, normal, cerca), interfaz en alta definición, ocho personajes originales diseñados uno por uno, barco nuevo con mascarón y pausa compacta.
+- **Iteración visual 3** (`docs/iteracion-3/`), pendiente de devolución: personajes sobre una plantilla común (seis complexiones, cuatro direcciones, caminata), mezclas al azar, elenco rehecho, interfaz más chica y bajo demanda, panel del cuerpo por zonas.
+- Iteración visual 2 (`docs/iteracion-2/`), con devolución recibida: casillas de 32 px, personajes de unos 52 px, zoom de tres niveles (alejado, normal, cerca), interfaz en alta definición, ocho personajes originales diseñados uno por uno, barco nuevo con mascarón y pausa compacta.
 - **Escala de poder:** niveles por mar, recompensas, potencial de la fruta por dominio del usuario, Haki.
 - **Afinidad:** si además de la velocidad limita el techo del dominio, y qué grupos de frutas pesan sobre qué estadísticas.
 - **Peleas grupales:** propuesta de una sola pelea donde los duelos aparecen solos, con órdenes a la tripulación.
