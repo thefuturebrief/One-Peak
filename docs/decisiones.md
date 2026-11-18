@@ -108,6 +108,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - Lo que viene después en combate se muestra en movimiento, no en maquetas estáticas.
 - **Devolución de la biblia v1:** lo mejor encaminado es el ambiente y la luz por hora. El arte del mundo está "a pocos pasos".
 - **Interfaz en alta definición:** HUD, menús y textos tienen que verse modernos, nítidos y legibles, no pixelados. El mundo sigue en píxel; la interfaz no.
+- **Dirección de personajes (con aportes del texto de ChatGPT):** siluetas reconocibles sin colores, variedad real de cuerpos, caras y peinados, volumen y materiales en lugar de colores planos, paleta limitada por personaje, y siempre pensados para animarse en cuatro direcciones. Escala razonable para una producción chica.
+- **La vista lateral sale del mismo modelo que la frontal:** ojos a la misma altura y del mismo tamaño. Capas y chaquetas sobre los hombros van detrás del cuerpo.
 - **Personajes con aspecto de juego, no de cuento:** proporciones compactas (cabeza grande, cuerpo chico), brazos pegados al cuerpo, una plantilla común para todos, cuatro direcciones y caminata. Cuerpos y cabezas combinables que mantienen la misma línea.
 - **El protagonista y sus opciones de diseño tienen el mismo estándar que el resto:** no es mejor ni peor que los demás personajes.
 - **Nada de detalles de más:** la información se da en el diálogo o la narración, no en carteles ("preocupado", "dato nuevo"). Tu estado y el del rival se abren a pedido.
@@ -155,7 +157,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
-- **Iteración visual 3** (`docs/iteracion-3/`), pendiente de devolución: personajes sobre una plantilla común (seis complexiones, cuatro direcciones, caminata), mezclas al azar, elenco rehecho, interfaz más chica y bajo demanda, panel del cuerpo por zonas.
+- **Iteración visual 4** (`docs/iteracion-4/`), pendiente de devolución: personajes reconstruidos con volumen por luz, contorno del color de la pieza, formas de cara, capas de ropa en orden y vista lateral coherente. Tres proporciones para elegir (A compacta, B intermedia, C estilizada). Plan de mejoras en `docs/plan.md`.
+- Iteración visual 3 (`docs/iteracion-3/`), con devolución recibida: personajes sobre una plantilla común (seis complexiones, cuatro direcciones, caminata), mezclas al azar, elenco rehecho, interfaz más chica y bajo demanda, panel del cuerpo por zonas.
 - Iteración visual 2 (`docs/iteracion-2/`), con devolución recibida: casillas de 32 px, personajes de unos 52 px, zoom de tres niveles (alejado, normal, cerca), interfaz en alta definición, ocho personajes originales diseñados uno por uno, barco nuevo con mascarón y pausa compacta.
 - **Escala de poder:** niveles por mar, recompensas, potencial de la fruta por dominio del usuario, Haki.
 - **Afinidad:** si además de la velocidad limita el techo del dominio, y qué grupos de frutas pesan sobre qué estadísticas.

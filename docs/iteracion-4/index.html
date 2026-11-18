@@ -1,0 +1,344 @@
+<title>Iteración visual 4</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Rubik:wght@400;500;600;700&family=IM+Fell+English+SC&display=swap">
+<style>
+/* Documento oscuro y cálido para mirar sprites: fondos neutros, las hojas se escalan en píxel entero. Un solo tema, a propósito. */
+:root{--bg:#1b1714;--bg2:#241e19;--txt:#efe3c8;--dim:#b9ab90;--muted:#8e826d;--line:#3b332b;--brass:#e0b24e;
+  --f:"Rubik",system-ui,sans-serif;--f-title:"Lilita One","Rubik",sans-serif;--f-print:"IM Fell English SC",Georgia,serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:var(--f);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:44px 120px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:76px}
+header{display:flex;flex-direction:column;gap:10px;max-width:74ch}
+header .k{font-family:var(--f-print);color:var(--brass);letter-spacing:.1em}
+h1{margin:0;font-family:var(--f-title);font-weight:400;font-size:clamp(36px,6vw,58px);line-height:1;text-wrap:balance}
+header p,.lead{margin:0;color:var(--dim);max-width:72ch}
+section{display:flex;flex-direction:column;gap:16px}
+.sh{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;border-top:2px solid var(--line);padding-top:14px}
+.sh .n{font-family:var(--f-print);color:var(--brass);font-size:18px}
+.sh h2{margin:0;font-family:var(--f-title);font-weight:400;font-size:clamp(25px,3.3vw,35px);line-height:1.05}
+.sheet{width:100%;background:#7a8a6a;border:2px solid #000;overflow-x:auto}
+.sheet canvas{display:block;width:100%;min-width:640px;height:auto;image-rendering:pixelated}
+.labels{display:grid;gap:4px;font-size:13px;color:var(--dim);text-align:center}
+.labels b{display:block;color:var(--txt);font-weight:600;font-size:14px}
+.rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:74ch;color:var(--dim)}
+.rules b{color:var(--txt);font-weight:600}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;background:var(--line);border:2px solid var(--line)}
+.cols div{background:var(--bg2);padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cols b{font-family:var(--f-title);font-weight:400;font-size:19px;color:var(--brass)}
+.cols p,.cols li{margin:0;font-size:14.5px;color:var(--dim)}
+.cols ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;margin-right:6px}
+.tag.ok{background:#2f4a32;color:#bfe6c4}.tag.no{background:#4a2a24;color:#f2bcb0}.tag.mid{background:#4a3a1e;color:#f2d8a0}
+.note{font-size:13.5px;color:var(--muted);max-width:74ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="k">One-Peak · iteración visual 4</div>
+    <h1>Personajes construidos desde cero</h1>
+    <p>Esta vuelta no le agrega detalles a los personajes anteriores: cambia cómo se construyen. Cada parte del cuerpo tiene volumen y recibe luz desde arriba a la izquierda, el contorno toma el color de la pieza que rodea, las caras tienen forma propia, la ropa respeta el orden de las capas y la vista de costado sale del mismo modelo que la de frente.</p>
+  </header>
+
+  <section>
+    <div class="sh"><span class="n">§ 1</span><h2>Tres proporciones para elegir</h2></div>
+    <p class="lead">Los mismos dos personajes (Ilo y una estibadora musculosa) en tres interpretaciones. La A es compacta, cerca de lo que te mostré la vez pasada. La B es intermedia. La C es más estilizada. Todas caben en la misma escala de mundo.</p>
+    <div class="sheet"><canvas id="cmp" aria-label="Dos personajes en tres proporciones"></canvas></div>
+    <div class="labels" style="grid-template-columns:repeat(3,1fr)"><span><b>A · Compacta</b>cabeza ≈ 2,5 veces en el cuerpo</span><span><b>B · Intermedia</b>≈ 3 cabezas · la que usa el resto de la página</span><span><b>C · Estilizada</b>≈ 3,5 cabezas</span></div>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">§ 2</span><h2>Ocho personajes de prueba, muy distintos entre sí</h2></div>
+    <p class="lead">Complexiones, caras, peinados y ropa diferentes, todos originales y en proporción B. Si tapás los colores, cada silueta debería seguir siendo reconocible. Abajo, de frente, de costado, de espaldas y caminando.</p>
+    <div class="sheet"><canvas id="cast" aria-label="Ocho personajes en tres vistas y caminando"></canvas></div>
+    <div class="labels" style="grid-template-columns:repeat(8,1fr)">
+      <span><b>Ilo</b>protagonista</span><span><b>Rosa Ancla</b>estibadora</span><span><b>Tío Garbanzo</b>cocinero</span><span><b>Lin</b>navegante</span><span><b>Comodoro Hask</b>Marina</span><span><b>Krenn</b>pirata</span><span><b>Viejo Brin</b>pescador</span><span><b>"Garra" Dorne</b>capitán</span>
+    </div>
+    <ul class="rules">
+      <li><b>Volumen en vez de bloques:</b> cabeza, torso, brazos y piernas se sombrean como formas redondas, con cuatro tonos por material.</li>
+      <li><b>Contorno del color de la pieza:</b> el borde de la camisa es un azul oscuro, el de la piel un marrón; ya no es una línea negra pareja.</li>
+      <li><b>Caras con forma:</b> redonda, cuadrada, alargada, ancha o de mentón fino. Ojos a la misma altura y del mismo tamaño en todas las vistas.</li>
+      <li><b>Capas en orden:</b> las capas y chaquetas sobre los hombros van detrás del cuerpo; los faldones de un abrigo abierto van delante. Nada atraviesa el torso.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">§ 3</span><h2>Qué tomé del texto de ChatGPT y qué no</h2></div>
+    <div class="cols">
+      <div><b>Lo que tiene valor</b><ul>
+        <li><span class="tag ok">sí</span>Siluetas reconocibles sin colores ni cara.</li>
+        <li><span class="tag ok">sí</span>Variedad real de cuerpos, cabezas y caras, no solo de ropa.</li>
+        <li><span class="tag ok">sí</span>Volumen, luz y materiales en vez de colores planos.</li>
+        <li><span class="tag ok">sí</span>Probar varias interpretaciones antes de rediseñar todo.</li>
+        <li><span class="tag ok">sí</span>Pensar en orientaciones y animación, no en ilustraciones sueltas.</li></ul></div>
+      <div><b>Lo que hay que matizar</b><ul>
+        <li><span class="tag mid">ojo</span>Dice que los personajes son "estrechos y alargados": eso describe la iteración 2, no la 3. Por eso comparo tres proporciones en lugar de asumir una.</li>
+        <li><span class="tag mid">ojo</span>"Nada de chibi" choca con tu referencia a Añil, que es bastante compacto. La B es el punto medio.</li>
+        <li><span class="tag mid">ojo</span>Sea of Stars usa sprites mucho más grandes y caros de animar. Sirve como referencia de terminación, no de escala.</li></ul></div>
+      <div><b>Lo que falta en ese texto</b><ul>
+        <li><span class="tag no">falta</span>Paleta limitada por personaje, para que el conjunto no se vuelva ruidoso.</li>
+        <li><span class="tag no">falta</span>Cómo se produce: con un sistema de piezas como este, cada personaje nuevo cuesta minutos; dibujar cada uno a mano, días.</li>
+        <li><span class="tag no">falta</span>Legibilidad en movimiento y de lejos, que es donde se juega el sprite.</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><span class="n">§ 4</span><h2>Lo que viene: mejoras y ampliación</h2></div>
+    <p class="lead">Mientras trabajaba en esto armé el plan de lo que falta mejorar y lo que falta crear. Está completo en el repositorio, en <code>docs/plan.md</code>. Resumen:</p>
+    <div class="cols">
+      <div><b>Mejorar lo que ya existe</b><ul>
+        <li>Mundo: más vida en la isla (puestos de mercado, gente sentada, perros, carretillas), sombras proyectadas y transiciones de casilla más suaves.</li>
+        <li>Barco: verlo desde las cuatro direcciones y en navegación, con velas desplegadas.</li>
+        <li>Interfaz: estados de botón, transiciones animadas y sonido.</li>
+        <li>Combate: animaciones de golpe propias por complexión.</li></ul></div>
+      <div><b>Diseñar ahora</b><ul>
+        <li>Prólogo jugable: cinco escenas de infancia que definen familia, oficio y sueño.</li>
+        <li>Simulación del pasado: qué se simula antes de empezar y cómo se convierte en historias que te cuentan.</li>
+        <li>Facciones del East Blue: Marina, piratas, cazarrecompensas, comerciantes.</li>
+        <li>Economía: berries, precios por isla, trabajos y deudas.</li></ul></div>
+      <div><b>Ampliar el juego</b><ul>
+        <li>Reputación y recompensa: cómo el mundo decide que sos un criminal.</li>
+        <li>Tripulación: reclutar, lealtad, roles a bordo y conflictos internos.</li>
+        <li>Navegación: rutas, clima, eventos en el mar y llegada a islas nuevas.</li>
+        <li>Primeras islas del East Blue, con nombres oficiales y nuestra interpretación visual.</li></ul></div>
+    </div>
+  </section>
+
+  <p class="note">Todos los personajes son diseños originales. Ningún personaje de la obra aparece ni se reproduce.</p>
+</div>
+
+<script>
+// =====================================================================
+// MOTOR: búfer de píxeles, sombreado por volumen y contorno de color
+// =====================================================================
+const OUTL=0x241820;
+function hex2rgb(c){return[c>>16&255,c>>8&255,c&255]}
+function mixc(a,b,k){const A=hex2rgb(a),B=hex2rgb(b);return(Math.round(A[0]+(B[0]-A[0])*k)<<16)|(Math.round(A[1]+(B[1]-A[1])*k)<<8)|Math.round(A[2]+(B[2]-A[2])*k)}
+class PB{
+  constructor(w,h){this.w=w;this.h=h;this.d=new Int32Array(w*h).fill(-1)}
+  set(x,y,c){x=Math.floor(x);y=Math.floor(y);if(x<0||y<0||x>=this.w||y>=this.h||c==null||c<0)return;this.d[y*this.w+x]=c}
+  get(x,y){x=Math.floor(x);y=Math.floor(y);if(x<0||y<0||x>=this.w||y>=this.h)return -1;return this.d[y*this.w+x]}
+  rect(x,y,w,h,c){for(let j=0;j<h;j++)for(let i=0;i<w;i++)this.set(x+i,y+j,c)}
+  line(x0,y0,x1,y1,c){x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);const dx=Math.abs(x1-x0),dy=-Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1;let e=dx+dy;for(;;){this.set(x0,y0,c);if(x0===x1&&y0===y1)break;const e2=2*e;if(e2>=dy){e+=dy;x0+=sx}if(e2<=dx){e+=dx;y0+=sy}}}
+  blit(s,ox,oy,flip){for(let y=0;y<s.h;y++)for(let x=0;x<s.w;x++){const c=s.d[y*s.w+(flip?s.w-1-x:x)];if(c>=0)this.set(ox+x,oy+y,c)}}
+  // contorno que toma el color de la pieza vecina, oscurecido
+  outline(){const o=new Int32Array(this.d);for(let y=0;y<this.h;y++)for(let x=0;x<this.w;x++){if(this.d[y*this.w+x]>=0)continue;
+      let n=-1;for(const[dx,dy]of[[0,1],[1,0],[0,-1],[-1,0]]){const c=this.get(x+dx,y+dy);if(c>=0){n=c;break}}
+      if(n>=0)o[y*this.w+x]=mixc(n,OUTL,.78)}this.d=o;return this}
+}
+// tono según la normal: luz desde arriba a la izquierda y algo de frente
+function tone(nx,ny){const nz=Math.sqrt(Math.max(0,1-nx*nx-ny*ny)),l=-.55*nx-.62*ny+.56*nz;return l>.66?0:l>.3?1:l>-.06?2:3}
+function blob(p,cx,cy,rx,ry,R,inside,cond){
+  for(let y=Math.floor(cy-ry-2);y<=cy+ry+2;y++)for(let x=Math.floor(cx-rx-2);x<=cx+rx+2;x++){const nx=(x+.5-cx)/rx,ny=(y+.5-cy)/ry;
+    if((inside?inside(nx,ny):nx*nx+ny*ny<=1)&&(!cond||cond(x,y)))p.set(x,y,R[tone(Math.max(-1,Math.min(1,nx*.9)),Math.max(-1,Math.min(1,ny*.9)))])}}
+function limb(p,x0,y0,x1,y1,r,R,cond){
+  const L=Math.hypot(x1-x0,y1-y0)||1,ux=(x1-x0)/L,uy=(y1-y0)/L;
+  for(let y=Math.floor(Math.min(y0,y1)-r-1);y<=Math.max(y0,y1)+r+1;y++)for(let x=Math.floor(Math.min(x0,x1)-r-1);x<=Math.max(x0,x1)+r+1;x++){
+    const px=x+.5-x0,py=y+.5-y0,t=Math.max(0,Math.min(L,px*ux+py*uy)),qx=x0+ux*t,qy=y0+uy*t,d=Math.hypot(x+.5-qx,y+.5-qy);
+    if(d<=r&&(!cond||cond(x,y))){const lat=((x+.5-qx)*uy*-1+(y+.5-qy)*ux)/r;p.set(x,y,R[tone(-lat*.85,t<1.5?-.5:.05)])}}}
+function trunk(p,cx,top,h,sw,ww,R,opt={}){
+  for(let y=top;y<top+h;y++){const f=(y-top)/(h-1||1);let half=sw/2+(ww/2-sw/2)*f;if(y===top)half-=1.5;else if(y===top+1)half-=.5;
+    for(let x=Math.floor(cx-half);x<Math.ceil(cx+half);x++){const nx=(x+.5-cx)/half,ny=y<top+2?-.6:y>top+h-2?.45:-.05;if(!opt.cond||opt.cond(x,y))p.set(x,y,R[tone(nx*.92,ny)])}}}
+
+// =====================================================================
+// PALETAS (rampas de 4: luz, base, sombra, profundo)
+// =====================================================================
+const SKIN={clara:[0xffe2c4,0xf2c49c,0xd6987a,0xa86a58],media:[0xf2c08e,0xd69c6a,0xb07650,0x7e5038],morena:[0xd8a068,0xb47a4a,0x8a5634,0x5e3824],oscura:[0xae744c,0x86522e,0x603820,0x3e2214]};
+const R={
+  blanco:[0xffffff,0xeee8de,0xc8bfb2,0x948a7e],marino:[0x5a72a8,0x3c5288,0x2a3a66,0x1c2648],naranja:[0xffb862,0xf08a2a,0xc2621a,0x8a4212],
+  marron:[0xb48a62,0x8e6644,0x6a4a30,0x48301e],cuero:[0x9a6a42,0x744a2c,0x54321c,0x38200e],oliva:[0x9aa060,0x7a8044,0x5a602e,0x3e421e],
+  gris:[0xb4b0b8,0x8e8a94,0x6a6672,0x48444e],rojo:[0xf0705a,0xd0443a,0xa02e2a,0x6e1c1e],verde:[0x5aa080,0x3e8064,0x2a5e4a,0x1a3e32],
+  violeta:[0xa080c0,0x7a5aa0,0x584078,0x3a2852],dorado:[0xfff0a0,0xe8c050,0xb08a28,0x7a5a14],negro:[0x5a5664,0x3a3644,0x26222e,0x18141e],
+  azulgris:[0x8ab0b8,0x6a8e98,0x4e6c76,0x344a52],amarillo:[0xffe680,0xf2c230,0xc89418,0x8a620c],crema:[0xfff8e8,0xf2e8d2,0xd6c8ac,0xa89a80],
+  canas:[0xffffff,0xe8e4dc,0xc4beb4,0x948e86],pelo_cast:[0x9a6038,0x6e3e20,0x4e2a14,0x341a0c],pelo_neg:[0x4a3e4a,0x2e2632,0x1e1822,0x120e16],
+  pelo_azul:[0x5a8ea0,0x3a6a7e,0x26505e,0x18363e],metal:[0xffffff,0xd8d8e4,0xa8a8b8,0x6e6e7e],madera:[0xd4a066,0xa8743e,0x7c5228,0x543416],
+  tatuaje:[0x3a5a7a,0x3a5a7a,0x2a4060,0x2a4060],rosa:[0xf6a8a8,0xe07e80,0xb85a62,0x803a44]
+};
+
+// =====================================================================
+// CONSTRUCCIÓN DEL PERSONAJE
+// =====================================================================
+const PROP={A:{head:10.2,torso:14,leg:12,neck:1},B:{head:9.4,torso:16,leg:17,neck:2},C:{head:8.8,torso:18,leg:22,neck:2}};
+const FW=60,FH=80,CX=30,FEET=78;
+function headInside(shape){return(nx,ny)=>{let ax=nx,ay=ny;
+  if(shape==='cuadrada')return Math.pow(Math.abs(ax),3.2)+Math.pow(Math.abs(ay),3.2)<=1;
+  if(shape==='fina'&&ay>0)ax=nx/(1-.4*ay);
+  if(shape==='ancha'&&ay>0)ax=nx/(1+.12*ay);
+  return ax*ax+ay*ay<=1}}
+function build(sp,dir='down',frame=0){
+  const pr=PROP[sp.prop||'B'],b=Object.assign({h:1,w:1,musc:0,belly:0,hunch:0,head:1},sp.b);
+  const p=new PB(FW,FH),side=dir==='right',back=dir==='up',step=[0,1,0,-1][frame%4],bob=step?1:0;
+  const S=sp.skin,legL=Math.round(pr.leg*b.h),tH=Math.round(pr.torso*(.9+.1*b.h)+b.belly*2);
+  const sw=Math.round((15+b.musc*5)*b.w*(side?.62:1)),ww=Math.round((12+b.belly*6)*b.w*(side?.66:1));
+  const hip=FEET-legL+bob,tTop=hip-tH+2+b.hunch,legR=Math.max(1.6,(2.1+b.musc*.5+b.belly*.4)*b.w),armR=(1.6+b.musc*1.1)*Math.min(1.15,b.w);
+  const hrx=pr.head*b.head*(sp.headW||1),hry=pr.head*b.head*1.02*(sp.headH||1);
+  const hx=CX+(side?1+b.hunch:0),hy=tTop-pr.neck-hry+2+b.hunch*1.2;
+  const has=k=>(sp.eq||[]).includes(k),top=sp.top||R.blanco,legs=sp.legs||R.marron,boots=sp.boots||R.cuero;
+  // ---------- detrás del cuerpo ----------
+  if(sp.cape){const c=sp.cape,len=tH+Math.round(legL*.55);
+    if(back){trunk(p,CX,tTop-1,len,sw+6,sw+10,c);}
+    else if(!side){const cond=(x)=>x<CX-sw/2+1||x>=CX+sw/2-1;trunk(p,CX,tTop-1,len,sw+6,sw+12,c,{cond});p.rect(CX-sw/2-6,tTop+len-2,5,1,R.marino[1]);p.rect(CX+sw/2+1,tTop+len-2,5,1,R.marino[2])}
+    else trunk(p,CX-4,tTop-1,len,7,10,c)}
+  if(sp.hair&&sp.hair.s==='afro')blob(p,hx-(side?2:0),hy-2,hrx+5,hry+4,sp.hair.c);
+  if(has('cuerda')&&!back){for(let a=0;a<6.3;a+=.25){const x=CX+(side?-5:-sw/2+2)+Math.cos(a)*6,y=tTop+2+Math.sin(a)*4;p.set(x,y,R.madera[(Math.floor(a*3))%2?1:2])}}
+  if(sp.hair&&(sp.hair.s==='largo'||sp.hair.s==='coleta')&&back){const c=sp.hair.c;if(sp.hair.s==='largo')trunk(p,hx,hy,hry+9,hrx*2,hrx*1.6,c);else limb(p,hx,hy+hry-3,hx,hy+hry+8,2.2,c)}
+  // ---------- piernas y calzado ----------
+  const legX=Math.max(2.4,legR+.6);
+  const legsAt=(x,lift,R1,R2)=>{const foot=FEET-lift;
+    if(sp.shorts){limb(p,x,hip,x,hip+legL*.4,legR+.3,legs);limb(p,x,hip+legL*.4,x,foot-3,legR-.2,S)}else limb(p,x,hip,x,foot-3,legR,legs);
+    if(sp.bootsTall)limb(p,x,foot-legL*.45,x,foot-2,legR+.3,boots);
+    blob(p,x+(side?1.5:0),foot-1.5,legR+(side?2:1),2,boots)};
+  if(!side){legsAt(CX-legX,step===-1?1:0);legsAt(CX+legX-1,step===1?1:0)}
+  else{legsAt(CX-step*2,0);legsAt(CX+step*2,step?1:0)}
+  if(sp.coatLong&&!back){const c=sp.coatLong,len=Math.round(legL*.6);
+    if(!side){trunk(p,CX-sw/4-1,hip-3,len+3,sw/2-1,sw/2+1,c);trunk(p,CX+sw/4+1,hip-3,len+3,sw/2-1,sw/2+1,c);p.rect(CX-sw/2-1,hip+len-1,sw/2,1,R.dorado[2]);p.rect(CX+2,hip+len-1,sw/2,1,R.dorado[2])}
+    else trunk(p,CX-1,hip-3,len+3,sw+2,sw+4,c)}
+  if(sp.coatLong&&back)trunk(p,CX,hip-3,Math.round(legL*.6)+3,sw,sw+3,sp.coatLong);
+  // ---------- torso ----------
+  const torsoR=sp.bare?S:top;
+  trunk(p,CX+(side?0:0),tTop,tH,sw,ww,torsoR);
+  if(b.belly)blob(p,CX+(side?3:0),tTop+tH*.62,(ww/2)*1.05+(side?1:0),tH*.42,torsoR);
+  if(sp.bare&&b.musc&&!back&&!side){p.line(CX,tTop+3,CX,tTop+tH-4,S[2]);p.rect(CX-5,tTop+6,4,1,S[2]);p.rect(CX+2,tTop+6,4,1,S[2])}
+  if(sp.vest&&!back){const c=sp.vest;if(!side){trunk(p,CX-sw/4-1,tTop,tH,sw/2-1,ww/2-1,c);trunk(p,CX+sw/4+1,tTop,tH,sw/2-1,ww/2-1,c)}else trunk(p,CX-1,tTop,tH,sw-2,ww-1,c)}
+  if(sp.vest&&back)trunk(p,CX,tTop,tH,sw,ww,sp.vest);
+  if(sp.coatLong&&!back&&!side){trunk(p,CX-sw/2+2,tTop,tH,5,4,sp.coatLong);trunk(p,CX+sw/2-2,tTop,tH,5,4,sp.coatLong)}
+  if(sp.coatLong&&back)trunk(p,CX,tTop,tH,sw,ww,sp.coatLong);
+  if(sp.apron&&!back){trunk(p,CX+(side?2:0),tTop+4,tH+Math.round(legL*.35),side?6:sw-4,side?7:ww-1,R.crema)}
+  if(sp.stripes&&!back)for(let y=tTop+3;y<tTop+tH;y+=3)for(let x=0;x<FW;x++){const c=p.get(x,y);if(top.includes(c))p.set(x,y,sp.stripes[top.indexOf(c)])}
+  if(sp.knit)for(let y=tTop+2;y<tTop+tH;y+=2)for(let x=0;x<FW;x+=2){const c=p.get(x+(y%4?1:0),y);if(top.includes(c))p.set(x+(y%4?1:0),y,top[Math.min(3,top.indexOf(c)+1)])}
+  if(sp.buttons&&!back&&!side)for(let y=tTop+3;y<tTop+tH-2;y+=3)p.set(CX,y,R.dorado[1]);
+  if(sp.sash){const c=sp.sash;for(let x=0;x<FW;x++)for(const y of[hip-3,hip-2])if(p.get(x,y)>=0&&p.get(x,y)!==S[0])p.set(x,y,c[x<CX-2?0:x>CX+3?2:1]);if(!back&&!side){p.set(CX+4,hip-1,c[2]);p.set(CX+4,hip,c[2]);p.set(CX+5,hip+1,c[3])}}
+  if(sp.belt){for(let x=0;x<FW;x++)if(p.get(x,hip-2)>=0)p.set(x,hip-2,sp.belt[x<CX?1:2]);if(!back)p.rect(CX-1+(side?2:0),hip-3,3,2,R.dorado[1])}
+  if(sp.scarf&&!back){const c=sp.scarf;limb(p,CX-3,tTop,CX+3,tTop,1.6,c);if(!side)limb(p,CX+2,tTop+1,CX+3,tTop+5,1.2,c)}
+  if(has('cadena')&&!back&&!side){for(let i=0;i<12;i++)p.set(CX-sw/2+2+i*(sw-4)/11,tTop+2+i*(tH-5)/11,i%2?R.metal[1]:R.metal[2])}
+  // ---------- brazos (nacen del hombro, pegados al torso) ----------
+  const sleeve=sp.sleeve||'larga',armC=sp.coatLong||sp.armColor||top;
+  const armDraw=(sx,ex,sw2)=>{const sy=tTop+2,ey=tTop+tH-1+sw2,elbow=sy+(ey-sy)*.5;
+    if(sp.bare||sleeve==='sin')limb(p,sx,sy,ex,ey,armR,S);
+    else if(sleeve==='corta'){limb(p,sx,sy,ex,elbow,armR+.2,armC);limb(p,(sx+ex)/2,elbow,ex,ey,armR-.1,S)}
+    else limb(p,sx,sy,ex,ey,armR,armC);
+    const hand=has('garra')&&ex>CX?R.metal:S;blob(p,ex,ey+1,armR+.3,armR+.2,hand);return[ex,ey+1]};
+  let hands=[];
+  if(!side){const lx=CX-sw/2+armR-.5,rx=CX+sw/2-armR+.5;hands=[armDraw(lx,lx-1-b.musc,back?step:-step),armDraw(rx,rx+1+b.musc,back?-step:step)]}
+  else{const ax=CX-1;hands=[armDraw(ax,ax+step*-3,0)]}
+  if(sp.tattoo&&!back&&!side){const[x,y]=hands[0];p.set(x,y-6,R.tatuaje[0]);p.set(x,y-5,R.tatuaje[0]);p.set(x-1,y-5,R.tatuaje[2]);p.set(x+1,y-5,R.tatuaje[2]);p.set(x,y-4,R.tatuaje[0])}
+  if(has('garra')){const[x,y]=hands[hands.length-1];for(let i=-1;i<=1;i++){p.set(x+i*2,y+2,R.metal[1]);p.set(x+i*2,y+3,R.metal[2]);p.set(x+i*2+(i||1)*.5,y+4,R.metal[0])}}
+  // ---------- cuello y cabeza ----------
+  limb(p,hx,tTop-pr.neck-1,hx,tTop+1,2.1,S);
+  const inside=headInside(sp.head||'redonda');
+  if(!back){const ex2=side?hx-hrx*.15:null;if(!side){blob(p,hx-hrx,hy+1,1.7,2.6,S);blob(p,hx+hrx,hy+1,1.7,2.6,S)}}
+  blob(p,hx,hy,hrx,hry,S,inside);
+  const F=(x,y)=>inside((x+.5-hx)/hrx,(y+.5-hy)/hry);
+  const ey=Math.round(hy+hry*.12),edx=Math.round(hrx*.44),eye=sp.eye||0x3c2a4a,brow=sp.brow||0x3a2014,ink=0x241820;
+  if(!back&&!side){
+    for(const s of[-1,1]){const x0=s<0?Math.round(hx)-edx-1:Math.round(hx)+edx-1;
+      p.rect(x0,ey-1,2,1,ink);p.rect(x0,ey,2,2,eye);p.set(s<0?x0:x0,ey,0xffffff);
+      if(sp.eyes==='grandes'){p.rect(x0,ey+2,2,1,eye);p.set(s<0?x0-1:x0+2,ey,0xffffff);p.set(s<0?x0-1:x0+2,ey+1,0xffffff)}
+      if(sp.eyes==='entornados')p.rect(x0,ey,2,1,ink);
+      const by=ey-3,thick=sp.browThick;const bx=s<0?x0-1:x0;
+      if(sp.expr==='enojado'){p.set(bx+(s<0?1:0),by,brow);p.set(bx+(s<0?2:1),by+1,brow);p.set(bx+(s<0?0:2),by-1,brow)}
+      else if(sp.expr==='preocupado'){p.set(bx+(s<0?0:2),by+1,brow);p.set(bx+1,by,brow);p.set(bx+(s<0?2:0),by-1,brow)}
+      else p.rect(bx,by,3,1,brow);
+      if(thick)p.rect(bx,by-1,3,1,brow)}
+    if(sp.glasses){for(const s of[-1,1]){const x0=s<0?Math.round(hx)-edx-2:Math.round(hx)+edx-2;p.rect(x0,ey-1,4,1,R.dorado[2]);p.rect(x0,ey+2,4,1,R.dorado[2]);p.set(x0,ey,R.dorado[2]);p.set(x0,ey+1,R.dorado[2]);p.set(x0+3,ey,R.dorado[2]);p.set(x0+3,ey+1,R.dorado[2])}p.set(hx,ey,R.dorado[2])}
+    const nx0=Math.round(hx);
+    if(sp.nose==='grande'){p.set(nx0-1,ey+2,S[1]);p.rect(nx0-1,ey+3,3,1,S[2]);p.set(nx0,ey+2,S[0])}else{p.set(nx0,ey+3,S[2]);p.set(nx0-1,ey+3,S[1])}
+    const my=ey+Math.round(hry*.5)+1;
+    if(sp.mouth==='sonrisa'){p.rect(nx0-1,my,3,1,S[3]);p.set(nx0-2,my-1,S[3]);p.set(nx0+2,my-1,S[3])}
+    else if(sp.mouth==='mueca'){p.rect(nx0-2,my-1,5,2,0x5a2a2a);p.rect(nx0-2,my-1,5,1,0xfff8ee);p.set(nx0-1,my-1,R.dorado[1])}
+    else p.rect(nx0-1,my,3,1,S[3]);
+    if(sp.scar)p.line(nx0+edx-1,ey-3,nx0+edx+2,ey+3,0xc8786a);
+  }else if(side){
+    const ex=Math.round(hx+hrx*.42);p.rect(ex,ey-1,2,1,ink);p.rect(ex,ey,2,2,eye);p.set(ex,ey,0xffffff);if(sp.eyes==='grandes')p.rect(ex,ey+2,2,1,eye);
+    p.rect(ex-1,ey-3,3,1,brow);if(sp.browThick)p.rect(ex-1,ey-4,3,1,brow);
+    const fx=Math.round(hx+hrx);p.set(fx,ey+2,S[1]);if(sp.nose==='grande'){p.set(fx+1,ey+2,S[1]);p.set(fx+1,ey+3,S[2])}p.set(fx,ey+3,S[2]);
+    p.rect(fx-2,ey+Math.round(hry*.5)+1,2,1,S[3]);
+    blob(p,hx-hrx*.2,ey+1,1.5,2.4,S);p.set(Math.round(hx-hrx*.2),ey+1,S[3]);
+    if(sp.glasses){p.rect(ex-1,ey-1,4,1,R.dorado[2]);p.rect(ex-1,ey+2,4,1,R.dorado[2]);p.line(ex-1,ey,hx-hrx*.2,ey,R.dorado[2])}
+  }
+  // vello facial, siempre dentro del contorno de la cara (las barbas largas bajan del mentón)
+  const fh=sp.fh,hc=sp.hair?.c||R.canas,fc=sp.fhC||hc;
+  if(fh&&!back){const my=ey+Math.round(hry*.5)+1;
+    if(fh==='bigote'){if(!side){p.rect(Math.round(hx)-3,my-1,6,1,fc[1]);p.set(Math.round(hx)-4,my,fc[2]);p.set(Math.round(hx)+2,my,fc[2])}else p.rect(Math.round(hx+hrx)-3,my-1,3,1,fc[1])}
+    if(fh==='morsa'){for(let y=my-2;y<=my+1;y++)for(let x=Math.floor(hx-hrx);x<=hx+hrx;x++)if(F(x,y)&&(side?x>hx:Math.abs(x+.5-hx)<hrx*.7))p.set(x,y,fc[y>my?2:x>hx+2?2:1]);}
+    if(fh==='barba'){for(let y=my-1;y<hy+hry+1;y++)for(let x=Math.floor(hx-hrx);x<=hx+hrx;x++)if(F(x,y)&&(side?x>hx-hrx*.1:true)&&!(y===my&&Math.abs(x+.5-hx)<2))p.set(x,y,fc[x>hx+2?2:1])}
+    if(fh==='barba_larga'){for(let y=my-1;y<hy+hry+6;y++)for(let x=Math.floor(hx-hrx);x<=hx+hrx;x++){const inChin=y>hy+hry-1?Math.abs(x+.5-(hx+(side?2:0)))<hrx*.55*(1-(y-hy-hry)/8):F(x,y);if(inChin&&(side?x>hx-hrx*.1:true)&&!(y===my&&Math.abs(x+.5-hx)<2))p.set(x,y,fc[x>hx+2?2:1])}}
+    if(fh==='patillas'){for(let y=hy-2;y<my;y++)for(const s of side?[-1]:[-1,1]){const x=s<0?Math.ceil(hx-hrx)+(side?Math.round(hrx*.6):0):Math.floor(hx+hrx)-1;if(F(x,y))p.set(x,y,fc[2]);if(F(x+(s<0?1:-1),y))p.set(x+(s<0?1:-1),y,fc[1])}}}
+  // pelo
+  const hs=sp.hair?.s;
+  if(hs&&hs!=='calvo'&&hs!=='afro'){const c=sp.hair.c,line=hy-hry*.28;
+    const inHair=(x,y)=>{const nx=(x+.5-hx)/(hrx+1),ny=(y+.5-hy+.6)/(hry+1);return nx*nx+ny*ny<=1};
+    if(back)blob(p,hx,hy-.6,hrx+1,hry+1,c,null,(x,y)=>y<hy+hry*.7);
+    else if(side)blob(p,hx,hy-.6,hrx+1,hry+1,c,null,(x,y)=>y<line||(x<hx-hrx*.25&&y<hy+hry*.7));
+    else{blob(p,hx,hy-.6,hrx+1,hry+1,c,null,(x,y)=>y<line||((x<hx-hrx*.78||x>hx+hrx*.78)&&y<ey+1))}
+    if(hs==='revuelto'&&!back){const tips=side?[[-.2,-1.12],[.2,-1.16],[.55,-.98],[-.6,-1]]:[[-.6,-1.02],[-.25,-1.18],[.15,-1.16],[.5,-1.06],[.8,-.8]];for(const[ax,ay]of tips){const x=hx+ax*hrx,y=hy+ay*hry;p.set(x,y,c[1]);p.set(x,y+1,c[1]);p.set(x+1,y+1,c[2])}
+      if(!side)for(const ax of[-.5,-.05,.4]){p.set(hx+ax*hrx,line,c[1]);p.set(hx+ax*hrx+1,line,c[2]);p.set(hx+ax*hrx,line+1,c[2])}}
+    if(hs==='revuelto'&&back)for(const ax of[-.5,0,.5])p.set(hx+ax*hrx,hy-hry-1.5,c[1]);
+    if(hs==='largo'&&!back){if(!side){limb(p,hx-hrx-.5,hy-2,hx-hrx-.8,hy+hry+5,2,c);limb(p,hx+hrx+.5,hy-2,hx+hrx+.8,hy+hry+5,2,c)}else limb(p,hx-hrx*.6,hy,hx-hrx*.7,hy+hry+5,3,c)}
+    if(hs==='coleta'&&side){limb(p,hx-hrx-1,hy-1,hx-hrx-3,hy+hry+3,1.8,c)}
+    if(hs==='mono'){blob(p,hx-(side?hrx*.5:0),hy-hry-2,3.2,2.8,c)}
+    if(hs==='pompadour'&&!back){blob(p,hx+(side?hrx*.35:0),hy-hry*.9,hrx*(side?.7:.85),hry*.42,c)}
+    if(hs==='rapado'){for(let y=0;y<FH;y++)for(let x=0;x<FW;x++){const v=p.get(x,y);if(c.includes(v))p.set(x,y,mixc(S[Math.min(3,c.indexOf(v)+1)],c[1],.35))}}
+  }
+  if(hs==='calvo_lados'&&!back){const c=sp.hair.c;if(!side){blob(p,hx-hrx+.5,hy-1,1.8,3,c);blob(p,hx+hrx-.5,hy-1,1.8,3,c)}else blob(p,hx-hrx*.4,hy-1,2.4,3,c)}
+  if(hs==='calvo_lados'&&back){const c=sp.hair.c;blob(p,hx,hy+1,hrx,3,c)}
+  if((hs==='calvo'||hs==='calvo_lados')&&!back){p.set(hx-hrx*.4,hy-hry*.65,0xffffff);p.set(hx-hrx*.4+1,hy-hry*.65,S[0])}
+  if(hs==='afro'&&!back)blob(p,hx,hy-.6,hrx+1,hry+1,sp.hair.c,null,(x,y)=>y<hy-hry*.3);
+  if(hs==='afro'&&back)blob(p,hx,hy-2,hrx+5,hry+4,sp.hair.c);
+  // tocados
+  const hw=sp.hw,hwc=sp.hwC||R.rojo;
+  if(hw==='panuelo'){blob(p,hx,hy-1,hrx+1.2,hry+.6,hwc,null,(x,y)=>y<hy-hry*.32);if(!side&&!back){}else{const kx=side?hx-hrx-1:hx+2;limb(p,kx,hy-hry*.35,kx-(side?3:-1),hy-hry*.35+4,1.3,hwc)}}
+  if(hw==='vincha'){for(let x=Math.floor(hx-hrx-1);x<=hx+hrx+1;x++)for(const y of[Math.round(hy-hry*.38),Math.round(hy-hry*.38)+1])if(p.get(x,y)>=0)p.set(x,y,hwc[y===Math.round(hy-hry*.38)?0:1]);if(side||back){const kx=side?hx-hrx-1:hx+hrx;limb(p,kx,hy-hry*.3,kx-(side?3:0),hy-hry*.3+4,1,hwc)}}
+  if(hw==='lana'){blob(p,hx,hy-1.5,hrx+1.3,hry+.5,hwc,null,(x,y)=>y<hy-hry*.3);for(let x=Math.floor(hx-hrx-1);x<=hx+hrx+1;x++)for(let y=Math.round(hy-hry*.48);y<=Math.round(hy-hry*.3);y++)if(p.get(x,y)>=0&&hwc.includes(p.get(x,y)))p.set(x,y,x%2?hwc[0]:hwc[2]);blob(p,hx-(side?2:0),hy-hry-2.5,2.4,2,R.rojo)}
+  if(hw==='boina'){blob(p,hx+(side?1:1.5),hy-hry*.62,hrx+2,hry*.42,hwc);p.set(hx+1,hy-hry*1.05,hwc[3])}
+  if(hw==='gorra'){blob(p,hx,hy-hry*.5,hrx+.6,hry*.55,R.blanco,null,(x,y)=>y<hy-hry*.32);for(let x=Math.floor(hx-hrx-1);x<=hx+hrx+1;x++)if(p.get(x,Math.round(hy-hry*.38))>=0)p.set(x,Math.round(hy-hry*.38),R.marino[x>hx?2:1]);if(!back){if(!side)p.rect(hx-hrx*.6,Math.round(hy-hry*.3),hrx*1.2,1,R.negro[2]);else p.rect(hx+1,Math.round(hy-hry*.3),hrx+1,1,R.negro[2])}}
+  if(hw==='tricornio'){const y0=Math.round(hy-hry*.45);const pts=side?[[hx-hrx-3,y0],[hx+hrx+4,y0],[hx+hrx*.4,y0-5],[hx-hrx*.5,y0-6]]:[[hx-hrx-5,y0],[hx+hrx+5,y0],[hx+hrx*.6,y0-5],[hx,y0-8],[hx-hrx*.6,y0-5]];
+    for(let y=y0-9;y<=y0;y++)for(let x=Math.floor(hx-hrx-6);x<=hx+hrx+6;x++){let ins=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){const[xi,yi]=pts[i],[xj,yj]=pts[j];if((yi>y+.5)!==(yj>y+.5)&&x+.5<(xj-xi)*(y+.5-yi)/(yj-yi)+xi)ins=!ins}if(ins)p.set(x,y,R.negro[x>hx+2?2:y<y0-4?0:1])}
+    for(let i=0;i<pts.length;i++){const[a,b2]=pts[i],[c,d]=pts[(i+1)%pts.length];if(b2===y0&&d===y0)continue;p.line(a,b2,c,d,R.dorado[1])}
+    if(!back)for(let i=0;i<7;i++)p.set(hx-3-i,y0-7-i*.5,i<5?R.crema[0]:R.crema[2])}
+  // equipo al frente
+  if(has('sable')&&!back){const x=side?CX-3:CX-sw/2+1;limb(p,x,hip-2,x-(side?6:5),hip+9,1,R.negro);p.rect(x-1,hip-4,3,2,R.dorado[1])}
+  if(has('pistola')&&!back&&!side){p.rect(CX+sw/2-5,hip-3,5,2,R.negro[1]);p.rect(CX+sw/2-2,hip-1,2,3,R.madera[2])}
+  if(has('mazo')&&!back){const x=side?CX-5:CX+sw/2-1;limb(p,x,hip-3,x,hip+5,.9,R.madera);blob(p,x,hip-5,2.6,1.8,R.madera)}
+  if(has('cucharon')&&!back){const[x,y]=hands[hands.length-1];limb(p,x+1,y-9,x,y,.8,R.metal);blob(p,x+2,y-10,2.2,1.6,R.metal)}
+  if(has('catalejo')&&!back){const[x,y]=hands[0];limb(p,x-1,y-1,x+(side?6:-1),y-9,1.3,R.dorado)}
+  if(has('pipa')&&!back){const x=side?Math.round(hx+hrx)-1:Math.round(hx)+2,y=ey+Math.round(hry*.5)+1;p.rect(x,y,3,1,R.madera[2]);p.rect(x+2,y-2,2,2,R.madera[2]);p.set(x+2,y-2,R.madera[3])}
+  if(has('aro')&&!back){p.set(side?hx-hrx*.2:hx+hrx,ey+4,R.dorado[1])}
+  return p.outline();
+}
+
+// =====================================================================
+// ELENCO DE PRUEBA (todos originales)
+// =====================================================================
+const CAST={
+  ilo:{b:{h:.96},head:'redonda',skin:SKIN.clara,hair:{s:'revuelto',c:R.pelo_cast},hw:'vincha',hwC:R.naranja,eye:0x3a6a3a,mouth:'sonrisa',top:R.blanco,vest:R.marino,sleeve:'corta',legs:R.marron,boots:R.cuero,belt:R.cuero,eq:['mazo']},
+  rosa:{b:{h:1.1,w:1.12,musc:1},head:'cuadrada',skin:SKIN.morena,hair:{s:'coleta',c:R.pelo_neg},hw:'panuelo',hwC:R.rojo,eye:0x3a2a2a,browThick:1,top:R.oliva,sleeve:'sin',legs:R.gris,boots:R.cuero,bootsTall:1,belt:R.cuero,tattoo:1,eq:['cuerda','aro']},
+  garbanzo:{b:{h:.78,w:1.25,belly:1},head:'ancha',headW:1.08,skin:SKIN.clara,hair:{s:'calvo_lados',c:R.canas},hw:'boina',hwC:R.rojo,fh:'morsa',fhC:R.canas,nose:'grande',eyes:'entornados',mouth:'sonrisa',top:R.blanco,apron:1,scarf:R.rojo,sleeve:'corta',legs:R.negro,boots:R.negro,eq:['cucharon']},
+  lin:{b:{h:1.16,w:.86},head:'alargada',headH:1.1,headW:.92,skin:SKIN.media,hair:{s:'largo',c:R.pelo_azul},glasses:1,eye:0x2a4a5a,top:R.crema,coatLong:R.verde,legs:R.negro,boots:R.cuero,bootsTall:1,eq:['catalejo']},
+  hask:{b:{h:1.06,w:1.08},head:'cuadrada',skin:SKIN.clara,hair:{s:'pompadour',c:R.canas},fh:'bigote',fhC:R.canas,expr:'enojado',browThick:1,top:R.marino,buttons:1,cape:R.blanco,legs:R.marino,boots:R.negro,bootsTall:1,belt:R.negro,eq:['sable']},
+  krenn:{b:{h:1.18,w:1.32,musc:1},head:'fina',headW:.92,skin:SKIN.media,hair:{s:'rapado',c:R.pelo_neg},expr:'enojado',mouth:'mueca',scar:1,bare:1,vest:R.cuero,legs:R.rojo,sash:R.dorado,boots:R.negro,bootsTall:1,eq:['cadena','aro']},
+  brin:{b:{h:.8,w:1.04,hunch:2},head:'redonda',skin:SKIN.morena,hair:{s:'calvo',c:R.canas},hw:'lana',hwC:R.verde,fh:'morsa',fhC:R.canas,brow:0xe8e4dc,browThick:1,expr:'preocupado',top:R.azulgris,knit:1,legs:R.marron,boots:R.amarillo,bootsTall:1,eq:['pipa']},
+  dorne:{b:{h:1.12,w:1.24,musc:.5},head:'cuadrada',skin:SKIN.oscura,hair:{s:'largo',c:R.pelo_neg},hw:'tricornio',fh:'patillas',fhC:R.pelo_neg,eye:0x8a1a1a,expr:'enojado',mouth:'mueca',top:R.crema,coatLong:R.violeta,sash:R.rojo,legs:R.negro,boots:R.negro,bootsTall:1,eq:['garra']}
+};
+const KEYS=Object.keys(CAST);
+
+// =====================================================================
+// HOJAS
+// =====================================================================
+function ground(pb){for(let y=0;y<pb.h;y++)for(let x=0;x<pb.w;x++){const h=((x*7+y*13)^(x*y))%23;pb.set(x,y,h<2?0x6a7a5a:0x7a8a6a)}}
+function show(id,pb){const c=document.getElementById(id);c.width=pb.w;c.height=pb.h;const g=c.getContext('2d'),img=g.createImageData(pb.w,pb.h);
+  for(let i=0;i<pb.d.length;i++){const v=pb.d[i]<0?0:pb.d[i];img.data[i*4]=v>>16&255;img.data[i*4+1]=v>>8&255;img.data[i*4+2]=v&255;img.data[i*4+3]=255}g.putImageData(img,0,0)}
+function shadow(pb,x,y,w){for(let i=-w;i<=w;i++)for(let j=-1;j<=1;j++)if(i*i/(w*w)+j*j<=1){const c=pb.get(x+i,y+j);if(c>=0)pb.set(x+i,y+j,mixc(c,0x2a3022,.35))}}
+function draw(fr){
+  {const pb=new PB(6*FW,FH+4);ground(pb);['A','B','C'].forEach((pr,i)=>['ilo','rosa'].forEach((k,j)=>{const x=(i*2+j)*FW;shadow(pb,x+CX,FEET+1,8);pb.blit(build({...CAST[k],prop:pr},'down',0),x,2)}));show('cmp',pb)}
+  {const rows=['down','right','up','walk','walkside'],pb=new PB(KEYS.length*FW,rows.length*(FH-6)+6);ground(pb);
+    rows.forEach((r,j)=>KEYS.forEach((k,i)=>{const dir=r==='walk'?'down':r==='walkside'?'right':r;const f=r.startsWith('walk')?fr:0;const s=build(CAST[k],dir,f);
+      const x=i*FW,y=j*(FH-6);shadow(pb,x+CX,y+FEET+1,8);pb.blit(s,x,y,r==='walkside'&&i%2===1)}));show('cast',pb)}
+}
+draw(0);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let last=-1;
+function loop(ms){const f=Math.floor(ms/160)%4;if(f!==last){last=f;draw(f)}if(!reduce)requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+</script>
