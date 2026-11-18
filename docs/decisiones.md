@@ -54,7 +54,7 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - Los familiares pueden tener secretos y vínculos con personajes del mundo, o con leyendas del pasado (por ejemplo, haber cruzado el camino de Roger).
 - **Linaje "D."**: aleatorio, ultra raro y oculto. Nunca se sabe al empezar; se descubre jugando.
 - **Prólogo como cuestionario de vida** (ver `docs/prologo.md` y `docs/menu/`): diez preguntas de los 6 a los 17 años que forman carácter (cinco ejes), rasgos, estadísticas iniciales, oficio, vínculos, sueño y punto de partida. **Sin modos Destino/Libre:** el jugador elige raza y ve todas las respuestas; un suceso de vida al azar aparece sin anunciarse. Sin explicaciones de más: el juego habla solo.
-- **Razas jugables al inicio:** Humano, Gyojin, Mink, Brazos largos y Piernas largas. Los Tontatta existen en el mundo, pero no se juegan.
+- **El protagonista es humano.** No hay elección de raza. Las demás razas existen en el mundo (Gyojin, Mink, Brazos largos, Piernas largas, Tontatta).
 - **La familia se sortea y no depende del prólogo.** Es igual en ambos modos; las preguntas se adaptan a ella.
 - **El oficio se resuelve en el prólogo, no se juega.** Es una simulación de piratas, no de carpinteros. Sale de tu origen y de tus decisiones de infancia, y define tus habilidades, tu rol en un barco (navegante, cocinero, carpintero naval, médico…) y parte de tu estilo de pelea. Se usa cuando hace falta; no hay "trabajar 4 horas".
 - **El oficio del prólogo es un dato de tu historia,** con influencia en tu rol a bordo (navegante, espadachín, cocinero, músico, médico, arqueólogo…). No define estadísticas ni afinidades.
@@ -159,8 +159,6 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Edificios entrables:** no todos, pero una gran variedad (casas, tabernas, tiendas, astilleros, edificios de la Marina si sos marine), siempre con gente y vida adentro; alguien puede tener algo importante que decir, o no.
-- **Razas jugables:** Humano, Mink y Gyojin. Brazos largos y Piernas largas quedan para más adelante.
-- **Origen según raza:** los Mink vienen de Zou y los Gyojin de la Isla Gyojin, o arrancan en un barco. Gyojin y Mink, por regla general, no pueden ser marines.
 - **Islas:** todas las canon de los arcos principales y las secundarias más importantes, más algunas generadas. La lista del autor, ordenada según la ruta de la obra, está en `docs/islas.md`.
 - **Estilo del mundo: piezas LPC (opción A)**, las mismas de los personajes, con recortes exactos. Lo que LPC no tiene (barcos, cosas de la Marina, objetos de One Piece) se dibuja por código imitando su estilo. La luz va por código: rayos de ventana con degradado, resplandor del fuego y luz ambiente según la hora. Comparación en `docs/comparacion/`.
 - **Familia fija (reemplaza la familia al azar):** tu madre **Marla** y tu hermano menor **Corso** viven con vos en Kalé. Tu padre desapareció y Marla no quiere hablar de él. Vos sos el que zarpa y Corso se queda. El **apellido lo elige el jugador** junto con el nombre, y lo lleva toda la familia, el padre incluido. Somos humanos, sin elección de raza. La historia cambia según seas pirata o marine.
