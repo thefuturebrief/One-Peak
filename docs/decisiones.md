@@ -106,8 +106,19 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **Referencias concretas del autor:** Pokémon Añil (RPG Maker XP, estilo cercano a la tercera generación) y "Revelations" (a confirmar cuál). Se toma el aspecto, no los recursos, y se suma nuestra propia impronta.
 - **Referencia:** juegos fan de Pokémon y Pokémon de mitad de generaciones, en estilo, no en contenido. Vista cenital con tiles, sprites de 4 direcciones, paleta colorida y nivel de detalle intermedio. Nunca se usan recursos sacados de juegos de Pokémon.
 - Lo que viene después en combate se muestra en movimiento, no en maquetas estáticas.
+- **Devolución de la biblia v1:** lo mejor encaminado es el ambiente y la luz por hora. El arte del mundo está "a pocos pasos".
+- **Interfaz en alta definición:** HUD, menús y textos tienen que verse modernos, nítidos y legibles, no pixelados. El mundo sigue en píxel; la interfaz no.
+- **La pausa de la pelea acompaña, no tapa:** formato compacto como en la prueba de estilo 1, mejor resuelto. La viñeta grande en el centro queda descartada.
+- **Personajes con diseño propio:** los importantes se diseñan uno por uno, con la rareza y la personalidad de los diseños de One Piece. El generador queda para la multitud.
 - **Biblia visual v1** en `docs/biblia-visual/`: concepto "dos tintas" (mundo en píxel a color, historia en tinta sobre papel), paleta, luz por hora, sistema de personajes, materiales de interfaz (madera, lona, papel, latón) y organización de cada pantalla. Pendiente de aprobación del autor.
 - **La prueba de estilo 1 no alcanza el estándar** (`prototipos/prueba-estilo/`): interfaces sin personalidad, diseños insípidos, gráficos pobres. Hace falta una identidad visual propia antes de producir más arte.
+
+### Islas y lugares canon
+- Las islas y lugares canon están en el juego, preferentemente con sus nombres oficiales. Su aspecto es nuestra propia interpretación en el estilo del juego.
+
+### Barcos
+- Los barcos tienen diseños particulares, como en la obra.
+- Se pueden comprar modelos ya hechos, mejorarlos o encargar uno a un carpintero naval eligiendo partes. Todo se paga en berries.
 
 ### Diálogos
 - Los personajes hablan con estilo One Piece: exagerados, con gritos, nombres de técnicas, risas propias y apodos. Nada de registro rioplatense en los textos del juego.
@@ -134,7 +145,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 
 ## En discusión
 - **Herramientas para que no haga falta apurarse:** Log Pose que tarda en cargar, peligro que escala, islas con profundidad.
-- **Aprobación de la biblia visual v1** y ajustes de la pantalla objetivo.
+- **Iteración 2 de lo visual:** interfaz en alta definición, diseño de personajes clave, barco nuevo y pausa compacta.
+- **Tamaño de los personajes:** si se mantienen en unos 25 px o se agranda la escala para que entren diseños más particulares.
 - **Escala de poder:** niveles por mar, recompensas, potencial de la fruta por dominio del usuario, Haki.
 - **Afinidad:** si además de la velocidad limita el techo del dominio, y qué grupos de frutas pesan sobre qué estadísticas.
 - **Peleas grupales:** propuesta de una sola pelea donde los duelos aparecen solos, con órdenes a la tripulación.
@@ -148,6 +160,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **Origen del arte:** dibujado por Claude como pixel art a mano, paquetes con licencia libre, generado con IA y retocado, o una mezcla. Se decide con una prueba de estilo.
 
 ## Descartado
+- Texto e interfaz pixelados. Pasan a alta definición.
+- Viñeta de decisión grande en el centro de la pantalla durante la pelea.
 - Modo de combate "al mando" por turnos. El instinto con pausas es el sistema.
 - Página de manga para el remate de las peleas.
 - Personajes canon vivos en el juego, ya sea dibujados o solo a distancia. Reemplazado por la nueva generación.
