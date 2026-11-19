@@ -1,11 +1,12 @@
 // Menú, prólogo, conversaciones, diario y el bucle del juego. El mundo lo construye mundo.js desde plano.json.
-const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre'];
+const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermana', 'forastero', 'teniente', 'pirata'];
 const SHEETS = {}, ROW = { up: 0, left: 1, down: 2, right: 3 };
 const loadImg = s => new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ko(new Error('No se pudo cargar ' + s)); i.src = s; });
 function drawLPC(g, id, x, y, dir, frame, scale = 1) { const im = SHEETS[id]; if (!im) return; g.drawImage(im, frame * 64, ROW[dir] * 64, 64, 64, Math.round(x - 32 * scale), Math.round(y - 60 * scale), 64 * scale, 64 * scale); }
 let PLANO, CREDITOS;
 const listo = (async () => {
   await Promise.all([...Object.entries(ATLAS).map(([k, s]) => loadImg(s).then(i => A[k] = i)), ...PERSONAJES.map(id => loadImg('assets/personajes/' + id + '.png').then(i => SHEETS[id] = i))]);
+  await cargarCatalogo();
   PLANO = await (await fetch('plano.json')).json(); CREDITOS = await (await fetch('assets/creditos.json')).json();
   buildIsland(PLANO);
 })();
@@ -79,19 +80,9 @@ function credits() { show(`<div class="col"><div class="kick">Créditos</div><h2
   <p style="margin-bottom:0"><b>Kalé, luz, interfaz y código:</b> hechos para este proyecto.</p></div><div class="row"><button class="btn ghost" type="button" id="back">Volver</button></div></div>`);
   document.getElementById('back').onclick = menu; keys(e => { if (e.key === 'Escape') menu(); }); }
 let previewTimer;
-function preview(canvas, id) { const g = canvas.getContext('2d'); g.imageSmoothingEnabled = false; const dirs = ['down', 'left', 'up', 'right'], t0 = performance.now(); clearInterval(previewTimer);
-  previewTimer = setInterval(() => { const t = (performance.now() - t0) / 1000; g.clearRect(0, 0, canvas.width, canvas.height); drawLPC(g, id, canvas.width / 2, canvas.height * .86, dirs[Math.floor(t / 1.6) % 4], 1 + Math.floor(t * 9) % 8, canvas.width / 72); }, 60); }
-function create() {
-  show(`<div class="create"><div class="stagebox"><canvas id="pv" width="288" height="288" aria-label="Tu personaje"></canvas></div><div class="glass panel"><div class="kick">Nueva partida</div><h1 class="t">¿Quién eres?</h1>
-    <label class="f" for="nm">Nombre<input class="name" id="nm" maxlength="16" autocomplete="off" value="${player.name}" autofocus></label>
-    <label class="f" for="ap">Apellido<input class="name" id="ap" maxlength="16" autocomplete="off" value="${player.last}"></label>
-    <div class="row"><button class="btn" type="button" id="go">Comenzar</button><button class="btn ghost" type="button" id="back">Volver</button></div></div></div>`);
-  preview(document.getElementById('pv'), 'grumete');
-  const stop = () => clearInterval(previewTimer);
-  document.getElementById('back').onclick = () => { stop(); menu(); };
-  document.getElementById('go').onclick = () => { player.name = document.getElementById('nm').value.trim() || pick(['Ilo', 'Nara', 'Cato', 'Brisa', 'Joel', 'Sira']); player.last = document.getElementById('ap').value.trim() || pick(['Malatesta', 'Varga', 'Salvatierra', 'Brakken']); stop(); reset(); question(); };
-  keys(e => { if (e.key === 'Escape') { stop(); menu(); } if (e.key === 'Enter') document.getElementById('go').click(); });
-}
+function preview(canvas, sheet) { const g = canvas.getContext('2d'); g.imageSmoothingEnabled = false; const dirs = ['down', 'left', 'up', 'right'], t0 = performance.now(); clearInterval(previewTimer);
+  previewTimer = setInterval(() => { const t = (performance.now() - t0) / 1000, sc = canvas.width / 72, d = dirs[Math.floor(t / 1.6) % 4], f = 1 + Math.floor(t * 9) % 8; g.clearRect(0, 0, canvas.width, canvas.height);
+    g.drawImage(sheet, f * 64, ROW[d] * 64, 64, 64, Math.round(canvas.width / 2 - 32 * sc), Math.round(canvas.height * .86 - 60 * sc), 64 * sc, 64 * sc); }, 60); }
 function question() {
   if (S.step >= Q.length) return dream();
   if (!S.evDone && S.step === S.ev) { S.evDone = true; const e = pick(EVENTS); apply(e.fx);
@@ -103,7 +94,7 @@ function question() {
 }
 function dream() { const list = DREAMS.map(x => ({ t: x.t, s: x.sc(S) })).sort((a, b) => b.s - a.s).slice(0, 3);
   show(`<div class="col"><div class="prog"><i style="width:100%"></i></div><div class="kick">17 años</div><h2 class="t">¿Qué sueño te llevas al mar?</h2><p class="lead">${motive()}</p><div class="opts">${list.map((x, i) => `<button class="opt" type="button" data-i="${i}"><kbd>${i + 1}</kbd><span>${x.t}</span></button>`).join('')}</div></div>`);
-  const btns = [...root.querySelectorAll('.opt')]; btns.forEach(b => b.onclick = () => { S.dream = list[+b.dataset.i].t; startGame(); }); keys(e => { const n = +e.key; if (n >= 1 && n <= btns.length) btns[n - 1].click(); }); }
+  const btns = [...root.querySelectorAll('.opt')]; btns.forEach(b => b.onclick = () => { S.dream = list[+b.dataset.i].t; intro(startGame); }); keys(e => { const n = +e.key; if (n >= 1 && n <= btns.length) btns[n - 1].click(); }); }
 
 // =====================================================================
 // GENTE: dónde está cada uno, cómo habla y de qué se puede hablar con él (ver docs/conversaciones.md)
@@ -301,6 +292,7 @@ function startGame() {
   OBJS = OBJECTS().map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; });
   if (matchMedia('(pointer:coarse)').matches) document.getElementById('pad').hidden = false;
   const [sc, at] = place('casa', [8.6, 4.2]); enter(sc, at, 'down'); G.paused = false; G.minutes = 8 * 60;
+  actoInit();
   const corso = PEOPLE.find(n => n.id === 'corso');
   setTimeout(() => say(corso, { lines: ['¡Por fin te despiertas! Mamá te está esperando en la cocina.', 'Y hay un barco negro en el puerto. ¡Un barco pirata de verdad!'] }), 600);
   requestAnimationFrame(loop);
@@ -320,8 +312,8 @@ function renderTalk() {
   const ov = document.getElementById('overlays'); let box = ov.querySelector('.dlg'); const t = G.talking; document.getElementById('hud').classList.toggle('talking', !!t);
   if (!t) { box && box.remove(); return; }
   if (!box) { box = document.createElement('div'); box.className = 'dlg glass'; box.setAttribute('role', 'dialog'); ov.appendChild(box); }
-  const last = t.i >= t.conv.lines.length - 1, tops = last && t.conv.topics ? topicsOf(t.npc) : [], ch = last && t.conv.topics;
-  const opts = ch ? [...tops.map(x => voz(x.ask)), tops.length ? 'Nada, me voy.' : 'Adiós.'] : [];
+  const last = t.i >= t.conv.lines.length - 1, tops = last && t.conv.topics ? topicsOf(t.npc) : [], ch = last && (t.conv.topics || t.conv.opts);
+  const opts = !ch ? [] : t.conv.opts ? t.conv.opts.map(o => o.t) : [...tops.map(x => voz(x.ask)), tops.length ? 'Nada, me voy.' : 'Adiós.'];
   box.innerHTML = `<div class="face"><canvas width="64" height="48" aria-hidden="true"></canvas></div><div><b class="nm">${t.npc.name || ''}</b><p>${t.conv.lines[t.i]}</p>${ch ? `<div class="ch">${opts.map((c, i) => `<button type="button" data-i="${i}">${c}</button>`).join('')}</div>` : ''}</div>${ch ? '' : '<span class="more">E / clic para seguir</span>'}`;
   face(box.querySelector('canvas'), t.npc.sprite || 'grumete');
   box.onclick = e => { const b = e.target.closest('button'); if (b) choose(+b.dataset.i); else if (!ch) advance(); };
@@ -329,13 +321,15 @@ function renderTalk() {
 }
 function choose(i) {
   const t = G.talking; if (!t) return;
+  if (t.conv.opts) { const o = t.conv.opts[i]; G.talking = null; renderTalk(); o.then && o.then(); return; }
+  if (actoChoose(t, i)) return;
   const tops = topicsOf(t.npc); if (i >= tops.length) { G.talking = null; renderTalk(); return; }
   const tp = tops[i], id = t.npc.id, n = asked(id, tp.id), c = ctxOf(t.npc, n);
   const lines = tp.a(c), l = typeof tp.learn === 'function' ? tp.learn(c) : tp.learn, d = typeof tp.aff === 'function' ? tp.aff(c) : (tp.aff || 0);
   S.asked[id][tp.id] = n + 1; S.aff[id] = aff(id) + d; (l || []).forEach(learn);
   G.talking = { npc: t.npc, conv: { lines, topics: true }, i: 0 }; renderTalk();
 }
-function advance() { const t = G.talking; if (!t) return; if (t.i < t.conv.lines.length - 1) { t.i++; renderTalk(); } else if (!t.conv.topics) { (t.conv.learn || []).forEach(learn); G.talking = null; renderTalk(); } }
+function advance() { const t = G.talking; if (!t) return; if (t.i < t.conv.lines.length - 1) { t.i++; renderTalk(); } else if (!t.conv.topics && !t.conv.opts) { (t.conv.learn || []).forEach(learn); G.talking = null; renderTalk(); t.conv.done && t.conv.done(); } }
 function clearBubbles() { G.bubbles.forEach(b => b.el.remove()); G.bubbles = []; G.chat = null; }
 function bubble(npc, text, ms = 3200) { if (!text) return; const el = document.createElement('div'); el.className = 'bubble'; el.textContent = text; document.getElementById('overlays').appendChild(el); G.bubbles.push({ npc, el, until: performance.now() + ms }); }
 const barkOf = n => { const b = Array.isArray(n.barks) ? n.barks : n.barks[tod()]; const line = oneOf(b, n._lastBark); n._lastBark = line; return line; };
@@ -353,6 +347,7 @@ function interact() {
   if (G.talking) { if (!document.querySelector('.dlg .ch')) advance(); return; }
   const t = nearest(); if (!t) return;
   if (t.type === 'npc') talkTo(t.n);
+  else if (t.type === 'obj' && t.o.act) t.o.act();
   else if (t.type === 'obj') say({ name: '', sprite: 'grumete' }, { lines: [t.o.text], learn: t.o.learn ? [t.o.learn] : [] });
   else if (t.type === 'door') { const b = t.s.b;
     if (!b.entrable || !b.int || LOCKED.has(b.id)) return note(CLOSED[b.id] || 'Está cerrado.');
@@ -393,11 +388,11 @@ function loop(now) {
     if (G.moving) { const running = K.shift || G.run, sp = (running ? 175 : 112) * dt * (vx && vy ? .7071 : 1), nx = G.x + vx * sp, ny = G.y + vy * sp;
       if (!blocked(nx - 6, G.y) && !blocked(nx + 6, G.y)) G.x = nx; if (!blocked(G.x - 6, ny) && !blocked(G.x + 6, ny)) G.y = ny;
       G.dir = vx < 0 ? 'left' : vx > 0 ? 'right' : vy < 0 ? 'up' : 'down'; G.walk += dt * (running ? 17 : 12); }
-    G.minutes += dt * .8;
+    G.minutes += dt * .8; actoTick(now, dt);
     for (const n of PEOPLE) { if (n.route) { n.t = (n.t || rnd() * 100) + dt; const [x, y, d] = where(n.route.map(([a, b]) => [a * T, b * T]), n.speed, n.t); n.x = x; n.y = y; n.dir = d; n.frame = 1 + Math.floor(n.t * 9) % 8; }
       if (n.scene === G.scene && now > n.nextBark && !n.chat && Math.hypot(n.x - G.x, n.y - G.y) < 240) { bubble(n, barkOf(n)); n.nextBark = now + 8000 + rnd() * 8000; } }
     const pura = PEOPLE.find(n => n.id === 'pura');
-    if (G.scene === 'town' && pura && !G.chat && Math.hypot(pura.x - G.x, pura.y - G.y) < 130 && !knows('Buscan a alguien')) G.chat = { i: 0, next: now };
+    if (G.scene === 'town' && pura && !G.chat && !F.campana && Math.hypot(pura.x - G.x, pura.y - G.y) < 130 && !knows('Buscan a alguien')) G.chat = { i: 0, next: now };
     if (G.chat && now >= G.chat.next) { const line = CHAT[G.chat.i]; if (!line) { G.chat = null; learn(['rumores', 'Buscan a alguien', 'Las vecinas dicen que los del barco negro buscan a alguien. Y que en Kalé hay «lo de siempre».']); } else { bubble(PEOPLE.find(n => n.id === line[0]), line[1], 2600); G.chat.i++; G.chat.next = now + 2700; } }
   }
   draw(now); if (!cv.hidden) requestAnimationFrame(loop);
@@ -423,7 +418,7 @@ function drawTown(g, cam, VW, VH, chars, now, h) {
   // mar que se mueve
   const wp = pat(g, R.water); wp.setTransform(new DOMMatrix().translate(-cx + Math.round(Math.sin(t * .6) * 6), -cy + Math.round(t * 4) % 32)); g.fillStyle = wp; g.fillRect(0, 0, VW, VH);
   g.fillStyle = 'rgba(255,255,255,.75)'; for (let i = 0; i < WORLD.foam.length; i++) { const [x, y] = WORLD.foam[i]; if (x < cx - 20 || x > cx + VW + 20 || y < cy - 20 || y > cy + VH + 20) continue; if (Math.sin(t * 2 + i * 1.7) > .2) g.fillRect(Math.round(x - cx - 2), Math.round(y - cy), 4, 1); }
-  g.drawImage(WORLD.ground, cx, cy, VW, VH, 0, 0, VW, VH);
+  g.drawImage(WORLD.ground, cx, cy, VW, VH, 0, 0, VW, VH); actoDrawTown(g, cam, now);
   // sombras según el sol
   const sn = sun(h);
   if (sn) { g.fillStyle = `rgba(15,20,45,${sn.alpha})`;

@@ -168,6 +168,28 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
 - **Reglas fijas para todos los edificios** (también en el plano): cada cuarto es su propia escena; las puertas se abren con E, con transición; lo demás de la casa no se ve. Las tiendas y oficios tienen horario. Todo lo transitable se alcanza caminando. Estas reglas se suman a las de vista, puertas, caminos, escala, coherencia entre interior y exterior, luz, sombras y capas.
 - **Movimiento:** paso de 112 px/s y carrera de 175 px/s (Shift, o el botón Correr en el teléfono). Zoom con la rueda, con + y −, o con dos dedos.
 - **Conversaciones:** estrategia en `docs/conversaciones.md`: la pregunta suena según tu rasgo más marcado, cada persona guarda confianza, lo que sabés abre temas con otros, los temas se agotan y los saludos y comentarios cambian con la hora. Se suman Gaspar (tienda), el Doctor Ansel y Nell (panadería).
+- **Personalización antes del prólogo:**
+  - Nombre y apellido.
+  - Pestaña Aspecto: cuerpo (masculino, femenino, fornido o menudo), rostro (rasgos marcados o suaves), piel, ojos, peinado y color de pelo.
+  - Pestaña Ropa: arriba, encima, abajo, pies y cabeza, cada una con su color.
+  - Botón Al azar.
+  - Se arma con capas LPC recoloreadas en el juego. Marla y Corso heredan tu piel, tus ojos y tu color de pelo.
+- **Introducción en tiza** después del prólogo: cinco dibujos que se trazan solos, con una frase cada uno.
+- **Acto 0 jugable** (guion en `docs/acto0.md`):
+  - a las 17:00 suena la campana;
+  - en la plaza, Dorne encadena el ancla, con opciones según lo que sabés;
+  - pelea de instinto con pausas para proteger a Corso;
+  - aparecen el forastero y la teniente Breda Nisi;
+  - al atardecer, despedidas: Marla te da la brújula del padre si hay confianza;
+  - de noche, la partida por el camino pirata o el marine, y el fin del Acto 0.
+- **Rutinas de la gente durante el día:**
+  - Marla va al mercado al mediodía.
+  - Brin come en la taberna.
+  - Lin dibuja junto al faro.
+  - Rosa vende en el mercado.
+  - Pura duerme la siesta.
+  - Nadie aparece ni desaparece delante tuyo.
+- **Descansar:** en tu cama podés descansar para que pase el tiempo.
 - **Casa con cuartos:** una sola escena con la sala y la cocina abajo, y el cuarto de Marla y el de los hermanos arriba, separados por una pared con dos puertas.
 - **Después del prólogo, una introducción corta** cuenta lo esencial de tu vida: dónde vivís, con quién, tu hermano, y que no conocés a tu padre.
 - **Acto 0 en Kalé (propuesta):** Dorne en la taberna, una pelea en el muelle y un mentor que te invita a zarpar (o un marine que te invita a alistarte). Al atardecer recorrés la isla y te despedís.
