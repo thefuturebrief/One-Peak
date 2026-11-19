@@ -426,8 +426,8 @@ function vida(g, [cx, cy], now, VW, VH, h, fase) {
 // ---------- barcos: de perfil, como las fachadas, con proa al este ----------
 // estilo 'pirata' (casco negro, velas negras con la medusa) o 'marina' (casco blanco y azul, velas con la gaviota)
 function barcoCanvas(estilo, L = 300) {
-  const P = estilo === 'pirata', W = L + 70, H = 320, [c, g] = mkCanvas(W, H), O = '#120c0e', wl = H - 40, x0 = 10, x1 = x0 + L;
-  const C = P ? { casco: ['#1a1416', '#2a2024', '#3a2e32'], franja: '#8a6a2a', vela: ['#1e1a1e', '#2e282e', '#3e363e'], marca: '#e8e2d8', bandera: '#141014', luz: '#ffcf6a' }
+  const K = estilo === 'corneja', P = estilo === 'pirata' || K, W = L + 70, H = 320, [c, g] = mkCanvas(W, H), O = '#120c0e', wl = H - 40, x0 = 10, x1 = x0 + L;
+  const C = K ? { casco: ['#24242c', '#34343e', '#464652'], franja: '#7a2a2a', vela: ['#3a3a44', '#4c4c58', '#5e5e6a'], marca: '#e8e2d8', bandera: '#141014', luz: '#ffcf6a' } : P ? { casco: ['#1a1416', '#2a2024', '#3a2e32'], franja: '#8a6a2a', vela: ['#1e1a1e', '#2e282e', '#3e363e'], marca: '#e8e2d8', bandera: '#141014', luz: '#ffcf6a' }
     : { casco: ['#d8dce4', '#eef2f6', '#ffffff'], franja: '#2f4f9a', vela: ['#d8dce4', '#eef0f4', '#ffffff'], marca: '#2f4f9a', bandera: '#2f4f9a', luz: '#ffe8a8' };
   // reflejo y sombra en el agua
   g.fillStyle = 'rgba(0,15,35,.35)'; g.beginPath(); g.ellipse(x0 + L / 2 + 6, wl + 14, L / 2 + 14, 16, 0, 0, 7); g.fill();
@@ -442,7 +442,7 @@ function barcoCanvas(estilo, L = 300) {
   g.fillStyle = P ? '#3a5a3a' : '#7a2a2a'; g.fillRect(x0, wl - 6, L + 10, 10); // obra viva
   g.restore();
   // cañoneras
-  for (let k = 0; k < 7; k++) { const px = x0 + 66 + k * (L - 120) / 6, py = wl - 31; g.fillStyle = O; g.fillRect(px - 5, py - 4, 10, 9); g.fillStyle = P ? '#5a2a1a' : '#24304a'; g.fillRect(px - 4, py - 3, 8, 7); g.fillStyle = '#0a0a0c'; g.beginPath(); g.arc(px, py + 1, 2.4, 0, 7); g.fill(); }
+  for (let k = 0, nk = K ? 3 : 7; k < nk; k++) { const px = x0 + 66 + k * (L - 120) / Math.max(1, nk - 1), py = wl - 31; g.fillStyle = O; g.fillRect(px - 5, py - 4, 10, 9); g.fillStyle = P ? '#5a2a1a' : '#24304a'; g.fillRect(px - 4, py - 3, 8, 7); g.fillStyle = '#0a0a0c'; g.beginPath(); g.arc(px, py + 1, 2.4, 0, 7); g.fill(); }
   // castillo de popa con ventanas encendidas
   g.fillStyle = O; g.fillRect(x0 - 2, wl - 86, 56, 26); g.fillStyle = C.casco[1]; g.fillRect(x0, wl - 84, 52, 22); g.fillStyle = C.franja; g.fillRect(x0, wl - 84, 52, 3);
   for (let k = 0; k < 3; k++) { g.fillStyle = O; g.fillRect(x0 + 6 + k * 15, wl - 78, 9, 9); g.fillStyle = C.luz; g.fillRect(x0 + 7 + k * 15, wl - 77, 7, 7); g.fillStyle = 'rgba(255,255,255,.6)'; g.fillRect(x0 + 7 + k * 15, wl - 77, 2, 3); }
@@ -452,7 +452,7 @@ function barcoCanvas(estilo, L = 300) {
   if (P) { g.fillStyle = '#d8d0b8'; g.beginPath(); g.arc(x1 + 4, wl - 46, 5, 0, 7); g.fill(); g.strokeStyle = '#d8d0b8'; g.lineWidth = 1.5; for (let k = 0; k < 5; k++) { g.beginPath(); g.moveTo(x1 + 2 + k, wl - 42); g.quadraticCurveTo(x1 + 8 + k * 2, wl - 30, x1 + k * 3, wl - 24); g.stroke(); } }
   else { g.fillStyle = '#f4f6fa'; g.beginPath(); g.moveTo(x1 - 2, wl - 50); g.lineTo(x1 + 14, wl - 56); g.lineTo(x1 + 4, wl - 44); g.fill(); g.fillStyle = '#f0a030'; g.fillRect(x1 + 12, wl - 56, 4, 2); }
   // mástiles, vergas y velas
-  const masts = [[x0 + 110, 200], [x0 + 210, 176]];
+  const masts = K ? [[x0 + L * .52, 190]] : [[x0 + 110, 200], [x0 + 210, 176]];
   g.strokeStyle = 'rgba(30,20,20,.75)'; g.lineWidth = 1; for (const [mx, mh] of masts) for (const tx of [x0 + 20, x1 + 50, mx - 60, mx + 60]) { g.beginPath(); g.moveTo(mx, wl - 50 - mh + 14); g.lineTo(tx, tx === x1 + 50 ? wl - 82 : wl - 54); g.stroke(); }
   for (const [mx, mh] of masts) { const top = wl - 50 - mh;
     g.fillStyle = O; g.fillRect(mx - 3, top, 6, mh); g.fillStyle = '#6a4a2a'; g.fillRect(mx - 2, top, 4, mh); g.fillStyle = '#8a6a3a'; g.fillRect(mx - 2, top, 1, mh);
@@ -465,12 +465,12 @@ function barcoCanvas(estilo, L = 300) {
       if (P) for (let k = 0; k < 3; k++) { g.fillStyle = 'rgba(0,0,0,.5)'; g.fillRect(mx - ww / 2 + 10 + hash(k, mx, 3) * (ww - 20), yy + hh - 6 - hash(k, 2, mx) * 10, 3, 6); } } }
   // emblema en la vela grande
   const [ex, eh] = masts[0], ey = wl - 50 - eh + 96 + 30;
-  if (P) { g.fillStyle = C.marca; g.beginPath(); g.ellipse(ex, ey - 6, 15, 11, 0, Math.PI, 0); g.fill(); g.fillRect(ex - 15, ey - 6, 30, 3); g.strokeStyle = C.marca; g.lineWidth = 2.5; for (let k = 0; k < 6; k++) { const sx = ex - 12 + k * 5; g.beginPath(); g.moveTo(sx, ey - 3); g.bezierCurveTo(sx - 5, ey + 8, sx + 6, ey + 14, sx + (k % 2 ? 4 : -4), ey + 22); g.stroke(); }
+  if (K) { /* la balandra no lleva emblema */ } else if (P) { g.fillStyle = C.marca; g.beginPath(); g.ellipse(ex, ey - 6, 15, 11, 0, Math.PI, 0); g.fill(); g.fillRect(ex - 15, ey - 6, 30, 3); g.strokeStyle = C.marca; g.lineWidth = 2.5; for (let k = 0; k < 6; k++) { const sx = ex - 12 + k * 5; g.beginPath(); g.moveTo(sx, ey - 3); g.bezierCurveTo(sx - 5, ey + 8, sx + 6, ey + 14, sx + (k % 2 ? 4 : -4), ey + 22); g.stroke(); }
     g.fillStyle = '#1e1a1e'; g.fillRect(ex - 7, ey - 11, 4, 3); g.fillRect(ex + 3, ey - 11, 4, 3); }
   else { g.fillStyle = C.marca; g.beginPath(); g.moveTo(ex - 24, ey - 6); g.quadraticCurveTo(ex - 10, ey - 18, ex, ey - 6); g.quadraticCurveTo(ex + 10, ey - 18, ex + 24, ey - 6); g.quadraticCurveTo(ex + 10, ey - 12, ex, ey); g.quadraticCurveTo(ex - 10, ey - 12, ex - 24, ey - 6); g.fill();
     g.font = '900 15px Georgia, serif'; g.textAlign = 'center'; g.fillText('MARINE', ex, ey + 20); const [ex2, eh2] = masts[1]; g.fillText('MARINE', ex2, wl - 50 - eh2 + 96 + 40); }
   // banderas en lo alto
-  for (const [mx, mh] of masts) { const top = wl - 50 - mh; g.fillStyle = O; g.fillRect(mx - 1, top - 16, 2, 18); g.fillStyle = C.bandera; g.beginPath(); g.moveTo(mx + 1, top - 16); g.lineTo(mx + 26, top - 13); g.lineTo(mx + 22, top - 8); g.lineTo(mx + 27, top - 3); g.lineTo(mx + 1, top - 4); g.fill();
+  if (!K) for (const [mx, mh] of masts) { const top = wl - 50 - mh; g.fillStyle = O; g.fillRect(mx - 1, top - 16, 2, 18); g.fillStyle = C.bandera; g.beginPath(); g.moveTo(mx + 1, top - 16); g.lineTo(mx + 26, top - 13); g.lineTo(mx + 22, top - 8); g.lineTo(mx + 27, top - 3); g.lineTo(mx + 1, top - 4); g.fill();
     g.fillStyle = P ? C.marca : '#ffffff'; g.beginPath(); g.arc(mx + 11, top - 10, 2.5, 0, 7); g.fill(); }
   // espuma en la línea de flotación
   g.fillStyle = 'rgba(255,255,255,.7)'; for (let k = 0; k < 26; k++) g.fillRect(x0 + 30 + k * (L - 40) / 25 + hash(k, 1, 61) * 6, wl + 1 + hash(k, 2, 61) * 3, 4 + hash(k, 3, 61) * 5, 1);

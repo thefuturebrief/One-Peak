@@ -353,10 +353,10 @@ function atardecer() {
 }
 function atardecerEstado() {
   for (const n of PEOPLE) n.nextBark = performance.now() + 9000 + Math.random() * 8000;
-  for (const id of ['mar2', 'mar3']) { const n = P(id); if (n) n.scene = 'none'; }
+  for (const [id, at] of [['mar2', [9, 4.4]], ['mar3', [16, 9]]]) { const n = P(id); if (n) { n.goal = null; moveNpc(n, 'gaviota:cubierta', at, 'down'); n.greet = () => pick(['Sin órdenes de la teniente, nada.', '¿Vienes a alistarte? Habla con la teniente.']); n.topics = []; } }
   learn(['gente', 'El forastero', 'Encapuchado, de negro. No le vi la cara. Dorne retrocedió solo con verlo. Dice que zarpa esta noche y que hay sitio para mí.']);
   learn(['gente', 'Teniente Breda Nisi', 'Oficial de la Marina de Loguetown. Me ofreció alistarme. Su barco sale esta noche.']);
-  const fo0 = P('forastero'); fo0.fijo = false; moveNpc(fo0, 'town', [4.6, 22.2], 'left'); moveNpc(P('teniente'), 'town', [44.5, 14.6], 'down');
+  const fo0 = P('forastero'); fo0.fijo = false; moveNpc(fo0, 'town', [9.6, 21.9], 'left'); moveNpc(P('teniente'), 'town', [44.5, 14.6], 'down');
   moveNpc(P('corso'), 'casa', [10.8, 4.9], 'left'); moveNpc(P('marla'), 'casa', [2.6, 8.4], 'right');
   for (const [id, at] of [['lin', [31.6, 23.8]], ['rosa', [26.8, 24.4]], ['pura', [28.1, 24.4]], ['brin', [3.2, 24.6]], ['yago', [24.6, 30.3]]]) { const n = P(id); n.act = null; n.emo = null; moveNpc(n, 'town', at); }
   const FR = { lin: ['Una isla sin nombre, un ancla que nadie puede mover... y ahora esto.', 'Tengo que apuntar todo lo de hoy antes de que se me olvide.'], rosa: ['Todavía me tiemblan las piernas.', '¿Quién era ese hombre de la capucha?'], pura: ['En mis tiempos esto no pasaba. Bueno... una vez sí.', 'Me desmayé como una jovencita, qué vergüenza.'],
@@ -465,7 +465,6 @@ function actoDrawTown(g, [cx, cy], now) {
   g.fillStyle = F.caja ? 'rgba(40,24,12,.7)' : `rgba(110,76,44,${sabe ? .55 : .25})`; g.beginPath(); g.ellipse(hx, hy, 13, 6, 0, 0, 7); g.fill();
   if (sabe && !F.caja) { g.fillStyle = '#8a8a94'; for (const [a, b] of [[-6, -3], [-3, -1], [0, 0], [3, 1], [6, 3], [-6, 3], [-3, 1], [3, -1], [6, -3]]) g.fillRect(Math.round(hx + a) - 1, Math.round(hy + b) - 1, 3, 2); }
   if (F.caja) { g.fillStyle = 'rgba(140,100,60,.8)'; g.beginPath(); g.ellipse(hx + 12, hy + 3, 7, 3, 0, 0, 7); g.fill(); }
-  if (F.refuerzos) { const b = WORLD.barcoMarina || (WORLD.barcoMarina = barcoSprite('marina', 0.6 * T, 33.4 * T, 9 * T)); g.drawImage(b.canvas, Math.round(b.x - cx), Math.round(b.y - cy)); }
 }
 // cadena de verdad: eslabones alternos que cuelgan entre la argolla del ancla y las manos de quien tira
 function drawChain(g, a, b, sag, t) { const n = Math.max(6, Math.round(Math.hypot(b[0] - a[0], b[1] - a[1]) / 5));

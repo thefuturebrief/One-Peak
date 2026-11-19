@@ -12,7 +12,7 @@ const listo = (async () => {
   await Promise.all([...Object.entries(ATLAS).map(([k, s]) => loadImg(s).then(i => A[k] = i)), ...PERSONAJES.map(id => loadImg('assets/personajes/' + id + '.png').then(i => SHEETS[id] = i))]);
   await cargarCatalogo(); await cargarArmas();
   PLANO = await (await fetch('plano.json')).json(); CREDITOS = await (await fetch('assets/creditos.json')).json();
-  buildIsland(PLANO);
+  buildIsland(PLANO); barcosEnPueblo();
 })();
 
 // =====================================================================
@@ -273,10 +273,10 @@ function fitGame() { const w = innerWidth, h = innerHeight; G.VW = Math.round(Ma
 addEventListener('resize', () => { fitBg(); if (!cv.hidden) fitGame(); });
 // edificios por dentro: cada uno se arma una vez, con una escena por cuarto
 const BLD = {}, SC = {};
-const bld = id => { if (!BLD[id]) { BLD[id] = buildInteriors(PLANO.edificios.find(b => b.id === id)); BLD[id].scenes.forEach(s => SC[s.id] = s); } return BLD[id]; };
+const bld = id => { if (!BLD[id]) { BLD[id] = BARCOS[id] ? construirBarco(id) : buildInteriors(PLANO.edificios.find(b => b.id === id)); BLD[id].scenes.forEach(s => SC[s.id] = s); } return BLD[id]; };
 const interior = sid => SC[sid] || (bld(sid.split(':')[0]), SC[sid]);
 // "casa" + un punto de la planta → la escena donde cae y su posición en píxeles
-function place(scene, at) { if (scene === 'town') return ['town', [at[0] * T, at[1] * T]]; const s = bld(scene).sceneOfPt(at[0], at[1]); return [s.id, [s.X(at[0]), s.Y(at[1])]]; }
+function place(scene, at) { if (scene === 'town' || scene.includes(':')) return [scene, [at[0] * T, at[1] * T]]; const s = bld(scene).sceneOfPt(at[0], at[1]); return [s.id, [s.X(at[0]), s.Y(at[1])]]; }
 const hit = (list, x, y) => list.some(([a, b, w, h]) => x >= a && x < a + w && y >= b && y < b + h);
 function walkableTown(x, y) {
   if (x < 8 || y < 8 || x > WORLD.w - 8 || y > WORLD.h - 8) return false;
@@ -290,7 +290,7 @@ function segDist(a, b, x, y) { const dx = b[0] - a[0], dy = b[1] - a[1], t = Mat
 function blocked(x, y) {
   const crowd = PEOPLE.some(n => n.scene === G.scene && Math.abs(n.x - x) < 10 && Math.abs(n.y - y) < 6);
   if (G.scene === 'town') return !walkableTown(x, y) || crowd;
-  const I = interior(G.scene); return x < WALL + 2 || x > I.w - WALL - 2 || y > I.h - WALL || hit(I.blocks, x, y) || crowd;
+  const I = interior(G.scene); if (I.dentro) return !I.dentro(x, y) || hit(I.blocks, x, y) || crowd; return x < WALL + 2 || x > I.w - WALL - 2 || y > I.h - WALL || hit(I.blocks, x, y) || crowd;
 }
 function fade(cb) { const f = document.getElementById('fadeov'); f.style.opacity = 1; setTimeout(() => { cb(); f.style.opacity = 0; }, 330); }
 function enter(scene, [x, y], dir) { G.scene = scene; G.x = x; G.y = y; G.dir = dir; clearBubbles(); const pn = document.getElementById('placeName'); pn.textContent = scene === 'town' ? 'Kalé' : interior(scene).name; pn.style.opacity = 1; clearTimeout(pn._t); pn._t = setTimeout(() => pn.style.opacity = 0, 2600); if (G.listo) guardarAuto(); }
@@ -362,7 +362,7 @@ function nearest() {
   let best = null, bd = 44;
   for (const n of PEOPLE) if (n.scene === G.scene && n.greet) { const d = Math.hypot(n.x - G.x, n.y - G.y); if (d < bd) { bd = d; best = { type: 'npc', n }; } }
   for (const o of OBJS) if (o.scene === G.scene) { const d = Math.hypot(o.x - G.x, o.y - G.y); if (d < bd) { bd = d; best = { type: 'obj', o, x: o.x, y: o.y }; } }
-  if (G.scene === 'town') { for (const s of WORLD.doors) { const [dx, dy] = s.door; if (Math.abs(G.x - dx) < 18 && G.y > dy - 6 && G.y < dy + 26) return { type: 'door', s }; } }
+  if (G.scene === 'town') { const pb = pasarelaCerca(); if (pb) return pb; for (const s of WORLD.doors) { const [dx, dy] = s.door; if (Math.abs(G.x - dx) < 18 && G.y > dy - 6 && G.y < dy + 26) return { type: 'door', s }; } }
   else for (const d of interior(G.scene).doors) if (hit([d.r], G.x, G.y)) return { type: 'idoor', d };
   return best;
 }
@@ -374,6 +374,9 @@ function interact() {
   else if (t.type === 'obj' && t.o.act) t.o.act();
   else if (t.type === 'obj' && t.o.cartel) { verCartel(t.o.cartel); t.o.learn && learn(t.o.learn); }
   else if (t.type === 'obj') say({ name: '', sprite: 'grumete' }, { lines: [t.o.text], learn: t.o.learn ? [t.o.learn] : [] });
+  else if (t.type === 'barco') subirA(t.id);
+  else if (t.type === 'idoor' && t.d.cerrada && t.d.cerrada()) note(t.d.cerrada());
+  else if (t.type === 'idoor' && t.d.salida) fade(() => enter('town', t.d.salida[0], t.d.salida[1]));
   else if (t.type === 'door') { const b = t.s.b;
     if (!b.entrable || !b.int || LOCKED.has(b.id)) return note(CLOSED[b.id] || 'Está cerrado.');
     if (!openNow(b)) return note(`${b.n}. En la puerta, un cartel: «Abierto ${horas(b.ext.horario)}».`);
@@ -448,8 +451,8 @@ function draw(now) {
   const toScr = (x, y) => [(x - cam[0]) * G.scale, (y - cam[1]) * G.scale + parseFloat(cv.style.top)];
   G.bubbles = G.bubbles.filter(b => { if (now > b.until || b.npc.scene !== G.scene) { b.el.remove(); return false; } const [x, y] = toScr(b.npc.x, b.npc.y - 58); b.el.style.left = x + 'px'; b.el.style.top = y + 'px'; return true; });
   const ov = document.getElementById('overlays'); let pr = ov.querySelector('.prompt'); const t = !G.talking && !G.paused && nearest();
-  if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'idoor' ? (t.d.to === 'town' ? 'Salir' : 'Abrir') : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
-    const [px, py] = t.type === 'npc' ? [t.n.x, t.n.y - 62] : t.type === 'obj' ? [t.x, t.y - 26] : t.type === 'door' ? [t.s.door[0], t.s.door[1] - 56] : [G.x, G.y - 62]; const [sx, sy] = toScr(px, py); pr.style.left = sx + 'px'; pr.style.top = sy + 'px'; } else if (pr) pr.remove();
+  if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'barco' ? 'Subir a ' + t.def.n : t.type === 'idoor' ? (t.d.salida ? 'Bajar al muelle' : t.d.to === 'town' ? 'Salir' : t.d.to.endsWith(':cubierta') ? 'Subir a cubierta' : 'Abrir') : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
+    const [px, py] = t.type === 'npc' ? [t.n.x, t.n.y - 62] : t.type === 'obj' ? [t.x, t.y - 26] : t.type === 'door' ? [t.s.door[0], t.s.door[1] - 56] : t.type === 'barco' ? [t.def.pasarela[0] * T, t.def.pasarela[1] * T - 44] : [G.x, G.y - 62]; const [sx, sy] = toScr(px, py); pr.style.left = sx + 'px'; pr.style.top = sy + 'px'; } else if (pr) pr.remove();
   drawBrujula(now); const pb = document.querySelector('.purse span'); if (pb && pb.textContent != berries()) pb.textContent = berries().toLocaleString('es-ES');
   const m = Math.floor(G.minutes) % 1440; document.getElementById('hour').textContent = `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 }
@@ -499,7 +502,7 @@ function drawTown(g, cam, VW, VH, chars, now, h) {
     for (const [x, y] of WORLD.trees) { if (x < cx - 200 || x > cx + VW + 200 || y < cy - 100 || y > cy + VH + 200) continue; g.beginPath(); g.ellipse(x - cx + sn.dx * 70, y - cy + sn.dy * 50 - 6, 40, 18, 0, 0, 7); g.fill(); } }
   const night = isNight(h), list = [];
   for (const sp of WORLD.sprites) { const w = sp.canvas ? sp.canvas.width : 140, hh = sp.canvas ? sp.canvas.height : 160; const x0 = sp.tree ? sp.x - 50 : sp.x, y0 = sp.tree ? sp.y - 140 : sp.y;
-    if (x0 > cx + VW || x0 + w < cx || y0 > cy + VH || y0 + hh < cy - 20) continue;
+    if (sp.visible && !sp.visible()) continue; if (x0 > cx + VW || x0 + w < cx || y0 > cy + VH || y0 + hh < cy - 20) continue;
     list.push({ key: sp.key, draw: (g, [cx, cy]) => { if (sp.canvas) g.drawImage(sp.canvas, Math.round(sp.x - cx + (sp.muneco && now > F.golpeMuneco && now - F.golpeMuneco < 320 ? Math.sin(now / 18) * 2 : 0)), Math.round(sp.y - cy)); else if (sp.img) put(g, sp.img, sp.x - cx, sp.y - cy); else if (sp.tree) drawTree(g, sp.x - cx, sp.y - cy); else if (sp.lamp) drawLamp(g, sp.x - cx, sp.y - cy, night); else if (sp.rect) { g.fillStyle = sp.rect[4]; g.fillRect(sp.rect[0] - cx, sp.rect[1] - cy, sp.rect[2], sp.rect[3]); } } }); }
   for (const c of chars) list.push({ key: c.y, draw: (g, [cx, cy]) => drawActor(g, c, cx, cy, now) });
   drawSorted(g, list, cam);
@@ -521,7 +524,7 @@ function drawTown(g, cam, VW, VH, chars, now, h) {
 // sol que entra por una ventana según hacia dónde mira y la hora
 function windowSun(dir, h) { const a = { E: [6, 11.5], S: [10, 15], O: [14, 19] }[dir]; if (!a || h < a[0] || h > a[1]) return 0; return Math.sin(Math.PI * (h - a[0]) / (a[1] - a[0])); }
 function drawInterior(g, I, cam, VW, VH, chars, now, h) {
-  const [cx, cy] = cam; g.fillStyle = '#120b07'; g.fillRect(0, 0, VW, VH); g.drawImage(I.canvas, -cx, -cy);
+  const [cx, cy] = cam; if (I.mar) { const t = now / 1000, wp = pat(g, R.water); wp.setTransform(new DOMMatrix().translate(-cx + Math.round(Math.sin(t * .6) * 6), -cy + Math.round(t * 4) % 32)); g.fillStyle = wp; g.fillRect(0, 0, VW, VH); } else { g.fillStyle = '#120b07'; g.fillRect(0, 0, VW, VH); } g.drawImage(I.canvas, -cx, -cy);
   const list = I.items.map(it => ({ key: it.key, draw: (g, [cx, cy]) => { if (it.img) put(g, it.img, it.x - cx, it.y - cy); else { g.save(); g.translate(-cx, -cy); it.fn(g); g.restore(); } } }));
   for (const c of chars) list.push({ key: c.y, draw: (g, [cx, cy]) => drawActor(g, c, cx, cy, now) });
   drawSorted(g, list, cam);
