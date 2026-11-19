@@ -18,7 +18,7 @@ const R = { // recortes exactos [atlas, x, y, w, h]
   table: ['int', 456, 192, 48, 80], longTable: ['int', 840, 438, 80, 42], chairFront: ['int', 515, 364, 26, 36], chairBack: ['int', 547, 373, 26, 27], plate: ['int', 997, 229, 22, 13],
   jars: ['int', 546, 416, 28, 64], plant: ['int', 896, 359, 32, 57], books: ['int', 672, 192, 32, 64], dishes: ['int', 704, 192, 32, 64], dresser: ['int', 512, 190, 64, 50],
   wardrobe: ['int', 514, 112, 60, 64], bedM: ['int', 840, 14, 48, 82], bedA: ['int', 680, 505, 48, 71], smallTable: ['int', 768, 416, 32, 30], lamp: ['int', 964, 288, 24, 31],
-  stove: ['int', 832, 256, 32, 66], stool: ['int', 420, 384, 24, 32], rtable: ['int', 768, 416, 32, 30],
+  stove: ['int', 832, 256, 32, 66], stool: ['int', 420, 384, 24, 32], rtable: ['int', 768, 416, 32, 30], desk: ['int', 576, 192, 64, 64],
 };
 // ---------- utilidades ----------
 const hash = (x, y, s = 0) => { let h = (Math.imul(x | 0, 374761393) + Math.imul(y | 0, 668265263) + Math.imul(s, 982451653)) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
@@ -180,7 +180,7 @@ function buildIsland(P) {
   // cosas sueltas que dan vida
   const props = [['barrel', 13.4, 20.4], ['barrel', 14.1, 20.6], ['crate', 6.4, 22.8], ['crate', 7.5, 22.8], ['sacks', 9.9, 23], ['tuna', 3.6, 22.6], ['woodpile', 43.6, 31.6], ['cart', 33.6, 20.4], ['barrel', 30.8, 15.8], ['crate', 31, 33.2], ['logs', 25.5, 35.3], ['stump', 20, 30], ['sack', 18.8, 19.8], ['barrel', 41.8, 18.6]];
   for (const [k, x, y] of props) { const r = R[k]; WORLD.sprites.push({ img: r, x: x * T - r[3] / 2, y: y * T - r[4], key: y * T }); WORLD.blocks.push([x * T - r[3] / 2 + 2, y * T - 12, r[3] - 4, 12]); }
-  for (const [x, y] of [[26, 22.8], [34, 22.8], [24.6, 17], [35.4, 25.4], [12.6, 22.8], [50, 22.8], [59.2, 30.4]]) { WORLD.lamps.push([x * T, y * T]); WORLD.sprites.push({ lamp: true, x: x * T, y: y * T, key: y * T }); WORLD.blocks.push([x * T - 4, y * T - 6, 8, 8]); }
+  for (const [x, y] of [[26, 22.8], [34, 22.8], [22.2, 17.4], [35.4, 25.4], [14.8, 20.7], [50, 22.8], [59.2, 30.4]]) { WORLD.lamps.push([x * T, y * T]); WORLD.sprites.push({ lamp: true, x: x * T, y: y * T, key: y * T }); WORLD.blocks.push([x * T - 4, y * T - 6, 8, 8]); }
   WORLD.ready = true;
 }
 function stall(x, y, i) { const [c, g] = mkCanvas(76, 70), col = ['#c8402e', '#2f78b7', '#d39418'][i % 3];
@@ -225,45 +225,78 @@ function drawTree(g, x, y) { put(g, R.trunk, x - 32, y - 66); put(g, R.crown, x 
 function drawLamp(g, x, y, night) { g.fillStyle = '#2a2a33'; g.fillRect(x - 2, y - 44, 4, 44); g.fillRect(x - 6, y - 2, 12, 3); g.fillStyle = '#2a2a33'; g.fillRect(x - 7, y - 58, 14, 15); g.fillStyle = night ? '#ffe9a0' : '#c9a85a'; g.fillRect(x - 5, y - 56, 10, 11); g.fillStyle = '#2a2a33'; g.fillRect(x - 8, y - 60, 16, 3); }
 
 // ---------- interiores ----------
-// La planta del plano es vista desde arriba. En tres cuartos, cada pared horizontal muestra su cara de 2 casillas,
-// así que cada línea de pared agrega 2 filas a la escena. Las ventanas toman la luz según hacia dónde miran.
+// Cada cuarto es una escena propia; los cuartos sin pared entre ellos (o con el mismo nombre) forman una sola.
+// Se pasa de una a otra abriendo la puerta con E. En tres cuartos, cada borde superior de un cuarto muestra
+// la cara de su pared (2 casillas), así que cada una de esas líneas agrega 2 filas a la escena.
 const WALL = 10;
-function buildInterior(b) {
-  const I = b.int, hw = I.paredes.filter(([x1, y1, x2, y2]) => y1 === y2), vw = I.paredes.filter(([x1, y1, x2, y2]) => x1 === x2);
-  const lines = [[0, 0, I.w], ...hw.map(([x1, y, x2]) => [y, Math.min(x1, x2), Math.max(x1, x2)])];
-  const sy = y => y + 2 * lines.filter(l => l[0] <= y + 1e-6).length, X = x => WALL + x * T, Y = y => sy(y) * T;
-  const W = I.w * T + 2 * WALL, H = Y(I.h) + WALL, [c, g] = mkCanvas(W, H), blocks = [], items = [], fires = [], lights = [], walk = [];
-  // pisos
-  for (const [n, x, y, w, h, f] of I.cuartos) { g.fillStyle = f === 'piedra' ? pat(g, R.floorStone) : pat(g, R.floorWood); const closes = lines.some(l => l[0] === y + h && l[1] <= x && l[2] >= x + w); g.fillRect(X(x), Y(y), w * T, Y(y + h) - Y(y) - (closes ? 2 * T : 0)); }
+const near0 = (a, b) => Math.abs(a - b) < 1e-6;
+function sceneGroups(I) {
+  const rooms = I.cuartos.map(([n, x, y, w, h, f], i) => ({ i, n, x, y, w, h, f })), par = rooms.map((_, i) => i);
+  const find = i => par[i] === i ? i : (par[i] = find(par[i])), uni = (a, b) => { par[find(a)] = find(b); };
+  const covered = (x1, y1, x2, y2) => I.paredes.some(([a, b, c, d]) => (near0(y1, y2) && near0(b, d) && near0(b, y1) && Math.min(a, c) <= x1 + 1e-6 && Math.max(a, c) >= x2 - 1e-6) || (near0(x1, x2) && near0(a, c) && near0(a, x1) && Math.min(b, d) <= y1 + 1e-6 && Math.max(b, d) >= y2 - 1e-6));
+  for (const r of rooms) for (const q of rooms) { if (r.i >= q.i) continue; if (r.n === q.n) { uni(r.i, q.i); continue; }
+    if (near0(r.x + r.w, q.x) || near0(q.x + q.w, r.x)) { const x = near0(r.x + r.w, q.x) ? q.x : r.x, a = Math.max(r.y, q.y), b = Math.min(r.y + r.h, q.y + q.h); if (b - a > 1e-6 && !covered(x, a, x, b)) uni(r.i, q.i); }
+    if (near0(r.y + r.h, q.y) || near0(q.y + q.h, r.y)) { const y = near0(r.y + r.h, q.y) ? q.y : r.y, a = Math.max(r.x, q.x), b = Math.min(r.x + r.w, q.x + q.w); if (b - a > 1e-6 && !covered(a, y, b, y)) uni(r.i, q.i); } }
+  const groups = {}; rooms.forEach(r => (groups[find(r.i)] = groups[find(r.i)] || []).push(r)); return Object.values(groups);
+}
+const sceneName = (b, g) => b.n + ' · ' + [...new Set(g.map(r => r.n))].map((n, i) => i ? n[0].toLowerCase() + n.slice(1) : n).join(' y ');
+// tramos de un borde horizontal (y) entre x1 y x2 donde del otro lado no hay escena
+function runs(x1, x2, outside) { const out = []; let start = null; for (let x = x1; x <= x2 + 1e-6; x += .25) { const o = x < x2 - 1e-6 && outside(x + .125); if (o && start === null) start = x; if (!o && start !== null) { out.push([start, x]); start = null; } } return out; }
+function buildInteriors(b) {
+  const I = b.int, groups = sceneGroups(I), scenes = groups.map((g, k) => ({ id: b.id + ':' + k, rooms: g, name: sceneName(b, g), bid: b.id }));
+  const sceneOfPt = (x, y) => scenes.find(s => s.rooms.some(r => x >= r.x - 1e-6 && x <= r.x + r.w + 1e-6 && y >= r.y - 1e-6 && y <= r.y + r.h + 1e-6));
+  for (const sc of scenes) buildScene(b, sc, scenes);
+  // puertas: cada una aparece en las dos escenas que une, o lleva a la calle
+  for (const [x, y, o, len, to] of I.puertas) {
+    const mid = o === 'h' ? [x + len / 2, y] : [x, y + len / 2], eps = .3;
+    const a = o === 'h' ? sceneOfPt(mid[0], y - eps) : sceneOfPt(x - eps, mid[1]), c = o === 'h' ? sceneOfPt(mid[0], y + eps) : sceneOfPt(x + eps, mid[1]);
+    const sides = [[a, o === 'h' ? 'S' : 'E'], [c, o === 'h' ? 'N' : 'O']].filter(([s]) => s);
+    for (const [s, side] of sides) { const other = sides.find(([t]) => t !== s), d = s.addDoor(x, y, o, len, side); d.to = other ? other[0].id : 'town'; d.twin = other ? { s: other[0], side: other[1], x, y, o, len } : null; }
+  }
+  for (const s of scenes) for (const d of s.doors) if (d.twin) d.at = d.twin.s.doorArrival(d.twin.x, d.twin.y, d.twin.o, d.twin.len, d.twin.side);
+  return { scenes, entrance: scenes.find(s => s.doors.some(d => d.to === 'town')), sceneOfPt };
+}
+function buildScene(b, sc, all) {
+  const I = b.int, rs = sc.rooms, inS = (x, y) => rs.some(r => x > r.x && x < r.x + r.w && y > r.y && y < r.y + r.h);
+  const bx = Math.min(...rs.map(r => r.x)), by = Math.min(...rs.map(r => r.y)), bx2 = Math.max(...rs.map(r => r.x + r.w)), by2 = Math.max(...rs.map(r => r.y + r.h));
+  const lines = []; for (const r of rs) for (const [a, z] of runs(r.x, r.x + r.w, x => !inS(x, r.y - .1))) lines.push([r.y, a, z]);
+  const ys = [...new Set(lines.map(l => l[0]))], sy = y => y + 2 * ys.filter(v => v <= y + 1e-6).length;
+  const X = x => WALL + (x - bx) * T, Y = y => (sy(y) - by) * T, W = (bx2 - bx) * T + 2 * WALL, H = Y(by2) + WALL;
+  const [c, g] = mkCanvas(W, H), blocks = [], items = [], fires = [], lights = [], doors = [];
+  g.fillStyle = '#1a100b'; g.fillRect(0, 0, W, H);
+  // pisos: un cuarto sigue por debajo de la línea de abajo salvo que esa línea lo cierre entero
+  for (const r of rs) { g.fillStyle = r.f === 'piedra' ? pat(g, R.floorStone) : pat(g, R.floorWood); const closes = lines.some(l => near0(l[0], r.y + r.h) && l[1] <= r.x + 1e-6 && l[2] >= r.x + r.w - 1e-6); g.fillRect(X(r.x), Y(r.y), r.w * T, Y(r.y + r.h) - Y(r.y) - (closes ? 2 * T : 0)); }
   if (I.redondo) { g.save(); g.globalCompositeOperation = 'destination-in'; g.beginPath(); g.ellipse(W / 2, (H + 2 * T) / 2, W / 2 - 2, (H - 2 * T) / 2, 0, 0, 7); g.rect(0, 0, W, 2 * T + 8); g.fill(); g.restore(); }
-  // caras de pared (pared norte y paredes interiores horizontales)
+  // caras de pared en cada borde superior
   for (const [ly, x1, x2] of lines) { const top = Y(ly) - 2 * T, x = X(x1), w = (x2 - x1) * T;
     g.fillStyle = pat(g, R.wallUp); g.fillRect(x, top, w, T); g.fillStyle = pat(g, R.wainscot); g.fillRect(x, top + T, w, T);
-    g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(x, top + 2 * T, w, 5); g.fillStyle = '#24160f'; g.fillRect(x - (ly ? 4 : 0), top - (ly ? 6 : 0), w + (ly ? 8 : 0), ly ? 8 : 6); g.fillStyle = '#4e3424'; g.fillRect(x - (ly ? 4 : 0), top - (ly ? 6 : 0), w + (ly ? 8 : 0), 2);
-    blocks.push([x, top - 8, w, 2 * T + 8 - 6]); }
-  // paredes verticales (se ven desde arriba como un borde)
-  const vTop = y => lines.some(l => Math.abs(l[0] - y) < 1e-6) ? Y(y) - 2 * T - 6 : Y(y), vBot = y => lines.some(l => Math.abs(l[0] - y) < 1e-6) ? Y(y) - 2 * T : Y(y);
-  for (const [x, y1, , y2] of vw) { const a = vTop(Math.min(y1, y2)), z = vBot(Math.max(y1, y2)); g.fillStyle = '#24160f'; g.fillRect(X(x) - 4, a, 8, z - a); g.fillStyle = '#4e3424'; g.fillRect(X(x) - 4, a, 2, z - a); blocks.push([X(x) - 5, a, 10, z - a]); }
-  // muros exteriores de los costados y de abajo
-  g.fillStyle = '#24160f'; g.fillRect(0, 0, WALL, H); g.fillRect(W - WALL, 0, WALL, H); g.fillRect(0, H - WALL, W, WALL); g.fillStyle = '#4e3424'; g.fillRect(WALL - 2, 0, 2, H); g.fillRect(W - WALL, 0, 2, H); g.fillRect(0, H - WALL, W, 2);
-  blocks.push([0, 0, WALL + 2, H], [W - WALL - 2, 0, WALL + 2, H]);
-  // ventanas
+    g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(x, top + 2 * T, w, 5); g.fillStyle = '#24160f'; g.fillRect(x - 4, top - 6, w + 8, 7); g.fillStyle = '#4e3424'; g.fillRect(x - 4, top - 6, w + 8, 2);
+    blocks.push([x, top - 8, w, 2 * T + 2]); }
+  // bordes de los costados y de abajo: muro visto desde arriba
+  const vTop = y => ys.some(v => near0(v, y)) ? Y(y) - 2 * T - 6 : Y(y);
+  for (const r of rs) for (const [x, side] of [[r.x, -1], [r.x + r.w, 1]]) for (const [a, z] of runs(r.y, r.y + r.h, y => !inS(x + side * .1, y))) {
+    const top = vTop(a), bot = Y(z) + (z >= by2 - 1e-6 ? WALL : 0), px = side < 0 ? X(x) - WALL : X(x);
+    g.fillStyle = '#24160f'; g.fillRect(px, top, WALL, bot - top); g.fillStyle = '#4e3424'; g.fillRect(side < 0 ? px + WALL - 2 : px, top, 2, bot - top); blocks.push([px - (side < 0 ? 0 : 0), top, WALL + 2, bot - top]); }
+  for (const r of rs) for (const [a, z] of runs(r.x, r.x + r.w, x => !inS(x, r.y + r.h + .1))) { const yy = Y(r.y + r.h); g.fillStyle = '#24160f'; g.fillRect(X(a) - WALL, yy, (z - a) * T + 2 * WALL, WALL); g.fillStyle = '#4e3424'; g.fillRect(X(a) - WALL, yy, (z - a) * T + 2 * WALL, 2); blocks.push([X(a) - WALL, yy - 4, (z - a) * T + 2 * WALL, WALL + 4]); }
+  // ventanas que dan afuera desde esta escena
   for (const [x, y, o, len, dir] of I.ventanas) {
-    if (o === 'h' && y === 0) { const cx = X(x + len / 2); put(g, R.winTall, cx - 16, Y(0) - 2 * T + 8); if (len > 1.6) { g.fillStyle = pat(g, R.wallUp); g.fillRect(cx - 16, Y(0) - 2 * T + 8, 32, 44); put(g, R.winTall, cx - 32, Y(0) - 2 * T + 8); put(g, R.winTall, cx, Y(0) - 2 * T + 8); } lights.push({ dir, x: cx, y: Y(0) - 2 * T + 30, w: len * T, wall: 'N' }); }
-    else if (o === 'h') { const x0 = X(x), yy = H - WALL; g.fillStyle = '#9fd0f0'; g.fillRect(x0, yy + 2, len * T, 5); g.fillStyle = '#e8f6ff'; g.fillRect(x0, yy + 2, len * T, 1); lights.push({ dir, x: x0 + len * T / 2, y: yy, w: len * T, wall: 'S' }); }
-    else { const xx = x === 0 ? 0 : W - WALL, y0 = Y(y), hh = len * T; g.fillStyle = '#9fd0f0'; g.fillRect(xx + 2, y0, WALL - 4, hh); g.fillStyle = '#e8f6ff'; g.fillRect(xx + (x === 0 ? WALL - 4 : 2), y0, 2, hh); lights.push({ dir, x: x === 0 ? WALL : W - WALL, y: y0 + hh / 2, w: hh, wall: x === 0 ? 'O' : 'E' }); } }
-  // puertas
-  const exits = [];
-  for (const [x, y, o, len, to] of I.puertas) {
-    if (o === 'h' && y === I.h) { const x0 = X(x), w = len * T; g.fillStyle = '#7a6a58'; g.fillRect(x0, H - WALL, w, WALL); g.fillStyle = '#9a3a2a'; g.fillRect(x0 + 2, H - WALL - 14, w - 4, 12); g.fillStyle = '#b8503a'; g.fillRect(x0 + 4, H - WALL - 12, w - 8, 8);
-      walk.push([x0, H - WALL - 4, w, WALL + 4]); exits.push({ r: [x0 - 6, H - WALL - 18, w + 12, 26], at: [x0 + w / 2, H - WALL - 22] }); }
-    else if (o === 'h') { const x0 = X(x), top = Y(y) - 2 * T; put(g, R.door.verde, x0 + (len * T - 32) / 2, top + 2 * T - 48); g.fillStyle = '#2a1a12'; g.fillRect(x0 + (len * T - 32) / 2 - 2, top + 2 * T - 50, 36, 2); walk.push([x0 + 4, top - 8, len * T - 8, 2 * T + 12]); }
-    else { const y0 = Y(y); g.fillStyle = pat(g, R.floorWood); g.fillRect(X(x) - 5, y0, 10, len * T); walk.push([X(x) - 6, y0, 12, len * T]); } }
-  // muebles
+    if (o === 'h') { const cxp = x + len / 2; if (inS(cxp, y + .1) && lines.some(l => near0(l[0], y) && l[1] <= cxp && l[2] >= cxp)) { const cx = X(cxp), wy = Y(y) - 2 * T + 8;
+        if (len > 1.6) { put(g, R.winTall, cx - 32, wy); put(g, R.winTall, cx, wy); } else put(g, R.winTall, cx - 16, wy); lights.push({ dir, x: cx, y: wy + 22, w: len * T, wall: 'N' }); }
+      else if (inS(cxp, y - .1)) { const x0 = X(x), yy = Y(y); g.fillStyle = '#9fd0f0'; g.fillRect(x0, yy + 2, len * T, 5); g.fillStyle = '#e8f6ff'; g.fillRect(x0, yy + 2, len * T, 1); lights.push({ dir, x: x0 + len * T / 2, y: yy, w: len * T, wall: 'S' }); } }
+    else { const cyp = y + len / 2, left = inS(x + .1, cyp), right = inS(x - .1, cyp); if (!left && !right) continue; const px = left ? X(x) - WALL : X(x), y0 = Y(y), hh = Y(y + len) - Y(y);
+      g.fillStyle = '#9fd0f0'; g.fillRect(px + 2, y0, WALL - 4, hh); g.fillStyle = '#e8f6ff'; g.fillRect(left ? px + WALL - 4 : px + 2, y0, 2, hh); lights.push({ dir, x: left ? X(x) : X(x), y: y0 + hh / 2, w: hh, wall: left ? 'O' : 'E' }); } }
+  // muebles y detalles que caen dentro de esta escena
   const box = ([n, x, y, w, h]) => [X(x), Y(y), w * T, h * T];
-  for (const m of I.muebles) furniture(b.id, m[0], box(m), items, blocks, fires, g);
-  for (const d of DECOR[b.id] || []) d(g, X, Y);
-  return { id: b.id, name: b.n, canvas: c, w: W, h: H, blocks, walk, items, fires, lights, exits, X, Y, area: [WALL, 0, W - 2 * WALL, H - WALL] };
+  for (const m of I.muebles) if (inS(m[1] + m[3] / 2, m[2] + m[4] / 2)) furniture(b.id, m[0], box(m), items, blocks, fires, g);
+  for (const d of DECOR[b.id] || []) if (inS(...d.at)) d.fn(g, X, Y);
+  // una puerta en el borde de arriba es una puerta en la cara de la pared; abajo, un umbral; a los lados, un hueco en el muro
+  sc.addDoor = (x, y, o, len, side) => { let r, look;
+    if (side === 'N') { const x0 = X(x) + (len * T - 32) / 2, top = Y(y) - 2 * T; put(g, R.door[b.id === 'casa' ? 'verde' : 'marron'], x0, top + 2 * T - 48); g.fillStyle = '#2a1a12'; g.fillRect(x0 - 2, top + 2 * T - 50, 36, 2); r = [X(x) - 4, Y(y) - 6, len * T + 8, 0.9 * T]; look = 'up'; }
+    else if (side === 'S') { const x0 = X(x), w = len * T, yy = Y(y); g.fillStyle = '#7a6a58'; g.fillRect(x0, yy, w, WALL); g.fillStyle = '#9a3a2a'; g.fillRect(x0 + 2, yy - 14, w - 4, 12); g.fillStyle = '#b8503a'; g.fillRect(x0 + 4, yy - 12, w - 8, 8); r = [x0 - 6, yy - 0.9 * T, w + 12, 0.9 * T + 4]; look = 'down'; }
+    else { const leftWall = side === 'O', px = leftWall ? X(x) - WALL : X(x), y0 = Y(y), hh = Y(y + len) - Y(y); g.fillStyle = '#3a2418'; g.fillRect(px, y0, WALL, hh); g.fillStyle = '#7a5030'; g.fillRect(px + 2, y0 + 2, WALL - 4, hh - 4); r = leftWall ? [X(x), y0, 0.9 * T, hh] : [X(x) - 0.9 * T, y0, 0.9 * T, hh]; look = leftWall ? 'left' : 'right'; }
+    const d = { r, look, args: [x, y, o, len, side] }; doors.push(d); return d; };
+  sc.doorArrival = (x, y, o, len, side) => side === 'N' ? [[X(x + len / 2), Y(y) + 0.8 * T], 'down'] : side === 'S' ? [[X(x + len / 2), Y(y) - 0.7 * T], 'up'] : side === 'O' ? [[X(x) + 0.8 * T, Y(y + len / 2) + 6], 'right'] : [[X(x) - 0.8 * T, Y(y + len / 2) + 6], 'left'];
+  Object.assign(sc, { canvas: c, w: W, h: H, blocks, items, fires, lights, doors, X, Y, area: [WALL, 0, W - 2 * WALL, H - WALL] });
 }
 // cada etiqueta de la planta se dibuja con su pieza LPC, apoyada en la base de su caja
 function furniture(bid, label, [x, y, w, h], items, blocks, fires, g) {
@@ -277,7 +310,7 @@ function furniture(bid, label, [x, y, w, h], items, blocks, fires, g) {
   if (L.startsWith('silla') || L.startsWith('mecedora')) return add(R.chairFront, cx - 13, by - 36);
   if (L.startsWith('comoda')) { add(R.dresser, cx - 32, by - 50); items.push({ fn: gg => { gg.fillStyle = '#5a3a24'; gg.fillRect(cx - 24, by - 54, 16, 5); gg.fillStyle = '#3a2418'; gg.fillRect(cx - 24, by - 50, 16, 1); }, key: by + 1 }); return; }
   if (L.startsWith('cofre') || L.startsWith('baul')) { items.push({ fn: gg => { gg.fillStyle = '#4a2c1c'; gg.fillRect(cx - 15, by - 18, 30, 18); gg.fillStyle = '#6a4228'; gg.fillRect(cx - 15, by - 18, 30, 6); gg.fillStyle = '#8a8a9a'; gg.fillRect(cx - 15, by - 13, 30, 1); gg.fillRect(cx - 11, by - 18, 2, 18); gg.fillRect(cx + 9, by - 18, 2, 18); gg.fillStyle = '#e6c25e'; gg.fillRect(cx - 2, by - 10, 4, 4); gg.strokeStyle = '#2a1a12'; gg.strokeRect(cx - 14.5, by - 17.5, 29, 17); }, key: by }); blocks.push([cx - 15, by - 14, 30, 14]); return; }
-  if (L.startsWith('estante') || L.startsWith('libros')) { for (let px = x; px + 30 <= x + w + 4; px += 32) add(R.books, px, by - 64); return; }
+  if (L === 'estante' || L.startsWith('libros')) { for (let px = x; px + 30 <= x + w + 4; px += 32) add(R.books, px, by - 64); return; }
   if (L.startsWith('botellero')) { let i = 0; for (let px = x; px + 30 <= x + w + 4; px += 32) add(i++ % 2 ? R.dishes : R.books, px, by - 64 + 8); return; }
   if (L.startsWith('mesita')) { add(R.smallTable, cx - 16, by - 30); items.push({ fn: gg => { gg.fillStyle = '#f4ecd8'; gg.fillRect(cx - 2, by - 38, 4, 7); gg.fillStyle = '#ffd25a'; gg.fillRect(cx - 1, by - 41, 2, 3); }, key: by + 1 }); fires.push({ x: cx, y: by - 38, r: 40, kind: 'vela' }); return; }
   if (L.startsWith('juguetes')) { add(R.crate, cx - 17, by - 33); items.push({ fn: gg => { gg.fillStyle = '#8a5a34'; gg.fillRect(cx + 14, by - 30, 3, 24); gg.fillRect(cx + 9, by - 25, 13, 3); }, key: by + 1 }); return; }
@@ -299,15 +332,27 @@ function furniture(bid, label, [x, y, w, h], items, blocks, fires, g) {
   if (L.startsWith('estufa')) { add(R.stove, cx - 16, by - 66); fires.push({ x: cx, y: by - 30, r: 70, kind: 'fuego' }); return; }
   if (L.startsWith('redes')) return flat(gg => { gg.fillStyle = '#9a8460'; gg.beginPath(); gg.ellipse(cx, by - 12, w / 2 - 4, 12, 0, 0, 7); gg.fill(); gg.strokeStyle = '#6a5a40'; for (let i = -w / 2; i < w / 2; i += 5) { gg.beginPath(); gg.moveTo(cx + i, by - 22); gg.lineTo(cx + i + 6, by - 2); gg.stroke(); } for (const dx of [-14, 6, 18]) { gg.fillStyle = '#c8402e'; gg.beginPath(); gg.arc(cx + dx, by - 12, 3, 0, 7); gg.fill(); } });
   if (L.startsWith('canas')) return flat(gg => { for (let i = 0; i < 3; i++) { gg.strokeStyle = i ? '#9a6a40' : '#c8a070'; gg.lineWidth = 2; gg.beginPath(); gg.moveTo(cx - 4 + i * 4, by); gg.lineTo(cx - 8 + i * 6, y - 20); gg.stroke(); } });
+  if (L === 'estantes') { let i = 0; for (let px = x; px + 28 <= x + w + 4; px += 32) { const r = [R.dishes, R.jars, R.dishes, R.sacks][i++ % 4]; add(r, px + (32 - r[3]) / 2, by - r[4] + 8); } return; }
+  if (L.startsWith('cajas')) { for (let px = x; px + 30 <= x + w + 4; px += 34) for (let py = by; py - 30 > y - 6; py -= 30) add(R.crate, px, py - 33); return; }
+  if (L.startsWith('lonas')) return add(R.sacks, cx - 32, by - 63);
+  if (L.startsWith('sogas')) return flat(gg => { for (let k = 0; k < 3; k++) { gg.strokeStyle = k % 2 ? '#a88a5a' : '#c8a870'; gg.lineWidth = 3; gg.beginPath(); gg.ellipse(cx, by - 12 - k * 5, w / 2 - 6 - k * 3, 7, 0, 0, 7); gg.stroke(); } });
+  if (L.startsWith('mostrador')) { items.push({ fn: gg => nine(gg, R.dresser, 14, x, by - h - 18, w, h + 18), key: by }); blocks.push([x, by - h - 4, w, h + 4]); return; }
+  if (L.startsWith('camilla')) return add(R.bedA, cx - 24, by - 71 - 6);
+  if (L.startsWith('biombo')) { items.push({ fn: gg => { for (let k = 0; k < 3; k++) { const py = y + k * h / 3; gg.fillStyle = '#5a3a24'; gg.fillRect(cx - 4, py, 8, h / 3 - 1); gg.fillStyle = '#efe4cc'; gg.fillRect(cx - 3, py + 2, 6, h / 3 - 5); } }, key: by }); blocks.push([cx - 5, y, 10, h]); return; }
+  if (L.startsWith('escritorio')) return add(R.desk, cx - 32, by - 64);
+  if (L.startsWith('escalera')) { items.push({ fn: gg => { for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; gg.fillStyle = k % 2 ? '#8a8478' : '#a8a296'; gg.beginPath(); gg.moveTo(cx, y + h / 2); gg.arc(cx, y + h / 2, w / 2, a, a + Math.PI / 4); gg.fill(); } gg.fillStyle = '#5a5448'; gg.beginPath(); gg.arc(cx, y + h / 2, 6, 0, 7); gg.fill(); gg.strokeStyle = '#2a1a12'; gg.beginPath(); gg.arc(cx, y + h / 2, w / 2, 0, 7); gg.stroke(); }, key: by }); blocks.push([x + 4, y + 4, w - 8, h - 8]); return; }
+  if (L.startsWith('artesa')) { add(R.longTable, cx - 40, by - 42); items.push({ fn: gg => { gg.fillStyle = '#f4ecd8'; gg.beginPath(); gg.ellipse(cx, by - 34, 18, 5, 0, 0, 7); gg.fill(); }, key: by + 1 }); return; }
+  if (L.startsWith('horno')) { add(R.fireplace, cx - 36, by - 70); items.push({ img: R.flame, x: cx - 15, y: by - 38, key: by + 1 }); fires.push({ x: cx, y: by - 24, r: 120, kind: 'fuego' }); return; }
+  if (L === 'pan') { add(R.crate, cx - 17, by - 33); items.push({ fn: gg => { for (let k = 0; k < 4; k++) { gg.fillStyle = '#c88a3a'; gg.beginPath(); gg.ellipse(cx - 10 + k * 7, by - 32, 5, 3, 0, 0, 7); gg.fill(); gg.fillStyle = '#e8b86a'; gg.fillRect(cx - 12 + k * 7, by - 34, 3, 1); } }, key: by + 1 }); return; }
   // sin pieza todavía: un bulto neutro para no dejar el hueco
   items.push({ fn: gg => { gg.fillStyle = '#6a4228'; gg.fillRect(x, y, w, h); gg.strokeStyle = '#2a1a12'; gg.strokeRect(x + .5, y + .5, w - 1, h - 1); }, key: by }); blocks.push([x, y, w, h]);
 }
-// detalles de cada interior que no son muebles de la planta
+// detalles de cada interior que no son muebles de la planta; "at" es un punto de la planta para saber en qué escena van
 const DECOR = {
-  casa: [(g, X, Y) => { // el mapa sobre tu cama y los dibujos de Corso, las ollas sobre el fogón
-    g.fillStyle = '#e8d6a8'; g.fillRect(X(6.6), Y(0) - 52, 36, 24); g.fillStyle = '#7a5a3a'; for (let i = 0; i < 4; i++) g.fillRect(X(6.6) + 4 + i * 8, Y(0) - 46 + (i % 2) * 6, 6, 1); g.fillStyle = '#c8402e'; g.fillRect(X(6.6) + 26, Y(0) - 40, 3, 3);
-    for (const [px, c] of [[12.1, '#4a7ab8'], [12.9, '#c8402e']]) { g.fillStyle = '#f4ecd8'; g.fillRect(X(px), Y(0) - 50, 18, 14); g.fillStyle = c; g.fillRect(X(px) + 3, Y(0) - 42, 12, 2); g.fillRect(X(px) + 8, Y(0) - 47, 2, 6); }
-    put(g, R.pots, X(1.4), Y(6) - 2 * T - 2); }],
-  taberna: [(g, X, Y) => { put(g, R.pots, X(1), Y(0) - 2 * T); g.fillStyle = '#e8d6a8'; g.fillRect(X(13.2), Y(5.6) - 4, 1, 1); }],
-  brin: [(g, X, Y) => { put(g, R.pots, X(4.6), Y(0) - 2 * T - 2); }],
+  casa: [{ at: [7, .5], fn: (g, X, Y) => { // el mapa sobre tu cama y los dibujos de Corso
+      g.fillStyle = '#e8d6a8'; g.fillRect(X(6.6), Y(0) - 52, 36, 24); g.fillStyle = '#7a5a3a'; for (let i = 0; i < 4; i++) g.fillRect(X(6.6) + 4 + i * 8, Y(0) - 46 + (i % 2) * 6, 6, 1); g.fillStyle = '#c8402e'; g.fillRect(X(6.6) + 26, Y(0) - 40, 3, 3);
+      for (const [px, c] of [[12.1, '#4a7ab8'], [12.9, '#c8402e']]) { g.fillStyle = '#f4ecd8'; g.fillRect(X(px), Y(0) - 50, 18, 14); g.fillStyle = c; g.fillRect(X(px) + 3, Y(0) - 42, 12, 2); g.fillRect(X(px) + 8, Y(0) - 47, 2, 6); } } },
+    { at: [1.4, 6.5], fn: (g, X, Y) => put(g, R.pots, X(1.4), Y(6) - 2 * T - 2) }],
+  taberna: [{ at: [1, .5], fn: (g, X, Y) => put(g, R.pots, X(1.6), Y(0) - 2 * T) }],
+  brin: [{ at: [4.6, .5], fn: (g, X, Y) => put(g, R.pots, X(4.6), Y(0) - 2 * T - 2) }],
 };

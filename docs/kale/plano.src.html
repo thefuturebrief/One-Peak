@@ -103,6 +103,9 @@ const RULES=[
   ['Cuartos','Cada cuarto tiene sus paredes. Las puertas interiores solo van en paredes entre dos cuartos y las ventanas solo en paredes que dan afuera.'],
   ['Luz','Ventana al este: sol de mañana. Al sur: sol del mediodía. Al oeste: sol de la tarde. Al norte: luz difusa, sin rayo. De noche, fuego y lámparas.'],
   ['Capas','Suelo, sombras, base de los edificios, personajes, y encima techos y copas. Quien pasa por detrás de una casa queda tapado.'],
+  ['Cuartos por separado','Cada cuarto (o grupo de cuartos abiertos entre sí) es su propia escena. Sus puertas se abren con E y hay una transición: lo demás de la casa no se ve. Vale para todos los edificios.'],
+  ['Horarios','Las tiendas y oficios abren a ciertas horas (la panadería de 8 a 14, el médico de 11 a 18, la tienda de aparejos de 9 a 13 y de 16 a 20). Fuera de hora, la puerta lo dice.'],
+  ['Acceso','Todo lo que se ve como transitable se puede alcanzar caminando: muelles, pasarelas y caminos se tocan con la tierra.'],
 ];
 const ns='http://www.w3.org/2000/svg';
 const el=(t,a={},p)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};

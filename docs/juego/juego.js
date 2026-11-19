@@ -44,7 +44,7 @@ const DREAMS = [
 ];
 const rnd = Math.random, pick = a => a[Math.floor(rnd() * a.length)];
 const S = {}, player = { name: '', last: '' };
-function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {} });
+function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
   STATS.forEach(([k]) => S.st[k] = 8); Object.keys(OFICIOS).forEach(k => S.of[k] = 0); S.tag = t => S.tags.filter(x => x === t).length; }
 function apply(fx) { if (!fx) return; for (const k in fx.ax || {}) S.ax[k] += fx.ax[k]; for (const k in fx.st || {}) S.st[k] += fx.st[k]; for (const k in fx.of || {}) S.of[k] += fx.of[k];
   (fx.tr || []).forEach(t => S.trs.includes(t) || S.trs.push(t)); (fx.tags || []).forEach(t => S.tags.push(t)); if (fx.bond) S.bonds.push(fx.bond); if (fx.item) S.items.push(fx.item); }
@@ -106,66 +106,145 @@ function dream() { const list = DREAMS.map(x => ({ t: x.t, s: x.sc(S) })).sort((
   const btns = [...root.querySelectorAll('.opt')]; btns.forEach(b => b.onclick = () => { S.dream = list[+b.dataset.i].t; startGame(); }); keys(e => { const n = +e.key; if (n >= 1 && n <= btns.length) btns[n - 1].click(); }); }
 
 // =====================================================================
-// GENTE: dónde está cada uno, qué comenta y de qué se puede hablar con él
+// GENTE: dónde está cada uno, cómo habla y de qué se puede hablar con él (ver docs/conversaciones.md)
 // =====================================================================
-// Una conversación: saludo y después temas. Cada tema puede cambiar según cuántas veces lo preguntaste o lo que ya sabes.
 const knows = title => Object.values(DIARY).some(sec => sec.some(e => e.title === title));
+// tu rasgo más marcado decide cómo suenan tus preguntas
+function rasgo() { let best = 'neutro', bv = 0; for (const [k, p, n] of [['coraje', 'temerario', 'cauto'], ['corazon', 'compasivo', 'frio'], ['orgullo', 'orgulloso', 'humilde'], ['libertad', 'libre', 'disciplinado'], ['ambicion', 'ambicioso', 'sereno']]) { const v = S.ax[k]; if (Math.abs(v) > bv) { bv = Math.abs(v); best = v > 0 ? p : n; } } return best; }
+const voz = o => typeof o === 'string' ? o : (o[rasgo()] || o.def);
+const aff = id => S.aff[id] || 0;
+const asked = (id, tp) => (S.asked[id] || {})[tp] || 0;
+const tod = () => { const h = hourNow(); return h < 12.5 ? 'dia' : h < 19.5 ? 'tarde' : 'noche'; };
+const L = (sec, title, txt) => [[sec, title, txt]];
 function makePeople() {
-  const fam = player.last;
+  const fam = player.last, nom = player.name;
   return [
-    { id: 'marla', scene: 'casa', at: [2.6, 8.4], sprite: 'madre', dir: 'right', name: `Marla ${fam}`, barks: ['El agua ya hierve.', '¿Has visto el cuchillo grande?', 'Abrígate, que sopla del norte.'],
-      hello: () => S.asked.marla ? pick(['¿Qué quieres ahora?', '¿Sigues aquí?', 'Dime.']) : `Por fin te levantas, ${player.name}. Ha entrado un barco con bandera negra en el puerto y todo el pueblo está nervioso.`,
-      first: [['familia', `Mi madre: Marla ${fam}`, 'Me crió sola, con Corso. Trabaja limpiando pescado en el mercado.']],
+    { id: 'marla', scene: 'casa', at: [2.6, 8.4], sprite: 'madre', dir: 'right', name: `Marla ${fam}`,
+      barks: { dia: ['El agua ya hierve.', '¿Has visto el cuchillo grande?'], tarde: ['Este pescado no se limpia solo.', '¿Dónde se habrá metido Corso?'], noche: ['Cierra bien la puerta.', 'Qué silencio hay esta noche...'] },
+      greet: c => knows('Dorne conoce a mamá') && !asked('marla', 'dorne') ? '(Marla te mira fijamente.) Te ha pasado algo. Lo veo en tu cara.' : c.n === 0 ? `Por fin te levantas, ${nom}. Ha entrado un barco con bandera negra y medio pueblo está en el muelle mirando.` : { dia: ['¿Has comido algo?', 'Dime.', '¿Ya vuelves?'], tarde: ['¿Dónde te habías metido?', 'Ayúdame con esto, anda.'], noche: ['Es tarde. ¿Dónde estabas?', 'Deberías estar durmiendo.'] }[c.tod],
+      first: L('familia', `Mi madre: Marla ${fam}`, 'Me crió sola, con Corso. Trabaja limpiando pescado en el mercado.'),
       topics: [
-        { t: '¿Qué pasa en el puerto?', a: ['Un barco negro. Nadie sabe qué quieren. La Marina dice que no nos acerquemos.', 'Ve a ver si Brin necesita algo en el muelle. Y no te metas en líos.'], learn: [['rumores', 'El barco negro', 'Entró anoche con bandera negra. La Marina pide no acercarse.']] },
-        { t: 'Háblame de papá.', a: n => [['No empieces, ' + player.name + '.'], ['Te he dicho que no quiero hablar de eso.'], ['(Se queda mirando el fuego un buen rato.)', 'Era alguien que se fue. Es todo lo que necesitas saber.']][Math.min(n, 2)], learn: n => n >= 2 ? [['familia', 'Mi padre', 'Se fue cuando yo era pequeño. Mamá no quiere hablar de él.']] : [] },
-        { t: 'Algún día me voy a ir de Kalé.', when: () => S.ax.libertad + S.ax.ambicion > 0, a: ['Ya lo sé. Lo sé desde que eras así de pequeño.', 'Pero hoy no. Hoy hay un barco pirata en el puerto.'] },
-        { t: '¿Necesitas ayuda con algo?', a: ['Si quieres ayudar, lleva a Corso lejos del muelle. Se le van los ojos detrás de ese barco.'] },
+        { id: 'puerto', once: true, ask: { def: '¿Qué pasa en el puerto?', temerario: 'He visto el barco pirata. Voy a ir a verlo de cerca.', cauto: '¿Es peligroso ese barco del puerto?' },
+          a: c => c.tone === 'temerario' ? ['Ni se te ocurra acercarte.', 'La Marina dice que nadie se acerque, y por una vez tienen razón.'] : ['Un barco negro. Nadie sabe qué quieren.', 'La Marina pide que no nos acerquemos. Y tú tampoco.'], learn: L('rumores', 'El barco negro', 'Entró anoche con bandera negra. La Marina pide no acercarse.') },
+        { id: 'papa', hideAfter: 3, ask: { def: 'Háblame de papá.', temerario: '¿Por qué nunca me hablas de papá?', compasivo: 'Mamá... ¿te acuerdas mucho de papá?', cauto: '¿Puedo preguntarte algo sobre papá?', orgulloso: 'Tengo derecho a saber quién era mi padre.' },
+          a: c => c.n === 0 ? (c.tone === 'compasivo' ? ['(Se le escapa media sonrisa.) Todos los días. Aunque no quiera.', 'Pero hoy no, cariño.'] : c.tone === 'orgulloso' ? ['¿Derecho? (Deja el cuchillo en la mesa.)', 'Lo que tienes es un techo y un plato caliente. No me hables así.'] : [`No empieces, ${nom}.`]) : c.n === 1 ? ['Te he dicho que no quiero hablar de eso.'] : c.aff >= 1 ? ['(Se queda mirando el fuego un buen rato.)', 'Se fue un invierno, cuando Corso era un bebé. Se fue por nosotros.', 'Algún día lo entenderás.'] : ['(Se queda mirando el fuego un buen rato.)', 'Era alguien que se fue. Es todo lo que necesitas saber.'],
+          aff: c => c.n === 0 ? (c.tone === 'compasivo' ? 1 : c.tone === 'orgulloso' ? -1 : 0) : 0,
+          learn: c => c.n >= 2 ? (c.aff >= 1 ? L('familia', 'Mi padre', 'Se fue un invierno, cuando Corso era un bebé. Mamá dice que se fue por nosotros.') : L('familia', 'Mi padre', 'Se fue cuando yo era pequeño. Mamá no quiere hablar de él.')) : [] },
+        { id: 'irse', once: true, need: () => S.ax.libertad + S.ax.ambicion > 0, ask: { def: 'Algún día me voy a ir de Kalé.', temerario: 'Me voy a ir de Kalé, mamá. Y pronto.' }, a: () => ['Ya lo sé. Lo sé desde que eras así de pequeño.', 'Pero hoy no. Hoy hay un barco pirata en el puerto.'] },
+        { id: 'ayuda', hideAfter: 2, ask: '¿Necesitas ayuda con algo?', a: c => c.n === 0 ? ['Si quieres ayudar, mantén a Corso lejos del muelle. Se le van los ojos detrás de ese barco.'] : ['Ya te lo he dicho: Corso. Que no se acerque al muelle.'], aff: c => c.n === 0 ? 1 : 0 },
+        { id: 'cofre', once: true, need: () => knows('El cofre de mamá'), ask: { def: '¿Qué guardas en el cofre de tu cuarto?', compasivo: 'Corso dice que abres el cofre de noche... ¿estás bien?' },
+          a: c => c.tone === 'compasivo' && c.aff >= 0 ? ['(Se queda quieta.) Cosas de antes. Cosas que no se tiran.', 'No se lo digas a Corso, ¿vale? Es pequeño.'] : ['Eso no es asunto tuyo. Ni de Corso.', '(Sigue cortando el pescado, más fuerte que antes.)'], aff: c => c.tone === 'compasivo' ? 1 : -1 },
+        { id: 'bandera', once: true, need: () => knows('La bandera de la medusa'), ask: 'Brin dice que esa bandera ya estuvo aquí hace veinte años.', a: () => ['(Se le cae la cuchara al suelo.)', 'Brin habla demasiado. Recoge eso, anda.'], learn: L('familia', 'Mamá y la bandera', 'Cuando le hablé de la bandera de la medusa, a mamá se le cayó la cuchara.') },
+        { id: 'dorne', once: true, need: () => knows('Dorne conoce a mamá'), ask: { def: 'Hay un tal Dorne en la taberna. Dice que te conoce.', temerario: 'Dorne dice que tú sabes quién es. ¿Quién es, mamá?' },
+          a: () => ['(Marla se pone pálida.)', '¿Has hablado con él? ¿Qué le has dicho? ¿Le has dicho dónde vivimos?', 'Escúchame bien. Esta noche no sale nadie de esta casa. Ni tú ni Corso.'], learn: L('familia', 'Mamá conoce a Dorne', 'Al oír el nombre de Dorne, mamá se puso pálida y nos prohibió salir esta noche.') },
       ] },
-    { id: 'corso', scene: 'casa', at: [10.8, 4.9], sprite: 'nino', dir: 'left', name: `Corso ${fam}`, barks: ['¡Mira, un barco!', '¿Jugamos a piratas?', 'Mamá está rara hoy.'],
-      hello: () => S.asked.corso ? pick(['¿Qué?', '¡Eh!', '¿Ya vuelves?']) : '¡Por fin! ¿Has visto el barco negro? ¡Es enorme!',
-      first: [['familia', `Mi hermano: Corso ${fam}`, 'Once años. Me sigue a todas partes y dibuja barcos en todas las paredes.']],
+    { id: 'corso', scene: 'casa', at: [10.8, 4.9], sprite: 'nino', dir: 'left', name: `Corso ${fam}`,
+      barks: { dia: ['¡Mira, un barco!', '¿Jugamos a piratas?'], tarde: ['Mamá está rara hoy.', '¡Me aburrooo!'], noche: ['No puedo dormir...', '¿Tú crees que los piratas duermen?'] },
+      greet: c => c.aff >= 3 ? pick(['¡Capitán!', '¡Mi capitán!']) : { dia: ['¡Eh!', '¿Ya te has despertado del todo?'], tarde: ['¿Me llevas al muelle? ¿Porfa?', '¡Por fin vuelves!'], noche: ['¿Tú tampoco puedes dormir?', 'Shh, que mamá se despierta.'] }[c.tod],
+      first: L('familia', `Mi hermano: Corso ${fam}`, 'Once años. Me sigue a todas partes y dibuja barcos en todas las paredes.'),
       topics: [
-        { t: '¿Qué dibujas?', a: ['Barcos. Este es el mío. Va a ser más grande que el del puerto.', 'Y este de aquí eres tú. Eres el capitán. Bueno, segundo capitán.'] },
-        { t: '¿Te acuerdas de papá?', a: ['Yo era muy pequeño... Solo me acuerdo de una voz.', 'Pero mamá guarda algo en el cofre de su cuarto. La he visto abrirlo de noche.'], learn: [['familia', 'El cofre de mamá', 'Corso dice que mamá abre de noche un cofre que guarda en su cuarto.']] },
-        { t: 'Algún día me iré a navegar.', a: n => n ? ['Ya me lo dijiste.', '...Prometiste que me llevarías.'] : ['¿En serio? ¿Y me llevarás?', '¡Prométemelo!'], learn: () => [['familia', 'Una promesa', 'Le prometí a Corso que algún día me lo llevaría a navegar.']] },
+        { id: 'dibujos', hideAfter: 2, ask: '¿Qué dibujas?', a: c => c.n === 0 ? ['Barcos. Este es el mío. Va a ser más grande que el del puerto.', 'Y este de aquí eres tú. Eres el capitán. Bueno, segundo capitán.'] : ['¡Hoy he dibujado una medusa! Como la de la bandera. Con muchos brazos.'], aff: c => c.n === 0 ? 1 : 0 },
+        { id: 'papa', once: true, ask: { def: '¿Te acuerdas de papá?', compasivo: '¿Echas de menos a papá?' }, a: () => ['Yo era muy pequeño... Solo me acuerdo de una voz que cantaba.', 'Pero mamá guarda algo en el cofre de su cuarto. La he visto abrirlo de noche.'], learn: L('familia', 'El cofre de mamá', 'Corso dice que mamá abre de noche un cofre que guarda en su cuarto.') },
+        { id: 'navegar', once: true, ask: { def: 'Algún día me iré a navegar.', temerario: 'Algún día tendré mi propio barco.', ambicioso: 'Algún día voy a ser el pirata más famoso del mar.' }, a: () => ['¿En serio? ¿Y me llevarás?', '¡Prométemelo!'] },
+        { id: 'prometo', once: true, need: () => asked('corso', 'navegar') && !asked('corso', 'pequeno'), ask: 'Te lo prometo.', a: () => ['(Corso te abraza tan fuerte que casi te tira.)', '¡Lo has prometido! ¡Ya no vale echarse atrás!'], aff: () => 2, learn: L('familia', 'Una promesa', 'Le prometí a Corso que algún día me lo llevaría a navegar.') },
+        { id: 'pequeno', once: true, need: () => asked('corso', 'navegar') && !asked('corso', 'prometo'), ask: 'Todavía eres muy pequeño, Corso.', a: () => ['¡No soy pequeño! ¡Tengo once años!', '(Se va a la ventana y no te mira.)'], aff: () => -1 },
+        { id: 'muelle', once: true, ask: '¿Has ido a ver el barco?', a: () => ['¡No! Mamá no me deja.', 'Pero desde la ventana se ve la bandera. Tiene una medusa con... con muchos brazos.'] },
       ] },
-    { id: 'brin', scene: 'town', at: [3.2, 24.6], sprite: 'viejo', dir: 'down', name: 'Viejo Brin', barks: ['Hoy no pican.', 'Esa bandera... no me gusta nada.', 'El mar se pone nervioso con barcos así.'],
-      hello: () => S.asked.brin ? 'Sigue sin picar nada.' : `Ah, el chico de Marla. ¿Vienes a ver el barco negro, como todos?`,
-      first: [['gente', 'Viejo Brin', 'Pescador del muelle. Vive en una choza sobre pilotes.']],
+    { id: 'brin', scene: 'town', at: [3.2, 24.6], sprite: 'viejo', dir: 'down', name: 'Viejo Brin',
+      barks: { dia: ['Hoy no pican.', 'Mar en calma, pescador en la cama.'], tarde: ['Esa bandera... no me gusta nada.', 'El mar se pone nervioso con barcos así.'], noche: ['De noche el mar habla. Hoy no dice nada bueno.'] },
+      greet: c => c.n === 0 ? 'Ah, el chico de Marla. ¿Vienes a ver el barco negro, como todos?' : c.aff >= 2 ? pick(['Siéntate, chico.', 'Tú otra vez. Bien.']) : { dia: ['Buenos días, si lo son.', 'Sigue sin picar nada.'], tarde: ['Sigue sin picar nada.', '¿Qué quieres, chico?'], noche: ['¿Qué haces aquí a estas horas? El muelle de noche no es para chiquillos.'] }[c.tod],
+      first: L('gente', 'Viejo Brin', 'Pescador del muelle. Vive en una choza sobre pilotes.'),
       topics: [
-        { t: 'Esa bandera, ¿la conoces?', a: ['Una medusa. La vi una vez, hace veinte años. Aquel invierno el mar se tragó tres barcas.', 'Y algo más se fue de Kalé aquel invierno. Pero eso no me toca contarlo a mí.'], learn: [['rumores', 'La bandera de la medusa', 'Brin la vio hace veinte años, el invierno en que el mar se tragó tres barcas.']] },
-        { t: '¿Conociste a mi padre?', when: () => knows('Mi padre') || S.tag('padre'), a: ['(Brin tira de la caña sin mirarte.)', 'Pregúntale a tu madre. Si ella no te lo cuenta, tendrá sus motivos.'] },
-        { t: '¿Necesitas algo?', a: ['Que ese barco se vaya. Y una red nueva. Lo primero no depende de ti.'] },
+        { id: 'redes', hideAfter: 2, ask: '¿Te echo una mano con las redes?', a: c => c.n === 0 ? ['(Te pasa un extremo de la red sin decir nada. Trabajáis un rato en silencio.)', 'Tienes buenas manos. Como... Bueno. Tienes buenas manos.'] : ['Por hoy ya está. Gracias, chico.'], aff: c => c.n === 0 ? 2 : 0 },
+        { id: 'bandera', hideAfter: 2, ask: { def: 'Esa bandera, ¿la conoces?', temerario: 'Vamos, Brin. Tú sabes algo de esa bandera.' },
+          a: c => c.n === 0 ? ['Una medusa. La vi una vez, hace veinte años. Aquel invierno el mar se tragó tres barcas.', 'Y algo más se fue de Kalé aquel invierno. Pero eso no me toca contarlo a mí.'] : c.aff >= 2 ? ['(Brin suspira.)', 'Tu padre se fue la misma noche que se fue ese barco. Ya está. Ya lo he dicho.'] : ['Ya te he dicho lo que tenía que decir. El resto, pregúntaselo a tu madre.'],
+          learn: c => c.n === 0 ? L('rumores', 'La bandera de la medusa', 'Brin la vio hace veinte años, el invierno en que el mar se tragó tres barcas.') : c.aff >= 2 ? L('familia', 'Papá y la medusa', 'Según Brin, papá se fue la misma noche que el barco de la medusa, hace veinte años.') : [] },
+        { id: 'padre', hideAfter: 2, need: () => knows('Mi padre') || S.tag('padre'), ask: '¿Conociste a mi padre?', a: c => c.aff >= 2 ? ['Lo conocí. Pescaba conmigo en este mismo muelle.', 'Era el único que leía el cielo mejor que yo.'] : ['(Brin tira de la caña sin mirarte.)', 'Pregúntale a tu madre. Si no te lo cuenta, tendrá sus motivos.'], learn: c => c.aff >= 2 ? L('familia', 'Papá pescaba con Brin', 'Brin dice que papá pescaba con él en el muelle y que leía el cielo mejor que nadie.') : [] },
+        { id: 'mapas', once: true, need: () => knows('Kalé no está en los mapas'), ask: 'Una cartógrafa dice que Kalé no sale en los mapas de la Marina.', a: () => ['Claro que no sale. Alguien se encargó de que no saliera.', 'Y ese alguien lo pagó caro.'], learn: L('rumores', 'Alguien borró Kalé', 'Brin dice que alguien se encargó de que Kalé no saliera en los mapas. Y que lo pagó caro.') },
       ] },
-    { id: 'lin', scene: 'town', at: [31.6, 23.8], sprite: 'navegante', dir: 'up', name: 'Lin', barks: ['Curioso...', '¿Quién pondría un ancla así en medio de una plaza?'],
-      hello: () => S.asked.lin ? '¿Otra vez tú? Bien, me vendrá bien alguien que conozca la isla.' : '¿Sabes quién dejó esta ancla aquí?',
-      first: [['gente', 'Lin', 'Cartógrafa de paso. Le interesa el ancla de la plaza.']],
-      topics: [{ t: '¿Qué buscas en Kalé?', a: ['En las cartas de la Marina, Kalé ni siquiera tiene nombre. Las islas sin nombre suelen esconder algo.'], learn: [['rumores', 'Kalé no está en los mapas', 'Según Lin, en las cartas de la Marina la isla no tiene nombre.']] },
-        { t: '¿Cómo llegaste?', a: ['En el mismo barco que trae la sal cada mes. Me voy en el próximo... o en el que salga antes.'] }] },
-    { id: 'rosa', scene: 'town', at: [26.8, 24.4], sprite: 'pescadora', dir: 'right', name: 'Rosa', chat: true, barks: ['Hoy el pescado está caro.', '¡Fresco, recién salido del agua!'] },
-    { id: 'pura', scene: 'town', at: [28.1, 24.4], sprite: 'vecina', dir: 'left', name: 'Doña Pura', chat: true, barks: ['En mis tiempos esto no pasaba.', `¿Y tu madre, cómo está?`] },
-    { id: 'mar1', scene: 'town', route: [[42.5, 15.2], [42.5, 22.6], [35, 22.6], [31.5, 26.8], [35, 22.6], [42.5, 22.6]], speed: 32, sprite: 'marine', name: 'Marine', barks: ['Circula, chaval.', 'Orden del capitán: nadie se acerca al barco negro.', 'Hace demasiado calor para este uniforme.'],
-      hello: () => 'No tengo tiempo para charlas. Hay un barco pirata fondeado frente al puerto.', topics: [{ t: '¿Qué buscan los piratas?', a: ['Si lo supiera no estaría patrullando. Si ves a alguien con un garfio, avisa al destacamento.'], learn: [['rumores', 'La Marina vigila', 'Buscan a alguien con un garfio.']] }] },
-    { id: 'mara', scene: 'taberna', at: [8, 2.3], sprite: 'tabernera', dir: 'down', name: 'Mara', barks: ['¡Arriba esas jarras!', 'Hoy no fío.'],
-      hello: () => S.asked.mara ? '¿Otra?' : '¿Lo de siempre? Hoy no fío, que la Marina anda rara.', first: [['gente', 'Mara', 'Tabernera de El Ancla Seca. Se entera de todo.']],
-      topics: [{ t: '¿Qué se cuenta hoy?', a: ['Que el del rincón lleva toda la mañana preguntando por alguien de Kalé.', 'No ha dicho por quién. Pero ha dicho tu apellido dos veces.'], learn: [['rumores', 'El del garfio pregunta', `Según Mara, el del rincón ha preguntado por los ${fam}.`]] },
-        { t: '¿Quién es el del rincón?', a: ['"Garra" Dorne. El capitán del barco negro. Paga bien y mira mal.'] }] },
-    { id: 'dorne', scene: 'taberna', at: [14.2, 11.2], sprite: 'capitan', dir: 'left', name: '"Garra" Dorne', barks: ['Krakaka...', 'Esta isla huele a pescado y a miedo.'],
-      hello: () => S.asked.dorne ? 'Krakaka... ¿Otra vez tú?' : `Krakaka... ¿Y tú qué miras, mocoso? Espera. Esa cara... ¿Eres un ${fam}?`,
-      first: [['gente', '"Garra" Dorne', 'Capitán de la bandera de la medusa. Me reconoció por la cara.']],
-      topics: [{ t: '¿Qué buscas en Kalé?', a: ['Algo que es mío. Lo dejé aquí hace veinte años y alguien lo ha guardado muy bien.'] }, { t: '¿Conoces a mi familia?', a: ['Conocí a alguien con tu cara. Dile a tu madre que Dorne ha vuelto. Ella sabrá.'], learn: [['familia', 'Dorne conoce a mamá', 'Dorne me reconoció por la cara y dijo que mamá sabría quién es.']] }] },
+    { id: 'lin', scene: 'town', at: [31.6, 23.8], sprite: 'navegante', dir: 'up', name: 'Lin',
+      barks: { dia: ['Buena luz para dibujar.', 'Curioso...'], tarde: ['¿Quién pondría un ancla así en medio de una plaza?'], noche: ['Con estas estrellas se podría fijar la posición exacta de Kalé.'] },
+      greet: c => c.n === 0 ? '¿Sabes quién dejó esta ancla aquí? No consta en ningún registro.' : pick(['Ah, mi guía local.', '¿Traes algo interesante?', 'Hola otra vez.']),
+      first: L('gente', 'Lin', 'Cartógrafa de paso. Le interesa el ancla de la plaza.'),
+      topics: [
+        { id: 'busca', once: true, ask: '¿Qué buscas en Kalé?', a: () => ['En las cartas de la Marina, Kalé ni siquiera tiene nombre. Una isla con puerto, faro y taberna... y sin nombre.', 'Las islas sin nombre suelen esconder algo.'], learn: L('rumores', 'Kalé no está en los mapas', 'Según Lin, en las cartas de la Marina la isla no tiene nombre.') },
+        { id: 'llegar', once: true, ask: '¿Cómo llegaste?', a: () => ['En el barco que trae la sal cada mes. Me iré en el próximo... o en el que salga antes.'] },
+        { id: 'borrar', once: true, need: () => knows('Alguien borró Kalé'), ask: '¿Por qué alguien borraría una isla de los mapas?', a: () => ['Para esconder algo. O a alguien.', '(Lo anota en su cuaderno.) Interesante. Muy interesante.'] },
+        { id: 'cadena', once: true, need: () => knows('Mucha cadena'), ask: 'Los del barco negro compraron cadena. Mucha.', a: () => ['¿Cadena? (Mira el ancla de la plaza.)', 'Esa ancla pesa más que un barco. Hace falta mucha cadena para moverla.'], learn: L('rumores', 'Quieren levantar el ancla', 'Lin cree que los del barco negro quieren levantar el ancla de la plaza.') },
+      ] },
+    { id: 'rosa', scene: 'town', at: [26.8, 24.4], sprite: 'pescadora', dir: 'right', name: 'Rosa', chat: true,
+      barks: { dia: ['¡Fresco, recién salido del agua!', 'Hoy el pescado está caro.'], tarde: ['A mitad de precio, que se pone malo.'], noche: ['Ya está bien por hoy.'] },
+      greet: () => pick(['¿Vas a comprar o a mirar?', '¡Hombre, el de Marla!']), topics: [{ id: 'tomas', once: true, ask: '¿Tu marido no sale a faenar?', a: () => ['Mi Tomás dice que con ese barco ahí fuera no se le ha perdido nada en el mar.', 'Veinte años lleva diciendo que se jubila. Hoy por fin tiene excusa.'] }] },
+    { id: 'pura', scene: 'town', at: [28.1, 24.4], sprite: 'vecina', dir: 'left', name: 'Doña Pura', chat: true,
+      barks: { dia: ['En mis tiempos esto no pasaba.', '¿Y tu madre, cómo está?'], tarde: ['Qué calor, Señor.'], noche: ['A estas horas, a casa.'] },
+      greet: c => c.n === 0 ? '¡Ay, el hijo de Marla! Cada día te pareces más a... (se calla) ...a tu madre, claro.' : pick(['¿Y tu madre?', 'Dale recuerdos a Marla.']),
+      topics: [{ id: 'parecido', once: true, need: () => (S.talks.pura || 0) >= 1, ask: 'Ibas a decir que me parezco a alguien.', a: () => ['¿Yo? No, no. A tu madre. Igualito.', '(Mira a Rosa. Rosa mira al suelo.)'], learn: L('familia', 'Me parezco a alguien', 'Doña Pura casi dijo a quién me parezco. Se calló a tiempo.') }] },
+    { id: 'mar1', scene: 'town', route: [[42.5, 15.2], [42.5, 22.6], [35, 22.6], [31.5, 26.8], [35, 22.6], [42.5, 22.6]], speed: 32, sprite: 'marine', name: 'Marine',
+      barks: { dia: ['Circula, chaval.', 'Orden del capitán: nadie se acerca al barco negro.'], tarde: ['Hace demasiado calor para este uniforme.'], noche: ['¿Qué haces en la calle? A casa.'] },
+      greet: c => c.n === 0 ? 'No tengo tiempo para charlas. Hay un barco pirata fondeado frente al puerto.' : pick(['¿Otra vez tú?', 'Circula.']),
+      topics: [{ id: 'buscan', once: true, ask: '¿Qué buscan los piratas?', a: () => ['Si lo supiera no estaría patrullando. Si ves a alguien con un garfio, avisa al destacamento.'], learn: L('rumores', 'La Marina vigila', 'Buscan a alguien con un garfio.') },
+        { id: 'detener', once: true, need: () => knows('Dorne tiene recompensa'), ask: { def: 'Si Dorne tiene recompensa, ¿por qué no lo detenéis?', temerario: '¿Y a qué esperáis para detener a Dorne?' }, a: () => ['¿Con seis hombres y un cañón oxidado? Esperamos refuerzos de Loguetown.', 'Y hasta entonces, nadie hace nada raro. ¿Entendido?'], learn: L('rumores', 'La Marina espera refuerzos', 'El destacamento de Kalé solo tiene seis hombres y espera refuerzos de Loguetown.') }] },
+    { id: 'mara', scene: 'taberna', at: [8, 2.3], sprite: 'tabernera', dir: 'down', name: 'Mara',
+      barks: { dia: ['Aún no ha llegado el vino.', 'Hoy no fío.'], tarde: ['¡Arriba esas jarras!'], noche: ['Esta noche hay más piratas que clientes.'] },
+      greet: c => c.n === 0 ? '¿Lo de siempre? Hoy no fío, que la Marina anda rara.' : pick(['¿Qué te pongo?', '¿Otra?', 'Dime, que tengo prisa.']),
+      first: L('gente', 'Mara', 'Tabernera de El Ancla Seca. Se entera de todo.'),
+      topics: [
+        { id: 'cuenta', once: true, ask: '¿Qué se cuenta hoy?', a: () => ['Que el del rincón lleva toda la mañana preguntando por alguien de Kalé.', 'No ha dicho por quién. Pero ha dicho tu apellido dos veces.'], learn: L('rumores', 'El del garfio pregunta', `Según Mara, el del rincón ha preguntado por los ${fam}.`) },
+        { id: 'quien', once: true, ask: '¿Quién es el del rincón?', a: () => ['"Garra" Dorne. El capitán del barco negro. Paga bien y mira mal.'] },
+        { id: 'cocina', once: true, need: () => S.of.cocinero >= 3, ask: 'Si necesitas ayuda en la cocina...', a: () => ['Siempre fuiste el mejor pinche que tuve.', 'Hoy no, que hay mucho pirata suelto. Mañana, si el pueblo sigue en pie.'], aff: () => 1 },
+      ] },
+    { id: 'dorne', scene: 'taberna', at: [14.2, 11.2], sprite: 'capitan', dir: 'left', name: '"Garra" Dorne',
+      barks: { dia: ['Krakaka...', 'Esta isla huele a pescado y a miedo.'], tarde: ['Krakaka...'], noche: ['La noche es de los piratas, mocosos.'] },
+      greet: c => c.n === 0 ? `Krakaka... ¿Y tú qué miras, mocoso? Espera. Esa cara... ¿Eres un ${fam}?` : pick(['Krakaka... ¿Otra vez tú?', `El mocoso de los ${fam}. Siéntate, si te atreves.`]),
+      first: L('gente', '"Garra" Dorne', 'Capitán de la bandera de la medusa. Me reconoció por la cara.'),
+      topics: [
+        { id: 'busca', once: true, ask: '¿Qué buscas en Kalé?', a: () => ['Algo que es mío. Lo dejé aquí hace veinte años y alguien lo ha guardado muy bien.'] },
+        { id: 'familia', once: true, ask: { def: '¿Conoces a mi familia?', temerario: 'Deja en paz a mi familia.', cauto: '¿De qué conoces a los ' + fam + '?' },
+          a: c => c.tone === 'temerario' ? ['Krakaka. Tiene dientes, el mocoso. Igual que su padre.', 'Dile a tu madre que Dorne ha vuelto. Ella sabrá.'] : ['Conocí a alguien con tu cara.', 'Dile a tu madre que Dorne ha vuelto. Ella sabrá.'],
+          learn: c => [...L('familia', 'Dorne conoce a mamá', 'Dorne me reconoció por la cara y dijo que mamá sabría quién es.'), ...(c.tone === 'temerario' ? L('familia', 'Dorne conoció a papá', 'Dorne dijo que tengo los mismos dientes que mi padre.') : [])] },
+        { id: 'porque', once: true, need: () => knows('El del garfio pregunta'), ask: '¿Por qué preguntas por mi familia?', a: () => ['Porque tu familia tiene algo mío.', 'Y si no me lo devuelven por las buenas... Krakaka. Kalé es una isla muy pequeña.'] },
+      ] },
+    { id: 'gaspar', scene: 'tienda', at: [4, 4.45], sprite: 'maton', dir: 'down', name: 'Gaspar',
+      barks: { dia: ['¡No toques eso!', 'Brea, cuerda, anzuelos...'], tarde: ['Se acerca la hora de cerrar.'], noche: ['Cerrado.'] },
+      greet: c => c.n === 0 ? 'Aparejos Gaspar. Si no compras, no toques.' : pick(['¿Qué quieres?', 'Tú otra vez.']),
+      first: L('gente', 'Gaspar', 'Dueño de la tienda de aparejos. Gruñón, pero sabe todo lo que se compra y se vende en Kalé.'),
+      topics: [
+        { id: 'vende', once: true, ask: '¿Qué vendes?', a: () => ['Cuerda, redes, anzuelos, brea, velas. Lo que haga falta para no hundirse.'] },
+        { id: 'piratas', once: true, ask: '¿Los del barco negro te han comprado algo?', a: () => ['Buenos clientes, los piratas. Pagan sin regatear.', 'Esta mañana se llevaron cien brazas de cadena gruesa. ¿Para qué quiere tanta cadena un barco fondeado?'], learn: L('rumores', 'Mucha cadena', 'Gaspar les vendió a los del barco negro cien brazas de cadena gruesa.') },
+        { id: 'ancla', once: true, need: () => knows('Quieren levantar el ancla'), ask: '¿Y si quieren levantar el ancla de la plaza?', a: () => ['(Gaspar deja de contar monedas.)', 'Esa ancla no se mueve. Mi abuelo decía que si alguien la levanta, Kalé se hunde.', 'Tonterías de viejos. ...Supongo.'], learn: L('kale', 'La leyenda del ancla', 'Según el abuelo de Gaspar, si alguien levanta el ancla de la plaza, Kalé se hunde.') },
+      ] },
+    { id: 'medico', scene: 'medico', at: [6.2, 5.6], sprite: 'padre', dir: 'down', name: 'Doctor Ansel',
+      barks: { dia: ['Siguiente.', 'Lávate las manos antes de tocar nada.'], tarde: ['Qué día más largo.'], noche: ['Las urgencias, por la puerta de atrás.'] },
+      greet: c => c.n === 0 ? (S.of.medico >= 3 ? `¡${nom}! Mi mejor ayudante. ¿Vienes a echarme una mano?` : 'Buenos días. ¿Te duele algo?') : pick(['¿Otra vez por aquí?', 'Siéntate, siéntate.']),
+      first: L('gente', 'Doctor Ansel', 'El médico de Kalé. Tranquilo y observador.'),
+      topics: [
+        { id: 'herido', once: true, ask: '¿Ha venido alguien del barco negro?', a: () => ['Anoche me trajeron a uno de esos piratas con un corte en el brazo.', 'Tenía la medusa tatuada. Y una cicatriz muy vieja, de las que hace un garfio.'], learn: L('rumores', 'El pirata herido', 'El médico curó anoche a un pirata con la medusa tatuada y una cicatriz de garfio.') },
+        { id: 'ayudar', once: true, need: () => S.of.medico >= 3, ask: '¿Necesitas ayuda?', a: () => ['Siempre. Pásame esas vendas. (Trabajáis un rato.)', 'Tienes buen pulso. Ojalá te quedaras en Kalé.'], aff: () => 2 },
+        { id: 'padre', once: true, need: () => knows('Papá y la medusa'), ask: '¿Conociste a mi padre?', a: () => ['(El doctor deja la pluma.)', 'Le curé una mano la noche antes de que se fuera. Una herida de garfio.', 'No me preguntes más. Le prometí a tu madre que no hablaría.'], learn: L('familia', 'La herida de papá', 'El doctor le curó a papá una herida de garfio la noche antes de que se fuera.') },
+      ] },
+    { id: 'nell', scene: 'panaderia', at: [3.2, 2.2], sprite: 'hermana', dir: 'down', name: 'Nell',
+      barks: { dia: ['¡Pan recién hecho!', '¡Cuidado, que quema!'], tarde: ['Hoy lo he vendido todo.'], noche: [''] },
+      greet: c => c.n === 0 ? '¡Hola! ¿Pan del día? Es lo último que queda.' : pick(['¡Hola otra vez!', '¿Vienes a por más?']),
+      first: L('gente', 'Nell', 'La hija del panadero. Lo sabe todo, y lo cuenta todo.'),
+      topics: [
+        { id: 'trabajo', once: true, ask: '¿Mucho trabajo hoy?', a: () => ['¡Los del barco negro! Vinieron a por pan para treinta.', 'Pagaron con monedas viejas, de las de antes. Mi padre dice que esas monedas no se ven desde hace veinte años.'], learn: L('rumores', 'Monedas viejas', 'Los piratas pagaron el pan con monedas que no circulan desde hace veinte años.') },
+        { id: 'veinte', once: true, need: () => knows('Monedas viejas') && knows('La bandera de la medusa'), ask: 'Veinte años... como la bandera.', a: () => ['¡Uy! ¿Tú crees?', '(Se ríe, pero se queda mirando hacia el puerto.)'] },
+      ] },
   ];
 }
 const OBJECTS = () => [
   { scene: 'town', at: [30, 21.9], label: 'Leer', text: '«Aquí echó el ancla el primer barco que llegó a Kalé. Que nadie la levante.» Debajo, alguien ha rayado: «Ya veremos».', learn: ['kale', 'El Ancla de Kalé', 'La placa dice que nadie debe levantarla. Alguien rayó debajo: «Ya veremos».'] },
   { scene: 'town', at: [35.5, 19.3], label: 'Leer', text: 'SE BUSCA: «Garra» Dorne. 8.000.000 de berries. Debajo, un papel nuevo de la Marina: «Prohibido acercarse al barco fondeado».', learn: ['rumores', 'Dorne tiene recompensa', 'El tablón de la Marina ofrece 8.000.000 de berries por «Garra» Dorne.'] },
-  { scene: 'casa', at: [4.95, 5.6], label: 'Mirar', text: 'El cofre de mamá. Cerrado con llave. Nunca lo has visto abierto.', learn: ['familia', 'El cofre de mamá', 'En el cuarto de mamá hay un cofre cerrado con llave.'] },
+  { scene: 'casa', at: [1.05, 5.6], label: 'Mirar', text: 'El cofre de mamá. Cerrado con llave. Nunca lo has visto abierto.', learn: ['familia', 'El cofre de mamá', 'En el cuarto de mamá hay un cofre cerrado con llave.'] },
   { scene: 'casa', at: [4.8, 1.4], label: 'Mirar', text: 'Un retrato boca abajo sobre la cómoda. Al levantarlo, está vacío: alguien sacó la imagen y dejó solo el marco.', learn: ['familia', 'El retrato vacío', 'Sobre la cómoda de mamá hay un marco boca abajo, sin la imagen.'] },
   { scene: 'brin', at: [3.7, 0.9], label: 'Mirar', text: 'Un mapa viejo y descolorido. Alguien marcó una cruz lejos de cualquier isla conocida.', learn: ['rumores', 'La cruz del mapa de Brin', 'En casa de Brin hay un mapa con una cruz lejos de cualquier isla conocida.'] },
 ];
 const CHAT = [['pura', '¿Has visto el barco que entró anoche?'], ['rosa', 'Bandera negra. Mi Tomás no quiere salir a faenar.'], ['pura', 'Dicen que buscan a alguien.'], ['rosa', 'En Kalé no hay nada que buscar... salvo lo de siempre.'], ['pura', 'Calla, que te oyen.']];
-const CLOSED = { tienda: 'La puerta está cerrada. Un cartel: «Vuelvo enseguida. Gaspar».', medico: 'Llamas, pero nadie contesta.', faro: 'La puerta del faro está cerrada con llave.', panaderia: 'Huele a pan, pero la puerta está atrancada.', marina: 'Un marine de guardia te corta el paso: «Solo personal de la Marina».', pura: 'Es la casa de Doña Pura. No está.', rosa: 'Es la casa de Rosa. No hay nadie.' };
+// lo que encuentras en la puerta de un sitio cerrado
+const CLOSED = { faro: 'La puerta del faro está cerrada con llave.', marina: 'Un marine de guardia te corta el paso: «Solo personal de la Marina».', pura: 'Es la casa de Doña Pura. No está.', rosa: 'Es la casa de Rosa. No hay nadie.' };
+const LOCKED = new Set(['faro', 'marina']);
+const horas = r => r.map(([a, b]) => `de ${a} a ${b}`).join(' y ');
+const openNow = b => !b.ext.horario || b.ext.horario.some(([a, z]) => hourNow() >= a && hourNow() < z);
 
 // =====================================================================
 // DIARIO
@@ -187,14 +266,17 @@ function closeDiary() { const d = document.querySelector('.diary'); d && d.remov
 // EL JUEGO
 // =====================================================================
 const cv = document.getElementById('game'), g = cv.getContext('2d');
-const G = { scene: 'town', x: 0, y: 0, dir: 'down', walk: 0, moving: false, paused: true, keys: {}, VW: 640, VH: 360, scale: 2, minutes: 8 * 60, talking: null, lastT: 0, bubbles: [], chat: null, ints: {} };
+const G = { scene: 'town', x: 0, y: 0, dir: 'down', walk: 0, moving: false, paused: true, keys: {}, VW: 640, VH: 360, scale: 2, minutes: 8 * 60, talking: null, lastT: 0, bubbles: [], chat: null, zoom: 1, run: false };
 let PEOPLE = [];
 const hourNow = () => (G.minutes % 1440) / 60;
-function fitGame() { const w = innerWidth, h = innerHeight; G.VW = Math.min(640, Math.max(300, Math.round(w / 1.6))); G.VH = Math.round(G.VW * h / w); G.scale = w / G.VW; cv.width = G.VW; cv.height = G.VH; cv.style.width = w + 'px'; cv.style.height = G.VH * G.scale + 'px'; cv.style.left = '0'; cv.style.top = ((h - G.VH * G.scale) / 2) + 'px'; g.imageSmoothingEnabled = false; }
+function fitGame() { const w = innerWidth, h = innerHeight; G.VW = Math.round(Math.min(640, Math.max(300, w / 1.6)) / G.zoom); G.VH = Math.round(G.VW * h / w); G.scale = w / G.VW; cv.width = G.VW; cv.height = G.VH; cv.style.width = w + 'px'; cv.style.height = G.VH * G.scale + 'px'; cv.style.left = '0'; cv.style.top = ((h - G.VH * G.scale) / 2) + 'px'; g.imageSmoothingEnabled = false; }
 addEventListener('resize', () => { fitBg(); if (!cv.hidden) fitGame(); });
-const interior = id => G.ints[id] || (G.ints[id] = buildInterior(PLANO.edificios.find(b => b.id === id)));
-const sceneOf = id => id === 'town' ? null : interior(id);
-const toPx = (scene, [x, y]) => scene === 'town' ? [x * T, y * T] : [interior(scene).X(x), interior(scene).Y(y)];
+// edificios por dentro: cada uno se arma una vez, con una escena por cuarto
+const BLD = {}, SC = {};
+const bld = id => { if (!BLD[id]) { BLD[id] = buildInteriors(PLANO.edificios.find(b => b.id === id)); BLD[id].scenes.forEach(s => SC[s.id] = s); } return BLD[id]; };
+const interior = sid => SC[sid] || (bld(sid.split(':')[0]), SC[sid]);
+// "casa" + un punto de la planta → la escena donde cae y su posición en píxeles
+function place(scene, at) { if (scene === 'town') return ['town', [at[0] * T, at[1] * T]]; const s = bld(scene).sceneOfPt(at[0], at[1]); return [s.id, [s.X(at[0]), s.Y(at[1])]]; }
 const hit = (list, x, y) => list.some(([a, b, w, h]) => x >= a && x < a + w && y >= b && y < b + h);
 function walkableTown(x, y) {
   if (x < 8 || y < 8 || x > WORLD.w - 8 || y > WORLD.h - 8) return false;
@@ -206,17 +288,19 @@ function walkableTown(x, y) {
 }
 function segDist(a, b, x, y) { const dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / (dx * dx + dy * dy || 1))); return Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy); }
 function blocked(x, y) {
-  if (G.scene === 'town') return !walkableTown(x, y) || PEOPLE.some(n => n.scene === 'town' && Math.abs(n.x - x) < 10 && Math.abs(n.y - y) < 6);
-  const I = interior(G.scene); if (x < I.area[0] + 6 || x > I.area[0] + I.area[2] - 6 || y > I.h - 2) return true;
-  if (hit(I.walk, x, y)) return false; return hit(I.blocks, x, y) || PEOPLE.some(n => n.scene === G.scene && Math.abs(n.x - x) < 10 && Math.abs(n.y - y) < 6);
+  const crowd = PEOPLE.some(n => n.scene === G.scene && Math.abs(n.x - x) < 10 && Math.abs(n.y - y) < 6);
+  if (G.scene === 'town') return !walkableTown(x, y) || crowd;
+  const I = interior(G.scene); return x < WALL + 2 || x > I.w - WALL - 2 || y > I.h - WALL || hit(I.blocks, x, y) || crowd;
 }
-function fade(cb) { const f = document.getElementById('fadeov'); f.style.opacity = 1; setTimeout(() => { cb(); f.style.opacity = 0; }, 360); }
+function fade(cb) { const f = document.getElementById('fadeov'); f.style.opacity = 1; setTimeout(() => { cb(); f.style.opacity = 0; }, 330); }
 function enter(scene, [x, y], dir) { G.scene = scene; G.x = x; G.y = y; G.dir = dir; clearBubbles(); const pn = document.getElementById('placeName'); pn.textContent = scene === 'town' ? 'Kalé' : interior(scene).name; pn.style.opacity = 1; clearTimeout(pn._t); pn._t = setTimeout(() => pn.style.opacity = 0, 2600); }
+let OBJS = [];
 function startGame() {
   attract.on = false; keyHandler = null; show(''); app.classList.add('playing'); cv.hidden = false; document.getElementById('hud').hidden = false; fitGame();
-  PEOPLE = makePeople().map(n => { const [x, y] = n.route ? [0, 0] : toPx(n.scene, n.at); return { ...n, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
+  PEOPLE = makePeople().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
+  OBJS = OBJECTS().map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; });
   if (matchMedia('(pointer:coarse)').matches) document.getElementById('pad').hidden = false;
-  enter('casa', toPx('casa', [8.6, 4.2]), 'down'); G.paused = false; G.minutes = 8 * 60;
+  const [sc, at] = place('casa', [8.6, 4.2]); enter(sc, at, 'down'); G.paused = false; G.minutes = 8 * 60;
   const corso = PEOPLE.find(n => n.id === 'corso');
   setTimeout(() => say(corso, { lines: ['¡Por fin te despiertas! Mamá te está esperando en la cocina.', 'Y hay un barco negro en el puerto. ¡Un barco pirata de verdad!'] }), 600);
   requestAnimationFrame(loop);
@@ -224,18 +308,20 @@ function startGame() {
 // ---------- conversaciones ----------
 function face(canvas, sprite) { const c = canvas.getContext('2d'); c.imageSmoothingEnabled = false; c.clearRect(0, 0, 64, 64); c.drawImage(SHEETS[sprite], 0, ROW.down * 64, 64, 40, 0, 4, 64, 40); }
 function say(npc, conv) { G.talking = { npc, conv, i: 0 }; if (npc.x != null) { const dx = G.x - npc.x, dy = G.y - npc.y; npc.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); } renderTalk(); }
+const ctxOf = (npc, n) => ({ n, aff: aff(npc.id), tone: rasgo(), tod: tod(), h: hourNow() });
+const oneOf = (v, last) => { if (!Array.isArray(v)) return v; const opts = v.filter(x => x !== last); return pick(opts.length ? opts : v); };
 function talkTo(npc) {
-  const first = !S.asked[npc.id]; const lines = [npc.hello()]; S.asked[npc.id] = S.asked[npc.id] || {};
-  if (first) (npc.first || []).forEach(learn);
-  say(npc, { lines, topics: true });
+  const n = S.talks[npc.id] || 0, line = oneOf(npc.greet(ctxOf(npc, n)), npc._lastGreet); npc._lastGreet = line;
+  if (n === 0) (npc.first || []).forEach(learn); S.talks[npc.id] = n + 1; S.asked[npc.id] = S.asked[npc.id] || {};
+  say(npc, { lines: [line], topics: true });
 }
-function topicsOf(npc) { return (npc.topics || []).filter(t => !t.when || t.when()); }
+function topicsOf(npc) { return (npc.topics || []).filter(t => (!t.need || t.need()) && !(t.once && asked(npc.id, t.id)) && !(t.hideAfter && asked(npc.id, t.id) >= t.hideAfter)); }
 function renderTalk() {
   const ov = document.getElementById('overlays'); let box = ov.querySelector('.dlg'); const t = G.talking; document.getElementById('hud').classList.toggle('talking', !!t);
   if (!t) { box && box.remove(); return; }
   if (!box) { box = document.createElement('div'); box.className = 'dlg glass'; box.setAttribute('role', 'dialog'); ov.appendChild(box); }
-  const last = t.i >= t.conv.lines.length - 1, tops = last && t.conv.topics ? topicsOf(t.npc) : [], ch = last && (tops.length || t.conv.choices);
-  const opts = t.conv.choices || (tops.length ? [...tops.map(x => x.t), 'Nada, me voy.'] : []);
+  const last = t.i >= t.conv.lines.length - 1, tops = last && t.conv.topics ? topicsOf(t.npc) : [], ch = last && t.conv.topics;
+  const opts = ch ? [...tops.map(x => voz(x.ask)), tops.length ? 'Nada, me voy.' : 'Adiós.'] : [];
   box.innerHTML = `<div class="face"><canvas width="64" height="48" aria-hidden="true"></canvas></div><div><b class="nm">${t.npc.name || ''}</b><p>${t.conv.lines[t.i]}</p>${ch ? `<div class="ch">${opts.map((c, i) => `<button type="button" data-i="${i}">${c}</button>`).join('')}</div>` : ''}</div>${ch ? '' : '<span class="more">E / clic para seguir</span>'}`;
   face(box.querySelector('canvas'), t.npc.sprite || 'grumete');
   box.onclick = e => { const b = e.target.closest('button'); if (b) choose(+b.dataset.i); else if (!ch) advance(); };
@@ -243,43 +329,59 @@ function renderTalk() {
 }
 function choose(i) {
   const t = G.talking; if (!t) return;
-  if (t.conv.choices) { const c = t.conv.choices[i]; G.talking = null; renderTalk(); if (c.then) c.then(); return; }
   const tops = topicsOf(t.npc); if (i >= tops.length) { G.talking = null; renderTalk(); return; }
-  const tp = tops[i], asked = S.asked[t.npc.id], n = asked[tp.t] || 0; asked[tp.t] = n + 1;
-  const a = typeof tp.a === 'function' ? tp.a(n) : tp.a, l = typeof tp.learn === 'function' ? tp.learn(n) : tp.learn;
-  (l || []).forEach(learn); G.talking = { npc: t.npc, conv: { lines: a, topics: true }, i: 0 }; renderTalk();
+  const tp = tops[i], id = t.npc.id, n = asked(id, tp.id), c = ctxOf(t.npc, n);
+  const lines = tp.a(c), l = typeof tp.learn === 'function' ? tp.learn(c) : tp.learn, d = typeof tp.aff === 'function' ? tp.aff(c) : (tp.aff || 0);
+  S.asked[id][tp.id] = n + 1; S.aff[id] = aff(id) + d; (l || []).forEach(learn);
+  G.talking = { npc: t.npc, conv: { lines, topics: true }, i: 0 }; renderTalk();
 }
 function advance() { const t = G.talking; if (!t) return; if (t.i < t.conv.lines.length - 1) { t.i++; renderTalk(); } else if (!t.conv.topics) { (t.conv.learn || []).forEach(learn); G.talking = null; renderTalk(); } }
 function clearBubbles() { G.bubbles.forEach(b => b.el.remove()); G.bubbles = []; G.chat = null; }
-function bubble(npc, text, ms = 3200) { const el = document.createElement('div'); el.className = 'bubble'; el.textContent = text; document.getElementById('overlays').appendChild(el); G.bubbles.push({ npc, el, until: performance.now() + ms }); }
+function bubble(npc, text, ms = 3200) { if (!text) return; const el = document.createElement('div'); el.className = 'bubble'; el.textContent = text; document.getElementById('overlays').appendChild(el); G.bubbles.push({ npc, el, until: performance.now() + ms }); }
+const barkOf = n => { const b = Array.isArray(n.barks) ? n.barks : n.barks[tod()]; const line = oneOf(b, n._lastBark); n._lastBark = line; return line; };
 // ---------- interacción ----------
 function nearest() {
   let best = null, bd = 44;
-  for (const n of PEOPLE) if (n.scene === G.scene && (n.topics || n.hello)) { const d = Math.hypot(n.x - G.x, n.y - G.y); if (d < bd) { bd = d; best = { type: 'npc', n }; } }
-  for (const o of OBJECTS()) if (o.scene === G.scene) { const [x, y] = toPx(o.scene, o.at), d = Math.hypot(x - G.x, y - G.y); if (d < bd) { bd = d; best = { type: 'obj', o, x, y }; } }
+  for (const n of PEOPLE) if (n.scene === G.scene && n.greet) { const d = Math.hypot(n.x - G.x, n.y - G.y); if (d < bd) { bd = d; best = { type: 'npc', n }; } }
+  for (const o of OBJS) if (o.scene === G.scene) { const d = Math.hypot(o.x - G.x, o.y - G.y); if (d < bd) { bd = d; best = { type: 'obj', o, x: o.x, y: o.y }; } }
   if (G.scene === 'town') { for (const s of WORLD.doors) { const [dx, dy] = s.door; if (Math.abs(G.x - dx) < 18 && G.y > dy - 6 && G.y < dy + 26) return { type: 'door', s }; } }
-  else for (const ex of interior(G.scene).exits) if (hit([ex.r], G.x, G.y)) return { type: 'exit' };
+  else for (const d of interior(G.scene).doors) if (hit([d.r], G.x, G.y)) return { type: 'idoor', d };
   return best;
 }
+const note = text => say({ name: '', sprite: 'grumete' }, { lines: [text] });
 function interact() {
   if (G.talking) { if (!document.querySelector('.dlg .ch')) advance(); return; }
   const t = nearest(); if (!t) return;
   if (t.type === 'npc') talkTo(t.n);
   else if (t.type === 'obj') say({ name: '', sprite: 'grumete' }, { lines: [t.o.text], learn: t.o.learn ? [t.o.learn] : [] });
-  else if (t.type === 'door') { const id = t.s.id; if (['casa', 'taberna', 'brin'].includes(id)) fade(() => { const I = interior(id); enter(id, I.exits[0].at, 'up'); }); else say({ name: '', sprite: 'grumete' }, { lines: [CLOSED[id]] }); }
-  else fade(() => { const s = WORLD.doors.find(d => d.id === G.scene); enter('town', [s.door[0], s.door[1] + 18], 'down'); });
+  else if (t.type === 'door') { const b = t.s.b;
+    if (!b.entrable || !b.int || LOCKED.has(b.id)) return note(CLOSED[b.id] || 'Está cerrado.');
+    if (!openNow(b)) return note(`${b.n}. En la puerta, un cartel: «Abierto ${horas(b.ext.horario)}».`);
+    fade(() => { const e = bld(b.id).entrance, d = e.doors.find(d => d.to === 'town'), [at, dir] = e.doorArrival(...d.args); enter(e.id, at, dir); }); }
+  else if (t.d.to === 'town') fade(() => { const s = WORLD.doors.find(d => d.id === interior(G.scene).bid); enter('town', [s.door[0], s.door[1] + 18], 'down'); });
+  else fade(() => enter(t.d.to, t.d.at[0], t.d.at[1]));
 }
 document.addEventListener('keydown', e => { if (cv.hidden) return; const k = e.key.toLowerCase();
   if (document.querySelector('.diary')) { if (k === 'escape' || k === 'j') closeDiary(); return; }
-  if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd'].includes(k)) { G.keys[k] = true; e.preventDefault(); }
+  if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', 'shift'].includes(k)) { G.keys[k] = true; e.preventDefault(); }
   if (k === 'e' || k === ' ' || k === 'enter') { if (!e.target.closest || !e.target.closest('button')) interact(); e.preventDefault(); }
+  if (k === '+' || k === '=') zoom(1.15); if (k === '-' || k === '_') zoom(1 / 1.15);
   if (k === 'j' && !G.talking) openDiary(); });
 document.addEventListener('keyup', e => { G.keys[e.key.toLowerCase()] = false; });
+addEventListener('blur', () => { G.keys = {}; });
 document.getElementById('openDiary').onclick = () => openDiary();
 document.getElementById('actBtn').addEventListener('pointerdown', e => { e.preventDefault(); interact(); });
+document.getElementById('runBtn').addEventListener('click', e => { G.run = !G.run; e.currentTarget.setAttribute('aria-pressed', G.run); });
 document.querySelectorAll('#pad .pad button').forEach(b => { const d = { up: 'arrowup', down: 'arrowdown', left: 'arrowleft', right: 'arrowright' }[b.dataset.d];
   b.addEventListener('pointerdown', e => { e.preventDefault(); G.keys[d] = true; }); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, () => G.keys[d] = false)); });
 cv.addEventListener('click', () => { if (G.talking && !document.querySelector('.dlg .ch')) advance(); });
+// zoom: rueda, + y -, o dos dedos
+function zoom(f) { G.zoom = Math.max(.7, Math.min(2.4, G.zoom * f)); fitGame(); }
+addEventListener('wheel', e => { if (cv.hidden || document.querySelector('.diary')) return; e.preventDefault(); zoom(e.deltaY < 0 ? 1.1 : 1 / 1.1); }, { passive: false });
+let pinch = null;
+cv.addEventListener('touchstart', e => { if (e.touches.length === 2) pinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }, { passive: true });
+cv.addEventListener('touchmove', e => { if (e.touches.length === 2 && pinch) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); zoom(d / pinch); pinch = d; } }, { passive: true });
+cv.addEventListener('touchend', () => { pinch = null; });
 function where(pts, v, t) { let L = 0; const seg = []; for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length], l = Math.hypot(b[0] - a[0], b[1] - a[1]); seg.push([a, b, l]); L += l; }
   let d = (t * v) % L; for (const [a, b, l] of seg) { if (d <= l) { const f = d / l, dx = b[0] - a[0], dy = b[1] - a[1]; return [a[0] + dx * f, a[1] + dy * f, Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up')]; } d -= l; } return [pts[0][0], pts[0][1], 'down']; }
 // ---------- bucle ----------
@@ -288,12 +390,12 @@ function loop(now) {
   if (!G.paused && !G.talking) {
     let vx = 0, vy = 0; const K = G.keys; if (K.arrowleft || K.a) vx = -1; else if (K.arrowright || K.d) vx = 1; if (K.arrowup || K.w) vy = -1; else if (K.arrowdown || K.s) vy = 1;
     G.moving = !!(vx || vy);
-    if (G.moving) { const sp = 84 * dt * (vx && vy ? .7071 : 1), nx = G.x + vx * sp, ny = G.y + vy * sp;
+    if (G.moving) { const running = K.shift || G.run, sp = (running ? 175 : 112) * dt * (vx && vy ? .7071 : 1), nx = G.x + vx * sp, ny = G.y + vy * sp;
       if (!blocked(nx - 6, G.y) && !blocked(nx + 6, G.y)) G.x = nx; if (!blocked(G.x - 6, ny) && !blocked(G.x + 6, ny)) G.y = ny;
-      G.dir = vx < 0 ? 'left' : vx > 0 ? 'right' : vy < 0 ? 'up' : 'down'; G.walk += dt * 10; }
+      G.dir = vx < 0 ? 'left' : vx > 0 ? 'right' : vy < 0 ? 'up' : 'down'; G.walk += dt * (running ? 17 : 12); }
     G.minutes += dt * .8;
     for (const n of PEOPLE) { if (n.route) { n.t = (n.t || rnd() * 100) + dt; const [x, y, d] = where(n.route.map(([a, b]) => [a * T, b * T]), n.speed, n.t); n.x = x; n.y = y; n.dir = d; n.frame = 1 + Math.floor(n.t * 9) % 8; }
-      if (n.scene === G.scene && now > n.nextBark && !n.chat && Math.hypot(n.x - G.x, n.y - G.y) < 240) { bubble(n, pick(n.barks)); n.nextBark = now + 8000 + rnd() * 8000; } }
+      if (n.scene === G.scene && now > n.nextBark && !n.chat && Math.hypot(n.x - G.x, n.y - G.y) < 240) { bubble(n, barkOf(n)); n.nextBark = now + 8000 + rnd() * 8000; } }
     const pura = PEOPLE.find(n => n.id === 'pura');
     if (G.scene === 'town' && pura && !G.chat && Math.hypot(pura.x - G.x, pura.y - G.y) < 130 && !knows('Buscan a alguien')) G.chat = { i: 0, next: now };
     if (G.chat && now >= G.chat.next) { const line = CHAT[G.chat.i]; if (!line) { G.chat = null; learn(['rumores', 'Buscan a alguien', 'Las vecinas dicen que los del barco negro buscan a alguien. Y que en Kalé hay «lo de siempre».']); } else { bubble(PEOPLE.find(n => n.id === line[0]), line[1], 2600); G.chat.i++; G.chat.next = now + 2700; } }
@@ -310,7 +412,7 @@ function draw(now) {
   const toScr = (x, y) => [(x - cam[0]) * G.scale, (y - cam[1]) * G.scale + parseFloat(cv.style.top)];
   G.bubbles = G.bubbles.filter(b => { if (now > b.until || b.npc.scene !== G.scene) { b.el.remove(); return false; } const [x, y] = toScr(b.npc.x, b.npc.y - 58); b.el.style.left = x + 'px'; b.el.style.top = y + 'px'; return true; });
   const ov = document.getElementById('overlays'); let pr = ov.querySelector('.prompt'); const t = !G.talking && !G.paused && nearest();
-  if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'exit' ? 'Salir' : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
+  if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'idoor' ? (t.d.to === 'town' ? 'Salir' : 'Abrir') : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
     const [px, py] = t.type === 'npc' ? [t.n.x, t.n.y - 62] : t.type === 'obj' ? [t.x, t.y - 26] : t.type === 'door' ? [t.s.door[0], t.s.door[1] - 56] : [G.x, G.y - 62]; const [sx, sy] = toScr(px, py); pr.style.left = sx + 'px'; pr.style.top = sy + 'px'; } else if (pr) pr.remove();
   const m = Math.floor(G.minutes) % 1440; document.getElementById('hour').textContent = `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 }

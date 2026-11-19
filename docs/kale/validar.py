@@ -37,4 +37,45 @@ for b in B:
             if not(x in(0,I['w']) or y in(0,I['h'])):err.append(f"{b['id']}: ventana {w} no está en una pared exterior")
         for m in I['muebles']:
             if m[1]<0 or m[2]<0 or m[1]+m[3]>I['w']+.01 or m[2]+m[4]>I['h']+.01:err.append(f"{b['id']}: mueble {m[0]} se sale")
+
+# cuartos: sin superponerse, cada puerta une dos cuartos (o un cuarto con la calle) y todos se alcanzan desde la entrada
+def room_at(rooms,x,y):
+    return next((i for i,(n,rx,ry,rw,rh,f) in enumerate(rooms) if rx<x<rx+rw and ry<y<ry+rh),None)
+for b in B:
+    if 'int' not in b: continue
+    I=b['int'];rooms=I['cuartos']
+    for i,a in enumerate(rooms):
+        for c in rooms[i+1:]:
+            if a[1]<c[1]+c[3]-1e-6 and c[1]<a[1]+a[3]-1e-6 and a[2]<c[2]+c[4]-1e-6 and c[2]<a[2]+a[4]-1e-6:err.append(f"{b['id']}: se superponen {a[0]} y {c[0]}")
+    edges={};start=None
+    for x,y,o,ln,to in I['puertas']:
+        m=(x+ln/2,y) if o=='h' else (x,y+ln/2)
+        sides=[room_at(rooms,m[0],m[1]-.3),room_at(rooms,m[0],m[1]+.3)] if o=='h' else [room_at(rooms,m[0]-.3,m[1]),room_at(rooms,m[0]+.3,m[1])]
+        sides=[s for s in sides if s is not None]
+        if not sides:err.append(f"{b['id']}: la puerta {[x,y]} no da a ningún cuarto")
+        if len(sides)==1:start=sides[0]
+        if len(sides)==2:edges.setdefault(sides[0],set()).add(sides[1]);edges.setdefault(sides[1],set()).add(sides[0])
+    # cuartos sin pared entre ellos o con el mismo nombre cuentan como conectados
+    def covered(x1,y1,x2,y2):
+        return any((y1==y2 and wy1==wy2==y1 and min(wx1,wx2)<=x1 and max(wx1,wx2)>=x2) or (x1==x2 and wx1==wx2==x1 and min(wy1,wy2)<=y1 and max(wy1,wy2)>=y2) for wx1,wy1,wx2,wy2 in I['paredes'])
+    for i,a in enumerate(rooms):
+        for j,c in enumerate(rooms):
+            if i>=j:continue
+            link=a[0]==c[0]
+            for (p,q) in ((a,c),(c,a)):
+                if abs(p[1]+p[3]-q[1])<1e-6:
+                    lo,hi=max(p[2],q[2]),min(p[2]+p[4],q[2]+q[4])
+                    if hi-lo>1e-6 and not covered(q[1],lo,q[1],hi):link=True
+                if abs(p[2]+p[4]-q[2])<1e-6:
+                    lo,hi=max(p[1],q[1]),min(p[1]+p[3],q[1]+q[3])
+                    if hi-lo>1e-6 and not covered(lo,q[2],hi,q[2]):link=True
+            if link:edges.setdefault(i,set()).add(j);edges.setdefault(j,set()).add(i)
+    if start is None:err.append(f"{b['id']}: no tiene puerta a la calle");continue
+    seen={start};st=[start]
+    while st:
+        k=st.pop()
+        for n in edges.get(k,()):
+            if n not in seen:seen.add(n);st.append(n)
+    for i,r in enumerate(rooms):
+        if i not in seen:err.append(f"{b['id']}: no se puede llegar a {r[0]}")
 print('\n'.join(err) or 'plano sin errores')
