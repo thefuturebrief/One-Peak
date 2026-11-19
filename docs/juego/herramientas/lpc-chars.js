@@ -1,4 +1,4 @@
-// Personajes de prueba armados con piezas LPC (solo la animación de caminar).
+// Personajes armados con piezas LPC (todas las animaciones: ver lpc-build2.js).
 // Cada capa: [carpeta base, paleta destino o color de archivo]. El resolvedor busca la variante del cuerpo.
 module.exports = [
   { id: 'grumete', name: 'Grumete', body: 'male', skin: 'light', layers: [
@@ -12,8 +12,8 @@ module.exports = [
     ['hat/cloth/leather_cap/feather/adult', 'file:black'], ['facial/patches/eyepatch/ambi/adult', 'file:black'], ['body/prosthesis/hook/male', 'metal:iron']] },
   { id: 'marine', name: 'Marine', body: 'male', skin: 'light', layers: [
     ['head/heads/human/male', 'body:light'], ['eyes/human/adult/neutral', 'eye:blue'], ['eyes/eyebrows/thin/adult', 'hair:dark_brown'],
-    ['feet/shoes/basic', 'cloth:black'], ['legs/formal', 'cloth:navy'], ['torso/clothes/longsleeve/formal', 'cloth:white'],
-    ['hair/buzzcut/adult', 'hair:dark_brown'], ['weapon/sword/arming/universal/fg', 'file:steel']] },
+    ['feet/shoes/basic', 'cloth:black'], ['legs/pants', 'cloth:white'], ['torso/clothes/longsleeve/longsleeve2_vneck', 'cloth:white'],
+    ['hair/buzzcut/adult', 'hair:dark_brown'], ['code:collar'], ['code:marinecap']] },
   { id: 'pescadora', name: 'Pescadora', body: 'female', skin: 'olive', layers: [
     ['head/heads/human/female', 'body:olive'], ['eyes/human/adult/default', 'eye:brown'], ['eyes/eyebrows/thin/adult', 'hair:black'],
     ['feet/sandals', 'cloth:brown'], ['legs/pants', 'cloth:brown'], ['torso/clothes/shortsleeve/tshirt', 'cloth:yellow'],
@@ -59,8 +59,8 @@ module.exports = [
     ['torso/jacket/frock', 'file:black'], ['hat/cloth/hood/adult', 'cloth:black']] },
   { id: 'teniente', name: 'Teniente', body: 'female', skin: 'light', layers: [
     ['head/heads/human/female', 'body:light'], ['eyes/human/adult/default', 'eye:blue'], ['eyes/eyebrows/thin/adult', 'hair:blonde'],
-    ['feet/shoes/basic', 'cloth:black'], ['legs/formal', 'cloth:navy'], ['torso/clothes/longsleeve/longsleeve', 'cloth:white'],
-    ['hair/bob/adult', 'hair:blonde'], ['weapon/sword/arming/universal/fg', 'file:steel']] },
+    ['<cape/solid/bg', 'cloth:white'], ['feet/shoes/basic', 'cloth:black'], ['legs/formal', 'cloth:navy'], ['torso/clothes/longsleeve/longsleeve2_buttoned', 'cloth:navy'],
+    ['hair/bob/adult', 'hair:blonde'], ['cape/solid/fg', 'cloth:white'], ['cape/trim', 'cloth:navy'], ['shoulders/mantal', 'cloth:white'], ['neck/capeclip', 'cloth:gold']] },
   { id: 'pirata', name: 'Pirata de Dorne', body: 'male', skin: 'olive', layers: [
     ['head/heads/human/male', 'body:olive'], ['eyes/human/adult/anger', 'eye:brown'], ['eyes/eyebrows/thick/adult', 'hair:black'],
     ['feet/boots/fold', 'cloth:black'], ['legs/pantaloons', 'cloth:black'], ['torso/clothes/sleeveless/sleeveless2', 'cloth:slate'],

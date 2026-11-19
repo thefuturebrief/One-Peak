@@ -1,6 +1,18 @@
 # Armas — plan
 
-Todavía no está implementado: este es el plan para cuando entren en el juego.
+## Estado
+
+Ya está en el juego (`docs/juego/armas.js`, atlas en `docs/juego/assets/armas/`):
+
+- **Catálogo con grados.** Veinte armas originales con nombre, más el arma de tu padre y una de madera para cada tipo.
+- **Siete tipos con piezas LPC recoloreadas:**
+  - katana, con la forma del sable curvo, porque la katana de LPC es diminuta;
+  - espada, estoque, daga, lanza, hacha y maza.
+- **Pistola y mosquete dibujados por código.** En la cadera al caminar; con el brazo extendido, fogonazo y humo en la pose de disparar.
+- **Iconos dibujados por código** para la bolsa y los avisos.
+- **En la pelea, cada tipo cambia la opción principal y la animación:** la lanza mantiene a distancia, el hacha y la maza aturden, la daga arriesga más.
+
+Falta: armas con aura en el mundo, cuánto Haki aguanta cada grado, y dos espadas a la vez.
 
 ## Qué ofrece LPC y qué no
 

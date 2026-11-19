@@ -405,26 +405,17 @@
     ]
    },
    {
-    "n": "Pasarela",
+    "n": "Senda de Brin",
     "p": [
      [
-      13,
-      23
-     ],
-     [
-      13,
+      30,
       31
      ],
      [
-      10.5,
+      16.5,
       31
-     ],
-     [
-      10.5,
-      30.5
      ]
-    ],
-    "madera": true
+    ]
    }
   ],
   "plaza": {
@@ -1027,8 +1018,8 @@
    "n": "Casa de Brin",
    "entrable": true,
    "ext": {
-    "x": 8,
-    "y": 26,
+    "x": 14,
+    "y": 27,
     "w": 5,
     "d": 4,
     "techo": "tablas",
@@ -1036,8 +1027,7 @@
     "puerta": 2.5,
     "ventanas": [
      4
-    ],
-    "pilotes": true
+    ]
    },
    "int": {
     "w": 7,

@@ -58,6 +58,7 @@ const RUTINA = {
   lin: [[0, 12.5, 'town', [31.6, 23.8]], [12.5, 15, 'town', [55.2, 9.8]], [15, 24, 'town', [31.6, 23.8]]],
   rosa: [[0, 13, 'town', [26.8, 24.4]], [13, 24, 'town', [18.6, 26.4]]],
   pura: [[0, 13, 'town', [28.1, 24.4]], [13, 15.5, 'none'], [15.5, 24, 'town', [28.1, 24.4]]],
+  yago: [[0, 24, 'town', [24.6, 30.3]]],
 };
 function moveNpc(n, scene, at, dir) { const [sc, [x, y]] = place(scene, at); Object.assign(n, { scene: sc, x, y }); if (dir) n.dir = dir; }
 function rutinas(force) {
@@ -77,29 +78,32 @@ function npcAdd(id, sprite, name, scene, at, dir, extra = {}) { const [sc, [x, y
 const P = id => PEOPLE.find(n => n.id === id);
 function actoInit() {
   for (const k in F) delete F[k];
-  rutinas(true);
+  yagoInit(); brinCaja(); rutinas(true);
+  OBJS.push({ scene: 'town', x: HOYO[0] * T, y: HOYO[1] * T, label: 'Cavar', act: cavar });
   OBJS.push(...[{ scene: 'casa', at: [7.25, 4.1], label: 'Descansar', act: descansar }].map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; }));
 }
 function descansar() {
   const h = hourNow(); if (h >= 16.5 || F.campana) return narr(['No tienes sueño. Y no es momento de dormir.']);
-  narr(['Te tumbas un rato en la cama. Se oye el mar y, a lo lejos, a Corso cantando.'], () => fade(() => { G.minutes = Math.min(17 * 60 - 10, G.minutes + 120); rutinas(true); }));
+  narr(['Te tumbas un rato en la cama. Se oye el mar y, a lo lejos, a Corso cantando.'], () => { G.paused = true; timelapse(Math.min(17 * 60 - 10, G.minutes + 120), 2600, () => { G.paused = false; rutinas(true); }); });
 }
 let lastTick = 0;
 function actoTick(now) {
   if (now - lastTick < 400) return; lastTick = now;
   rutinas(false);
+  const y = P('yago'); if (y && y.scene === 'town' && !F.campana && !y.act && !y.goal && !G.paused && !G.talking && Math.random() < .55 && Math.hypot(y.x - G.x, y.y - G.y) < 500) { y.dir = 'right'; act(y, 'slash', { fps: 13 }); F.golpeMuneco = performance.now() + 260; }
   if (!F.campana && hourNow() >= 17) return campana();
   if (F.campana && !F.plaza && G.scene === 'town' && Math.hypot(G.x - 30 * T, G.y - 21 * T) < 6 * T) { F.plaza = true; plaza(); }
 }
 function campana() {
   F.campana = true; const fam = player.last; clearBubbles(); for (const n of PEOPLE) n.nextBark = 1e15;
   P('dorne').scene = 'none'; P('marla').slot = null;
-  const spots = { lin: [34.6, 24.6, 'left'], rosa: [26, 25.2, 'right'], pura: [27, 25.6, 'right'], brin: [25.2, 23.4, 'right'], corso: [27.4, 24.2, 'up'] };
+  const spots = { lin: [34.6, 24.6, 'left'], rosa: [26, 25.2, 'right'], pura: [27, 25.6, 'right'], brin: [25.2, 23.4, 'right'], corso: [27.4, 24.2, 'up'], yago: [34.2, 25.8, 'left'] };
   for (const [id, [x, y, d]] of Object.entries(spots)) { const n = P(id); moveNpc(n, 'town', [x, y], d); n.chat = false; n.route = null; }
   const m = P('mar1'); m.route = null; moveNpc(m, 'town', [33.6, 18.6], 'down');
   npcAdd('dorneP', 'capitan', '"Garra" Dorne', 'town', [32.4, 22.8], 'left');
-  npcAdd('pirata', 'pirata', 'Pirata de Dorne', 'town', [27.6, 21.4], 'right');
-  npcAdd('pirata2', 'maton', 'Pirata de Dorne', 'town', [32.4, 21], 'left');
+  npcAdd('pirata', 'pirata', 'Pirata de Dorne', 'town', [27.4, 21.6], 'left', { arma: 'sable_marinero', tira: true });
+  npcAdd('pirata2', 'maton', 'Pirata de Dorne', 'town', [32.6, 21.4], 'right', { tira: true });
+  for (const n of PEOPLE) if (n.scene === 'town' && ['lin', 'rosa', 'pura', 'brin', 'corso', 'yago'].includes(n.id)) later(300 + Math.random() * 900, () => emote(n, '!', 1400));
   narr(['Suena la campana del puerto. Una vez, dos, tres...', 'Alguien grita en la calle: «¡En la plaza! ¡Están levantando el ancla!»']);
 }
 function plaza() {
@@ -115,91 +119,218 @@ function plaza() {
 }
 function corsoPiedra() {
   const c = P('corso'), pi = P('pirata');
-  bubble(c, '¡Deja en paz a mi hermano!', 2400);
+  bubble(c, '¡Deja en paz a mi hermano!', 2400); act(c, 'slash', { fps: 12 }); later(500, () => emote(P('dorneP'), '!', 1200));
   narr(['Corso le tira una piedra a Dorne. Le da en el sombrero.', 'El pirata de la cadena lo agarra del cuello de la camisa.'], () => {
-    moveNpc(pi, 'town', [28.2, 23.4], 'right'); moveNpc(c, 'town', [27.5, 23.6], 'right'); G.x = 30.2 * T; G.y = 23.4 * T; G.dir = 'left';
-    say(P('dorneP'), { lines: ['Encárgate del mayor. Y no me lo rompas del todo: lo necesito para hablar.'], done: pelea }); });
+    pi.tira = false; emote(c, '!'); moveNpc(pi, 'town', [28.2, 23.4], 'right'); moveNpc(c, 'town', [27.5, 23.6], 'right'); G.x = 30.2 * T; G.y = 23.4 * T; G.dir = 'left';
+    say(P('dorneP'), { lines: ['Encárgate del mayor. Y no me lo rompas del todo: lo necesito para hablar.'], done: () => pelea({ kind: 'plaza', foe: pi, foeName: 'Pirata de Dorne', foeMax: 110, rounds: F.prisa ? 3 : 4, arma: S.arma }) }); });
 }
 
 // =====================================================================
 // LA PELEA: instinto con pausas. Se congela en cada momento y eliges lo que te pide el cuerpo.
+// Sirve para el duelo con Yago y para la plaza; los dos se ven: tajos, estocadas, golpes y caídas.
 // =====================================================================
 const OFICIO_GOLPE = { tirador: ['Una piedra, directa a la cara', 'agilidad', 18, true], cocinero: ['Volcarle encima la caja de pescado', 'fuerza', 20, true], carpintero: ['Un tablón suelto del puesto', 'fuerza', 28], medico: ['Un punto de presión en el cuello', 'intelecto', 16, true], navegante: ['Enredarle los pies con la cadena', 'iq', 14, true], combatiente: ['El golpe del puerto', 'fuerza', 34], musico: ['Un grito que le revienta los oídos', 'carisma', 10, true], arqueologo: ['Leer su postura y golpear donde falla', 'intelecto', 26] };
+// lo que pide cada arma: texto, atributo, daño, aturde, esquiva
+const ARMA_GOLPE = { katana: ['Un tajo limpio', 'agilidad', 26], espada: ['Un tajo de arriba abajo', 'fuerza', 28], estoque: ['Tres estocadas rápidas', 'agilidad', 22], daga: ['Entrar corto y clavar', 'agilidad', 30, false, false, -.08],
+  lanza: ['Tenerlo a raya con la punta', 'iq', 22, false, true], hacha: ['Un hachazo que rompe la guardia', 'fuerza', 32, true, false, -.06], maza: ['Un mazazo al hombro', 'fuerza', 30, true, false, -.04] };
 const chance = (v, b = 0) => Math.max(.15, Math.min(.88, .42 + (v - 8) * .07 + b));
 const riesgo = p => p >= .62 ? ['Seguro', 'ok'] : p >= .4 ? ['Arriesgado', 'mid'] : ['Muy difícil', 'hard'];
+const tipoDe = id => id && arma(id) ? arma(id).tipo : 'punos';
 function instinto() {
-  const st = S.st, top = Object.entries(S.of).sort((a, b) => b[1] - a[1])[0], of = top[1] > 0 ? top[0] : null, list = [];
-  list.push({ id: 'golpe', t: 'Golpearlo', p: chance(st.fuerza), dmg: 20 + st.fuerza });
+  const f = F.fight, st = S.st, top = Object.entries(S.of).sort((a, b) => b[1] - a[1])[0], of = top[1] > 0 ? top[0] : null, list = [], t = tipoDe(f.arma);
+  if (ARMA_GOLPE[t]) { const [tx, s, dmg, stun, dodge, b = 0] = ARMA_GOLPE[t]; list.push({ id: 'arma', t: tx, p: chance(st[s], b), dmg: dmg + Math.floor(st[s] / 2), stun, dodge }); }
+  else list.push({ id: 'golpe', t: 'Golpearlo', p: chance(st.fuerza), dmg: 20 + st.fuerza });
   list.push({ id: 'esquiva', t: 'Esquivar y responder', p: chance((st.agilidad + st.iq) / 2), dmg: 14, dodge: true });
-  if (F.fight.corso) list.push({ id: 'proteger', t: 'Ponerte delante de Corso', p: chance(st.voluntad, S.ax.corazon > 0 ? .15 : 0), protect: true });
-  if (of) { const [t, s, dmg, stun] = OFICIO_GOLPE[of]; list.push({ id: 'oficio', t, p: chance(st[s], .06), dmg, stun }); }
-  else list.push({ id: 'arena', t: 'Echarle arena a los ojos', p: chance(st.intelecto, .06), dmg: 6, stun: true });
+  if (f.corso) list.push({ id: 'proteger', t: 'Ponerte delante de Corso', p: chance(st.voluntad, S.ax.corazon > 0 ? .15 : 0), protect: true });
+  if (f.kind === 'plaza') { if (of) { const [tx, s, dmg, stun] = OFICIO_GOLPE[of]; list.push({ id: 'oficio', t: tx, p: chance(st[s], .06), dmg, stun }); } else list.push({ id: 'arena', t: 'Echarle arena a los ojos', p: chance(st.intelecto, .06), dmg: 6, stun: true }); }
   return list;
 }
-function pelea() {
-  const meMax = 40 + S.st.resistencia * 6; F.fight = { me: meMax, meMax, foe: 110, foeMax: 110, round: 0, rounds: F.prisa ? 3 : 4, corso: true, protected: false, hard: 0 };
-  G.paused = true; const ov = document.getElementById('overlays'), box = document.createElement('div'); box.className = 'fight glass'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Pelea'); ov.appendChild(box);
+function pelea(o) {
+  const meMax = 40 + S.st.resistencia * 6; F.fight = { kind: o.kind, foe: o.foe, foeName: o.foeName, me: meMax, meMax, foeHP: o.foeMax, foeMax: o.foeMax, round: 0, rounds: o.rounds, corso: o.kind === 'plaza', protected: false, hard: 0, arma: o.arma, fin: o.fin };
+  G.paused = true; G.arma0 = S.arma; S.arma = o.arma; G.dir = dirTo(G, o.foe); o.foe.dir = dirTo(o.foe, G);
+  const ov = document.getElementById('overlays'), box = document.createElement('div'); box.className = 'fight glass'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Pelea'); ov.appendChild(box);
   document.getElementById('hud').classList.add('talking'); momento();
 }
 function fightUI(text, opts) {
   const f = F.fight, box = document.querySelector('.fight'), bar = (v, m, me) => `<i class="bar${me ? ' me' : ''}"><s style="width:${Math.max(0, v / m * 100)}%"></s></i>`;
-  box.innerHTML = `<div class="bars"><div><b>Pirata de Dorne</b>${bar(f.foe, f.foeMax)}</div><div><b>${player.name}</b>${bar(f.me, f.meMax, true)}</div></div><p class="nar">${text}</p>${opts ? `<div class="ch">${opts.map((o, i) => { const [r, c] = riesgo(o.p); return `<button type="button" data-i="${i}"><kbd>${i + 1}</kbd>${o.t}<span class="risk ${c}">${r}</span></button>`; }).join('')}</div>` : '<span class="more">…</span>'}`;
+  box.innerHTML = `<div class="bars"><div><b>${f.foeName}</b>${bar(f.foeHP, f.foeMax)}</div><div><b>${player.name}</b>${bar(f.me, f.meMax, true)}</div></div><p class="nar">${text}</p>${opts ? `<div class="ch">${opts.map((o, i) => { const [r, c] = riesgo(o.p); return `<button type="button" data-i="${i}"><kbd>${i + 1}</kbd>${o.t}<span class="risk ${c}">${r}</span></button>`; }).join('')}</div>` : '<span class="more">…</span>'}`;
   if (opts) { const bs = [...box.querySelectorAll('button')]; bs.forEach(b => b.onclick = () => elegir(opts[+b.dataset.i])); bs[0].focus(); keyHandler = e => { const n = +e.key; if (n >= 1 && n <= opts.length) elegir(opts[n - 1]); }; }
   else keyHandler = null;
 }
-function momento() { const f = F.fight; f.round++; fightUI(f.round === 1 ? 'El pirata se te echa encima. El tiempo se estira: lo ves venir.' : 'Otra vez. Respiras. Decides.', instinto()); }
+function momento() { const f = F.fight; f.round++; fightUI(f.round === 1 ? (f.kind === 'duelo' ? 'Yago levanta el arma y sonríe. «Cuando quieras.»' : 'El pirata se te echa encima. El tiempo se estira: lo ves venir.') : 'Otra vez. Respiras. Decides.', instinto()); }
 const later = (ms, fn) => setTimeout(fn, ms);
-function golpeVisual(quien) { const tg = quien === 'me' ? G : P('pirata'); if (tg) F.fx = { x: tg.x, y: tg.y - 26, t0: performance.now(), me: quien === 'me' }; const el = document.getElementById('game'); el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(3px,-2px)' }, { transform: 'translate(0,0)' }], { duration: 220 });
+function golpeVisual(quien) { const f = F.fight, tg = quien === 'me' ? G : f.foe; if (tg) F.fx = { x: tg.x + (tg.dx || 0), y: tg.y - 26, t0: performance.now(), me: quien === 'me' }; const el = document.getElementById('game'); el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(3px,-2px)' }, { transform: 'translate(0,0)' }], { duration: 220 });
   if (quien === 'me') { const fl = document.createElement('div'); fl.className = 'hitflash'; document.getElementById('overlays').appendChild(fl); later(380, () => fl.remove()); } }
-function lunge(n, dx) { const x0 = n.x; n.x += dx; later(150, () => n.x = x0); }
+// un paso hacia el otro y vuelta
+function lunge(o, dx, ms = 180) { o.dx = dx; later(ms, () => o.dx = 0); }
+const hacia = (a, b) => b.x > a.x ? 1 : -1;
+function atacar(o, armaId, target) { act(o, GOLPE_DE[tipoDe(armaId)] || 'slash', { fps: 14 }); lunge(o, hacia(o, target) * 9, 260); }
+function encaja(o) { act(o, 'hurt', { stop: 1, dur: 420, fps: 14 }); lunge(o, -hacia(o, o === G ? F.fight.foe : G) * 5, 300); }
 function elegir(o) {
-  const f = F.fight, pi = P('pirata'), me = { get x() { return G.x; }, set x(v) { G.x = v; } }, ok = Math.random() < o.p; let stun = false, txt;
+  const f = F.fight, foe = f.foe, ok = Math.random() < o.p; let stun = false, txt;
   keyHandler = null;
-  if (o.protect) { if (ok) { f.protected = true; f.corso = false; moveNpc(P('corso'), 'town', [26, 24.6], 'right'); txt = 'Te metes entre Corso y el pirata. Corso se suelta y corre hacia Brin.'; } else txt = 'Intentas llegar hasta Corso, pero el pirata te corta el paso.'; }
-  else { lunge(me, -10); if (ok) { f.foe -= o.dmg; stun = !!o.stun; txt = { golpe: 'Le das de lleno. El pirata se tambalea.', esquiva: 'Te agachas, el puño te pasa por encima y le respondes en las costillas.', arena: 'Le echas un puñado de arena a los ojos. Se queda ciego un momento.' }[o.id] || `${o.t}. Funciona.`; golpeVisual('foe'); }
-    else txt = { golpe: 'Lanzas el puño, pero lo ve venir.', esquiva: 'Esquivas tarde.', arena: 'La arena se la lleva el viento.' }[o.id] || `${o.t}... pero no sale como esperabas.`; }
+  if (o.protect) { if (ok) { f.protected = true; f.corso = false; const c = P('corso'); emote(c, '!'); walkTo(c, [26, 24.6], 110, n => n.dir = 'right'); lunge(G, -14, 500); txt = 'Te metes entre Corso y el pirata. Corso se suelta y corre hacia Brin.'; } else { lunge(G, -8); txt = 'Intentas llegar hasta Corso, pero el pirata te corta el paso.'; } }
+  else { atacar(G, f.arma, foe);
+    if (ok) { f.foeHP -= o.dmg; stun = !!o.stun; txt = { golpe: 'Le das de lleno. Se tambalea.', esquiva: 'Te agachas, el golpe te pasa por encima y respondes en las costillas.', arena: 'Le echas un puñado de arena a los ojos. Se queda ciego un momento.' }[o.id] || `${o.t}. Funciona.`; later(180, () => { encaja(foe); golpeVisual('foe'); }); }
+    else { txt = { golpe: 'Lanzas el golpe, pero lo ve venir.', esquiva: 'Esquivas tarde.', arena: 'La arena se la lleva el viento.' }[o.id] || `${o.t}... pero no sale como esperabas.`; later(120, () => lunge(foe, hacia(foe, G) * -12, 320)); } }
   fightUI(txt);
   later(1300, () => {
-    if (f.foe > 0 && F.vecinos && f.round === 2) { f.foe -= 22; fightUI('Brin aparece por detrás y le rompe un remo en la espalda al pirata.'); return later(1400, contra.bind(null, stun, o, ok)); }
+    if (f.foeHP > 0 && F.vecinos && f.kind === 'plaza' && f.round === 2) { const b = P('brin'); f.foeHP -= 22; walkTo(b, [foe.x / T - .9, foe.y / T + .2], 160, n => { n.dir = 'right'; act(n, 'slash', { fps: 14 }); later(160, () => { encaja(foe); golpeVisual('foe'); }); });
+      fightUI('Brin aparece por detrás y le rompe un remo en la espalda al pirata.'); return later(1600, contra.bind(null, stun, o, ok)); }
     contra(stun, o, ok);
   });
 }
 function contra(stun, o, ok) {
-  const f = F.fight, pi = P('pirata');
-  if (f.foe <= 0) return finPelea('El pirata cae de rodillas, sin aire. Nadie en la plaza se lo esperaba.');
-  if (stun) { fightUI('El pirata no puede responder. Ganas un respiro.'); return later(1200, sigue); }
-  lunge(pi, 10);
-  const hitP = .62 - (o.dodge && ok ? .35 : 0), dmg = 14 + Math.floor(Math.random() * 12) + (o.protect && ok ? 6 : 0);
-  if (Math.random() < hitP) { f.me -= dmg; if (dmg >= 22) f.hard++; golpeVisual('me'); fightUI(dmg >= 22 ? 'El puñetazo te llega a la ceja. Ves blanco un instante.' : 'Te alcanza en el costado. Duele, pero sigues en pie.'); }
-  else fightUI('El pirata golpea al aire.');
+  const f = F.fight, foe = f.foe;
+  if (f.foeHP <= 0) { act(foe, 'hurt', { hold: true, fps: 10 }); later(900, () => emote(foe, f.kind === 'duelo' ? '…' : 'zzz', 4000)); return finPelea(f.kind === 'duelo' ? 'Yago acaba sentado en el serrín, riéndose sin aire.' : 'El pirata cae de espaldas, sin aire. Nadie en la plaza se lo esperaba.'); }
+  if (stun) { emote(foe, '?', 1200); fightUI(f.kind === 'duelo' ? 'Yago se queda un segundo sin saber dónde está. Ganas un respiro.' : 'El pirata no puede responder. Ganas un respiro.'); return later(1200, sigue); }
+  atacar(foe, foe.arma, G);
+  const hitP = .62 - (o.dodge && ok ? .35 : 0) - (f.kind === 'duelo' ? .08 : 0), dmg = (f.kind === 'duelo' ? 10 : 14) + Math.floor(Math.random() * 12) + (o.protect && ok ? 6 : 0);
+  if (Math.random() < hitP) { f.me -= dmg; if (dmg >= 22 && f.kind === 'plaza') f.hard++; later(180, () => { encaja(G); golpeVisual('me'); }); fightUI(f.kind === 'duelo' ? (dmg >= 18 ? 'La madera te da en el hombro. Suena feo.' : 'Te roza el brazo. Escuece.') : dmg >= 22 ? 'El golpe te llega a la ceja. Ves blanco un instante.' : 'Te alcanza en el costado. Duele, pero sigues en pie.'); }
+  else { later(150, () => lunge(G, hacia(G, foe) * -12, 320)); fightUI(f.kind === 'duelo' ? 'Yago golpea al aire. «¡Quieto!»' : 'El pirata golpea al aire.'); }
   later(1300, sigue);
 }
-function sigue() { const f = F.fight; if (f.me <= 0) return finPelea('Caes al suelo. Lo último que ves es la bota del pirata.', true); if (f.round >= f.rounds) return finPelea('Seguís en pie los dos, jadeando. El pirata ya no sonríe.'); momento(); }
+function sigue() { const f = F.fight; if (f.me <= 0) { act(G, 'hurt', { hold: true, fps: 10 }); return finPelea(f.kind === 'duelo' ? 'Acabas en el suelo, mirando el cielo entre los andamios.' : 'Caes al suelo. Lo último que ves es la bota del pirata.', true); } if (f.round >= f.rounds) return finPelea(f.kind === 'duelo' ? 'Paráis los dos a la vez, sin aire. Ninguno quiere decir que está cansado.' : 'Seguís en pie los dos, jadeando. El pirata ya no sonríe.'); momento(); }
 function finPelea(txt, caido) {
-  const f = F.fight; f.won = f.foe <= 0; f.down = !!caido; fightUI(txt);
+  const f = F.fight; f.won = f.foeHP <= 0; f.down = !!caido; fightUI(txt);
   if (f.hard) { S.trs.push('Cicatriz en la ceja'); learn(['yo', 'Una cicatriz', 'La pelea de la plaza me dejó una cicatriz en la ceja. Cada vez que la toco, me acuerdo de Corso.']); }
-  later(1800, () => { document.querySelector('.fight').remove(); G.paused = false; forastero(); });
+  later(1800, () => { document.querySelector('.fight').remove(); document.getElementById('hud').classList.remove('talking'); G.paused = false; S.arma = G.arma0; if (f.kind === 'plaza') { F.plazaFight = f; forastero(); } else { if (caido) later(600, () => G.act = null); f.fin(f); } });
 }
 // =====================================================================
-// EL FORASTERO Y LOS REFUERZOS
+// EL FORASTERO, EL HAKI Y LOS REFUERZOS
 // =====================================================================
 function forastero() {
-  const d = P('dorneP'), f = F.fight, fo = npcAdd('forastero', 'forastero', 'Forastero', 'town', [35.6, 22.4], 'left');
-  say(d, { lines: ['Basta de juegos. Si quieres algo bien hecho...', '(Dorne da un paso hacia ti, con el garfio por delante.)'], done: () => say(fo, { lines: ['Dorne. Veinte años y sigues peleándote con críos.'], done: () => { haki(fo); G.paused = true; later(1500, () => (G.paused = false, narr(['Por un instante, todos en la plaza sienten un peso en el pecho, como si el aire se hubiera vuelto agua.', 'A Rosa se le caen los pescados.', f.won ? 'El pirata del suelo deja de respirar un segundo.' : 'El pirata que peleaba contigo baja los puños sin darse cuenta.'], () => say(d, { lines: ['(Dorne retrocede.)', 'Tú... Krakaka. Esto no ha terminado. ¡Nos vamos!'], done: refuerzos })))); } }) });
+  const d = P('dorneP'), f = F.plazaFight, fo = npcAdd('forastero', 'forastero', 'Forastero', 'town', [37.5, 22.4], 'left', { fijo: true });
+  if (!f.down) G.act = null;
+  say(d, { lines: ['Basta de juegos. Si quieres algo bien hecho...', '(Dorne da un paso hacia ti, con el garfio por delante.)'], done: () => { act(d, 'slash', { stop: 2, hold: true, fps: 10 });
+    walkTo(fo, [35.4, 22.6], 55, () => { fo.dir = 'left'; for (const n of PEOPLE) if (n.scene === 'town' && n !== fo && Math.hypot(n.x - fo.x, n.y - fo.y) < 14 * T) { n.dir = dirTo(n, fo); } G.dir = dirTo(G, fo); for (const n of PEOPLE.filter(n => ['lin', 'rosa', 'pura', 'brin', 'corso'].includes(n.id))) emote(n, '?', 1400);
+      say(fo, { lines: ['Dorne. Veinte años y sigues peleándote con críos.'], done: () => { d.act = null; haki(fo); G.paused = true; later(2600, () => (G.paused = false, narr(['Por un instante, todos en la plaza sienten un peso en el pecho, como si el aire se hubiera vuelto agua.', 'Casi todos caen redondos. Rosa, Doña Pura, Lin, los dos piratas.', 'Tú aguantas de rodillas. Corso tiembla, pero sigue en pie. Dorne también: es el único que no aparta la vista.'],
+        () => { G.act = null; say(d, { lines: ['(Dorne da un paso atrás. Después otro.)', 'Tú... Krakaka. Así que eras tú. Esto no ha terminado.', '¡Arriba, gandules! ¡Nos vamos!'], done: dorneSeVa }); }))); } }); }); } });
+}
+// Haki del rey: una onda que sale del forastero; el aire se oscurece, rayos negros con filo rojo; la plaza cae
+function haki(fo) {
+  F.haki = { t0: performance.now(), x: fo.x, y: fo.y - 30 };
+  const el = document.getElementById('game');
+  el.animate([{ filter: 'none' }, { filter: 'grayscale(.85) contrast(1.5) brightness(.8)', offset: .15 }, { filter: 'grayscale(.6) contrast(1.3)', offset: .7 }, { filter: 'none' }], { duration: 2200, easing: 'ease-out' });
+  el.animate([0, 1, 2, 3, 4, 5, 6, 7].map(k => ({ transform: k % 7 ? `translate(${(k % 2 ? -1 : 1) * (5 - k * .6)}px,${(k % 3 - 1) * 2}px)` : 'translate(0,0)' })), { duration: 700 });
+  emote(G, '!!', 2000); later(350, () => act(G, 'hurt', { stop: 3, hold: true, fps: 8 }));
+  for (const n of PEOPLE) { if (n === fo || n.scene !== 'town' || Math.hypot(n.x - fo.x, n.y - fo.y) > 16 * T) continue; const d = 120 + Math.random() * 380;
+    if (n.id === 'dorneP') { later(d, () => { emote(n, '!!', 1800); lunge(n, -hacia(n, fo) * 6, 900); }); continue; }
+    if (n.id === 'corso') { later(d, () => emote(n, '!', 2400)); const t0 = performance.now(), sh = setInterval(() => { n.dx = Math.round(Math.sin((performance.now() - t0) / 30)); if (performance.now() - t0 > 2400) { clearInterval(sh); n.dx = 0; } }, 30); continue; }
+    if (n.id === 'pirata' && F.plazaFight && F.plazaFight.won) continue;
+    later(d, () => emote(n, '!', 700)); later(d + 500, () => { n.desmayado = true; act(n, 'hurt', { hold: true, fps: 10 }); }); later(d + 2400, () => n.desmayado && emote(n, 'zzz', 5000)); }
+  later(2600, () => F.haki = null);
+}
+function despertar() { for (const n of PEOPLE) if (n.desmayado) { const d = Math.random() * 1400; later(d, () => { n.act = null; n.desmayado = false; emote(n, '?', 1600); }); } }
+function dorneSeVa() {
+  const d = P('dorneP'); for (const id of ['pirata', 'pirata2']) { const n = P(id); n.act = null; n.desmayado = false; emote(n, '…', 1500); }
+  d.dir = 'left'; walkTo(d, [22, 22.2], 75, n => n.scene = 'none'); later(500, () => { walkTo(P('pirata'), [21.5, 22.6], 85, n => n.scene = 'none'); walkTo(P('pirata2'), [21, 21.8], 85, n => n.scene = 'none'); });
+  despertar(); later(1600, () => { const fo = P('forastero'), f = F.plazaFight; G.dir = dirTo(G, fo); fo.dir = dirTo(fo, G);
+    say(fo, { lines: [f.protected ? 'Protegiste al pequeño. Bien hecho.' : 'Tienes buenos puños. Te falta saber cuándo usarlos.', 'Zarpo esta noche, con la marea. Hay sitio para uno más. Te espero en la punta del muelle.', 'No preguntes adónde.'], done: () => {
+      narr(['En el muelle suena una corneta. Un barco de la Marina acaba de amarrar.'], () => say(fo, { lines: ['La Marina. Mejor que no me vean por aquí.', '(Se cala la capucha y se va calle abajo, sin prisa.)'], done: () => { walkTo(fo, [20, 22.4], 70, n => n.scene = 'none'); later(1400, refuerzos); } })); } }); });
 }
 function refuerzos() {
-  for (const id of ['dorneP', 'pirata', 'pirata2']) P(id).scene = 'none';
-  F.refuerzos = true; const fo = P('forastero'), te = npcAdd('teniente', 'teniente', 'Teniente Breda Nisi', 'town', [33.8, 23.6], 'left'), f = F.fight;
-  narr(['En el muelle suena una corneta. Un barco de la Marina acaba de amarrar.'], () => say(te, { lines: ['Teniente Breda Nisi, de Loguetown. Por lo que veo, llegamos tarde.', f.protected ? 'Te pusiste delante de un pirata para proteger a un crío. Eso no se enseña en ninguna academia.' : f.won ? 'Tumbaste a uno de los hombres de Dorne. No está nada mal.' : 'Aguantaste contra uno de los hombres de Dorne. No está mal.', 'Mi barco sale esta noche. Si quieres entrar en la Marina, búscame frente al destacamento.'],
-    done: () => say(fo, { lines: [f.protected ? 'Protegiste al pequeño. Bien hecho.' : 'Tienes buenos puños. Te falta saber cuándo usarlos.', 'Zarpo esta noche, con la marea. Hay sitio para uno más. Te espero en la punta del muelle.', 'No preguntes adónde.'], done: atardecer }) }));
+  F.refuerzos = true; const f = F.plazaFight, te = npcAdd('teniente', 'teniente', 'Teniente Breda Nisi', 'town', [42.5, 15], 'down', { arma: 'espada_ronda' });
+  const m2 = npcAdd('mar2', 'marine', 'Marine', 'town', [41.8, 14.2], 'down', { arma: 'mosquete_marina' }), m3 = npcAdd('mar3', 'marine', 'Marine', 'town', [43.2, 14.2], 'down', { arma: 'mosquete_marina' });
+  for (const n of PEOPLE) if (n.scene === 'town' && Math.hypot(n.x - 30 * T, n.y - 22 * T) < 14 * T && n !== te) later(600, () => { n.dir = 'right'; });
+  walkTo(m2, [42.5, 21.4], 80, () => walkTo(m2, [36, 22.4], 80, n => n.dir = 'left')); walkTo(m3, [43.2, 21.4], 80, () => walkTo(m3, [36, 24], 80, n => n.dir = 'left'));
+  walkTo(te, [42.5, 22.4], 80, () => walkTo(te, [33.2, 23.4], 80, n => { n.dir = 'left'; G.dir = 'right';
+    say(te, { lines: ['Teniente Breda Nisi, de Loguetown. Por lo que veo, llegamos tarde.', f.protected ? 'Te pusiste delante de un pirata para proteger a un crío. Eso no se enseña en ninguna academia.' : f.won ? 'Tumbaste a uno de los hombres de Dorne. No está nada mal.' : 'Aguantaste contra uno de los hombres de Dorne. No está mal.', 'Mi barco sale esta noche. Si quieres entrar en la Marina, búscame frente al destacamento.'], done: atardecer }); }));
 }
+
+// =====================================================================
+// LA MAÑANA: Yago entrena en el astillero y te reta; Brin te cuenta lo de la caja; la roca de la ballena
+// =====================================================================
+const ROCA = [49.2, 9.9], HOYO = [50.4, 10.9];
+const ESTILOS = [['katana', 'La katana'], ['espada', 'La espada'], ['estoque', 'El estoque'], ['lanza', 'La lanza'], ['hacha', 'El hacha'], ['maza', 'La maza'], ['daga', 'La daga'], ['punos', 'Con los puños']];
+function rocaBallena() { const [c, g] = mkCanvas(96, 56), O = '#1e1a20';
+  g.fillStyle = 'rgba(20,20,30,.25)'; g.beginPath(); g.ellipse(46, 50, 44, 6, 0, 0, 7); g.fill();
+  g.fillStyle = O; g.beginPath(); g.moveTo(6, 50); g.quadraticCurveTo(10, 14, 46, 12); g.quadraticCurveTo(74, 12, 80, 34); g.lineTo(92, 20); g.lineTo(90, 40); g.lineTo(84, 50); g.closePath(); g.fill();
+  g.fillStyle = '#7a7a84'; g.beginPath(); g.moveTo(8, 49); g.quadraticCurveTo(12, 16, 46, 14); g.quadraticCurveTo(72, 14, 78, 35); g.lineTo(89, 24); g.lineTo(88, 40); g.lineTo(83, 49); g.closePath(); g.fill();
+  g.fillStyle = '#9a9aa4'; g.beginPath(); g.moveTo(14, 36); g.quadraticCurveTo(20, 18, 46, 17); g.quadraticCurveTo(30, 22, 18, 40); g.fill();
+  g.fillStyle = '#5a5a64'; g.fillRect(12, 44, 70, 5); g.fillStyle = O; g.fillRect(24, 30, 3, 3); g.fillStyle = '#4a7a3a'; g.fillRect(30, 15, 10, 2); g.fillRect(60, 46, 12, 2); g.fillStyle = '#e8e8f0'; g.fillRect(24, 30, 1, 1);
+  return { canvas: c, x: ROCA[0] * T - 46, y: ROCA[1] * T - 50, key: ROCA[1] * T }; }
+function munecoPractica(x, y) { const [c, g] = mkCanvas(32, 60), O = '#1e1a20';
+  g.fillStyle = O; g.fillRect(14, 14, 5, 46); g.fillStyle = '#7a5030'; g.fillRect(15, 14, 3, 46); g.fillStyle = O; g.fillRect(5, 22, 23, 4); g.fillStyle = '#8a6038'; g.fillRect(6, 23, 21, 2);
+  g.fillStyle = O; g.fillRect(8, 3, 17, 22); g.fillStyle = '#d8b878'; g.fillRect(9, 4, 15, 20); g.fillStyle = '#b8984a'; for (let k = 0; k < 4; k++) g.fillRect(9, 7 + k * 5, 15, 1); g.fillStyle = '#c83a3a'; g.fillRect(14, 10, 5, 5); g.fillStyle = '#fff6dc'; g.fillRect(16, 12, 1, 1);
+  return { canvas: c, x: x - 16, y: y - 58, key: y, muneco: true }; }
+function yagoInit() {
+  const y = npcAdd('yago', 'hermano', 'Yago', 'town', [24.6, 30.3], 'right', { arma: 'madera_katana', nextBark: performance.now() + 9000,
+    barks: { dia: ['¡Ha! ¡Ha!', 'Otra vez. Más rápido.', 'Mi padre dice que soy cabezota. Yo digo constante.'], tarde: ['Una más y lo dejo... Una más.'], noche: [''] },
+    fases: { ancla: [''], despedida: ['¿Te vas de verdad? Llévate lo que aprendiste en el astillero.', 'La próxima vez que nos veamos, te gano.'] },
+    greet: c => F.duelo ? pick(['¿Otra vez por aquí?', 'Todavía me duele el hombro, ¿eh?']) : c.n === 0 ? `¡Eh, ${player.name}! ¿Vienes a mirar o a sudar?` : pick(['¿Te lo has pensado?', 'El muñeco no se queja, pero tampoco aprende.']),
+    first: L('gente', 'Yago', 'El hijo del carpintero del astillero. Entrena todas las mañanas con armas de madera que talla su padre.'),
+    topics: [
+      { id: 'que', once: true, ask: '¿Qué haces?', a: () => ['Entreno. Algún día me iré en un barco de verdad, y en el mar no hay segundas oportunidades.', 'Mi padre talla las armas. De todas las que hay: katanas, lanzas, hachas... Hasta un estoque, que es una aguja con pretensiones.'] },
+      { id: 'duelo', need: () => !F.duelo, ask: { def: '¿Un combate?', temerario: 'Pelea conmigo. Ahora.', cauto: '¿Me enseñas un poco?' },
+        a: () => ['¡Eso! Elige con qué. Tengo de madera de todo.'] },
+      { id: 'otro', hideAfter: 1, need: () => F.duelo, ask: '¿La revancha?', a: () => ['Hoy no, que me duele hasta la sombra. Mañana.', '(Se ríe.) Si sigues en Kalé mañana.'] },
+    ] });
+  WORLD.sprites.push(munecoPractica(25.9 * T, 30.3 * T), rocaBallena()); WORLD.blocks.push([25.9 * T - 6, 30.3 * T - 8, 12, 10], [ROCA[0] * T - 40, ROCA[1] * T - 16, 80, 18]);
+  OBJS.push({ scene: 'town', x: ROCA[0] * T, y: ROCA[1] * T + 6, label: 'Mirar', text: 'Una roca gris con forma de ballena: la joroba, la cola levantada, hasta un ojo hecho por un agujero. Los críos de Kalé la llaman la Vieja.' });
+  return y;
+}
+// elegir arma para el duelo (al preguntar «¿Un combate?»)
+function duelChoose(t, i) {
+  const tp = topicsOf(t.npc)[i]; if (!tp || t.npc.id !== 'yago' || tp.id !== 'duelo') return false;
+  S.asked.yago.duelo = 1;
+  G.talking = { npc: t.npc, conv: { lines: ['¡Eso! Elige con qué. Tengo de madera de todo.'], opts: ESTILOS.map(([k, n]) => ({ t: n, then: () => duelo(k) })) }, i: 0 }; renderTalk(); return true;
+}
+function duelo(tipo) {
+  const y = P('yago'); F.armaTipo = tipo; if (tipo !== 'punos') { S.armaDuelo = 'madera_' + tipo; }
+  const linea = { katana: 'Una katana. Buena elección: rápida y honrada.', espada: 'Espada. Recta, como tú. O eso espero.', estoque: '¿El estoque? Vas a picarme como un mosquito.', lanza: 'Lanza. Vas a querer tenerme lejos, ¿eh?', hacha: 'El hacha. Mi padre dice que los del hacha piensan después.', maza: 'Maza. Eso duele aunque sea de madera.', daga: 'Daga. Hay que tener valor para pelear tan cerca.', punos: 'Con los puños. Bueno, pues yo también.' }[tipo];
+  if (tipo === 'punos') y.armaDuelo = null; else y.armaDuelo = 'madera_' + (tipo === 'punos' ? 'katana' : tipo);
+  say(y, { lines: [linea, tipo === 'punos' ? '(Yago deja su espada de madera apoyada en el muñeco.)' : '(Te lanza un arma de madera. La atrapas al vuelo.)', 'A tres asaltos. El que acabe en el suelo invita a pan.'], done: () => {
+    G.x = 23.2 * T; G.y = 30.3 * T; G.dir = 'right'; y.x = 24.8 * T; y.y = 30.3 * T; y.dir = 'left'; if (tipo !== 'punos') y.arma = y.armaDuelo; else y.arma = null;
+    pelea({ kind: 'duelo', foe: y, foeName: 'Yago', foeMax: 70, rounds: 3, arma: tipo === 'punos' ? null : 'madera_' + tipo, fin: finDuelo }); } });
+}
+function finDuelo(f) {
+  const y = P('yago'); F.duelo = true; y.arma = 'madera_katana'; const won = f.foe <= 0, tipo = F.armaTipo;
+  learn(['yo', 'El duelo del astillero', `Peleé con Yago en el astillero ${tipo === 'punos' ? 'a puñetazo limpio' : 'con ' + { katana: 'una katana', espada: 'una espada', estoque: 'un estoque', lanza: 'una lanza', hacha: 'un hacha', maza: 'una maza', daga: 'una daga' }[tipo] + ' de madera'}. ${won ? 'Gané.' : f.down ? 'Acabé en el suelo.' : 'Quedamos en tablas.'}`]);
+  later(500, () => { y.act = null; y.emo = null; G.act = null; y.dir = dirTo(y, G);
+    say(y, { lines: [won ? '(Yago se levanta frotándose las costillas.) Vale, vale. Invito yo al pan.' : f.down ? '(Yago te tiende la mano para levantarte.) No está mal. Para ser la primera vez.' : '(Yago jadea.) Tablas. Odio las tablas.',
+      'Oye... peleas como si ya hubieras tenido un arma en la mano. ¿Quién te enseñó?', '¿Nadie? Pues el viejo Brin siempre dice que tu padre peleaba igual. Pregúntale a él.'],
+      learn: [['familia', 'Papá peleaba', 'Yago dice que el viejo Brin cuenta que papá peleaba igual que yo.']] }); });
+}
+// lo que Brin sabe de la caja (se suma a sus temas al empezar)
+function brinCaja() {
+  const b = P('brin'); b.topics.unshift({ id: 'caja', once: true, need: () => knows('Papá peleaba'), ask: { def: 'Yago dice que mi padre peleaba como yo.', temerario: 'Brin, ¿cómo peleaba mi padre?' },
+    a: () => ['(Brin deja la caña en el suelo, muy despacio.)', 'Así que ya ha llegado el día. Tu padre me hizo jurar una cosa antes de irse.', 'Enterró una caja junto a la Vieja, la roca con forma de ballena que hay de camino al faro.', '«Cuando el crío agarre un arma, que sea la mía.» Eso dijo. Y que no se lo contara a tu madre.', 'Ve. Y no le digas a Marla que te lo he dicho yo.'],
+    learn: L('familia', 'La caja de papá', 'Brin dice que papá enterró una caja junto a la Vieja, la roca con forma de ballena de camino al faro.') });
+}
+function cavar() {
+  if (!knows('La caja de papá')) return narr(['Tierra removida hace mucho. No hay nada que ver... ¿o sí?']);
+  if (F.caja) return narr(['El hoyo donde estaba la caja de tu padre.']);
+  G.dir = 'up'; act(G, 'thrust', { fps: 8, dur: 1600 });
+  later(900, () => narr(['Cavas con las manos al lado de la Vieja. A un palmo, la tierra suena a madera.', 'Una caja pequeña, envuelta en lona encerada. Dentro hay un arma vieja, una brújula y una nota doblada.'], () => {
+    F.caja = true; const tipo = F.armaTipo && F.armaTipo !== 'punos' ? F.armaTipo : 'daga', id = 'padre_' + tipo;
+    darObjeto(id); darObjeto('brujula'); darObjeto('nota'); S.arma = id;
+    learn(['familia', 'El arma de papá', `En la caja había ${arma(id).n}, el arma de papá. ${F.armaTipo === 'punos' ? 'Una daga: dice Brin que no hay puño que no mejore con una.' : 'La misma que elegí con Yago, como si lo hubiera sabido.'}`]);
+    learn(['familia', 'La brújula de papá', 'Estaba en la caja. No apunta al norte: tiembla y señala adonde tengo que ir.']);
+    const o = OBJS.find(o => o.label === 'Cavar'); if (o) o.label = 'Mirar';
+    later(3600, () => !G.talking && bubble({ x: G.x, y: G.y, scene: G.scene }, 'C para sacar la brújula', 3200)); }));
+}
+// adónde apunta la brújula: siempre hacia lo siguiente que importa
+function objetivo() {
+  if (F.invitacion) { const f = P('forastero'); return f && f.scene === 'town' ? { scene: 'town', x: f.x, y: f.y } : null; }
+  if (F.campana && !F.plaza) return { scene: 'town', x: 30 * T, y: 22.5 * T };
+  if (F.campana) return null;
+  if (knows('La caja de papá') && !F.caja) return { scene: 'town', x: HOYO[0] * T, y: HOYO[1] * T };
+  return { scene: 'town', x: 30 * T, y: 22.5 * T }; // la aguja se queda mirando el ancla de la plaza
+}
+
 function atardecer() {
-  F.invitacion = true; G.minutes = Math.max(G.minutes, 18.5 * 60); for (const n of PEOPLE) n.nextBark = performance.now() + 6000 + Math.random() * 8000;
+  F.invitacion = true; G.paused = true; timelapse(Math.max(G.minutes, 18.5 * 60), 5200, () => { G.paused = false; narr(['El sol ya toca el mar. Tienes hasta esta noche para decidir.', 'El forastero espera en la punta del muelle. La teniente, frente al destacamento.']); }); for (const n of PEOPLE) n.nextBark = performance.now() + 9000 + Math.random() * 8000;
+  for (const id of ['mar2', 'mar3']) { const n = P(id); if (n) n.scene = 'none'; }
   learn(['gente', 'El forastero', 'Encapuchado, de negro. No le vi la cara. Dorne retrocedió solo con verlo. Dice que zarpa esta noche y que hay sitio para mí.']);
   learn(['gente', 'Teniente Breda Nisi', 'Oficial de la Marina de Loguetown. Me ofreció alistarme. Su barco sale esta noche.']);
-  moveNpc(P('forastero'), 'town', [4.6, 22.2], 'left'); moveNpc(P('teniente'), 'town', [44.5, 14.6], 'down');
+  const fo0 = P('forastero'); fo0.fijo = false; moveNpc(fo0, 'town', [4.6, 22.2], 'left'); moveNpc(P('teniente'), 'town', [44.5, 14.6], 'down');
   moveNpc(P('corso'), 'casa', [10.8, 4.9], 'left'); moveNpc(P('marla'), 'casa', [2.6, 8.4], 'right');
-  for (const [id, at] of [['lin', [31.6, 23.8]], ['rosa', [26.8, 24.4]], ['pura', [28.1, 24.4]], ['brin', [3.2, 24.6]]]) moveNpc(P(id), 'town', at);
+  for (const [id, at] of [['lin', [31.6, 23.8]], ['rosa', [26.8, 24.4]], ['pura', [28.1, 24.4]], ['brin', [3.2, 24.6]], ['yago', [24.6, 30.3]]]) { const n = P(id); n.act = null; n.emo = null; moveNpc(n, 'town', at); }
+  const FR = { lin: ['Una isla sin nombre, un ancla que nadie puede mover... y ahora esto.', 'Tengo que apuntar todo lo de hoy antes de que se me olvide.'], rosa: ['Todavía me tiemblan las piernas.', '¿Quién era ese hombre de la capucha?'], pura: ['En mis tiempos esto no pasaba. Bueno... una vez sí.', 'Me desmayé como una jovencita, qué vergüenza.'],
+    brin: ['Ese de la capucha... Juraría que lo conozco.', 'Esta noche el mar está demasiado quieto.'], marla: ['...', '(Marla dobla la misma camisa por tercera vez.)'], corso: ['¿De verdad te vas a ir?', 'Si te vas, ¿quién me va a enseñar a pelear?'], mar1: ['Menudo día. Y yo de guardia.'], mara: ['Hoy invita la casa. Por si acaso es la última.'], gaspar: ['Hoy cierro antes. No quiero más sustos.'], medico: ['Media plaza ha pasado por aquí con chichones.'], nell: ['¡Dicen que te pegaste con un pirata!'] };
+  for (const [id, l] of Object.entries(FR)) { const n = P(id); if (n) n.fases = { ...(n.fases || {}), despedida: l }; }
+  const lin = P('lin'); lin.greet = () => pick(['Después de lo de hoy, esa ancla me interesa todavía más.', '¿Estás bien? Te vi de rodillas.']);
   const fam = player.last, fo = P('forastero'), te = P('teniente');
   fo.greet = () => pick(['La marea no espera.', '¿Ya lo has decidido?']); fo.barks = ['...'];
   fo.topics = [{ id: 'quien', once: true, ask: '¿Quién eres?', a: () => ['Alguien que conoció a tu padre. Con eso basta, por ahora.'], learn: L('familia', 'El forastero conoció a papá', 'El forastero dice que conoció a mi padre.') },
@@ -210,17 +341,17 @@ function atardecer() {
   const marla = P('marla'), corso = P('corso');
   marla.topics = [{ id: 'adios', once: true, ask: 'Mamá... me voy de Kalé. Esta noche.', a: () => {
     const lines = []; if (F.dorneCofre) lines.push('Dorne sabe lo del cofre, ¿verdad? Lo he visto en tu cara.');
-    if (aff('marla') >= 1 || knows('Mamá conoce a Dorne')) { F.brujula = true; S.items.push('Brújula de tu padre'); learn(['familia', 'La brújula de papá', 'Mamá me dio la brújula de papá. No apunta al norte. Él decía que apunta adonde está él.']);
-      return [...lines, '(Marla no dice nada. Va a su cuarto y vuelve con algo en la mano.)', 'Era de tu padre. Una brújula que no apunta al norte.', 'Él decía que apunta adonde está él. Nunca le creí.', 'Vuelve. ¿Me oyes? Vuelve.']; }
+    if (tiene('brujula')) lines.push('(Marla ve la brújula asomando de tu bolsa y se queda quieta.)', 'Así que Brin te lo ha contado. Esa brújula... él decía que apunta adonde está él. Nunca le creí.');
+    if (aff('marla') >= 1 || knows('Mamá conoce a Dorne')) { F.retrato = true; later(200, () => darObjeto('retrato')); learn(['familia', 'El retrato de papá', 'Mamá me dio la imagen que faltaba en el marco de su cómoda. Papá, joven, riéndose en un muelle. Tiene mi cara.']);
+      return [...lines, '(Marla va a su cuarto y vuelve con un papel doblado en la mano.)', 'La saqué del marco el día que se fue. No soportaba verlo.', 'Llévatela tú. Para que sepas a quién buscas.', 'Vuelve. ¿Me oyes? Vuelve.']; }
     return [...lines, '(Marla te abraza muy fuerte y tarda en soltarte.)', 'Ya sabía que este día iba a llegar.', 'Vuelve. ¿Me oyes? Vuelve.']; } }, ...marla.topics.filter(t => t.id === 'papa')];
   marla.greet = () => '(Marla tiene los ojos rojos.) Me lo ha contado todo Corso. Todo.';
-  corso.topics = [{ id: 'adios', once: true, ask: 'Corso, me voy.', a: () => asked('corso', 'prometo') ? ['¿Te vas? ¿Sin mí?', '...Lo prometiste. Me llevarás. Algún día.', 'Hasta entonces, cuido yo de mamá.'] : ['¿Te vas?', '(Corso se muerde el labio.) Escríbeme. Aunque sea una carta.'] }];
-  corso.greet = () => F.fight.protected ? '¡Le pegaste a un pirata! ¡A un pirata de verdad!' : '¿Estás bien? Tienes sangre en la ceja.';
-  narr(['El sol ya toca el mar. Tienes hasta esta noche para decidir.', 'El forastero espera en la punta del muelle. La teniente, frente al destacamento.']);
+  corso.topics = [{ id: 'adios', once: true, ask: 'Corso, me voy.', a: () => { corso.fases.despedida = ['(Corso hace como que dibuja, pero no dibuja nada.)', '...']; corso.nextBark = performance.now() + 20000; return asked('corso', 'prometo') ? ['¿Te vas? ¿Sin mí?', '...Lo prometiste. Me llevarás. Algún día.', 'Hasta entonces, cuido yo de mamá.'] : ['¿Te vas?', '(Corso se muerde el labio.) Escríbeme. Aunque sea una carta.']; } }];
+  corso.greet = () => F.plazaFight.protected ? '¡Le pegaste a un pirata! ¡A un pirata de verdad!' : '¿Estás bien? Tienes sangre en la ceja.';
 }
 // confirmación al elegir camino: el juego pregunta aquí antes de responder un tema
 function actoChoose(t, i) {
-  if (t.conv.opts) return false; const tp = topicsOf(t.npc)[i];
+  if (t.conv.opts) return false; if (duelChoose(t, i)) return true; const tp = topicsOf(t.npc)[i];
   if (!tp || !((t.npc.id === 'forastero' && tp.id === 'vamos') || (t.npc.id === 'teniente' && tp.id === 'alistar'))) return false;
   const path = t.npc.id === 'forastero' ? 'pirata' : 'marine';
   G.talking = { npc: t.npc, conv: { lines: [path === 'pirata' ? '¿Seguro? Cuando subas, no hay vuelta atrás.' : '¿Seguro? Una vez firmes, eres de la Marina.'], opts: [{ t: path === 'pirata' ? 'Sí. Zarpemos.' : 'Sí. Quiero alistarme.', then: () => final(path) }, { t: 'Todavía no.', then: () => { } }] }, i: 0 };
@@ -231,10 +362,10 @@ function actoChoose(t, i) {
 // =====================================================================
 function final(path) {
   const fam = player.last, f = F.fight || {};
-  learn(['yo', 'Me fui de Kalé', path === 'pirata' ? 'Zarpé de noche con el forastero de la levita negra, sin saber adónde.' : 'Me alisté en la Marina con la teniente Breda Nisi. Rumbo a Loguetown.']);
+  learn(['yo', 'Me fui de Kalé', path === 'pirata' ? 'Zarpé de noche con el forastero de la capucha, sin saber adónde.' : 'Me alisté en la Marina con la teniente Breda Nisi. Rumbo a Loguetown.']);
   const lines = path === 'pirata'
-    ? ['Esa noche, Kalé se hizo pequeña detrás de ti.', asked('corso', 'prometo') ? 'Corso te despidió desde el muelle hasta que ya no pudo verte. Le habías hecho una promesa.' : 'Corso te despidió desde el muelle hasta que ya no pudo verte.', F.brujula ? 'En el bolsillo llevabas la brújula de tu padre. No apuntaba al norte.' : 'El forastero no dijo una palabra en toda la noche.']
-    : ['Esa noche subiste a un barco de la Marina rumbo a Loguetown.', asked('corso', 'prometo') ? 'Corso no lloró. Te había hecho prometer que volverías a por él.' : 'Corso te despidió desde el muelle con la gorra de un marine que le habían regalado.', F.brujula ? 'En el bolsillo llevabas la brújula de tu padre. No apuntaba al norte.' : 'La teniente Nisi te miró una vez y asintió.'];
+    ? ['Esa noche, Kalé se hizo pequeña detrás de ti.', asked('corso', 'prometo') ? 'Corso te despidió desde el muelle hasta que ya no pudo verte. Le habías hecho una promesa.' : 'Corso te despidió desde el muelle hasta que ya no pudo verte.', tiene('brujula') ? 'En el bolsillo llevabas la brújula de tu padre. La aguja no apuntaba al norte: apuntaba mar adentro.' : 'El forastero no dijo una palabra en toda la noche.']
+    : ['Esa noche subiste a un barco de la Marina rumbo a Loguetown.', asked('corso', 'prometo') ? 'Corso no lloró. Te había hecho prometer que volverías a por él.' : 'Corso te despidió desde el muelle con la gorra de un marine que le habían regalado.', tiene('retrato') ? 'En el bolsillo llevabas el retrato de tu padre. Alguien en la Marina tenía que conocer esa cara.' : 'La teniente Nisi te miró una vez y asintió.'];
   G.paused = true; G.talking = null; renderTalk(); keyHandler = null;
   const ov = document.createElement('div'); ov.className = 'tiza'; ov.innerHTML = `<canvas width="640" height="360" aria-hidden="true"></canvas><p class="on"></p><div class="fin" hidden><b>Fin del Acto 0</b><span>${fullName()} · ${path === 'pirata' ? 'Rumbo desconocido' : 'Rumbo a Loguetown'}</span><button type="button" class="btn" id="finmenu">Volver al menú</button></div>`;
   app.appendChild(ov); const c = ov.querySelector('canvas'), g = c.getContext('2d'), p = ov.querySelector('p'); let i = 0, t0 = performance.now();
@@ -250,17 +381,14 @@ function final(path) {
 // =====================================================================
 // LO QUE SE DIBUJA EN EL MUNDO DURANTE EL ACTO
 // =====================================================================
-// Haki del rey: una onda que sale del forastero; el aire se oscurece, rayos negros con filo rojo, la plaza se encoge.
-function haki(fo) {
-  F.haki = { t0: performance.now(), x: fo.x, y: fo.y - 30 };
-  const el = document.getElementById('game');
-  el.animate([{ filter: 'none' }, { filter: 'grayscale(.85) contrast(1.5) brightness(.8)', offset: .15 }, { filter: 'grayscale(.6) contrast(1.3)', offset: .7 }, { filter: 'none' }], { duration: 2200, easing: 'ease-out' });
-  el.animate([0, 1, 2, 3, 4, 5, 6, 7].map(k => ({ transform: k % 7 ? `translate(${(k % 2 ? -1 : 1) * (5 - k * .6)}px,${(k % 3 - 1) * 2}px)` : 'translate(0,0)' })), { duration: 700 });
-  // todos se echan un poco hacia atrás
-  for (const n of PEOPLE) if (n !== fo && n.scene === 'town' && Math.hypot(n.x - fo.x, n.y - fo.y) < 12 * T) { const dx = Math.sign(n.x - fo.x) * 5, x0 = n.x; n.x += dx; n.dir = n.x < fo.x ? 'right' : 'left'; later(900, () => n.x = x0); }
-  later(2600, () => F.haki = null);
-}
 function actoDrawOver(g, [cx, cy], now, VW, VH) {
+  // los piratas tiran de la cadena: se inclinan hacia atrás, a tirones, y el ancla suelta polvo
+  const tc = now / 1000, ring = [30 * T - cx, 21 * T - 113 - cy];
+  if (F.campana && !F.refuerzos) for (const id of ['pirata', 'pirata2']) { const n = P(id); if (!n || n.scene !== 'town' || !n.tira) continue; const s = n.x < 30 * T ? -1 : 1, tir = Math.max(0, Math.sin(tc * 3 + (s > 0 ? 1 : 0)));
+    n.dir = s < 0 ? 'left' : 'right'; n.dx = Math.round(s * tir * 3); n.paso = true; n.frame = 1 + Math.floor(tc * 5 + (s > 0 ? 3 : 0)) % 8;
+    drawChain(g, ring, [n.x + n.dx - cx - s * 8, n.y - 30 - cy], 10 - tir * 7, tc);
+    if (tir > .9) { g.fillStyle = 'rgba(200,190,170,.5)'; for (let k = 0; k < 4; k++) g.fillRect(Math.round(30 * T - cx + s * (20 + k * 5) + Math.sin(tc * 20 + k) * 2), Math.round(21 * T - cy + 12 - k), 2, 2); } }
+  else if (F.campana && P('pirata') && !P('pirata').tira && P('pirata').scene === 'town' && !F.refuerzos) drawChain(g, ring, [27.6 * T - cx, 21.9 * T - cy], 4, 0);
   // golpe: estrella de impacto y líneas de velocidad, 220 ms
   const fx = F.fx; if (fx && now - fx.t0 < 220) { const k = (now - fx.t0) / 220, x = fx.x - cx, y = fx.y - cy, r = 6 + k * 16; g.save(); g.globalAlpha = 1 - k;
     g.fillStyle = fx.me ? '#ff6a4a' : '#fff6dc'; g.beginPath(); for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, rr = i % 2 ? r * .45 : r; g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } g.fill();
@@ -283,10 +411,18 @@ function actoDrawOver(g, [cx, cy], now, VW, VH) {
   if (t < .12) { g.fillStyle = `rgba(255,255,255,${.5 * (1 - t / .12)})`; g.fillRect(0, 0, VW, VH); }
 }
 function actoDrawTown(g, [cx, cy], now) {
-  if (F.campana && P('pirata') && P('pirata').scene === 'town') { g.strokeStyle = '#6a6a76'; g.lineWidth = 3; g.setLineDash([4, 3]);
-    for (const id of ['pirata', 'pirata2']) { const n = P(id); g.beginPath(); g.moveTo(30 * T - cx, 20.4 * T - cy); g.lineTo(n.x - cx, n.y - 24 - cy); g.stroke(); } g.setLineDash([]); }
+  // tierra removida junto a la Vieja: casi no se ve hasta que sabes buscarla
+  const hx = HOYO[0] * T - cx, hy = HOYO[1] * T - cy, sabe = knows('La caja de papá');
+  g.fillStyle = F.caja ? 'rgba(40,24,12,.7)' : `rgba(110,76,44,${sabe ? .55 : .25})`; g.beginPath(); g.ellipse(hx, hy, 13, 6, 0, 0, 7); g.fill();
+  if (sabe && !F.caja) { g.fillStyle = '#8a8a94'; for (const [a, b] of [[-6, -3], [-3, -1], [0, 0], [3, 1], [6, 3], [-6, 3], [-3, 1], [3, -1], [6, -3]]) g.fillRect(Math.round(hx + a) - 1, Math.round(hy + b) - 1, 3, 2); }
+  if (F.caja) { g.fillStyle = 'rgba(140,100,60,.8)'; g.beginPath(); g.ellipse(hx + 12, hy + 3, 7, 3, 0, 0, 7); g.fill(); }
   if (F.refuerzos) drawMarineShip(g, 5.4 * T - cx, 17.4 * T - cy, 8 * T, 3.2 * T);
 }
+// cadena de verdad: eslabones alternos que cuelgan entre la argolla del ancla y las manos de quien tira
+function drawChain(g, a, b, sag, t) { const n = Math.max(6, Math.round(Math.hypot(b[0] - a[0], b[1] - a[1]) / 5));
+  for (let i = 0; i <= n; i++) { const k = i / n, x = a[0] + (b[0] - a[0]) * k, y = a[1] + (b[1] - a[1]) * k + Math.sin(k * Math.PI) * sag + Math.sin(t * 9 + k * 6) * .6, along = i % 2 === 0;
+    g.fillStyle = '#1e1a20'; g.beginPath(); g.ellipse(x, y, along ? 4 : 2, along ? 2.4 : 3.6, Math.atan2(b[1] - a[1], b[0] - a[0]), 0, 7); g.fill();
+    g.fillStyle = along ? '#6e6c78' : '#4a4856'; g.beginPath(); g.ellipse(x, y, along ? 3 : 1.2, along ? 1.4 : 2.6, Math.atan2(b[1] - a[1], b[0] - a[0]), 0, 7); g.fill(); if (along) { g.fillStyle = '#1e1a20'; g.fillRect(Math.round(x) - 1, Math.round(y), 2, 1); } } }
 function drawMarineShip(g, x, y, w, h) {
   g.save(); g.fillStyle = 'rgba(0,10,30,.3)'; g.beginPath(); g.ellipse(x + w / 2 + 8, y + h / 2 + 10, w / 2, h / 2.1, 0, 0, 7); g.fill();
   const hull = [[x + 4, y + 8], [x + w * .72, y + 3], [x + w * .93, y + h * .3], [x + w + 14, y + h / 2], [x + w * .93, y + h * .7], [x + w * .72, y + h - 3], [x + 4, y + h - 8]];

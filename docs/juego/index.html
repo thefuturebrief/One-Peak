@@ -182,6 +182,57 @@ input.name:focus{border-color:var(--gold)}
 .tip span{display:flex;align-items:center;gap:7px;color:var(--dim)}.tip kbd{font:800 11px var(--f);padding:2px 6px;border-radius:5px;border:1.5px solid var(--edge);color:#fff6e8}
 .hud.talking .tip,#hud.talking .tip{display:none}
 #vig{position:fixed;inset:0;pointer-events:none;display:none;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 55%,rgba(8,10,20,.42) 100%)}.playing #vig{display:block}
+.hb.new-d::after{content:"";position:absolute;right:-3px;top:-3px;width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 2px var(--ink)}
+.hb[aria-pressed="true"]{border-color:var(--gold);color:var(--gold2)}
+.panelj{position:absolute;inset:0;display:grid;place-items:center;background:rgba(10,6,4,.55);padding:16px;animation:pin .18s ease-out}
+@keyframes pin{from{opacity:0;transform:translateY(6px)}}
+.panelj .book{width:min(900px,100%);height:min(620px,100%);display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+.panelj .tabs{display:flex;gap:6px;padding:12px 14px 0;border-bottom:1px solid var(--edge)}
+.panelj .tabs button{all:unset;cursor:pointer;padding:10px 16px;font-weight:800;font-size:16px;color:var(--dim);border-bottom:3px solid transparent;display:flex;gap:8px;align-items:center}
+.panelj .tabs button kbd{font:700 11px var(--f);padding:1px 6px;border-radius:5px;border:1.5px solid var(--edge);color:var(--dim)}
+.panelj .tabs button.on{color:var(--gold2);border-color:var(--gold)}.panelj .tabs button:focus-visible{outline:2px solid #fff}
+.panelj .tabs .x{margin-left:auto;font-weight:600;font-size:14px}
+.pbody{overflow:hidden;min-height:0}
+.diario{display:grid;grid-template-columns:170px 1fr;height:100%}
+.diario .sub{display:flex;flex-direction:column;gap:2px;padding:14px 10px;border-right:1px solid var(--edge)}
+.diario .sub button{all:unset;cursor:pointer;padding:9px 12px;border-radius:10px;font-weight:700;font-size:15px;color:var(--dim);display:flex;justify-content:space-between;align-items:center}
+.diario .sub button i{font-style:normal;font-size:12px;font-weight:800;background:rgba(255,255,255,.08);border-radius:999px;padding:1px 8px}
+.diario .sub button.on{background:rgba(255,200,90,.12);color:var(--gold2)}.diario .sub button:focus-visible{outline:2px solid #fff}
+.diario .page{overflow:auto;padding:18px 22px 22px;display:flex;flex-direction:column;gap:12px}
+.bolsa{display:grid;grid-template-columns:1fr 300px;height:100%}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:10px;padding:18px;align-content:start;overflow:auto}
+.slot{all:unset;box-sizing:border-box;aspect-ratio:1;border-radius:14px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);display:grid;place-items:center;position:relative;cursor:pointer}
+.slot canvas{width:64px;height:64px;image-rendering:pixelated}
+.slot.on{border-color:var(--gold);background:rgba(255,200,90,.1)}.slot:focus-visible{outline:2px solid #fff}
+.slot.vacio{cursor:default;background:rgba(255,255,255,.02);border-style:dashed}
+.slot .eq{position:absolute;left:6px;top:6px;font-style:normal;font-size:10px;font-weight:800;background:var(--gold);color:#2a1206;border-radius:6px;padding:1px 5px}
+.det{border-left:1px solid var(--edge);padding:22px;display:flex;flex-direction:column;gap:10px;overflow:auto}
+.det .ic{display:grid;place-items:center;height:150px;border-radius:16px;background:radial-gradient(circle at 50% 40%,rgba(255,220,150,.14),rgba(0,0,0,0) 70%)}
+.det .ic canvas{width:128px;height:128px;image-rendering:pixelated}
+.det b{font-size:20px}.det p{margin:0;color:var(--dim);line-height:1.55;font-size:15px}
+.det .meta{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:700;color:var(--dim);flex-wrap:wrap}
+.grado{font-size:11px;font-weight:800;letter-spacing:.04em;padding:3px 8px;border-radius:999px;border:1.5px solid currentColor}
+.g-saijo{color:#ff9a6a}.g-o{color:#ffd27a}.g-ryo{color:#9ad8ff}.g-waza{color:#b8e8a0}.g-sin{color:#a89a8a}
+.btn.sm{font-size:15px;padding:10px 18px;align-self:flex-start}
+.toast{position:absolute;left:50%;top:max(16px,env(safe-area-inset-top,0px));transform:translateX(-50%);display:flex;align-items:center;gap:14px;padding:10px 20px 10px 10px;animation:tin .35s cubic-bezier(.2,1.4,.4,1);transition:opacity .45s,transform .45s}
+.toast.out{opacity:0;transform:translate(-50%,-12px)}
+@keyframes tin{from{opacity:0;transform:translate(-50%,-16px) scale(.94)}}
+.toast .ti{width:64px;height:64px;border-radius:12px;background:radial-gradient(circle at 50% 40%,rgba(255,220,150,.22),rgba(0,0,0,0) 70%);display:grid;place-items:center}
+.toast .ti canvas{width:64px;height:64px;image-rendering:pixelated}
+.toast small{display:block;color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.toast b{font-size:18px}
+#brujula{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);width:156px;height:156px;border-radius:50%;filter:drop-shadow(0 14px 24px rgba(0,0,0,.45));animation:bin .3s cubic-bezier(.2,1.4,.4,1);pointer-events:none}
+#brujula canvas{width:100%;height:100%}
+@keyframes bin{from{opacity:0;transform:translateY(-50%) scale(.8) rotate(-20deg)}}
+#hud.talking #brujula{opacity:.35}
+.wanted-ov{position:absolute;inset:0;display:grid;place-items:center;background:rgba(10,6,4,.6);padding:16px;cursor:pointer;animation:pin .2s ease-out}
+.wanted{width:min(320px,90vw);padding:18px 22px 14px;background:linear-gradient(180deg,#efe2bf,#e2cf9e);color:#3a2414;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.5),inset 0 0 40px rgba(120,80,30,.35);transform:rotate(-1.5deg);font-family:Georgia,'Times New Roman',serif;border-radius:2px}
+.wanted h3{margin:0;font:900 44px/1 Georgia,serif;letter-spacing:.06em}
+.wanted .foto{margin:10px auto 8px;border:3px solid #3a2414;background:#7a6a50}.wanted .foto canvas{display:block;width:100%;image-rendering:pixelated}
+.wanted .vom{font:800 15px Georgia,serif;letter-spacing:.3em}.wanted .nom{font:900 24px Georgia,serif;margin-top:4px}
+.wanted .cifra{font:900 28px Georgia,serif;margin-top:2px;display:flex;justify-content:center;align-items:baseline;gap:4px}.wanted .cifra span{font-size:22px}.wanted .cifra small{font-size:20px}
+.wanted .mar{font:800 12px Georgia,serif;letter-spacing:.5em;margin-top:6px;opacity:.75}
+#hud:has(.panelj) #pad,#hud:has(.panelj) .hbtns,#hud:has(.wanted-ov) #pad,#hud:has(.pausa) #pad{display:none}
+@media (max-width:700px){.bolsa{display:flex;flex-direction:column;overflow:auto}.slots{overflow:visible;grid-template-columns:repeat(4,1fr)}.slot.vacio:nth-child(n+9){display:none}.det{border-left:0;border-top:1px solid var(--edge);overflow:visible}.det .ic{height:110px}.det .ic canvas{width:96px;height:96px}.diario{grid-template-columns:1fr;grid-template-rows:auto 1fr}.diario .sub{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid var(--edge)}#brujula{width:120px;height:120px;top:30%}}
 @media (prefers-reduced-motion:reduce){#bg,.screen,.bubble{animation:none}.mi,.opt,.btn{transition:none}}
 </style>
 <div id="app">
@@ -194,7 +245,8 @@ input.name:focus{border-color:var(--gold)}
     <div class="clock glass"><b id="day">Día 1</b><span id="hour">08:00</span></div>
     <div class="place glass" id="placeName">Kalé</div>
     <div class="purse glass" hidden><i></i><span>300</span></div>
-    <div class="hbtns"><button class="hb glass" id="openDiary" type="button">Diario <kbd>J</kbd></button><button class="hb glass" id="pauseBtn" type="button" aria-label="Pausa">❚❚</button></div>
+    <div class="hbtns"><button class="hb glass" id="compBtn" type="button" hidden aria-pressed="false">Brújula <kbd>C</kbd></button><button class="hb glass" id="openBag" type="button">Bolsa <kbd>I</kbd></button><button class="hb glass" id="pauseBtn" type="button" aria-label="Pausa">❚❚</button></div>
+    <div id="brujula" hidden aria-label="Brújula"><canvas id="bruCv" width="220" height="220"></canvas></div>
     <div id="overlays"></div>
     <div id="pad" hidden><div class="pad"><span></span><button data-d="up" aria-label="Arriba">▲</button><span></span><button data-d="left" aria-label="Izquierda">◀</button><span></span><button data-d="right" aria-label="Derecha">▶</button><span></span><button data-d="down" aria-label="Abajo">▼</button><span></span></div><button class="act" id="actBtn" aria-label="Interactuar">E</button><button class="run" id="runBtn" type="button" aria-pressed="false">Correr</button></div>
   </div>
@@ -203,5 +255,7 @@ input.name:focus{border-color:var(--gold)}
 <script src="mundo.js"></script>
 <script src="decor.js"></script>
 <script src="personaje.js"></script>
+<script src="armas.js"></script>
+<script src="bolsa.js"></script>
 <script src="acto0.js"></script>
 <script src="juego.js"></script>

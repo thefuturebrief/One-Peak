@@ -206,6 +206,38 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
   - El monedero queda oculto hasta que haya economía.
   - Golpes con estrella de impacto.
   - Sombras de nubes que cruzan la isla y una viñeta suave en los bordes.
+- **Versión 0.5 (después de la segunda prueba completa):**
+  - **Animaciones LPC completas:** caminar, tajo, estocada, disparo y caída, para todos los personajes y para el tuyo.
+  - **Pelea y escenas animadas.** Ataques, golpes que se encajan y caídas. La gente mira a quien habla, y aparecen signos sobre la cabeza (!, ?, …, zzz).
+  - **Haki:** casi toda la plaza se desmaya. Tú caes de rodillas; Corso tiembla y Dorne retrocede.
+  - **El forastero se va antes de que llegue la Marina:** no se cruzan.
+  - **La cadena** es de eslabones de verdad. Los piratas tiran a tirones y el ancla suelta polvo.
+  - **Mañana con cosas para hacer:**
+    - duelo con Yago en el astillero, eligiendo arma;
+    - Brin cuenta que tu padre enterró una caja junto a la Vieja, la roca con forma de ballena;
+    - la caja trae el arma de tu padre del tipo que elegiste, la brújula y una nota.
+    - El reloj va un poco más rápido.
+  - **Bolsa:** aviso con la imagen del objeto, y Bolsa y Diario en un mismo panel (I y J).
+  - **Brújula (C):** latón y aguja con inercia. Apunta a lo siguiente que importa: la caja, el ancla, el forastero.
+  - **Marla** ahora te da el retrato que faltaba en el marco, si hay confianza. La brújula viene de la caja.
+  - **Cartel de recompensa** con la foto de Dorne a mitad de un tajo.
+  - **Marina con uniforme:**
+    - los marineros llevan gorra blanca con banda azul, cuello marinero y corbatín, dibujados sobre la cabeza en cada cuadro;
+    - los oficiales llevan el abrigo blanco sobre los hombros.
+    - Los rangos siguen pendientes.
+  - **Creación:**
+    - sexo y complexión por separado (no hay cuerpo de mujer fornida en LPC);
+    - diez tonos de piel, entre ellos pálida, trigueña, café con leche y canela;
+    - treinta colores de pelo;
+    - los ojos ya cambian de color.
+  - **Mundo:**
+    - los caminos se dibujan como uno solo;
+    - ancla y faro rehechos;
+    - la casa de Brin pasa a tierra firme;
+    - pasto con matas, flores y piedras;
+    - humo de chimenea, gaviotas, mariposas, una ardilla, luciérnagas y el haz del faro.
+  - **Tiempo y movimiento:** el atardecer y el descanso pasan a la vista, no de golpe, y el zoom es suave.
+  - **Frases según el momento del acto,** sin repetir las últimas.
 - **Armas:** plan en `docs/armas.md`.
   - LPC para espadas, contundentes y astas, con paletas.
   - Armas de fuego dibujadas por código sobre la pose de disparar.

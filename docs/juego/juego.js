@@ -1,8 +1,12 @@
 // Menú, prólogo, conversaciones, diario y el bucle del juego. El mundo lo construye mundo.js desde plano.json.
-const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermana', 'forastero', 'teniente', 'pirata'];
+const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata'];
 const SHEETS = {}, ROW = { up: 0, left: 1, down: 2, right: 3 };
 const loadImg = s => new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ko(new Error('No se pudo cargar ' + s)); i.src = s; });
-function drawLPC(g, id, x, y, dir, frame, scale = 1) { const im = SHEETS[id]; if (!im) return; g.drawImage(im, frame * 64, ROW[dir] * 64, 64, 64, Math.round(x - 32 * scale), Math.round(y - 60 * scale), 64 * scale, 64 * scale); }
+// animaciones de la hoja: fila inicial y cuadros; la caída tiene una sola fila (mira hacia abajo)
+const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'] };
+const animOk = (id, a) => a === 'walk' || (SHEETS[id] && SHEETS[id].anims ? SHEETS[id].anims.has(a) : !(SIN_ANIM[id] || []).includes(a));
+function drawLPC(g, id, x, y, dir, frame, scale = 1, anim = 'walk') { const im = SHEETS[id]; if (!im) return; if (!animOk(id, anim)) { anim = 'walk'; frame = 0; }
+  const [r0, n] = ANIM[anim], row = r0 + (anim === 'hurt' ? 0 : ROW[dir]); g.drawImage(im, Math.min(frame | 0, n - 1) * 64, row * 64, 64, 64, Math.round(x - 32 * scale), Math.round(y - 60 * scale), 64 * scale, 64 * scale); }
 let PLANO, CREDITOS;
 const listo = (async () => {
   await Promise.all([...Object.entries(ATLAS).map(([k, s]) => loadImg(s).then(i => A[k] = i)), ...PERSONAJES.map(id => loadImg('assets/personajes/' + id + '.png').then(i => SHEETS[id] = i))]);
@@ -45,10 +49,10 @@ const DREAMS = [
 ];
 const rnd = Math.random, pick = a => a[Math.floor(rnd() * a.length)];
 const S = {}, player = { name: '', last: '' };
-function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
+function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], bag: [], arma: null, dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
   STATS.forEach(([k]) => S.st[k] = 8); Object.keys(OFICIOS).forEach(k => S.of[k] = 0); S.tag = t => S.tags.filter(x => x === t).length; }
 function apply(fx) { if (!fx) return; for (const k in fx.ax || {}) S.ax[k] += fx.ax[k]; for (const k in fx.st || {}) S.st[k] += fx.st[k]; for (const k in fx.of || {}) S.of[k] += fx.of[k];
-  (fx.tr || []).forEach(t => S.trs.includes(t) || S.trs.push(t)); (fx.tags || []).forEach(t => S.tags.push(t)); if (fx.bond) S.bonds.push(fx.bond); if (fx.item) S.items.push(fx.item); }
+  (fx.tr || []).forEach(t => S.trs.includes(t) || S.trs.push(t)); (fx.tags || []).forEach(t => S.tags.push(t)); if (fx.bond) S.bonds.push(fx.bond); if (fx.item) { S.items.push(fx.item); darObjeto('mapa', true); } }
 function motive() { if (S.tag('padre')) return 'Nunca supiste quién era tu padre. Tu madre se niega a hablar de él.';
   if (S.tag('justicia') >= 2) return 'Viste demasiadas veces que la ley y la justicia no son lo mismo.';
   if (S.tag('tesoro')) return 'Desde aquella historia para dormir no has dejado de pensar en lo que hay al final del mar.';
@@ -68,7 +72,7 @@ function menu() {
   attract.on = true; requestAnimationFrame(attractFrame);
   show(`<div class="col"><h1 class="logo"><span>One</span><span>Peak</span></h1><nav class="menu" aria-label="Menú principal">
     <button class="mi" data-a="new" type="button">${ANCHOR}Nueva partida</button><button class="mi" type="button" disabled>${ANCHOR}Continuar</button>
-    <button class="mi" data-a="opt" type="button">${ANCHOR}Opciones</button><button class="mi" data-a="cred" type="button">${ANCHOR}Créditos</button></nav></div><div class="ver">v0.3</div>`, false);
+    <button class="mi" data-a="opt" type="button">${ANCHOR}Opciones</button><button class="mi" data-a="cred" type="button">${ANCHOR}Créditos</button></nav></div><div class="ver">v0.5</div>`, false);
   const items = [...root.querySelectorAll('.mi:not(:disabled)')]; items.forEach(b => b.onclick = () => ({ new: create, opt: options, cred: credits })[b.dataset.a]());
   keys(e => { const i = items.indexOf(document.activeElement); if (e.key === 'ArrowDown') { items[(i + 1) % items.length].focus(); e.preventDefault(); } if (e.key === 'ArrowUp') { items[(i - 1 + items.length) % items.length].focus(); e.preventDefault(); } });
 }
@@ -161,7 +165,7 @@ function makePeople() {
         { id: 'busca', once: true, ask: '¿Qué buscas en Kalé?', a: () => ['En las cartas de la Marina, Kalé ni siquiera tiene nombre. Una isla con puerto, faro y taberna... y sin nombre.', 'Las islas sin nombre suelen esconder algo.'], learn: L('rumores', 'Kalé no está en los mapas', 'Según Lin, en las cartas de la Marina la isla no tiene nombre.') },
         { id: 'llegar', once: true, ask: '¿Cómo llegaste?', a: () => ['En el barco que trae la sal cada mes. Me iré en el próximo... o en el que salga antes.'] },
         { id: 'borrar', once: true, need: () => knows('Alguien borró Kalé'), ask: '¿Por qué alguien borraría una isla de los mapas?', a: () => ['Para esconder algo. O a alguien.', '(Lo anota en su cuaderno.) Interesante. Muy interesante.'] },
-        { id: 'cadena', once: true, need: () => knows('Mucha cadena'), ask: 'Los del barco negro compraron cadena. Mucha.', a: () => ['¿Cadena? (Mira el ancla de la plaza.)', 'Esa ancla pesa más que un barco. Hace falta mucha cadena para moverla.'], learn: L('rumores', 'Quieren levantar el ancla', 'Lin cree que los del barco negro quieren levantar el ancla de la plaza.') },
+        { id: 'cadena', once: true, need: () => knows('Mucha cadena') && !F.campana, ask: 'Los del barco negro compraron cadena. Mucha.', a: () => ['¿Cadena? (Mira el ancla de la plaza.)', 'Esa ancla pesa más que un barco. Hace falta mucha cadena para moverla.'], learn: L('rumores', 'Quieren levantar el ancla', 'Lin cree que los del barco negro quieren levantar el ancla de la plaza.') },
       ] },
     { id: 'rosa', scene: 'town', at: [26.8, 24.4], sprite: 'pescadora', dir: 'right', name: 'Rosa', chat: true,
       barks: { dia: ['¡Fresco, recién salido del agua!', 'Hoy el pescado está caro.'], tarde: ['A mitad de precio, que se pone malo.'], noche: ['Ya está bien por hoy.'] },
@@ -202,7 +206,7 @@ function makePeople() {
       topics: [
         { id: 'vende', once: true, ask: '¿Qué vendes?', a: () => ['Cuerda, redes, anzuelos, brea, velas. Lo que haga falta para no hundirse.'] },
         { id: 'piratas', once: true, ask: '¿Los del barco negro te han comprado algo?', a: () => ['Buenos clientes, los piratas. Pagan sin regatear.', 'Esta mañana se llevaron cien brazas de cadena gruesa. ¿Para qué quiere tanta cadena un barco fondeado?'], learn: L('rumores', 'Mucha cadena', 'Gaspar les vendió a los del barco negro cien brazas de cadena gruesa.') },
-        { id: 'ancla', once: true, need: () => knows('Quieren levantar el ancla'), ask: '¿Y si quieren levantar el ancla de la plaza?', a: () => ['(Gaspar deja de contar monedas.)', 'Esa ancla no se mueve. Mi abuelo decía que si alguien la levanta, Kalé se hunde.', 'Tonterías de viejos. ...Supongo.'], learn: L('kale', 'La leyenda del ancla', 'Según el abuelo de Gaspar, si alguien levanta el ancla de la plaza, Kalé se hunde.') },
+        { id: 'ancla', once: true, need: () => knows('Quieren levantar el ancla') && !F.campana, ask: '¿Y si quieren levantar el ancla de la plaza?', a: () => ['(Gaspar deja de contar monedas.)', 'Esa ancla no se mueve. Mi abuelo decía que si alguien la levanta, Kalé se hunde.', 'Tonterías de viejos. ...Supongo.'], learn: L('kale', 'La leyenda del ancla', 'Según el abuelo de Gaspar, si alguien levanta el ancla de la plaza, Kalé se hunde.') },
       ] },
     { id: 'medico', scene: 'medico', at: [6.2, 5.6], sprite: 'padre', dir: 'down', name: 'Doctor Ansel',
       barks: { dia: ['Siguiente.', 'Lávate las manos antes de tocar nada.'], tarde: ['Qué día más largo.'], noche: ['Las urgencias, por la puerta de atrás.'] },
@@ -225,7 +229,7 @@ function makePeople() {
 }
 const OBJECTS = () => [
   { scene: 'town', at: [30, 21.9], label: 'Leer', text: '«Aquí echó el ancla el primer barco que llegó a Kalé. Que nadie la levante.» Debajo, alguien ha rayado: «Ya veremos».', learn: ['kale', 'El Ancla de Kalé', 'La placa dice que nadie debe levantarla. Alguien rayó debajo: «Ya veremos».'] },
-  { scene: 'town', at: [35.5, 19.3], label: 'Leer', text: 'SE BUSCA: «Garra» Dorne. 8.000.000 de berries. Debajo, un papel nuevo de la Marina: «Prohibido acercarse al barco fondeado».', learn: ['rumores', 'Dorne tiene recompensa', 'El tablón de la Marina ofrece 8.000.000 de berries por «Garra» Dorne.'] },
+  { scene: 'town', at: [35.5, 19.3], label: 'Leer', cartel: 'dorne', text: 'SE BUSCA: «Garra» Dorne. 8.000.000 de berries. Debajo, un papel nuevo de la Marina: «Prohibido acercarse al barco fondeado».', learn: ['rumores', 'Dorne tiene recompensa', 'El tablón de la Marina ofrece 8.000.000 de berries por «Garra» Dorne.'] },
   { scene: 'casa', at: [1.05, 5.6], label: 'Mirar', text: 'El cofre de mamá. Cerrado con llave. Nunca lo has visto abierto.', learn: ['familia', 'El cofre de mamá', 'En el cuarto de mamá hay un cofre cerrado con llave.'] },
   { scene: 'casa', at: [4.8, 1.4], label: 'Mirar', text: 'Un retrato boca abajo sobre la cómoda. Al levantarlo, está vacío: alguien sacó la imagen y dejó solo el marco.', learn: ['familia', 'El retrato vacío', 'Sobre la cómoda de mamá hay un marco boca abajo, sin la imagen.'] },
   { scene: 'brin', at: [3.7, 0.9], label: 'Mirar', text: 'Un mapa viejo y descolorido. Alguien marcó una cruz lejos de cualquier isla conocida.', learn: ['rumores', 'La cruz del mapa de Brin', 'En casa de Brin hay un mapa con una cruz lejos de cualquier isla conocida.'] },
@@ -241,17 +245,15 @@ const openNow = b => !b.ext.horario || b.ext.horario.some(([a, z]) => hourNow() 
 // DIARIO
 // =====================================================================
 const DIARY = { yo: [], familia: [], gente: [], rumores: [], kale: [] };
-function learn(e) { if (!e) return; const [sec, title, txt] = e; if (DIARY[sec].some(x => x.title === title)) return; DIARY[sec].push({ title, txt }); document.getElementById('openDiary').classList.add('new'); }
-function openDiary(tab = 'yo') { G.paused = true; document.getElementById('openDiary').classList.remove('new'); const ov = document.getElementById('overlays'); const old = ov.querySelector('.diary'); old && old.remove();
-  const d = document.createElement('div'); d.className = 'diary'; const TABS = [['yo', 'Yo'], ['familia', 'Familia'], ['gente', 'Gente'], ['rumores', 'Rumores'], ['kale', 'Kalé']];
+function learn(e) { if (!e) return; const [sec, title, txt] = e; if (DIARY[sec].some(x => x.title === title)) return; DIARY[sec].push({ title, txt }); document.getElementById('openBag').classList.add('new-d'); }
+function diarioHTML(tab) { const TABS = [['yo', 'Yo'], ['familia', 'Familia'], ['gente', 'Gente'], ['rumores', 'Rumores'], ['kale', 'Kalé']];
   const page = k => { if (k === 'yo') { const top = Object.entries(S.of).sort((a, b) => b[1] - a[1])[0], of = top[1] > 0 ? OFICIOS[top[0]] : 'Sin oficio fijo';
       return `<div class="entry"><b>${fullName()}</b><span>17 años. Nací en Kalé, en el East Blue. ${of}.</span></div><div class="entry"><b>Mi sueño</b><span>${S.dream}<br><i>${motive()}</i></span></div>
       <div class="axes">${Object.entries(AX).map(([k, [a, b]]) => { const v = Math.max(-4, Math.min(4, S.ax[k])); return `<div class="ax"><span class="${v < 0 ? 'on' : ''}">${a}</span><span class="tr"><i style="left:${50 + v * 12}%"></i></span><span class="${v > 0 ? 'on' : ''}">${b}</span></div>`; }).join('')}</div>
-      <div class="stats">${STATS.map(([k, n]) => `<div>${n}<b>${S.st[k]}</b></div>`).join('')}</div>${S.trs.length || S.items.length ? `<div class="entry"><span>${[...S.trs, ...S.items].join(' · ')}</span></div>` : ''}`; }
-    return DIARY[k].length ? DIARY[k].map(e => `<div class="entry"><b>${e.title}</b><span>${e.txt}</span></div>`).join('') : '<p class="empty">Todavía no has escrito nada aquí.</p>'; };
-  d.innerHTML = `<div class="glass book" role="dialog" aria-label="Diario"><div class="tabs">${TABS.map(([k, n]) => `<button type="button" data-k="${k}" class="${k === tab ? 'on' : ''}">${n}</button>`).join('')}<button type="button" class="x" aria-label="Cerrar diario">Cerrar ✕</button></div><div class="page">${page(tab)}</div></div>`;
-  ov.appendChild(d); d.querySelectorAll('[data-k]').forEach(b => b.onclick = () => openDiary(b.dataset.k)); d.querySelector('.x').onclick = closeDiary; d.onclick = e => { if (e.target === d) closeDiary(); }; d.querySelector('.on').focus(); }
-function closeDiary() { const d = document.querySelector('.diary'); d && d.remove(); G.paused = false; }
+      <div class="stats">${STATS.map(([k, n]) => `<div>${n}<b>${S.st[k]}</b></div>`).join('')}</div>${S.trs.length ? `<div class="entry"><b>Marcas</b><span>${S.trs.join(' · ')}</span></div>` : ''}`; }
+    return DIARY[k].length ? [...DIARY[k]].reverse().map(e => `<div class="entry"><b>${e.title}</b><span>${e.txt}</span></div>`).join('') : '<p class="empty">Todavía no has escrito nada aquí.</p>'; };
+  return `<div class="diario"><nav class="sub">${TABS.map(([k, n]) => `<button type="button" data-k="${k}" class="${k === tab ? 'on' : ''}">${n}${k !== 'yo' && DIARY[k].length ? `<i>${DIARY[k].length}</i>` : ''}</button>`).join('')}</nav><div class="page">${page(tab)}</div></div>`; }
+const openDiary = (tab = 'yo') => openPanel('diario', tab), closeDiary = () => closePanel();
 
 // =====================================================================
 // EL JUEGO
@@ -291,7 +293,7 @@ function startGame() {
   PEOPLE = makePeople().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
   OBJS = OBJECTS().map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; });
   if (matchMedia('(pointer:coarse)').matches) document.getElementById('pad').hidden = false;
-  else { const tip = document.createElement('div'); tip.className = 'tip glass'; tip.innerHTML = CONTROLES.slice(0, 4).map(([k, v]) => `<span><kbd>${k}</kbd>${v}</span>`).join(''); document.getElementById('overlays').appendChild(tip); setTimeout(() => tip.classList.add('out'), 9000); setTimeout(() => tip.remove(), 9800); }
+  else { const tip = document.createElement('div'); tip.className = 'tip glass'; tip.innerHTML = CONTROLES.slice(0, 5).map(([k, v]) => `<span><kbd>${k}</kbd>${v}</span>`).join(''); document.getElementById('overlays').appendChild(tip); setTimeout(() => tip.classList.add('out'), 9000); setTimeout(() => tip.remove(), 9800); }
   const [sc, at] = place('casa', [8.6, 4.2]); enter(sc, at, 'down'); G.paused = false; G.minutes = 8 * 60;
   actoInit();
   const corso = PEOPLE.find(n => n.id === 'corso');
@@ -300,7 +302,8 @@ function startGame() {
 }
 // ---------- conversaciones ----------
 function face(canvas, sprite) { const c = canvas.getContext('2d'); c.imageSmoothingEnabled = false; c.clearRect(0, 0, 64, 64); c.drawImage(SHEETS[sprite], 0, ROW.down * 64, 64, 40, 0, 4, 64, 40); }
-function say(npc, conv) { G.talking = { npc, conv, i: 0 }; if (npc.x != null) { const dx = G.x - npc.x, dy = G.y - npc.y; npc.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); } renderTalk(); }
+const dirTo = (a, b) => { const dx = b.x - a.x, dy = b.y - a.y; return Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); };
+function say(npc, conv) { G.talking = { npc, conv, i: 0 }; if (npc.x != null && npc.scene === G.scene && !npc.fijo) { npc.dir = dirTo(npc, G); if (!G.act) G.dir = dirTo(G, npc); } renderTalk(); }
 const ctxOf = (npc, n) => ({ n, aff: aff(npc.id), tone: rasgo(), tod: tod(), h: hourNow() });
 const oneOf = (v, last) => { if (!Array.isArray(v)) return v; const opts = v.filter(x => x !== last); return pick(opts.length ? opts : v); };
 function talkTo(npc) {
@@ -342,7 +345,9 @@ function choose(i) {
 function advance() { const t = G.talking; if (!t) return; if (t.typing) return t.finishType(); if (t.i < t.conv.lines.length - 1) { t.i++; renderTalk(); } else if (!t.conv.topics && !t.conv.opts) { (t.conv.learn || []).forEach(learn); G.talking = null; renderTalk(); t.conv.done && t.conv.done(); } }
 function clearBubbles() { G.bubbles.forEach(b => b.el.remove()); G.bubbles = []; G.chat = null; }
 function bubble(npc, text, ms = 3200) { if (!text) return; const el = document.createElement('div'); el.className = 'bubble'; el.textContent = text; document.getElementById('overlays').appendChild(el); G.bubbles.push({ npc, el, until: performance.now() + ms }); }
-const barkOf = n => { const b = Array.isArray(n.barks) ? n.barks : n.barks[tod()]; const line = oneOf(b, n._lastBark); n._lastBark = line; return line; };
+const fase = () => F.invitacion ? 'despedida' : F.campana ? 'ancla' : null;
+function barkOf(n) { const ph = fase(), pool = (ph && n.fases && n.fases[ph]) || (Array.isArray(n.barks) ? n.barks : n.barks[tod()]) || [];
+  n._ult = n._ult || []; const fresh = pool.filter(x => x && !n._ult.includes(x)); if (!fresh.length) return null; const line = pick(fresh); n._ult = [line, ...n._ult].slice(0, 3); return line; }
 // ---------- interacción ----------
 function nearest() {
   let best = null, bd = 44;
@@ -355,9 +360,10 @@ function nearest() {
 const note = text => say({ name: '', sprite: 'grumete' }, { lines: [text] });
 function interact() {
   if (G.talking) { if (G.talking.typing || !document.querySelector('.dlg .ch')) advance(); return; }
-  const t = nearest(); if (!t) return;
+  if (G.paused) return; const t = nearest(); if (!t) return;
   if (t.type === 'npc') talkTo(t.n);
   else if (t.type === 'obj' && t.o.act) t.o.act();
+  else if (t.type === 'obj' && t.o.cartel) { verCartel(t.o.cartel); t.o.learn && learn(t.o.learn); }
   else if (t.type === 'obj') say({ name: '', sprite: 'grumete' }, { lines: [t.o.text], learn: t.o.learn ? [t.o.learn] : [] });
   else if (t.type === 'door') { const b = t.s.b;
     if (!b.entrable || !b.int || LOCKED.has(b.id)) return note(CLOSED[b.id] || 'Está cerrado.');
@@ -367,17 +373,21 @@ function interact() {
   else fade(() => enter(t.d.to, t.d.at[0], t.d.at[1]));
 }
 document.addEventListener('keydown', e => { if (cv.hidden) return; const k = e.key.toLowerCase();
-  if (document.querySelector('.diary')) { if (k === 'escape' || k === 'j') closeDiary(); return; }
+  if (document.querySelector('.wanted-ov')) return;
+  if (document.querySelector('.panelj')) { if (k === 'escape' || (k === 'j' && PANEL.tab === 'diario') || ((k === 'i' || k === 'tab') && PANEL.tab === 'bolsa')) closePanel(); else if (k === 'j') openPanel('diario'); else if (k === 'i' || k === 'tab') openPanel('bolsa'); if (k === 'tab') e.preventDefault(); return; }
   if (document.querySelector('.pausa')) { if (k === 'escape') closePause(); return; }
   if (k === 'escape' && !G.talking && !G.paused) { openPause(); return; }
   if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', 'shift'].includes(k)) { G.keys[k] = true; e.preventDefault(); }
   if (k === 'e' || k === ' ' || k === 'enter') { if (!e.target.closest || !e.target.closest('button')) interact(); e.preventDefault(); }
   if (k === '+' || k === '=') zoom(1.15); if (k === '-' || k === '_') zoom(1 / 1.15);
-  if (k === 'j' && !G.talking) openDiary(); });
+  if (k === 'j' && !G.talking && !G.paused) openDiary();
+  if ((k === 'i' || k === 'tab') && !G.talking && !G.paused) { e.preventDefault(); openPanel('bolsa'); }
+  if (k === 'c' && !G.talking) toggleBrujula(); });
 document.addEventListener('keyup', e => { G.keys[e.key.toLowerCase()] = false; });
 addEventListener('blur', () => { G.keys = {}; });
-document.getElementById('openDiary').onclick = () => openDiary();
-const CONTROLES = [['WASD / flechas', 'Caminar'], ['Mayús', 'Correr'], ['E · Espacio', 'Hablar, abrir, mirar'], ['J', 'Diario'], ['Rueda · + −', 'Acercar y alejar'], ['Esc', 'Pausa']];
+document.getElementById('openBag').onclick = () => !G.talking && !G.paused && openPanel(document.getElementById('openBag').classList.contains('new-d') && !document.getElementById('openBag').classList.contains('new') ? 'diario' : 'bolsa');
+document.getElementById('compBtn').onclick = () => toggleBrujula();
+const CONTROLES = [['WASD / flechas', 'Caminar'], ['Mayús', 'Correr'], ['E · Espacio', 'Hablar, abrir, mirar'], ['I', 'Bolsa'], ['J', 'Diario'], ['C', 'Brújula (cuando la tengas)'], ['Rueda · + −', 'Acercar y alejar'], ['Esc', 'Pausa']];
 function openPause() { G.paused = true; G.keys = {}; const ov = document.getElementById('overlays'), el = document.createElement('div'); el.className = 'pausa glass'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Pausa');
   el.innerHTML = `<div class="kick">Pausa</div><dl>${CONTROLES.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><div class="pb"><button class="btn" type="button" data-a="c">Continuar</button><button class="btn ghost" type="button" data-a="m">Salir al menú</button></div><small>Salir pierde la partida: todavía no hay guardado.</small>`;
   ov.appendChild(el); el.querySelector('[data-a="c"]').onclick = closePause; el.querySelector('[data-a="m"]').onclick = () => location.reload(); el.querySelector('button').focus(); }
@@ -389,8 +399,8 @@ document.querySelectorAll('#pad .pad button').forEach(b => { const d = { up: 'ar
   b.addEventListener('pointerdown', e => { e.preventDefault(); G.keys[d] = true; }); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, () => G.keys[d] = false)); });
 cv.addEventListener('click', () => { if (G.talking && !document.querySelector('.dlg .ch')) advance(); });
 // zoom: rueda, + y -, o dos dedos
-function zoom(f) { G.zoom = Math.max(.7, Math.min(2.4, G.zoom * f)); fitGame(); }
-addEventListener('wheel', e => { if (cv.hidden || document.querySelector('.diary')) return; e.preventDefault(); zoom(e.deltaY < 0 ? 1.1 : 1 / 1.1); }, { passive: false });
+function zoom(f) { G.zoomT = Math.max(.7, Math.min(2.4, (G.zoomT || G.zoom) * f)); }
+addEventListener('wheel', e => { if (cv.hidden || document.querySelector('.panelj')) return; e.preventDefault(); zoom(e.deltaY < 0 ? 1.1 : 1 / 1.1); }, { passive: false });
 let pinch = null;
 cv.addEventListener('touchstart', e => { if (e.touches.length === 2) pinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }, { passive: true });
 cv.addEventListener('touchmove', e => { if (e.touches.length === 2 && pinch) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); zoom(d / pinch); pinch = d; } }, { passive: true });
@@ -406,20 +416,22 @@ function loop(now) {
     if (G.moving) { const running = K.shift || G.run, sp = (running ? 175 : 112) * dt * (vx && vy ? .7071 : 1), nx = G.x + vx * sp, ny = G.y + vy * sp;
       if (!blocked(nx - 6, G.y) && !blocked(nx + 6, G.y)) G.x = nx; if (!blocked(G.x - 6, ny) && !blocked(G.x + 6, ny)) G.y = ny;
       G.dir = vx < 0 ? 'left' : vx > 0 ? 'right' : vy < 0 ? 'up' : 'down'; G.walk += dt * (running ? 17 : 12); }
-    G.minutes += dt * .8; actoTick(now, dt);
+    if (!G.lapse) G.minutes += dt * 1.0; actoTick(now, dt);
     for (const n of PEOPLE) { if (n.route) { n.t = (n.t || rnd() * 100) + dt; const [x, y, d] = where(n.route.map(([a, b]) => [a * T, b * T]), n.speed, n.t); n.x = x; n.y = y; n.dir = d; n.frame = 1 + Math.floor(n.t * 9) % 8; }
-      if (n.scene === G.scene && now > n.nextBark && !n.chat && Math.hypot(n.x - G.x, n.y - G.y) < 240) { bubble(n, barkOf(n)); n.nextBark = now + 8000 + rnd() * 8000; } }
+      if (n.scene === G.scene && now > n.nextBark && !n.chat && Math.hypot(n.x - G.x, n.y - G.y) < 240) { bubble(n, barkOf(n)); n.nextBark = now + 11000 + rnd() * 12000; } }
     const pura = PEOPLE.find(n => n.id === 'pura');
     if (G.scene === 'town' && pura && !G.chat && !F.campana && Math.hypot(pura.x - G.x, pura.y - G.y) < 130 && !knows('Buscan a alguien')) G.chat = { i: 0, next: now };
     if (G.chat && now >= G.chat.next) { const line = CHAT[G.chat.i]; if (!line) { G.chat = null; learn(['rumores', 'Buscan a alguien', 'Las vecinas dicen que los del barco negro buscan a alguien. Y que en Kalé hay «lo de siempre».']); } else { bubble(PEOPLE.find(n => n.id === line[0]), line[1], 2600); G.chat.i++; G.chat.next = now + 2700; } }
   }
+  stepWalkers(dt);
+  if (G.zoomT && Math.abs(G.zoomT - G.zoom) > .002) { G.zoom += (G.zoomT - G.zoom) * Math.min(1, dt * 12); fitGame(); }
   draw(now); if (!cv.hidden) requestAnimationFrame(loop);
 }
 function draw(now) {
   const VW = G.VW, VH = G.VH, inside = G.scene !== 'town', I = inside && interior(G.scene), SW = inside ? I.w : WORLD.w, SH = inside ? I.h : WORLD.h;
   const cam = [Math.round(SW < VW ? -(VW - SW) / 2 : Math.max(0, Math.min(SW - VW, G.x - VW / 2))), Math.round(SH < VH ? -(VH - SH) / 2 : Math.max(0, Math.min(SH - VH, G.y - VH / 2)))];
-  const chars = PEOPLE.filter(n => n.scene === G.scene).map(n => ({ id: n.sprite, x: n.x, y: n.y, dir: n.dir, f: n.route ? n.frame : 0 }));
-  chars.push({ id: 'grumete', x: G.x, y: G.y, dir: G.dir, f: G.moving ? 1 + Math.floor(G.walk) % 8 : 0 });
+  const chars = PEOPLE.filter(n => n.scene === G.scene).map(n => actor(n, n.sprite, n.route || n.paso ? n.frame : 0, now));
+  chars.push(actor(G, 'grumete', G.moving ? 1 + Math.floor(G.walk) % 8 : 0, now, S.arma && arma(S.arma)));
   if (inside) drawInterior(g, I, cam, VW, VH, chars, now, hourNow()); else drawTown(g, cam, VW, VH, chars, now, hourNow());
   // globos y aviso de acción siguen a quien corresponde
   const toScr = (x, y) => [(x - cam[0]) * G.scale, (y - cam[1]) * G.scale + parseFloat(cv.style.top)];
@@ -427,8 +439,38 @@ function draw(now) {
   const ov = document.getElementById('overlays'); let pr = ov.querySelector('.prompt'); const t = !G.talking && !G.paused && nearest();
   if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'idoor' ? (t.d.to === 'town' ? 'Salir' : 'Abrir') : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
     const [px, py] = t.type === 'npc' ? [t.n.x, t.n.y - 62] : t.type === 'obj' ? [t.x, t.y - 26] : t.type === 'door' ? [t.s.door[0], t.s.door[1] - 56] : [G.x, G.y - 62]; const [sx, sy] = toScr(px, py); pr.style.left = sx + 'px'; pr.style.top = sy + 'px'; } else if (pr) pr.remove();
+  drawBrujula(now);
   const m = Math.floor(G.minutes) % 1440; document.getElementById('hour').textContent = `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 }
+// ---------- actores: animación en curso, arma en la mano y signos sobre la cabeza ----------
+// act(o, 'slash') la reproduce una vez; hold la deja en el último cuadro (o en "stop"); dur la corta a los ms indicados
+function act(o, a, { fps = 12, hold = false, stop, dur } = {}) { o.act = { a, t0: performance.now(), fps, hold, stop, dur }; }
+function poseOf(o, now) { const A = o.act; if (!A) return null; const n = ANIM[A.a][1], el = now - A.t0, end = A.stop != null ? A.stop : n - 1, k = Math.floor(el / 1000 * A.fps);
+  if (A.dur && el > A.dur) { o.act = null; return null; } if (k <= end) return [A.a, k]; if (A.hold || A.dur) return [A.a, end]; o.act = null; return null; }
+function emote(o, s, ms = 1500) { o.emo = { s, t0: performance.now(), ms }; }
+function actor(o, id, f, now, w) { const p = poseOf(o, now); return { id, x: o.x + (o.dx || 0), y: o.y, dir: o.dir, f: p ? p[1] : f, a: p ? p[0] : 'walk', w: w || (o.arma && arma(o.arma)), o }; }
+function drawActor(g, c, cx, cy, now) { const x = c.x - cx, y = c.y - cy, tumbado = c.a === 'hurt' && c.f >= 4;
+  shade(g, x, y, tumbado ? 16 : 11);
+  if (c.w) drawArma(g, c.w, x, y, c.dir, c.a, c.f, true);
+  drawLPC(g, c.id, x, y, c.dir, c.f, 1, c.a);
+  if (c.w) drawArma(g, c.w, x, y, c.dir, c.a, c.f, false);
+  const E = c.o && c.o.emo; if (E) { const t = now - E.t0; if (t > E.ms) c.o.emo = null; else drawEmote(g, E.s, x, y - (tumbado ? 30 : 62), t); } }
+// globito de píxel con un signo: ! ? … !! zzz o gota
+function drawEmote(g, s, x, y, t) { const k = Math.min(1, t / 120), bob = Math.round(Math.sin(t / 140)), w = s === '…' || s === 'zzz' ? 17 : 13, h = 13, X = Math.round(x - w / 2), Y = Math.round(y - h * k + bob);
+  g.fillStyle = '#2a1a12'; g.fillRect(X - 1, Y, w + 2, h); g.fillRect(X, Y - 1, w, h + 2); g.fillRect((X + w / 2 - 2) | 0, Y + h, 4, 2); g.fillStyle = '#fffaf0'; g.fillRect(X, Y, w, h); g.fillRect((X + w / 2 - 1) | 0, Y + h, 2, 1);
+  const P = (px, py, pw, ph, col) => { g.fillStyle = col; g.fillRect(X + px, Y + py, pw, ph); };
+  if (s === '!' || s === '!!') { for (const x0 of s === '!' ? [5] : [3, 8]) { P(x0, 2, 3, 6, '#c8302e'); P(x0, 10, 3, 2, '#c8302e'); } }
+  else if (s === '?') { P(4, 2, 5, 2, '#2c4a8a'); P(8, 3, 2, 3, '#2c4a8a'); P(6, 6, 2, 2, '#2c4a8a'); P(6, 10, 2, 2, '#2c4a8a'); P(3, 3, 2, 1, '#2c4a8a'); }
+  else if (s === '…') for (let i = 0; i < 3; i++) P(3 + i * 4, 8, 2, 2, '#4a4a5a');
+  else if (s === 'zzz') { P(3, 3, 5, 1, '#4a5a8a'); P(6, 4, 1, 1, '#4a5a8a'); P(5, 5, 1, 1, '#4a5a8a'); P(3, 6, 5, 1, '#4a5a8a'); P(10, 6, 4, 1, '#7a8aaa'); P(12, 7, 1, 1, '#7a8aaa'); P(10, 8, 4, 1, '#7a8aaa'); }
+  else if (s === 'gota') { P(5, 3, 3, 2, '#5aa8e8'); P(4, 5, 5, 4, '#5aa8e8'); P(5, 9, 3, 1, '#5aa8e8'); P(5, 5, 1, 2, '#e8f4ff'); } }
+// caminar hasta un punto (casillas en el pueblo, píxeles dentro), con animación; done al llegar
+function walkTo(n, [tx, ty], speed = 70, done) { n.goal = { x: n.scene === 'town' ? tx * T : tx, y: n.scene === 'town' ? ty * T : ty, speed, done }; }
+function stepWalkers(dt) { for (const n of [...PEOPLE]) { const q = n.goal; if (!q) continue; const dx = q.x - n.x, dy = q.y - n.y, d = Math.hypot(dx, dy), st = q.speed * dt;
+    if (d <= st) { n.x = q.x; n.y = q.y; n.goal = null; n.paso = false; n.frame = 0; q.done && q.done(n); continue; }
+    n.x += dx / d * st; n.y += dy / d * st; n.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'); n.paso = true; n.wk = (n.wk || 0) + dt * 10; n.frame = 1 + Math.floor(n.wk) % 8; } }
+// pasar el tiempo de golpe pero a la vista: la luz cambia poco a poco
+function timelapse(toMin, ms, done) { const from = G.minutes, t0 = performance.now(); G.lapse = true; const step = now => { const k = Math.min(1, (now - t0) / ms); G.minutes = from + (toMin - from) * (k * k * (3 - 2 * k)); if (k < 1) requestAnimationFrame(step); else { G.lapse = false; done && done(); } }; requestAnimationFrame(step); }
 function shade(g, x, y, r) { g.fillStyle = 'rgba(20,10,5,.28)'; g.beginPath(); g.ellipse(Math.round(x), Math.round(y), r, 4, 0, 0, 7); g.fill(); }
 function drawSorted(g, list, cam) { list.sort((a, b) => a.key - b.key); for (const s of list) s.draw(g, cam); }
 function drawTown(g, cam, VW, VH, chars, now, h) {
@@ -447,9 +489,10 @@ function drawTown(g, cam, VW, VH, chars, now, h) {
   const night = isNight(h), list = [];
   for (const sp of WORLD.sprites) { const w = sp.canvas ? sp.canvas.width : 140, hh = sp.canvas ? sp.canvas.height : 160; const x0 = sp.tree ? sp.x - 50 : sp.x, y0 = sp.tree ? sp.y - 140 : sp.y;
     if (x0 > cx + VW || x0 + w < cx || y0 > cy + VH || y0 + hh < cy - 20) continue;
-    list.push({ key: sp.key, draw: (g, [cx, cy]) => { if (sp.canvas) g.drawImage(sp.canvas, Math.round(sp.x - cx), Math.round(sp.y - cy)); else if (sp.img) put(g, sp.img, sp.x - cx, sp.y - cy); else if (sp.tree) drawTree(g, sp.x - cx, sp.y - cy); else if (sp.lamp) drawLamp(g, sp.x - cx, sp.y - cy, night); else if (sp.rect) { g.fillStyle = sp.rect[4]; g.fillRect(sp.rect[0] - cx, sp.rect[1] - cy, sp.rect[2], sp.rect[3]); } } }); }
-  for (const c of chars) list.push({ key: c.y, draw: (g, [cx, cy]) => { shade(g, c.x - cx, c.y - cy, 11); drawLPC(g, c.id, c.x - cx, c.y - cy, c.dir, c.f); } });
+    list.push({ key: sp.key, draw: (g, [cx, cy]) => { if (sp.canvas) g.drawImage(sp.canvas, Math.round(sp.x - cx + (sp.muneco && now > F.golpeMuneco && now - F.golpeMuneco < 320 ? Math.sin(now / 18) * 2 : 0)), Math.round(sp.y - cy)); else if (sp.img) put(g, sp.img, sp.x - cx, sp.y - cy); else if (sp.tree) drawTree(g, sp.x - cx, sp.y - cy); else if (sp.lamp) drawLamp(g, sp.x - cx, sp.y - cy, night); else if (sp.rect) { g.fillStyle = sp.rect[4]; g.fillRect(sp.rect[0] - cx, sp.rect[1] - cy, sp.rect[2], sp.rect[3]); } } }); }
+  for (const c of chars) list.push({ key: c.y, draw: (g, [cx, cy]) => drawActor(g, c, cx, cy, now) });
   drawSorted(g, list, cam);
+  vida(g, cam, now, VW, VH, h);
   // sombras de nubes que cruzan la isla con el viento
   if (sn) { const MW = WORLD.ground.width, MH = WORLD.ground.height;
     for (let i = 0; i < 6; i++) { const x = ((hash(i, 1, 91) * MW + t * 9) % (MW + 600)) - 300 - cx, y = hash(i, 2, 91) * MH - cy, rx = 160 + hash(i, 3, 91) * 140;
@@ -469,7 +512,7 @@ function windowSun(dir, h) { const a = { E: [6, 11.5], S: [10, 15], O: [14, 19] 
 function drawInterior(g, I, cam, VW, VH, chars, now, h) {
   const [cx, cy] = cam; g.fillStyle = '#120b07'; g.fillRect(0, 0, VW, VH); g.drawImage(I.canvas, -cx, -cy);
   const list = I.items.map(it => ({ key: it.key, draw: (g, [cx, cy]) => { if (it.img) put(g, it.img, it.x - cx, it.y - cy); else { g.save(); g.translate(-cx, -cy); it.fn(g); g.restore(); } } }));
-  for (const c of chars) list.push({ key: c.y, draw: (g, [cx, cy]) => { shade(g, c.x - cx, c.y - cy, 11); drawLPC(g, c.id, c.x - cx, c.y - cy, c.dir, c.f); } });
+  for (const c of chars) list.push({ key: c.y, draw: (g, [cx, cy]) => drawActor(g, c, cx, cy, now) });
   drawSorted(g, list, cam);
   const night = isNight(h), day = !night;
   g.globalCompositeOperation = 'multiply'; g.fillStyle = night ? 'rgb(96,92,128)' : 'rgb(208,198,192)'; g.fillRect(0, 0, VW, VH);
