@@ -437,7 +437,7 @@ function loop(now) {
     if (G.scene === 'town' && pura && !G.chat && !F.campana && Math.hypot(pura.x - G.x, pura.y - G.y) < 130 && !knows('Buscan a alguien')) G.chat = { i: 0, next: now };
     if (G.chat && now >= G.chat.next) { const line = CHAT[G.chat.i]; if (!line) { G.chat = null; learn(['rumores', 'Buscan a alguien', 'Las vecinas dicen que los del barco negro buscan a alguien. Y que en Kalé hay «lo de siempre».']); } else { bubble(PEOPLE.find(n => n.id === line[0]), line[1], 2600); G.chat.i++; G.chat.next = now + 2700; } }
   }
-  stepWalkers(dt);
+  stepWalkers(dt); cv.style.transform = F.navegando && G.scene !== 'town' ? `scale(1.04) rotate(${(Math.sin(now / 1300) * .7).toFixed(3)}deg) translateY(${(Math.sin(now / 900) * 2).toFixed(1)}px)` : '';
   if (G.zoomT && Math.abs(G.zoomT - G.zoom) > .002) { G.zoom += (G.zoomT - G.zoom) * Math.min(1, dt * 12); fitGame(); }
   draw(now); if (!cv.hidden) requestAnimationFrame(loop);
 }
@@ -454,6 +454,7 @@ function draw(now) {
   if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'barco' ? 'Subir a ' + t.def.n : t.type === 'idoor' ? (t.d.salida ? 'Bajar al muelle' : t.d.to === 'town' ? 'Salir' : t.d.to.endsWith(':cubierta') ? 'Subir a cubierta' : 'Abrir') : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
     const [px, py] = t.type === 'npc' ? [t.n.x, t.n.y - 62] : t.type === 'obj' ? [t.x, t.y - 26] : t.type === 'door' ? [t.s.door[0], t.s.door[1] - 56] : t.type === 'barco' ? [t.def.pasarela[0] * T, t.def.pasarela[1] * T - 44] : [G.x, G.y - 62]; const [sx, sy] = toScr(px, py); pr.style.left = sx + 'px'; pr.style.top = sy + 'px'; } else if (pr) pr.remove();
   drawBrujula(now); const pb = document.querySelector('.purse span'); if (pb && pb.textContent != berries()) pb.textContent = berries().toLocaleString('es-ES');
+  const dia = 'Día ' + (Math.floor(G.minutes / 1440) + 1), de = document.getElementById('day'); if (de.textContent !== dia) de.textContent = dia;
   const m = Math.floor(G.minutes) % 1440; document.getElementById('hour').textContent = `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 }
 // ---------- actores: animación en curso, arma en la mano y signos sobre la cabeza ----------

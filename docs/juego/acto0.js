@@ -1,55 +1,6 @@
 // Acto 0: la introducción en tiza, las rutinas del día, la campana, la pelea y la partida. Guion en docs/acto0.md.
 const F = {};
 // =====================================================================
-// INTRODUCCIÓN EN TIZA
-// =====================================================================
-const tz = {
-  line: (a, b) => [a, b],
-  poly: (pts, close) => close ? [...pts, pts[0]] : pts,
-  circle: (cx, cy, rx, ry = rx, n = 28, a0 = 0, a1 = Math.PI * 2) => Array.from({ length: n + 1 }, (_, i) => { const a = a0 + (a1 - a0) * i / n; return [cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]; }),
-  wave: (x0, y, x1, amp = 4, step = 14) => { const p = []; for (let x = x0; x <= x1; x += step / 2) p.push([x, y + ((x - x0) / (step / 2)) % 2 * amp - amp / 2]); return p; },
-  blob: (cx, cy, rx, ry, seed) => Array.from({ length: 33 }, (_, i) => { const a = i / 32 * Math.PI * 2, k = 1 + (hash(i % 32, 3, seed) - .5) * .22; return [cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]; }),
-};
-const TIZA = [
-  { t: () => 'Kalé. Una isla pequeña del East Blue que no sale en ningún mapa.', d: () => [tz.blob(320, 170, 150, 80, 4), tz.poly([[398, 150], [398, 112], [410, 112], [410, 150]]), tz.poly([[394, 112], [404, 96], [414, 112]]), tz.poly([[260, 175], [260, 158], [292, 158], [292, 175]]), tz.poly([[254, 160], [276, 144], [298, 160]]),
-    tz.wave(110, 280, 220), tz.wave(400, 290, 540), tz.wave(150, 70, 250), tz.wave(420, 60, 520), tz.line([60, 40], [60, 320]), tz.line([580, 40], [580, 320]), tz.line([60, 40], [580, 40]), tz.line([60, 320], [580, 320]), tz.poly([[520, 90], [530, 76], [542, 80], [540, 92], [532, 98], [532, 106]]), tz.circle(532, 116, 2, 2, 6)] },
-  { t: () => `Vives con tu madre, Marla, en la casa del tejado de paja.`, d: () => [tz.poly([[200, 150], [230, 90], [410, 90], [440, 150]], true), tz.poly([[220, 150], [220, 260], [420, 260], [420, 150]]), tz.poly([[305, 260], [305, 200], [335, 200], [335, 260]]), tz.poly([[240, 180], [280, 180], [280, 215], [240, 215]], true), tz.poly([[360, 180], [400, 180], [400, 215], [360, 215]], true),
-    tz.line([260, 180], [260, 215]), tz.line([380, 180], [380, 215]), tz.poly([[372, 90], [372, 66], [390, 66], [390, 90]]), tz.circle(384, 50, 8, 6, 12, Math.PI * .8, Math.PI * 2.4), tz.circle(396, 30, 10, 7, 12, Math.PI * .8, Math.PI * 2.4), tz.line([150, 262], [490, 262])] },
-  { t: () => `Y con Corso, tu hermano pequeño, que te sigue a todas partes.`, d: () => [tz.circle(320, 120, 24), tz.poly([[300, 104], [306, 88], [314, 100], [320, 84], [326, 100], [336, 88], [340, 104]]), tz.line([320, 144], [320, 210]), tz.poly([[320, 160], [290, 185], [282, 196]]), tz.poly([[320, 160], [352, 182], [364, 178]]),
-    tz.poly([[320, 210], [300, 262]]), tz.poly([[320, 210], [340, 262]]), tz.poly([[350, 180], [394, 180], [384, 196], [360, 196]], true), tz.poly([[372, 180], [372, 152], [390, 176]]), tz.circle(312, 118, 2, 2, 6), tz.circle(328, 118, 2, 2, 6), tz.circle(320, 130, 6, 3, 10, 0, Math.PI)] },
-  { t: () => 'De tu padre solo sabes una cosa: un invierno se fue. Y tu madre no habla de él.', d: () => [tz.poly([[250, 160], [250, 70], [330, 70], [330, 160]], true), tz.line([290, 70], [290, 160]), tz.line([250, 115], [330, 115]), tz.circle(306, 92, 10, 10, 16),
-    tz.poly([[390, 140], [390, 260]]), tz.poly([[390, 200], [460, 200], [460, 260]]), tz.line([400, 200], [400, 260]), tz.poly([[390, 140], [400, 140], [400, 200]]), tz.line([150, 262], [500, 262])] },
-  { t: () => 'Tienes diecisiete años. Y anoche entró en el puerto un barco con bandera negra.', d: () => [tz.poly([[170, 220], [200, 260], [440, 260], [470, 220]], true), tz.line([260, 220], [260, 80]), tz.line([370, 220], [370, 90]), tz.poly([[268, 96], [330, 104], [330, 190], [268, 200]], true), tz.poly([[378, 104], [430, 110], [430, 190], [378, 196]], true),
-    tz.poly([[370, 90], [370, 60], [420, 60], [420, 88], [370, 88]]), tz.circle(395, 72, 7, 6, 14), tz.line([388, 78], [384, 86]), tz.line([395, 79], [395, 87]), tz.line([402, 78], [406, 86]), tz.wave(100, 280, 560, 6, 18), tz.wave(140, 300, 520, 5, 18)] },
-];
-// trazo de tiza: líneas ásperas que se dibujan solas, con polvo alrededor
-function chalkDraw(g, strokes, prog, seed) {
-  const segs = []; strokes.forEach((s, k) => { for (let i = 1; i < s.length; i++) segs.push([s[i - 1], s[i], k]); });
-  const total = segs.length, upto = prog * total;
-  g.lineCap = 'round'; g.lineJoin = 'round';
-  segs.forEach(([a, b, k], i) => { if (i > upto) return; const f = Math.min(1, upto - i), x = a[0] + (b[0] - a[0]) * f, y = a[1] + (b[1] - a[1]) * f;
-    for (let pass = 0; pass < 2; pass++) { const j = (hash(i, pass, seed) - .5) * 1.6; g.strokeStyle = pass ? 'rgba(245,240,228,.35)' : 'rgba(245,240,228,.85)'; g.lineWidth = pass ? 1.2 : 2.6;
-      g.beginPath(); g.moveTo(a[0] + j, a[1] - j); g.lineTo(x - j, y + j); g.stroke(); }
-    if (hash(i, 9, seed) < .5) { g.fillStyle = 'rgba(245,240,228,.25)'; g.fillRect(Math.round(x + (hash(i, 7, seed) - .5) * 8), Math.round(y + (hash(i, 8, seed) - .5) * 8), 1, 1); } });
-}
-function intro(done) {
-  keyHandler = null; show(''); attract.on = false;
-  const ov = document.createElement('div'); ov.className = 'tiza'; ov.innerHTML = `<canvas width="640" height="360" aria-hidden="true"></canvas><p aria-live="polite"></p><button type="button" class="skip">Saltar</button>`;
-  app.appendChild(ov); const c = ov.querySelector('canvas'), g = c.getContext('2d'), p = ov.querySelector('p'); let i = 0, t0 = performance.now(), live = true;
-  const end = () => { if (!live) return; live = false; ov.remove(); keyHandler = null; done(); };
-  const next = () => { const prog = (performance.now() - t0) / 2400; if (prog < 1) { t0 -= 2400; return; } i++; if (i >= TIZA.length) return end(); t0 = performance.now(); p.classList.remove('on'); p.textContent = ''; };
-  const frame = now => { if (!live) return; const prog = Math.min(1, (now - t0) / 2400); g.fillStyle = 'rgb(22,26,24)'; g.fillRect(0, 0, 640, 360);
-    for (let k = 0; k < 140; k++) { g.fillStyle = 'rgba(255,255,255,.025)'; g.fillRect(hash(k, i, 3) * 640, hash(k, i, 4) * 360, 30, 2); }
-    chalkDraw(g, TIZA[i].d(), prog, i + 1);
-    if (prog >= 1 && !p.classList.contains('on')) { p.textContent = TIZA[i].t(); p.classList.add('on'); }
-    if (prog >= 1 && now - t0 > 2400 + 4200) next();
-    requestAnimationFrame(frame); };
-  ov.onclick = e => { if (e.target.classList.contains('skip')) end(); else next(); };
-  keyHandler = e => { if (e.key === 'Escape') end(); else if (['Enter', ' ', 'e', 'E'].includes(e.key)) next(); };
-  requestAnimationFrame(frame);
-}
-
-// =====================================================================
 // RUTINAS: dónde está cada uno según la hora (hasta que suena la campana)
 // =====================================================================
 const RUTINA = {
@@ -91,6 +42,7 @@ function actoTick(now) {
   if (now - lastTick < 400) return; lastTick = now;
   rutinas(false);
   const y = P('yago'); if (y && y.scene === 'town' && !F.campana && !y.act && !y.goal && !G.paused && !G.talking && Math.random() < .55 && Math.hypot(y.x - G.x, y.y - G.y) < 500) { y.dir = 'right'; act(y, 'slash', { fps: 13 }); F.golpeMuneco = performance.now() + 260; }
+  if (F.navegando && !F.entra && F.desperto && performance.now() - F.desperto > 45000 && !G.talking) return entraJefe(F.camino);
   if (!F.campana && hourNow() >= 17) return campana();
   if (F.campana && !F.plaza && G.scene === 'town' && Math.hypot(G.x - 30 * T, G.y - 21 * T) < 6 * T) { F.plaza = true; plaza(); }
 }
@@ -386,30 +338,12 @@ function actoChoose(t, i) {
   if (t.conv.opts) return false; if (duelChoose(t, i)) return true; const tp = topicsOf(t.npc)[i];
   if (!tp || !((t.npc.id === 'forastero' && tp.id === 'vamos') || (t.npc.id === 'teniente' && tp.id === 'alistar'))) return false;
   const path = t.npc.id === 'forastero' ? 'pirata' : 'marine';
-  G.talking = { npc: t.npc, conv: { lines: [path === 'pirata' ? '¿Seguro? Cuando subas, no hay vuelta atrás.' : '¿Seguro? Una vez firmes, eres de la Marina.'], opts: [{ t: path === 'pirata' ? 'Sí. Zarpemos.' : 'Sí. Quiero alistarme.', then: () => final(path) }, { t: 'Todavía no.', then: () => { } }] }, i: 0 };
+  G.talking = { npc: t.npc, conv: { lines: [path === 'pirata' ? '¿Seguro? Cuando subas, no hay vuelta atrás.' : '¿Seguro? Una vez firmes, eres de la Marina.'], opts: [{ t: path === 'pirata' ? 'Sí. Zarpemos.' : 'Sí. Quiero alistarme.', then: () => viaje(path) }, { t: 'Todavía no.', then: () => { } }] }, i: 0 };
   renderTalk(); return true;
 }
 // =====================================================================
 // LA PARTIDA
 // =====================================================================
-function final(path) {
-  const fam = player.last, f = F.fight || {};
-  learn(['yo', 'Me fui de Kalé', path === 'pirata' ? 'Zarpé de noche con el forastero de la capucha, sin saber adónde.' : 'Me alisté en la Marina con la teniente Breda Nisi. Rumbo a Loguetown.']);
-  const lines = path === 'pirata'
-    ? ['Esa noche, Kalé se hizo pequeña detrás de ti.', asked('corso', 'prometo') ? 'Corso te despidió desde el muelle hasta que ya no pudo verte. Le habías hecho una promesa.' : 'Corso te despidió desde el muelle hasta que ya no pudo verte.', tiene('brujula') ? 'En el bolsillo llevabas la brújula de tu padre. La aguja no apuntaba al norte: apuntaba mar adentro.' : 'El forastero no dijo una palabra en toda la noche.']
-    : ['Esa noche subiste a un barco de la Marina rumbo a Loguetown.', asked('corso', 'prometo') ? 'Corso no lloró. Te había hecho prometer que volverías a por él.' : 'Corso te despidió desde el muelle con la gorra de un marine que le habían regalado.', tiene('retrato') ? 'En el bolsillo llevabas el retrato de tu padre. Alguien en la Marina tenía que conocer esa cara.' : 'La teniente Nisi te miró una vez y asintió.'];
-  G.paused = true; G.talking = null; renderTalk(); keyHandler = null;
-  const ov = document.createElement('div'); ov.className = 'tiza'; ov.innerHTML = `<canvas width="640" height="360" aria-hidden="true"></canvas><p class="on"></p><div class="fin" hidden><b>Fin del Acto 0</b><span>${fullName()} · ${path === 'pirata' ? 'Rumbo desconocido' : 'Rumbo a Loguetown'}</span><button type="button" class="btn" id="finmenu">Volver al menú</button></div>`;
-  app.appendChild(ov); const c = ov.querySelector('canvas'), g = c.getContext('2d'), p = ov.querySelector('p'); let i = 0, t0 = performance.now();
-  const barco = [tz.poly([[200, 220], [226, 254], [414, 254], [440, 220]], true), tz.line([320, 220], [320, 90]), tz.poly([[326, 100], [390, 112], [386, 200], [326, 206]], true), tz.circle(500, 80, 22, 22, 24), tz.wave(80, 270, 560, 6, 18), tz.wave(120, 292, 520, 5, 18), ...(path === 'pirata' ? [] : [tz.poly([[320, 90], [354, 92], [352, 76], [320, 76]])])];
-  const frame = now => { if (!ov.isConnected) return; const prog = Math.min(1, (now - t0) / 2600); g.fillStyle = 'rgb(22,26,24)'; g.fillRect(0, 0, 640, 360); chalkDraw(g, barco, prog, 9);
-    p.textContent = lines[Math.min(i, lines.length - 1)]; requestAnimationFrame(frame); };
-  requestAnimationFrame(frame);
-  const nextLine = () => { i++; if (i >= lines.length) { p.remove(); ov.querySelector('.fin').hidden = false; ov.querySelector('#finmenu').focus(); } };
-  ov.onclick = e => { if (e.target.id === 'finmenu') { ov.remove(); location.reload(); } else if (i < lines.length) nextLine(); };
-  keyHandler = e => { if (['Enter', ' ', 'e', 'E'].includes(e.key) && i < lines.length) nextLine(); };
-  cv.hidden = true; document.getElementById('hud').hidden = true;
-}
 // =====================================================================
 // LO QUE SE DIBUJA EN EL MUNDO DURANTE EL ACTO
 // =====================================================================

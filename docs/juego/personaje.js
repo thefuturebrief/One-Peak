@@ -58,13 +58,13 @@ function aplicarAspecto(L) { SHEETS.grumete = hojaJugador(L); Object.assign(SHEE
 const ZONAS = [['cabeza', 'Cabeza'], ['cara', 'Cara'], ['torso', 'Torso'], ['brazos', 'Brazos'], ['piernas', 'Piernas']];
 const cuerpoDe = () => (typeof S !== 'undefined' && S.cuerpo) || {};
 function hojaJugador(L) {
-  const C = cuerpoDe(), k = JSON.stringify([L, C]); if (SHEET_CACHE[k]) return SHEET_CACHE[k];
+  const C = cuerpoDe(), U = typeof S !== 'undefined' && S.uniforme, k = JSON.stringify([L, C, U]); if (SHEET_CACHE[k]) return SHEET_CACHE[k];
   const M = CAT.marcas, extra = [];
   if (C.brazos === 'herida') extra.push([M.herida_brazos, 'none']);
   if (C.cara === 'herida') extra.push([M.herida_cara, 'none']);
   if (C.brazos === 'vendada') extra.push([M.venda_brazos[L.cuerpo], 'cloth', 'white']);
   if (C.cabeza === 'vendada') extra.push([M.venda_cabeza, 'cloth', 'white']);
-  const c = componer([...capasDe(L), ...extra]); marcasCodigo(c, CAT.fijas[`cabeza_${L.rostro}${L.cuerpo === 'teen' ? '_small' : ''}`], C);
+  const c = componer([...capasDe(L), ...extra]), cab = CAT.fijas[`cabeza_${L.rostro}${L.cuerpo === 'teen' ? '_small' : ''}`]; marcasCodigo(c, cab, C); if (U) uniformeCodigo(c, cab);
   return SHEET_CACHE[k] = c;
 }
 // caja de la cabeza en cada cuadro: de ahí salen pecho, muslo y frente
@@ -86,6 +86,14 @@ function marcasCodigo(c, headSrc, C) {
     if (C.piernas === 'herida') { P(tx - 1, ty, 3, 1, '#b8282a'); P(tx, ty + 2, 2, 1, '#9a2024'); }
     if (C.piernas === 'vendada') { P(tx - 3, ty - 1, 6, 4, O); P(tx - 2, ty, 4, 2, '#f4f0e6'); P(tx - 2, ty + 1, 4, 1, '#d8d0c0'); } }
 }
+// gorra blanca con banda azul y cuello marinero, como los marines de lpc-build2
+function uniformeCodigo(c, headSrc) { const g = c.getContext('2d'), B = cajasCabeza(headSrc);
+  for (const key in B) { const r = Math.floor(key / 13), f = key % 13; if (r === 16 && f >= 3) continue; const dir = r === 16 ? 2 : r % 4, [x0, y0, x1, y1] = B[key], X = f * 64, Y = r * 64, cx = Math.round((x0 + x1) / 2), hw = x1 - x0 + 1, P = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(X + x, Y + y, w, h); };
+    const top = y0 - 1, Lx = x0 - 1, Wc = hw + 2; P(Lx + 1, top - 1, Wc - 2, 1, '#2a2a3a'); P(Lx, top, Wc, 5, '#2a2a3a'); P(Lx + 1, top, Wc - 2, 4, '#f4f6fa'); P(Lx + 1, top, Wc - 2, 1, '#ffffff'); P(Lx + Wc - 4, top + 1, 2, 3, '#c8ccd8');
+    P(Lx, top + 4, Wc, 3, '#2a2a3a'); P(Lx + 1, top + 4, Wc - 2, 2, '#2f4f9a'); if (dir === 2) P(Lx + 2, top + 7, Wc - 4, 1, '#3a3a4a'); if (dir === 1) P(Lx - 3, top + 6, 5, 2, '#2a2a3a'); if (dir === 3) P(Lx + Wc - 2, top + 6, 5, 2, '#2a2a3a');
+    const ny = y1 + 1; if (dir === 0) { P(cx - 7, ny - 1, 14, 8, '#1e2a52'); P(cx - 6, ny - 1, 12, 7, '#2f4f9a'); P(cx - 6, ny + 4, 12, 1, '#f4f6fa'); }
+    else if (dir === 2) { P(cx - 6, ny - 1, 12, 2, '#2f4f9a'); P(cx - 3, ny + 1, 2, 2, '#2f4f9a'); P(cx + 1, ny + 1, 2, 2, '#2f4f9a'); P(cx - 1, ny + 2, 2, 3, '#c83a3a'); P(cx - 6, ny, 12, 1, '#f4f6fa'); }
+    else { const sd = dir === 1 ? 1 : -1; P(cx - 4 + sd * 2, ny - 1, 8, 2, '#2f4f9a'); P(cx + sd * 4 - 2, ny, 5, 5, '#2f4f9a'); P(cx + sd * 4 - 2, ny + 3, 5, 1, '#f4f6fa'); } } }
 function refrescarJugador() { if (player.look) SHEETS.grumete = hojaJugador(player.look); }
 // colores con nombre en castellano, para las muestras
 const NOMBRES = { pale: 'pálida', wheat: 'trigueña', latte: 'café con leche', cinnamon: 'canela', caramel: 'caramelo', auburn: 'caoba', honey: 'miel', silver: 'plata', light: 'clara', amber: 'ámbar', olive: 'oliva', taupe: 'tostada', bronze: 'bronce', brown: 'morena', black: 'negra', blue: 'azul', green: 'verde', purple: 'violeta', red: 'rojo', orange: 'naranja', yellow: 'amarillo', gray: 'gris', ash: 'ceniza', platinum: 'platino', white: 'blanco', blonde: 'rubio', sandy: 'arena', strawberry: 'fresa', gold: 'dorado', ginger: 'jengibre', carrot: 'zanahoria', redhead: 'pelirrojo', light_brown: 'castaño claro', chestnut: 'castaño', dark_brown: 'castaño oscuro', dark_gray: 'gris oscuro', raven: 'azabache', rose: 'rosa', pink: 'rosa claro', violet: 'lila', navy: 'marino', leather: 'cuero', walnut: 'nogal', tan: 'tostado', maroon: 'granate', lavender: 'lavanda', teal: 'turquesa', bluegray: 'gris azulado', forest: 'bosque', sky: 'cielo', slate: 'pizarra', charcoal: 'carbón' };

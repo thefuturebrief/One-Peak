@@ -2,7 +2,7 @@
 // y a mano desde la pausa. No se guarda durante el ataque a la plaza: si sales ahí, vuelves al último guardado de antes.
 const CLAVE = 'onepeak-partida-v1';
 const leerGuardado = () => { try { const t = localStorage.getItem(CLAVE); return t ? JSON.parse(t) : null; } catch (e) { return null; } };
-const sePuedeGuardar = () => !cv.hidden && !(F.campana && !F.invitacion) && !G.lapse;
+const sePuedeGuardar = () => !cv.hidden && !(F.campana && !F.invitacion) && !G.lapse && !F.zarpado;
 function guardar(manual) {
   if (!sePuedeGuardar()) return false;
   const flags = {}; for (const [k, v] of Object.entries(F)) if (['string', 'number', 'boolean'].includes(typeof v)) flags[k] = v;

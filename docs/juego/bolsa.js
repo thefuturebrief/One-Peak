@@ -6,6 +6,7 @@ const OBJETOS = {
   mapa: { n: 'Trozo de mapa', desc: 'Lo dejó la marea en la playa, envuelto en hule. Una costa que no reconoces y una línea de puntos que se corta en el borde.', acc: ['ver', 'Mirar'], icono: () => iconoMapa() },
   emulsion: { n: 'Emulsión del doctor', cuenta: true, desc: 'Un frasco de emulsión de árnica y aceite. Sobre la herida limpia, deja de sangrar.', acc: ['curar', 'Curar'], icono: () => iconoFrasco() },
   vendas: { n: 'Vendas', cuenta: true, desc: 'Vendas de lino, enrolladas. Tapan la herida mientras cierra.', acc: ['curar', 'Curar'], icono: () => iconoVendas() },
+  carta: { n: 'Carta náutica del East Blue', noVende: true, desc: 'La carta del forastero. Una ruta a lápiz sale de una isla sin nombre; al lado, con otra letra, alguien escribió «Kalé».', acc: ['ver', 'Mirar'], icono: () => iconoMapa() },
   retrato: { n: 'Retrato de tu padre', desc: 'La imagen que faltaba en el marco de mamá. Un hombre joven en un muelle, riéndose. Tiene tu cara.', acc: ['ver', 'Mirar'], icono: () => iconoRetrato() },
 };
 const infoObjeto = id => OBJETOS[id] || (arma(id) && { n: arma(id).n, desc: arma(id).desc, arma: arma(id), icono: px => iconoArma(arma(id), px) });
@@ -86,8 +87,8 @@ function herir(z) { S.cuerpo = S.cuerpo || {}; const e = estadoDe(z); if (e === 
 function verObjeto(id) {
   G.paused = true; const el = document.createElement('div'); el.className = 'ver-ov';
   if (id === 'nota') el.innerHTML = `<div class="papel nota-p" role="dialog" aria-label="Nota de tu padre"><p>Para cuando sepas adónde ir.</p><p>Si la aguja se vuelve loca, es que estás cerca.</p><p>No dejes que tu madre cargue con todo.</p><p class="firma">— P.</p></div>`;
-  else { el.innerHTML = `<div class="papel lienzo" role="dialog" aria-label="${infoObjeto(id).n}"><canvas width="560" height="400"></canvas><small>${id === 'mapa' ? 'Ninguna costa que conozcas. La línea de puntos sale del borde roto.' : 'Detrás, a lápiz: «Kalé, el verano antes».'}</small></div>`;
-    const c = el.querySelector('canvas'); (id === 'mapa' ? dibujarMapa : dibujarRetrato)(c.getContext('2d'), 560, 400); }
+  else { el.innerHTML = `<div class="papel lienzo" role="dialog" aria-label="${infoObjeto(id).n}"><canvas width="560" height="400"></canvas><small>${{ mapa: 'Ninguna costa que conozcas. La línea de puntos sale del borde roto.', carta: 'El East Blue. La ruta a lápiz termina en la isla Dawn.' }[id] || 'Detrás, a lápiz: «Kalé, el verano antes».'}</small></div>`;
+    const c = el.querySelector('canvas'); ({ mapa: dibujarMapa, carta: dibujarCarta }[id] || dibujarRetrato)(c.getContext('2d'), 560, 400); }
   document.getElementById('overlays').appendChild(el);
   const close = () => { el.remove(); G.paused = false; keyHandler = null; }; el.onclick = close;
   keyHandler = e => { if (['e', 'E', ' ', 'Enter', 'Escape'].includes(e.key)) { e.preventDefault(); e.stopImmediatePropagation(); close(); } };
@@ -167,4 +168,19 @@ function verCartel(id) {
   g.drawImage(SHEETS[P0.sprite], 2 * 64, (ANIM.slash[0] + ROW.down) * 64, 64, 46, 4, -2, 192, 138);
   const id2 = g.getImageData(0, 0, 200, 150), d = id2.data; for (let i = 0; i < d.length; i += 4) { const l = .3 * d[i] + .59 * d[i + 1] + .11 * d[i + 2]; d[i] = l * 1.05 + 20; d[i + 1] = l * .92 + 10; d[i + 2] = l * .72; } g.putImageData(id2, 0, 0);
   const close = () => { el.remove(); G.paused = false; keyHandler = null; }; el.onclick = close; keyHandler = e => { if (['e', 'E', ' ', 'Enter', 'Escape'].includes(e.key)) { e.preventDefault(); e.stopImmediatePropagation(); close(); } };
+}
+
+// la carta del East Blue: islas canon con su nombre, Kalé a lápiz y la ruta hasta Dawn
+function dibujarCarta(g, W, H) {
+  const gr = g.createRadialGradient(W / 2, H / 2, 40, W / 2, H / 2, W * .7); gr.addColorStop(0, '#f0e2b8'); gr.addColorStop(1, '#cfae70'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  g.strokeStyle = 'rgba(90,60,30,.18)'; g.lineWidth = 1; for (let x = 40; x < W; x += 60) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, H); g.stroke(); } for (let y = 40; y < H; y += 60) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
+  const isla = (x, y, r, n, s2) => { g.fillStyle = 'rgba(120,150,80,.45)'; g.strokeStyle = '#5a3a1e'; g.lineWidth = 1.8; g.beginPath(); for (let i = 0; i <= 18; i++) { const a = i / 18 * Math.PI * 2, k = 1 + (hash(i, s2, 3) - .5) * .4; g.lineTo(x + Math.cos(a) * r * k, y + Math.sin(a) * r * .7 * k); } g.fill(); g.stroke();
+    if (n) { g.fillStyle = '#4a2e14'; g.font = 'italic 600 13px Georgia, serif'; g.textAlign = 'center'; g.fillText(n, x, y + r + 14); } };
+  isla(150, 290, 14, null, 1); g.fillStyle = '#5a5a5a'; g.font = '600 15px Caveat, cursive'; g.textAlign = 'center'; g.fillText('Kalé', 150, 322);
+  isla(320, 250, 26, 'Dawn · Reino de Goa', 2); isla(250, 120, 16, 'Orange Town', 3); isla(420, 150, 18, 'Conomi', 4); g.fillStyle = '#4a2e14'; g.fillRect(372, 300, 10, 5); g.font = 'italic 600 12px Georgia, serif'; g.fillText('Baratie', 377, 320); isla(490, 70, 22, 'Loguetown', 5);
+  g.strokeStyle = '#6a6a6a'; g.lineWidth = 2; g.setLineDash([5, 6]); g.beginPath(); g.moveTo(164, 286); g.bezierCurveTo(210, 300, 260, 290, 296, 262); g.stroke(); g.setLineDash([]);
+  g.strokeStyle = '#8a2a1e'; g.lineWidth = 2.5; g.beginPath(); g.moveTo(300, 250); g.lineTo(312, 262); g.moveTo(312, 250); g.lineTo(300, 262); g.stroke();
+  g.fillStyle = 'rgba(90,58,30,.7)'; g.font = '700 22px Georgia, serif'; g.fillText('EAST BLUE', W / 2, 40);
+  g.save(); g.translate(500, 320); g.fillStyle = '#5a3a1e'; for (let k = 0; k < 4; k++) { g.rotate(Math.PI / 2); g.beginPath(); g.moveTo(0, -30); g.lineTo(5, 0); g.lineTo(-5, 0); g.fill(); } g.font = '700 12px Georgia, serif'; g.fillText('N', 0, -36); g.restore();
+  g.strokeStyle = 'rgba(60,40,20,.6)'; g.lineWidth = 6; g.strokeRect(3, 3, W - 6, H - 6);
 }
