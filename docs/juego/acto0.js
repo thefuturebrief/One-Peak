@@ -149,7 +149,7 @@ function fightUI(text, opts) {
 }
 function momento() { const f = F.fight; f.round++; fightUI(f.round === 1 ? 'El pirata se te echa encima. El tiempo se estira: lo ves venir.' : 'Otra vez. Respiras. Decides.', instinto()); }
 const later = (ms, fn) => setTimeout(fn, ms);
-function golpeVisual(quien) { const el = document.getElementById('game'); el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(3px,-2px)' }, { transform: 'translate(0,0)' }], { duration: 220 });
+function golpeVisual(quien) { const tg = quien === 'me' ? G : P('pirata'); if (tg) F.fx = { x: tg.x, y: tg.y - 26, t0: performance.now(), me: quien === 'me' }; const el = document.getElementById('game'); el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(3px,-2px)' }, { transform: 'translate(0,0)' }], { duration: 220 });
   if (quien === 'me') { const fl = document.createElement('div'); fl.className = 'hitflash'; document.getElementById('overlays').appendChild(fl); later(380, () => fl.remove()); } }
 function lunge(n, dx) { const x0 = n.x; n.x += dx; later(150, () => n.x = x0); }
 function elegir(o) {
@@ -185,7 +185,7 @@ function finPelea(txt, caido) {
 // =====================================================================
 function forastero() {
   const d = P('dorneP'), f = F.fight, fo = npcAdd('forastero', 'forastero', 'Forastero', 'town', [35.6, 22.4], 'left');
-  say(d, { lines: ['Basta de juegos. Si quieres algo bien hecho...', '(Dorne da un paso hacia ti, con el garfio por delante.)'], done: () => say(fo, { lines: ['Dorne. Veinte años y sigues peleándote con críos.'], done: () => narr(['Por un instante, todos en la plaza sienten un peso en el pecho, como si el aire se hubiera vuelto agua.', 'A Rosa se le caen los pescados.', f.won ? 'El pirata del suelo deja de respirar un segundo.' : 'El pirata que peleaba contigo baja los puños sin darse cuenta.'], () => say(d, { lines: ['(Dorne retrocede.)', 'Tú... Krakaka. Esto no ha terminado. ¡Nos vamos!'], done: refuerzos })) }) });
+  say(d, { lines: ['Basta de juegos. Si quieres algo bien hecho...', '(Dorne da un paso hacia ti, con el garfio por delante.)'], done: () => say(fo, { lines: ['Dorne. Veinte años y sigues peleándote con críos.'], done: () => { haki(fo); G.paused = true; later(1500, () => (G.paused = false, narr(['Por un instante, todos en la plaza sienten un peso en el pecho, como si el aire se hubiera vuelto agua.', 'A Rosa se le caen los pescados.', f.won ? 'El pirata del suelo deja de respirar un segundo.' : 'El pirata que peleaba contigo baja los puños sin darse cuenta.'], () => say(d, { lines: ['(Dorne retrocede.)', 'Tú... Krakaka. Esto no ha terminado. ¡Nos vamos!'], done: refuerzos })))); } }) });
 }
 function refuerzos() {
   for (const id of ['dorneP', 'pirata', 'pirata2']) P(id).scene = 'none';
@@ -195,7 +195,7 @@ function refuerzos() {
 }
 function atardecer() {
   F.invitacion = true; G.minutes = Math.max(G.minutes, 18.5 * 60); for (const n of PEOPLE) n.nextBark = performance.now() + 6000 + Math.random() * 8000;
-  learn(['gente', 'El forastero', 'Un hombre de levita negra. Dorne retrocedió solo con verlo. Dice que zarpa esta noche y que hay sitio para mí.']);
+  learn(['gente', 'El forastero', 'Encapuchado, de negro. No le vi la cara. Dorne retrocedió solo con verlo. Dice que zarpa esta noche y que hay sitio para mí.']);
   learn(['gente', 'Teniente Breda Nisi', 'Oficial de la Marina de Loguetown. Me ofreció alistarme. Su barco sale esta noche.']);
   moveNpc(P('forastero'), 'town', [4.6, 22.2], 'left'); moveNpc(P('teniente'), 'town', [44.5, 14.6], 'down');
   moveNpc(P('corso'), 'casa', [10.8, 4.9], 'left'); moveNpc(P('marla'), 'casa', [2.6, 8.4], 'right');
@@ -250,6 +250,38 @@ function final(path) {
 // =====================================================================
 // LO QUE SE DIBUJA EN EL MUNDO DURANTE EL ACTO
 // =====================================================================
+// Haki del rey: una onda que sale del forastero; el aire se oscurece, rayos negros con filo rojo, la plaza se encoge.
+function haki(fo) {
+  F.haki = { t0: performance.now(), x: fo.x, y: fo.y - 30 };
+  const el = document.getElementById('game');
+  el.animate([{ filter: 'none' }, { filter: 'grayscale(.85) contrast(1.5) brightness(.8)', offset: .15 }, { filter: 'grayscale(.6) contrast(1.3)', offset: .7 }, { filter: 'none' }], { duration: 2200, easing: 'ease-out' });
+  el.animate([0, 1, 2, 3, 4, 5, 6, 7].map(k => ({ transform: k % 7 ? `translate(${(k % 2 ? -1 : 1) * (5 - k * .6)}px,${(k % 3 - 1) * 2}px)` : 'translate(0,0)' })), { duration: 700 });
+  // todos se echan un poco hacia atrás
+  for (const n of PEOPLE) if (n !== fo && n.scene === 'town' && Math.hypot(n.x - fo.x, n.y - fo.y) < 12 * T) { const dx = Math.sign(n.x - fo.x) * 5, x0 = n.x; n.x += dx; n.dir = n.x < fo.x ? 'right' : 'left'; later(900, () => n.x = x0); }
+  later(2600, () => F.haki = null);
+}
+function actoDrawOver(g, [cx, cy], now, VW, VH) {
+  // golpe: estrella de impacto y líneas de velocidad, 220 ms
+  const fx = F.fx; if (fx && now - fx.t0 < 220) { const k = (now - fx.t0) / 220, x = fx.x - cx, y = fx.y - cy, r = 6 + k * 16; g.save(); g.globalAlpha = 1 - k;
+    g.fillStyle = fx.me ? '#ff6a4a' : '#fff6dc'; g.beginPath(); for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, rr = i % 2 ? r * .45 : r; g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } g.fill();
+    g.strokeStyle = '#2a1a12'; g.lineWidth = 1; g.stroke(); g.strokeStyle = '#fff6dc'; for (let i = 0; i < 6; i++) { const a = hash(i, fx.t0 | 0, 3) * 7; g.beginPath(); g.moveTo(x + Math.cos(a) * (r + 3), y + Math.sin(a) * (r + 3)); g.lineTo(x + Math.cos(a) * (r + 12), y + Math.sin(a) * (r + 12)); g.stroke(); } g.restore(); }
+  const H = F.haki; if (!H) return; const t = (now - H.t0) / 1000; if (t > 2.4) return;
+  const x = H.x - cx, y = H.y - cy, fade = t < .15 ? t / .15 : Math.max(0, 1 - (t - .9) / 1.5);
+  // el aire se vuelve pesado: viñeta oscura que nace del forastero
+  const vg = g.createRadialGradient(x, y, 20, x, y, Math.max(VW, VH)); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(.5, `rgba(20,0,8,${.35 * fade})`); vg.addColorStop(1, `rgba(10,0,4,${.7 * fade})`); g.fillStyle = vg; g.fillRect(0, 0, VW, VH);
+  // ondas
+  for (let k = 0; k < 3; k++) { const tt = t - k * .22; if (tt < 0 || tt > 1.2) continue; const r = 12 + tt * Math.max(VW, VH) * .9, a = (1 - tt / 1.2);
+    g.beginPath(); for (let i = 0; i <= 72; i++) { const an = i / 72 * Math.PI * 2, rr = r * (1 + (hash(i, k, Math.floor(now / 60)) - .5) * .02); g.lineTo(x + Math.cos(an) * rr, y + Math.sin(an) * rr * .6); }
+    g.strokeStyle = `rgba(0,0,0,${.85 * a})`; g.lineWidth = 6 * a + 1; g.stroke(); g.strokeStyle = `rgba(200,20,40,${.7 * a})`; g.lineWidth = 1.5; g.stroke(); }
+  // rayos: cambian cada 70 ms, negros con borde rojo
+  if (t < 1.6) { const seed = Math.floor(now / 70); g.save(); g.lineCap = 'round';
+    for (let b = 0; b < 7; b++) { if (hash(b, seed, 5) < .35) continue; let an = hash(b, seed, 1) * Math.PI * 2, px = x, py = y; const pts = [[px, py]], len = 60 + hash(b, seed, 2) * 140;
+      for (let s = 0; s < 7; s++) { an += (hash(b, s, seed) - .5) * 1.4; px += Math.cos(an) * len / 7; py += Math.sin(an) * len / 7 * .7; pts.push([px, py]); }
+      for (const [w, c] of [[5, 'rgba(220,30,50,.55)'], [2.2, 'rgba(0,0,0,.95)']]) { g.strokeStyle = c; g.lineWidth = w; g.beginPath(); pts.forEach(([a, b2]) => g.lineTo(a, b2)); g.stroke(); } }
+    g.restore(); }
+  // destello inicial
+  if (t < .12) { g.fillStyle = `rgba(255,255,255,${.5 * (1 - t / .12)})`; g.fillRect(0, 0, VW, VH); }
+}
 function actoDrawTown(g, [cx, cy], now) {
   if (F.campana && P('pirata') && P('pirata').scene === 'town') { g.strokeStyle = '#6a6a76'; g.lineWidth = 3; g.setLineDash([4, 3]);
     for (const id of ['pirata', 'pirata2']) { const n = P(id); g.beginPath(); g.moveTo(30 * T - cx, 20.4 * T - cy); g.lineTo(n.x - cx, n.y - 24 - cy); g.stroke(); } g.setLineDash([]); }

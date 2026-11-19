@@ -291,6 +291,7 @@ function startGame() {
   PEOPLE = makePeople().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
   OBJS = OBJECTS().map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; });
   if (matchMedia('(pointer:coarse)').matches) document.getElementById('pad').hidden = false;
+  else { const tip = document.createElement('div'); tip.className = 'tip glass'; tip.innerHTML = CONTROLES.slice(0, 4).map(([k, v]) => `<span><kbd>${k}</kbd>${v}</span>`).join(''); document.getElementById('overlays').appendChild(tip); setTimeout(() => tip.classList.add('out'), 9000); setTimeout(() => tip.remove(), 9800); }
   const [sc, at] = place('casa', [8.6, 4.2]); enter(sc, at, 'down'); G.paused = false; G.minutes = 8 * 60;
   actoInit();
   const corso = PEOPLE.find(n => n.id === 'corso');
@@ -316,8 +317,17 @@ function renderTalk() {
   const opts = !ch ? [] : t.conv.opts ? t.conv.opts.map(o => o.t) : [...tops.map(x => voz(x.ask)), tops.length ? 'Nada, me voy.' : 'Adiós.'];
   box.innerHTML = `<div class="face"><canvas width="64" height="48" aria-hidden="true"></canvas></div><div><b class="nm">${t.npc.name || ''}</b><p>${t.conv.lines[t.i]}</p>${ch ? `<div class="ch">${opts.map((c, i) => `<button type="button" data-i="${i}">${c}</button>`).join('')}</div>` : ''}</div>${ch ? '' : '<span class="more">E / clic para seguir</span>'}`;
   face(box.querySelector('canvas'), t.npc.sprite || 'grumete');
-  box.onclick = e => { const b = e.target.closest('button'); if (b) choose(+b.dataset.i); else if (!ch) advance(); };
-  if (ch) box.querySelector('button').focus();
+  box.onclick = e => { const b = e.target.closest('button'); if (b) choose(+b.dataset.i); else if (!ch || t.typing) advance(); };
+  typeLine(box, t, ch);
+}
+// la línea aparece letra a letra; E o clic la completa de golpe
+function typeLine(box, t, ch) {
+  const p = box.querySelector('p'), full = p.textContent, chs = box.querySelector('.ch'); clearInterval(G.typer);
+  const done = () => { clearInterval(G.typer); t.typing = false; p.textContent = full; if (chs) { chs.classList.remove('wait'); chs.querySelector('button').focus(); } };
+  t.finishType = done;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || full.length < 4) return done();
+  t.typing = true; chs && chs.classList.add('wait'); let k = 0; p.textContent = '';
+  G.typer = setInterval(() => { k += 2; p.textContent = full.slice(0, k); if (k >= full.length) done(); }, 24);
 }
 function choose(i) {
   const t = G.talking; if (!t) return;
@@ -329,7 +339,7 @@ function choose(i) {
   S.asked[id][tp.id] = n + 1; S.aff[id] = aff(id) + d; (l || []).forEach(learn);
   G.talking = { npc: t.npc, conv: { lines, topics: true }, i: 0 }; renderTalk();
 }
-function advance() { const t = G.talking; if (!t) return; if (t.i < t.conv.lines.length - 1) { t.i++; renderTalk(); } else if (!t.conv.topics && !t.conv.opts) { (t.conv.learn || []).forEach(learn); G.talking = null; renderTalk(); t.conv.done && t.conv.done(); } }
+function advance() { const t = G.talking; if (!t) return; if (t.typing) return t.finishType(); if (t.i < t.conv.lines.length - 1) { t.i++; renderTalk(); } else if (!t.conv.topics && !t.conv.opts) { (t.conv.learn || []).forEach(learn); G.talking = null; renderTalk(); t.conv.done && t.conv.done(); } }
 function clearBubbles() { G.bubbles.forEach(b => b.el.remove()); G.bubbles = []; G.chat = null; }
 function bubble(npc, text, ms = 3200) { if (!text) return; const el = document.createElement('div'); el.className = 'bubble'; el.textContent = text; document.getElementById('overlays').appendChild(el); G.bubbles.push({ npc, el, until: performance.now() + ms }); }
 const barkOf = n => { const b = Array.isArray(n.barks) ? n.barks : n.barks[tod()]; const line = oneOf(b, n._lastBark); n._lastBark = line; return line; };
@@ -344,7 +354,7 @@ function nearest() {
 }
 const note = text => say({ name: '', sprite: 'grumete' }, { lines: [text] });
 function interact() {
-  if (G.talking) { if (!document.querySelector('.dlg .ch')) advance(); return; }
+  if (G.talking) { if (G.talking.typing || !document.querySelector('.dlg .ch')) advance(); return; }
   const t = nearest(); if (!t) return;
   if (t.type === 'npc') talkTo(t.n);
   else if (t.type === 'obj' && t.o.act) t.o.act();
@@ -358,6 +368,8 @@ function interact() {
 }
 document.addEventListener('keydown', e => { if (cv.hidden) return; const k = e.key.toLowerCase();
   if (document.querySelector('.diary')) { if (k === 'escape' || k === 'j') closeDiary(); return; }
+  if (document.querySelector('.pausa')) { if (k === 'escape') closePause(); return; }
+  if (k === 'escape' && !G.talking && !G.paused) { openPause(); return; }
   if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', 'shift'].includes(k)) { G.keys[k] = true; e.preventDefault(); }
   if (k === 'e' || k === ' ' || k === 'enter') { if (!e.target.closest || !e.target.closest('button')) interact(); e.preventDefault(); }
   if (k === '+' || k === '=') zoom(1.15); if (k === '-' || k === '_') zoom(1 / 1.15);
@@ -365,6 +377,12 @@ document.addEventListener('keydown', e => { if (cv.hidden) return; const k = e.k
 document.addEventListener('keyup', e => { G.keys[e.key.toLowerCase()] = false; });
 addEventListener('blur', () => { G.keys = {}; });
 document.getElementById('openDiary').onclick = () => openDiary();
+const CONTROLES = [['WASD / flechas', 'Caminar'], ['Mayús', 'Correr'], ['E · Espacio', 'Hablar, abrir, mirar'], ['J', 'Diario'], ['Rueda · + −', 'Acercar y alejar'], ['Esc', 'Pausa']];
+function openPause() { G.paused = true; G.keys = {}; const ov = document.getElementById('overlays'), el = document.createElement('div'); el.className = 'pausa glass'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Pausa');
+  el.innerHTML = `<div class="kick">Pausa</div><dl>${CONTROLES.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><div class="pb"><button class="btn" type="button" data-a="c">Continuar</button><button class="btn ghost" type="button" data-a="m">Salir al menú</button></div><small>Salir pierde la partida: todavía no hay guardado.</small>`;
+  ov.appendChild(el); el.querySelector('[data-a="c"]').onclick = closePause; el.querySelector('[data-a="m"]').onclick = () => location.reload(); el.querySelector('button').focus(); }
+function closePause() { const el = document.querySelector('.pausa'); el && el.remove(); G.paused = false; }
+document.getElementById('pauseBtn').onclick = () => !G.talking && !G.paused && openPause();
 document.getElementById('actBtn').addEventListener('pointerdown', e => { e.preventDefault(); interact(); });
 document.getElementById('runBtn').addEventListener('click', e => { G.run = !G.run; e.currentTarget.setAttribute('aria-pressed', G.run); });
 document.querySelectorAll('#pad .pad button').forEach(b => { const d = { up: 'arrowup', down: 'arrowdown', left: 'arrowleft', right: 'arrowright' }[b.dataset.d];
@@ -432,6 +450,12 @@ function drawTown(g, cam, VW, VH, chars, now, h) {
     list.push({ key: sp.key, draw: (g, [cx, cy]) => { if (sp.canvas) g.drawImage(sp.canvas, Math.round(sp.x - cx), Math.round(sp.y - cy)); else if (sp.img) put(g, sp.img, sp.x - cx, sp.y - cy); else if (sp.tree) drawTree(g, sp.x - cx, sp.y - cy); else if (sp.lamp) drawLamp(g, sp.x - cx, sp.y - cy, night); else if (sp.rect) { g.fillStyle = sp.rect[4]; g.fillRect(sp.rect[0] - cx, sp.rect[1] - cy, sp.rect[2], sp.rect[3]); } } }); }
   for (const c of chars) list.push({ key: c.y, draw: (g, [cx, cy]) => { shade(g, c.x - cx, c.y - cy, 11); drawLPC(g, c.id, c.x - cx, c.y - cy, c.dir, c.f); } });
   drawSorted(g, list, cam);
+  // sombras de nubes que cruzan la isla con el viento
+  if (sn) { const MW = WORLD.ground.width, MH = WORLD.ground.height;
+    for (let i = 0; i < 6; i++) { const x = ((hash(i, 1, 91) * MW + t * 9) % (MW + 600)) - 300 - cx, y = hash(i, 2, 91) * MH - cy, rx = 160 + hash(i, 3, 91) * 140;
+      if (x < -rx || x > VW + rx || y < -rx || y > VH + rx) continue; const gr = g.createRadialGradient(x, y, 0, x, y, rx); gr.addColorStop(0, `rgba(20,30,60,${.13 * sn.alpha / .3})`); gr.addColorStop(1, 'rgba(20,30,60,0)');
+      g.save(); g.translate(x, y); g.scale(1, .55); g.translate(-x, -y); g.fillStyle = gr; g.fillRect(x - rx, y - rx, 2 * rx, 2 * rx); g.restore(); } }
+  actoDrawOver(g, cam, now, VW, VH);
   const [r, gg, b, a] = ambient(h); if (a > 0) { g.fillStyle = `rgba(${r | 0},${gg | 0},${b | 0},${a})`; g.fillRect(0, 0, VW, VH); }
   if (night) { g.globalCompositeOperation = 'lighter';
     const glow = (x, y, rad, c) => { const gr = g.createRadialGradient(x, y, 0, x, y, rad); gr.addColorStop(0, c); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(x - rad, y - rad, 2 * rad, 2 * rad); };

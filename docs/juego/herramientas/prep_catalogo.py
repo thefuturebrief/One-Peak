@@ -53,7 +53,7 @@ cat['familia'] = {
     [take(res('torso/aprons/apron', 'female', 'white'), 'delantal_female.png'), 'cloth', 'white'], [take(res('hair/bangs_bun/adult', 'female'), 'pelo_bangs_bun.png'), 'hair']]},
   'corso': {'cuerpo': take(res('body/bodies/child', 'child'), 'cuerpo_child.png'), 'capas': [
     [take(res('head/heads/human/child', 'child'), 'cabeza_child.png'), 'body'], [take(res('legs/pants/child', 'child', 'blue') or 'spritesheets/legs/pants/child/walk/blue.png', 'pantalon_child.png'), 'none'],
-    [take('spritesheets/torso/clothes/shirt/child/walk/red.png', 'camisa_child.png'), 'none'], [take(res('hair/bedhead/adult', 'child'), 'pelo_bedhead.png'), 'hair']]},
+    [take('spritesheets/torso/clothes/shirt/child/walk/red.png', 'camisa_child.png'), 'none'], [take('spritesheets/hair/relm_short/child/walk.png', 'pelo_nino_corto.png'), 'hair']]},
 }
 missing = [s for s in need if s not in files]
 if missing: print('faltan en el repo:', missing); sys.exit(1)

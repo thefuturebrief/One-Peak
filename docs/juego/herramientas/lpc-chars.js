@@ -45,7 +45,7 @@ module.exports = [
     ['feet/sandals', 'cloth:brown'], ['legs/pants', 'cloth:navy'], ['torso/clothes/shortsleeve/tshirt', 'cloth:sky'], ['hair/pixie/adult', 'hair:chestnut']] },
   { id: 'nino', name: 'Niño', body: 'child', skin: 'light', layers: [
     ['head/heads/human/child', 'body:light'], ['legs/pants', 'file:blue'],
-    ['torso/clothes/shirt', 'file:red'], ['hair/bedhead/adult', 'hair:chestnut']] },
+    ['torso/clothes/shirt', 'file:red'], ['hair/relm_short/child', 'hair:chestnut']] },
   { id: 'tabernera', name: 'Tabernera', body: 'female', skin: 'amber', layers: [
     ['head/heads/human/female', 'body:amber'], ['eyes/human/adult/default', 'eye:brown'], ['eyes/eyebrows/thin/adult', 'hair:redhead'],
     ['feet/shoes/basic', 'cloth:black'], ['legs/pants', 'cloth:maroon'], ['torso/clothes/shortsleeve/tshirt', 'cloth:white'],
@@ -53,10 +53,10 @@ module.exports = [
   { id: 'vecina', name: 'Vecina', body: 'female', skin: 'taupe', layers: [
     ['head/heads/human/female_elderly', 'body:taupe'], ['eyes/human/adult/default', 'eye:gray'], ['eyes/eyebrows/thin/adult', 'hair:white'],
     ['feet/shoes/basic', 'cloth:black'], ['legs/pants', 'cloth:gray'], ['torso/clothes/shortsleeve/tshirt', 'cloth:lavender'], ['hair/bob/adult', 'hair:white']] },
-  { id: 'forastero', name: 'Forastero', body: 'male', skin: 'taupe', layers: [
-    ['head/heads/human/male', 'body:taupe'], ['eyes/human/adult/default', 'eye:gray'], ['eyes/eyebrows/thick/adult', 'hair:dark_gray'],
-    ['feet/boots/fold', 'cloth:black'], ['legs/pantaloons', 'cloth:charcoal'], ['torso/clothes/longsleeve/formal', 'cloth:white'],
-    ['torso/jacket/frock', 'file:black'], ['beards/beard/basic', 'hair:dark_gray'], ['hair/long/adult', 'hair:dark_gray']] },
+  { id: 'forastero', name: 'Forastero', body: 'male', skin: 'fur_black', layers: [
+    ['head/heads/human/male', 'body:fur_black'],
+    ['feet/boots/fold', 'cloth:black'], ['legs/pantaloons', 'cloth:charcoal'], ['torso/clothes/longsleeve/formal', 'cloth:charcoal'],
+    ['torso/jacket/frock', 'file:black'], ['hat/cloth/hood/adult', 'cloth:black']] },
   { id: 'teniente', name: 'Teniente', body: 'female', skin: 'light', layers: [
     ['head/heads/human/female', 'body:light'], ['eyes/human/adult/default', 'eye:blue'], ['eyes/eyebrows/thin/adult', 'hair:blonde'],
     ['feet/shoes/basic', 'cloth:black'], ['legs/formal', 'cloth:navy'], ['torso/clothes/longsleeve/longsleeve', 'cloth:white'],

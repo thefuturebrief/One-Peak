@@ -288,7 +288,8 @@ function buildScene(b, sc, all) {
   // muebles y detalles que caen dentro de esta escena
   const box = ([n, x, y, w, h]) => [X(x), Y(y), w * T, h * T];
   for (const m of I.muebles) if (inS(m[1] + m[3] / 2, m[2] + m[4] / 2)) furniture(b.id, m[0], box(m), items, blocks, fires, g);
-  for (const d of DECOR[b.id] || []) if (inS(...d.at)) d.fn(g, X, Y);
+  const add = { item: o => items.push(o), block: r => blocks.push(r), fire: f => fires.push(f) };
+  for (const d of DECOR[b.id] || []) if (inS(...d.at)) d.fn(g, X, Y, add);
   // una puerta en el borde de arriba es una puerta en la cara de la pared; abajo, un umbral; a los lados, un hueco en el muro
   sc.addDoor = (x, y, o, len, side) => { let r, look;
     if (side === 'N') { const x0 = X(x) + (len * T - 32) / 2, top = Y(y) - 2 * T; put(g, R.door[b.id === 'casa' ? 'verde' : 'marron'], x0, top + 2 * T - 48); g.fillStyle = '#2a1a12'; g.fillRect(x0 - 2, top + 2 * T - 50, 36, 2); r = [X(x) - 4, Y(y) - 6, len * T + 8, 0.9 * T]; look = 'up'; }
@@ -347,12 +348,3 @@ function furniture(bid, label, [x, y, w, h], items, blocks, fires, g) {
   // sin pieza todavía: un bulto neutro para no dejar el hueco
   items.push({ fn: gg => { gg.fillStyle = '#6a4228'; gg.fillRect(x, y, w, h); gg.strokeStyle = '#2a1a12'; gg.strokeRect(x + .5, y + .5, w - 1, h - 1); }, key: by }); blocks.push([x, y, w, h]);
 }
-// detalles de cada interior que no son muebles de la planta; "at" es un punto de la planta para saber en qué escena van
-const DECOR = {
-  casa: [{ at: [7, .5], fn: (g, X, Y) => { // el mapa sobre tu cama y los dibujos de Corso
-      g.fillStyle = '#e8d6a8'; g.fillRect(X(6.6), Y(0) - 52, 36, 24); g.fillStyle = '#7a5a3a'; for (let i = 0; i < 4; i++) g.fillRect(X(6.6) + 4 + i * 8, Y(0) - 46 + (i % 2) * 6, 6, 1); g.fillStyle = '#c8402e'; g.fillRect(X(6.6) + 26, Y(0) - 40, 3, 3);
-      for (const [px, c] of [[12.1, '#4a7ab8'], [12.9, '#c8402e']]) { g.fillStyle = '#f4ecd8'; g.fillRect(X(px), Y(0) - 50, 18, 14); g.fillStyle = c; g.fillRect(X(px) + 3, Y(0) - 42, 12, 2); g.fillRect(X(px) + 8, Y(0) - 47, 2, 6); } } },
-    { at: [1.4, 6.5], fn: (g, X, Y) => put(g, R.pots, X(1.4), Y(6) - 2 * T - 2) }],
-  taberna: [{ at: [1, .5], fn: (g, X, Y) => put(g, R.pots, X(1.6), Y(0) - 2 * T) }],
-  brin: [{ at: [4.6, .5], fn: (g, X, Y) => put(g, R.pots, X(4.6), Y(0) - 2 * T - 2) }],
-};

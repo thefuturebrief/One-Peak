@@ -190,6 +190,27 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
   - Pura duerme la siesta.
   - Nadie aparece ni desaparece delante tuyo.
 - **Descansar:** en tu cama podés descansar para que pase el tiempo.
+- **Pelo de niños:** los niños usan peinados LPC de niño, no los de adulto, que en la cabeza chica flotaban.
+- **El forastero va encapuchado, de negro, sin cara visible.** Su gesto en la plaza es un Haki del rey animado: una onda oscura que sale de él, rayos negros con filo rojo, la imagen se desatura y tiembla, y la gente se echa atrás.
+- **Interiores decorados** (`docs/juego/decor.js`): piezas LPC y objetos dibujados por código con la misma paleta y contorno.
+  - Casa: el mapa y los dibujos de Corso, el barquito, un espejo, un cuadro del mar y pescado seco.
+  - Taberna: un retrato, el cartel de Dorne, una antorcha, un reloj, un candelabro, laúd y tambor en la tarima, y un barco en botella.
+  - Tienda: sogas, remos, un ancla chica, una balanza, un farol y cañas.
+  - Médico: un esqueleto, un reloj, el diploma, frascos, hierbas colgadas y una palangana.
+  - Panadería: estantes de pan, cestas, la pala del horno y trigo.
+  - Todo bloquea lo que tiene que bloquear, y una prueba comprueba que cada puerta sigue siendo accesible.
+- **Interfaz del juego:**
+  - Esc (o el botón ❚❚) abre la pausa con los controles.
+  - Al empezar, una pista de controles que se va sola.
+  - El diálogo aparece letra a letra; E lo completa.
+  - El monedero queda oculto hasta que haya economía.
+  - Golpes con estrella de impacto.
+  - Sombras de nubes que cruzan la isla y una viñeta suave en los bordes.
+- **Armas:** plan en `docs/armas.md`.
+  - LPC para espadas, contundentes y astas, con paletas.
+  - Armas de fuego dibujadas por código sobre la pose de disparar.
+  - El grado decide la resistencia y el filo, no el daño.
+  - Las espadas con nombre del canon no se poseen.
 - **Casa con cuartos:** una sola escena con la sala y la cocina abajo, y el cuarto de Marla y el de los hermanos arriba, separados por una pared con dos puertas.
 - **Después del prólogo, una introducción corta** cuenta lo esencial de tu vida: dónde vivís, con quién, tu hermano, y que no conocés a tu padre.
 - **Acto 0 en Kalé (propuesta):** Dorne en la taberna, una pelea en el muelle y un mentor que te invita a zarpar (o un marine que te invita a alistarte). Al atardecer recorrés la isla y te despedís.

@@ -174,24 +174,34 @@ input.name:focus{border-color:var(--gold)}
 .risk{font-size:12px;font-weight:700;padding:2px 8px;border-radius:8px}
 .risk.ok{background:rgba(120,200,120,.18);color:#bfe8b0}.risk.mid{background:rgba(245,183,58,.18);color:var(--gold2)}.risk.hard{background:rgba(226,73,47,.2);color:#ffb3a3}
 .hitflash{position:absolute;inset:0;pointer-events:none;background:radial-gradient(closest-side,transparent 55%,rgba(226,73,47,.45));animation:fade .38s ease reverse both}
+.dlg .ch.wait{visibility:hidden}
+.pausa{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,calc(100% - 32px));padding:22px 24px;display:grid;gap:16px}
+.pausa dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:0;font-size:14px}.pausa dt{font-weight:800;color:var(--gold)}.pausa dd{margin:0;color:var(--dim)}
+.pausa .pb{display:flex;gap:10px;flex-wrap:wrap}.pausa small{color:var(--dim);font-size:12px}
+.tip{position:absolute;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;gap:18px;padding:10px 16px;font-size:13px;white-space:nowrap;transition:opacity .8s}.tip.out{opacity:0}
+.tip span{display:flex;align-items:center;gap:7px;color:var(--dim)}.tip kbd{font:800 11px var(--f);padding:2px 6px;border-radius:5px;border:1.5px solid var(--edge);color:#fff6e8}
+.hud.talking .tip,#hud.talking .tip{display:none}
+#vig{position:fixed;inset:0;pointer-events:none;display:none;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 55%,rgba(8,10,20,.42) 100%)}.playing #vig{display:block}
 @media (prefers-reduced-motion:reduce){#bg,.screen,.bubble{animation:none}.mi,.opt,.btn{transition:none}}
 </style>
 <div id="app">
   <canvas id="bg" class="px" width="640" height="360" aria-hidden="true"></canvas>
   <canvas id="game" class="px" hidden aria-label="Kalé"></canvas>
   <div class="shade"></div>
+  <div id="vig" aria-hidden="true"></div>
   <div id="root"></div>
   <div id="hud" hidden>
     <div class="clock glass"><b id="day">Día 1</b><span id="hour">08:00</span></div>
     <div class="place glass" id="placeName">Kalé</div>
-    <div class="purse glass"><i></i><span>300</span></div>
-    <div class="hbtns"><button class="hb glass" id="openDiary" type="button">Diario <kbd>J</kbd></button></div>
+    <div class="purse glass" hidden><i></i><span>300</span></div>
+    <div class="hbtns"><button class="hb glass" id="openDiary" type="button">Diario <kbd>J</kbd></button><button class="hb glass" id="pauseBtn" type="button" aria-label="Pausa">❚❚</button></div>
     <div id="overlays"></div>
     <div id="pad" hidden><div class="pad"><span></span><button data-d="up" aria-label="Arriba">▲</button><span></span><button data-d="left" aria-label="Izquierda">◀</button><span></span><button data-d="right" aria-label="Derecha">▶</button><span></span><button data-d="down" aria-label="Abajo">▼</button><span></span></div><button class="act" id="actBtn" aria-label="Interactuar">E</button><button class="run" id="runBtn" type="button" aria-pressed="false">Correr</button></div>
   </div>
   <div id="fadeov"></div>
 </div>
 <script src="mundo.js"></script>
+<script src="decor.js"></script>
 <script src="personaje.js"></script>
 <script src="acto0.js"></script>
 <script src="juego.js"></script>
