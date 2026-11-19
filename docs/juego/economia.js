@@ -26,7 +26,7 @@ const iconoCatalejo = px => icono32(g => { const seg = [[4, 26, 7], [10, 20, 6],
 const berries = () => S.berries || 0;
 function cobrar(n) { S.berries = berries() + n; avisoDinero('+' + n); }
 function pagar(n) { if (berries() < n) return false; S.berries = berries() - n; avisoDinero('−' + n); return true; }
-function avisoDinero(t) { const p = document.querySelector('.purse'); if (!p) return; p.classList.remove('pop'); void p.offsetWidth; p.classList.add('pop'); const el = document.createElement('i'); el.className = 'pdelta'; el.textContent = t + ' ฿'; p.appendChild(el); setTimeout(() => el.remove(), 1400); }
+function avisoDinero(t) { sfx('moneda'); const p = document.querySelector('.purse'); if (!p) return; p.classList.remove('pop'); void p.offsetWidth; p.classList.add('pop'); const el = document.createElement('i'); el.className = 'pdelta'; el.textContent = t + ' ฿'; p.appendChild(el); setTimeout(() => el.remove(), 1400); }
 const precioArma = a => a.id.startsWith('padre_') || a.id.startsWith('madera_') ? 0 : a.grado !== 'sin' ? { waza: 2000, ryo: 9000, o: 40000, saijo: 200000 }[a.grado] : { daga: 120, garrote: 60 }[a.id] || { comun: 90, oficio: 220, personaje: 600 }[TIPO[a.tipo][1]];
 const precioDe = id => OBJETOS[id] ? OBJETOS[id].precio || 0 : arma(id) ? precioArma(arma(id)) : 0;
 const vendible = id => !(OBJETOS[id] && OBJETOS[id].noVende) && precioDe(id) > 0 && S.arma !== id;

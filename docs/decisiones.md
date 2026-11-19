@@ -238,6 +238,42 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
     - humo de chimenea, gaviotas, mariposas, una ardilla, luciérnagas y el haz del faro.
   - **Tiempo y movimiento:** el atardecer y el descanso pasan a la vista, no de golpe, y el zoom es suave.
   - **Frases según el momento del acto,** sin repetir las últimas.
+- **Versión 0.7: zarpar** (plan en `docs/plan-v07.md`):
+  - **Armas para todos:** las 27 de LPC en tres grupos:
+    - comunes;
+    - de oficio;
+    - de personajes importantes.
+  - **Armas iniciales:** se elige entre ocho, las más distintas (sable, mandoble, espada corta, martillo, hacha, lanza, arco, daga), cada una con su versión del padre y de madera.
+  - **Armas de los NPC:**
+    - los marines llevan espada corta, pistola o mosquete;
+    - los piratas, armas distintas;
+    - Dorne, una guadaña propia (Colmillo Negro).
+  - **Economía:**
+    - berries;
+    - tiendas de Gaspar, Nell, Mara y el médico;
+    - comprar y vender (pagan el 40%);
+    - comida que repone aguante;
+    - encargos con recompensa, en su pestaña del diario.
+  - **Kalé más vivo:**
+    - el faro y el destacamento de la Marina se pueden entrar, con su gente (Lin en el faro, el sargento Vela y el capitán Malva en la guardia);
+    - un catalejo perdido en la playa.
+  - **Barcos a los que se sube:**
+    - la Corneja (del forastero) y la Gaviota (de la Marina), con cubierta, pasarela y bajo cubierta;
+    - la escotilla queda cerrada hasta zarpar;
+    - en el mar la imagen se mece.
+  - **Zarpar:**
+    - escenas de tiza nuevas;
+    - despertás en el camarote, investigás, y entra el forastero (Corvo) o la teniente (Nisi) a conversar sobre tu padre;
+    - el forastero da una pista y se va por asuntos pendientes;
+    - destino: Reino de Goa (pirata) o Loguetown (marine).
+  - **Sonido generado en el navegador:**
+    - ambiente según lugar y hora;
+    - efectos;
+    - cinco temas cortos (Kalé, plaza, noche, mar, tiza);
+    - música, efectos y textos rápidos se activan por separado y se recuerdan.
+  - **Goa y Loguetown se construyen en la próxima versión (Acto 1).** Por qué esas islas:
+    - Goa es la isla del East Blue con más canon fuera de los personajes (la Terminal Gris, el reino, el puerto), y queda cerca de una isla chica como Kalé;
+    - Loguetown es la base natural de un recluta antes de la Grand Line.
 - **Versión 0.6:**
   - **Guardado de partida** en el navegador:
     - se guarda solo al cambiar de lugar y en momentos clave;

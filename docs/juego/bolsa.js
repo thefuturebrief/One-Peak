@@ -15,7 +15,7 @@ function darObjeto(id, silencio, n) { S.bag = S.bag || []; if (n) { S.cant = S.c
 function quitarObjeto(id) { S.bag = (S.bag || []).filter(x => x !== id); if (S.arma === id) S.arma = null; }
 // aviso arriba al centro, con la imagen del objeto; si llegan varios, van en fila
 const AVISOS = [];
-function aviso(id) { AVISOS.push(id); if (AVISOS.length === 1) sigAviso(); }
+function aviso(id) { sfx('aviso'); AVISOS.push(id); if (AVISOS.length === 1) sigAviso(); }
 function sigAviso() { const id = AVISOS[0]; if (!id) return; const o = infoObjeto(id), el = document.createElement('div'); el.className = 'toast glass'; el.setAttribute('role', 'status');
   el.innerHTML = `<div class="ti"></div><div><small>Guardado en la bolsa</small><b>${o.n}</b></div>`; el.querySelector('.ti').appendChild(o.icono(96)); document.getElementById('overlays').appendChild(el);
   setTimeout(() => el.classList.add('out'), 2900); setTimeout(() => { el.remove(); AVISOS.shift(); sigAviso(); }, 3400); }
@@ -37,7 +37,7 @@ const iconoRetrato = px => icono32(g => { g.fillStyle = '#2a1a10'; g.fillRect(4,
 // ---------- panel: Bolsa, Cuerpo y Diario en un mismo sitio ----------
 let PANEL = null;
 const PESTANAS = [['bolsa', 'Bolsa', 'I'], ['cuerpo', 'Cuerpo', 'K'], ['diario', 'Diario', 'J']];
-function openPanel(tab = 'bolsa', sub) { G.paused = true; G.keys = {}; PANEL = { ...(PANEL || {}), tab, sub: sub || (PANEL && PANEL.sub) || null }; if (tab === 'bolsa') document.getElementById('openBag').classList.remove('new'); if (tab === 'diario') document.getElementById('openBag').classList.remove('new-d');
+function openPanel(tab = 'bolsa', sub) { sfx('pagina'); G.paused = true; G.keys = {}; PANEL = { ...(PANEL || {}), tab, sub: sub || (PANEL && PANEL.sub) || null }; if (tab === 'bolsa') document.getElementById('openBag').classList.remove('new'); if (tab === 'diario') document.getElementById('openBag').classList.remove('new-d');
   const ov = document.getElementById('overlays'), old = ov.querySelector('.panelj'); old && old.remove(); const d = document.createElement('div'); d.className = 'panelj';
   d.innerHTML = `<div class="glass book" role="dialog" aria-label="${PESTANAS.find(p => p[0] === tab)[1]}"><div class="tabs top">${PESTANAS.map(([k, n, kb]) => `<button type="button" data-t="${k}" class="${k === tab ? 'on' : ''}">${n} <kbd>${kb}</kbd></button>`).join('')}<button type="button" class="x" aria-label="Cerrar">Cerrar ✕</button></div>
     <div class="pbody">${tab === 'bolsa' ? bolsaHTML() : tab === 'cuerpo' ? cuerpoHTML() : diarioHTML(sub || 'yo')}</div></div>`;

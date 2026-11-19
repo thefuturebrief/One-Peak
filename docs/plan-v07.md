@@ -2,6 +2,10 @@
 
 Plan de trabajo. Cada fase se cierra con su prueba antes de pasar a la siguiente.
 
+**Estado:**
+- las cinco fases están hechas y probadas;
+- queda para la versión 0.8: Goa (Terminal Gris) y Loguetown como Acto 1.
+
 ## Decisiones previas
 
 - **Armas para todos.** Se usan las 27 armas de LPC, más la pistola y el mosquete dibujados por código. Se reparten en tres grupos:

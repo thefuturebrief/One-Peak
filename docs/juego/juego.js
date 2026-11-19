@@ -72,12 +72,12 @@ function menu() {
   attract.on = true; requestAnimationFrame(attractFrame);
   show(`<div class="col"><h1 class="logo"><span>One</span><span>Peak</span></h1><nav class="menu" aria-label="Menú principal">
     <button class="mi" data-a="new" type="button">${ANCHOR}Nueva partida</button><button class="mi" data-a="cont" type="button"${leerGuardado() ? '' : ' disabled'}>${ANCHOR}Continuar</button>
-    <button class="mi" data-a="opt" type="button">${ANCHOR}Opciones</button><button class="mi" data-a="cred" type="button">${ANCHOR}Créditos</button></nav></div><div class="ver">v0.5</div>`, false);
+    <button class="mi" data-a="opt" type="button">${ANCHOR}Opciones</button><button class="mi" data-a="cred" type="button">${ANCHOR}Créditos</button></nav></div><div class="ver">v0.7</div>`, false);
   const items = [...root.querySelectorAll('.mi:not(:disabled)')]; items.forEach(b => b.onclick = () => ({ new: create, cont: continuar, opt: options, cred: credits })[b.dataset.a]());
   keys(e => { const i = items.indexOf(document.activeElement); if (e.key === 'ArrowDown') { items[(i + 1) % items.length].focus(); e.preventDefault(); } if (e.key === 'ArrowUp') { items[(i - 1 + items.length) % items.length].focus(); e.preventDefault(); } });
 }
 function options() { show(`<div class="col"><div class="kick">Opciones</div><div class="glass" style="padding:8px 22px"><div class="tog">Música<button class="sw" type="button" aria-pressed="true" aria-label="Música"></button></div><div class="tog">Efectos de sonido<button class="sw" type="button" aria-pressed="true" aria-label="Efectos"></button></div><div class="tog" style="border:0">Textos rápidos<button class="sw" type="button" aria-pressed="false" aria-label="Textos rápidos"></button></div></div><div class="row"><button class="btn ghost" type="button" id="back">Volver</button></div></div>`);
-  root.querySelectorAll('.sw').forEach(s => s.onclick = () => s.setAttribute('aria-pressed', s.getAttribute('aria-pressed') !== 'true')); document.getElementById('back').onclick = menu; keys(e => { if (e.key === 'Escape') menu(); }); }
+  root.querySelectorAll('.sw').forEach((s, i) => { const k = ['musica', 'efectos', 'rapido'][i]; s.setAttribute('aria-pressed', PREFS[k]); s.onclick = () => { PREFS[k] = !PREFS[k]; s.setAttribute('aria-pressed', PREFS[k]); guardarPrefs(); sfx('ui'); }; }); document.getElementById('back').onclick = menu; keys(e => { if (e.key === 'Escape') menu(); }); }
 function credits() { show(`<div class="col"><div class="kick">Créditos</div><h2 class="t">One Peak</h2><div class="glass credits" style="padding:20px 22px">
   <p style="margin-top:0"><b>Personajes y escenarios:</b> piezas del Liberated Pixel Cup (LPC), bajo licencias ${CREDITOS.licencias.join(', ')}.</p>
   <p><b>Personajes:</b> ${CREDITOS.personajes.join(', ')}.</p><p><b>Escenarios:</b> ${CREDITOS.escenarios.join(', ')}.</p>
@@ -292,7 +292,7 @@ function blocked(x, y) {
   if (G.scene === 'town') return !walkableTown(x, y) || crowd;
   const I = interior(G.scene); if (I.dentro) return !I.dentro(x, y) || hit(I.blocks, x, y) || crowd; return x < WALL + 2 || x > I.w - WALL - 2 || y > I.h - WALL || hit(I.blocks, x, y) || crowd;
 }
-function fade(cb) { const f = document.getElementById('fadeov'); f.style.opacity = 1; setTimeout(() => { cb(); f.style.opacity = 0; }, 330); }
+function fade(cb) { sfx('puerta'); const f = document.getElementById('fadeov'); f.style.opacity = 1; setTimeout(() => { cb(); f.style.opacity = 0; }, 330); }
 function enter(scene, [x, y], dir) { G.scene = scene; G.x = x; G.y = y; G.dir = dir; clearBubbles(); const pn = document.getElementById('placeName'); pn.textContent = scene === 'town' ? 'Kalé' : interior(scene).name; pn.style.opacity = 1; clearTimeout(pn._t); pn._t = setTimeout(() => pn.style.opacity = 0, 2600); if (G.listo) guardarAuto(); }
 let OBJS = [];
 function startGame(rest) {
@@ -338,7 +338,7 @@ function typeLine(box, t, ch) {
   t.finishType = done;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || full.length < 4) return done();
   t.typing = true; chs && chs.classList.add('wait'); let k = 0; p.textContent = '';
-  G.typer = setInterval(() => { k += 2; p.textContent = full.slice(0, k); if (k >= full.length) done(); }, 24);
+  G.typer = setInterval(() => { k += PREFS.rapido ? 7 : 2; p.textContent = full.slice(0, k); if (k >= full.length) done(); }, 24);
 }
 function choose(i) {
   const t = G.talking; if (!t) return;

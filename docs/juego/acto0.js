@@ -47,7 +47,7 @@ function actoTick(now) {
   if (F.campana && !F.plaza && G.scene === 'town' && Math.hypot(G.x - 30 * T, G.y - 21 * T) < 6 * T) { F.plaza = true; plaza(); }
 }
 function campana() {
-  F.campana = true; const fam = player.last; clearBubbles(); for (const n of PEOPLE) n.nextBark = 1e15;
+  sfx('campana'); F.campana = true; const fam = player.last; clearBubbles(); for (const n of PEOPLE) n.nextBark = 1e15;
   P('dorne').scene = 'none'; P('marla').slot = null;
   const spots = { lin: [34.6, 24.6, 'left'], rosa: [26, 25.2, 'right'], pura: [27, 25.6, 'right'], brin: [25.2, 23.4, 'right'], corso: [27.4, 24.2, 'up'], yago: [34.2, 25.8, 'left'] };
   for (const [id, [x, y, d]] of Object.entries(spots)) { const n = P(id); moveNpc(n, 'town', [x, y], d); n.chat = false; n.route = null; }
@@ -117,12 +117,12 @@ function fightUI(text, opts) {
 }
 function momento() { const f = F.fight; f.round++; fightUI(f.round === 1 ? (f.kind === 'duelo' ? 'Yago levanta el arma y sonríe. «Cuando quieras.»' : 'El pirata se te echa encima. El tiempo se estira: lo ves venir.') : 'Otra vez. Respiras. Decides.', instinto()); }
 const later = (ms, fn) => setTimeout(fn, ms);
-function golpeVisual(quien) { const f = F.fight, tg = quien === 'me' ? G : f.foe; if (tg) F.fx = { x: tg.x + (tg.dx || 0), y: tg.y - 26, t0: performance.now(), me: quien === 'me' }; const el = document.getElementById('game'); el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(3px,-2px)' }, { transform: 'translate(0,0)' }], { duration: 220 });
+function golpeVisual(quien) { sfx('golpe'); const f = F.fight, tg = quien === 'me' ? G : f.foe; if (tg) F.fx = { x: tg.x + (tg.dx || 0), y: tg.y - 26, t0: performance.now(), me: quien === 'me' }; const el = document.getElementById('game'); el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(3px,-2px)' }, { transform: 'translate(0,0)' }], { duration: 220 });
   if (quien === 'me') { const fl = document.createElement('div'); fl.className = 'hitflash'; document.getElementById('overlays').appendChild(fl); later(380, () => fl.remove()); } }
 // un paso hacia el otro y vuelta
 function lunge(o, dx, ms = 180) { o.dx = dx; later(ms, () => o.dx = 0); }
 const hacia = (a, b) => b.x > a.x ? 1 : -1;
-function atacar(o, armaId, target) { act(o, golpeDe(armaId && arma(armaId)), { fps: 14 }); lunge(o, hacia(o, target) * 9, 260); }
+function atacar(o, armaId, target) { const gp = golpeDe(armaId && arma(armaId)); sfx(gp === 'shoot' && TIPO[arma(armaId).tipo][2] === 'fuego' ? 'disparo' : 'tajo'); act(o, gp, { fps: 14 }); lunge(o, hacia(o, target) * 9, 260); }
 function encaja(o) { act(o, 'hurt', { stop: 1, dur: 420, fps: 14 }); lunge(o, -hacia(o, o === G ? F.fight.foe : G) * 5, 300); }
 function elegir(o) {
   const f = F.fight, foe = f.foe, ok = Math.random() < o.p; let stun = false, txt;
@@ -168,6 +168,7 @@ function forastero() {
 // Haki del rey: una onda que sale del forastero; el aire se oscurece, rayos negros con filo rojo; la plaza cae
 const HAKI_CARGA = .6;
 function haki(fo) {
+  sfx('haki');
   F.haki = { t0: performance.now(), x: fo.x, y: fo.y - 30, hx: fo.x, hy: fo.y }; const R = HAKI_CARGA * 1000;
   const el = document.getElementById('game');
   el.animate([{ filter: 'none' }, { filter: 'brightness(.9) contrast(1.15)', offset: .2 }, { filter: 'grayscale(.95) contrast(1.7) brightness(.75)', offset: .24 }, { filter: 'grayscale(.7) contrast(1.35) brightness(.85)', offset: .7 }, { filter: 'none' }], { duration: 2800, easing: 'ease-out' });

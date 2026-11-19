@@ -1,18 +1,32 @@
 # Armas — plan
 
-## Estado
+## Estado (v0.7)
 
-Ya está en el juego (`docs/juego/armas.js`, atlas en `docs/juego/assets/armas/`):
+Ya está en el juego (`docs/juego/armas.js`, atlas en `docs/juego/assets/armas/`, índice en `armas.json`):
 
-- **Catálogo con grados.** Veinte armas originales con nombre, más el arma de tu padre y una de madera para cada tipo.
-- **Siete tipos con piezas LPC recoloreadas:**
-  - katana, con la forma del sable curvo, porque la katana de LPC es diminuta;
-  - espada, estoque, daga, lanza, hacha y maza.
-- **Pistola y mosquete dibujados por código.** En la cadera al caminar; con el brazo extendido, fogonazo y humo en la pose de disparar.
-- **Iconos dibujados por código** para la bolsa y los avisos.
-- **En la pelea, cada tipo cambia la opción principal y la animación:** la lanza mantiene a distancia, el hacha y la maza aturden, la daga arriesga más.
+- **Las 27 armas de LPC, en tres grupos:**
+  - **comunes:** daga, espada corta, sable, lanza, hacha de leñador, martillo, garrote, arco, tirachinas, pistola y mosquete;
+  - **de oficio:** mandoble, maza, cimitarra, estoque, ballesta, alabarda y pico;
+  - **de personajes importantes:** katana, guadaña, tridente, lanza larga, lanza dragón, mangual, hacha de guerra, mandoble fino, látigo y bumerán.
+- **Ocho iniciales**, las más distintas entre sí: sable, mandoble, espada corta, martillo, hacha, lanza, arco y daga. Cada una tiene su versión del padre y una de madera.
+- **Armas de los NPC:**
+  - marines: espada corta, pistola o mosquete;
+  - piratas: cimitarra, garrote y otras;
+  - Dorne: Colmillo Negro, una guadaña;
+  - la teniente: estoque.
+- **Dibujo:**
+  - cada pieza en su tamaño nativo (64, 128 o 192), centrada;
+  - recoloreado solo de la hoja;
+  - armas de fuego dibujadas por código;
+  - iconos para todas las formas.
+- **En la pelea:**
+  - el golpe depende del tipo, y si no, de la familia (corte, golpe, asta, distancia, fuego);
+  - el arma de fuego dispara una vez y después se golpea con la culata.
 
-Falta: armas con aura en el mundo, cuánto Haki aguanta cada grado, y dos espadas a la vez.
+Falta:
+- armas con aura en el mundo;
+- cuánto Haki aguanta cada grado;
+- dos espadas a la vez.
 
 ## Qué ofrece LPC y qué no
 
