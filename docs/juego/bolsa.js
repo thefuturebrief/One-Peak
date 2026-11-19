@@ -57,7 +57,7 @@ function bolsaHTML() {
   const grado = a ? `<span class="grado g-${a.grado}">${GRADOS[a.grado]}</span>` : '';
   const btn = a ? `<button type="button" class="btn sm" data-act="equipar">${S.arma === sel ? 'Guardar' : 'Llevar en la mano'}</button>` : o.acc ? `<button type="button" class="btn sm" data-act="${o.acc[0]}">${o.acc[1]}</button>` : '';
   return `<div class="bolsa"><div class="slots">${bag.map(id => `<button type="button" class="slot${id === sel ? ' on' : ''}" data-id="${id}" aria-label="${infoObjeto(id).n}">${S.arma === id ? '<i class="eq">En mano</i>' : ''}${OBJETOS[id] && OBJETOS[id].cuenta ? `<i class="ct">×${cant(id)}</i>` : ''}</button>`).join('')}${Array.from({ length: Math.max(0, 15 - bag.length) }, () => '<span class="slot vacio"></span>').join('')}</div>
-    <div class="det"><div class="ic"></div><b>${o.n}${o.cuenta ? ` <span class="cnt">×${cant(sel)}</span>` : ''}</b>${a ? `<div class="meta">${TIPOS[a.tipo]}${grado}</div>` : ''}<p>${o.desc}</p>${btn}</div></div>`;
+    <div class="det"><div class="ic"></div><b>${o.n}${o.cuenta ? ` <span class="cnt">×${cant(sel)}</span>` : ''}</b>${a ? `<div class="meta">${TIPOS[a.tipo]} · ${GRUPOS[TIPO[a.tipo][1]]}${grado}</div>` : ''}<p>${o.desc}</p>${btn}</div></div>`;
 }
 // ---------- cuerpo: una figura por zonas; tocas una y ves qué tiene y qué le puedes poner ----------
 const ESTADO = { sana: ['Sana', 'Nada que curar.'], herida: ['Herida', 'Sangra un poco. Primero la emulsión, después la venda.'], tratada: ['Con emulsión', 'Ya no sangra. Una venda la protege mientras cierra.'], vendada: ['Vendada', 'Bien tapada. Cerrará sola en unos días.'] };

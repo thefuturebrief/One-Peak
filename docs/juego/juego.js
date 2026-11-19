@@ -10,7 +10,7 @@ function drawLPC(g, id, x, y, dir, frame, scale = 1, anim = 'walk') { const im =
 let PLANO, CREDITOS;
 const listo = (async () => {
   await Promise.all([...Object.entries(ATLAS).map(([k, s]) => loadImg(s).then(i => A[k] = i)), ...PERSONAJES.map(id => loadImg('assets/personajes/' + id + '.png').then(i => SHEETS[id] = i))]);
-  await cargarCatalogo();
+  await cargarCatalogo(); await cargarArmas();
   PLANO = await (await fetch('plano.json')).json(); CREDITOS = await (await fetch('assets/creditos.json')).json();
   buildIsland(PLANO);
 })();
@@ -174,7 +174,7 @@ function makePeople() {
       barks: { dia: ['En mis tiempos esto no pasaba.', '¿Y tu madre, cómo está?'], tarde: ['Qué calor, Señor.'], noche: ['A estas horas, a casa.'] },
       greet: c => c.n === 0 ? '¡Ay, el hijo de Marla! Cada día te pareces más a... (se calla) ...a tu madre, claro.' : pick(['¿Y tu madre?', 'Dale recuerdos a Marla.']),
       topics: [{ id: 'parecido', once: true, need: () => (S.talks.pura || 0) >= 1, ask: 'Ibas a decir que me parezco a alguien.', a: () => ['¿Yo? No, no. A tu madre. Igualito.', '(Mira a Rosa. Rosa mira al suelo.)'], learn: L('familia', 'Me parezco a alguien', 'Doña Pura casi dijo a quién me parezco. Se calló a tiempo.') }] },
-    { id: 'mar1', scene: 'town', route: [[42.5, 15.2], [42.5, 22.6], [35, 22.6], [31.5, 26.8], [35, 22.6], [42.5, 22.6]], speed: 32, sprite: 'marine', name: 'Marine',
+    { id: 'mar1', scene: 'town', route: [[42.5, 15.2], [42.5, 22.6], [35, 22.6], [31.5, 26.8], [35, 22.6], [42.5, 22.6]], speed: 32, sprite: 'marine', name: 'Marine', arma: 'reglamento',
       barks: { dia: ['Circula, chaval.', 'Orden del capitán: nadie se acerca al barco negro.'], tarde: ['Hace demasiado calor para este uniforme.'], noche: ['¿Qué haces en la calle? A casa.'] },
       greet: c => c.n === 0 ? 'No tengo tiempo para charlas. Hay un barco pirata fondeado frente al puerto.' : pick(['¿Otra vez tú?', 'Circula.']),
       topics: [{ id: 'buscan', once: true, ask: '¿Qué buscan los piratas?', a: () => ['Si lo supiera no estaría patrullando. Si ves a alguien con un garfio, avisa al destacamento.'], learn: L('rumores', 'La Marina vigila', 'Buscan a alguien con un garfio.') },

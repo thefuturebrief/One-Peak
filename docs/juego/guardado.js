@@ -31,6 +31,6 @@ function restaurar(d) {
 // de noche: la plaza ya pasó; vuelven el forastero y la teniente a sus sitios y todos a sus frases de despedida
 function restaurarNoche() {
   F.campana = F.plaza = F.refuerzos = true; P('dorne').scene = 'none';
-  npcAdd('forastero', 'forastero', 'Forastero', 'town', [4.6, 22.2], 'left'); npcAdd('teniente', 'teniente', 'Teniente Breda Nisi', 'town', [44.5, 14.6], 'down', { arma: 'espada_ronda' });
+  npcAdd('forastero', 'forastero', 'Forastero', 'town', [4.6, 22.2], 'left'); npcAdd('teniente', 'teniente', 'Teniente Breda Nisi', 'town', [44.5, 14.6], 'down', { arma: 'estoque' });
   atardecerEstado();
 }

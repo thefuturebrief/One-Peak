@@ -1,9 +1,18 @@
 // Armas: catálogo, grados, dibujo en el personaje (piezas LPC recoloreadas) e iconos para la bolsa (dibujados por código).
 // Los nombres son originales. Los grados son los del mundo, y las armas con grado ocupan solo los huecos que el canon deja sin nombre.
 const GRADOS = { saijo: 'Saijō Ō Wazamono', o: 'Ō Wazamono', ryo: 'Ryō Wazamono', waza: 'Wazamono', sin: 'Sin grado' };
-const TIPOS = { katana: 'Katana', espada: 'Espada', estoque: 'Estoque', daga: 'Daga', lanza: 'Lanza', hacha: 'Hacha', maza: 'Maza', pistola: 'Pistola', mosquete: 'Mosquete' };
-// con qué animación ataca cada tipo; las de fuego se dibujan por código sobre la pose de disparar
-const GOLPE_DE = { katana: 'slash', espada: 'slash', estoque: 'slash', daga: 'thrust', lanza: 'thrust', hacha: 'slash', maza: 'slash', pistola: 'shoot', mosquete: 'shoot', punos: 'slash' };
+// tipo: nombre, grupo (comun, oficio, personaje), familia (corte, golpe, asta, distancia, fuego). La pieza LPC se llama igual que el tipo (assets/armas/<tipo>.png)
+const TIPO = {
+  daga: ['Daga', 'comun', 'corte'], espada_corta: ['Espada corta', 'comun', 'corte'], sable: ['Sable', 'comun', 'corte'], lanza: ['Lanza', 'comun', 'asta'], hacha: ['Hacha de leñador', 'comun', 'golpe'],
+  martillo: ['Martillo', 'comun', 'golpe'], garrote: ['Garrote', 'comun', 'golpe'], arco: ['Arco', 'comun', 'distancia'], tirachinas: ['Tirachinas', 'comun', 'distancia'], pistola: ['Pistola', 'comun', 'fuego'], mosquete: ['Mosquete', 'comun', 'fuego'],
+  mandoble: ['Mandoble', 'oficio', 'corte'], maza: ['Maza', 'oficio', 'golpe'], cimitarra: ['Cimitarra', 'oficio', 'corte'], estoque: ['Estoque', 'oficio', 'corte'], ballesta: ['Ballesta', 'oficio', 'distancia'], alabarda: ['Alabarda', 'oficio', 'asta'], pico: ['Pico', 'oficio', 'golpe'],
+  katana: ['Katana', 'personaje', 'corte'], guadana: ['Guadaña', 'personaje', 'asta'], tridente: ['Tridente', 'personaje', 'asta'], lanza_larga: ['Lanza larga', 'personaje', 'asta'], lanza_dragon: ['Lanza dragón', 'personaje', 'asta'], mangual: ['Mangual', 'personaje', 'golpe'],
+  hacha_guerra: ['Hacha de guerra', 'personaje', 'golpe'], mandoble_fino: ['Mandoble fino', 'personaje', 'corte'], latigo: ['Látigo', 'personaje', 'golpe'], bumeran: ['Bumerán', 'personaje', 'distancia'], baston: ['Bastón', 'comun', 'asta'],
+};
+const TIPOS = Object.fromEntries(Object.entries(TIPO).map(([k, v]) => [k, v[0]]));
+const GRUPOS = { comun: 'Común', oficio: 'De oficio', personaje: 'De personaje' };
+// las que puedes elegir al empezar: las más distintas entre sí
+const INICIALES = ['sable', 'mandoble', 'espada_corta', 'martillo', 'hacha', 'lanza', 'arco', 'daga'];
 // hoja de oscuro a claro
 const HOJA = {
   acero: ['#2a2e38', '#5c6474', '#9aa4b4', '#e4ecf4'], negra: ['#08080e', '#1a1a24', '#30303c', '#5e5e70'], plata: ['#2c3448', '#6a7898', '#b4c4e0', '#f4f8ff'],
@@ -15,52 +24,54 @@ const HOJA = {
 const ARMAS = [
   ['tsukikage', 'Tsukikage', 'katana', 'saijo', 'plata', '#8ab4ff', 'Dicen que su filo solo se ve de noche. De día parece una hoja vulgar, y por eso sigue sin dueño.'],
   ['umibozu', 'Umibōzu', 'lanza', 'saijo', 'verdemar', '#5ae0c8', 'Una lanza de asta negra que pesa como un mástil. Quien la empuña dice que oye el mar dentro.'],
-  ['shiranami', 'Shiranami', 'katana', 'o', 'acero', '#e8f4ff', 'Ola blanca. Hoja larga, curva suave. Corta la espuma sin mojarse, según los que la vieron.'],
-  ['rompemares', 'Rompemares', 'hacha', 'o', 'negra', '#c83a3a', 'Hacha de abordaje de hoja negra. Partió el palo mayor de un galeón de un solo golpe.'],
-  ['durgan', 'Durgan', 'espada', 'o', 'oro', '#ffd27a', 'Espada ancha de empuñadura dorada. Sus dueños nunca mueren en la cama.'],
+  ['shiranami', 'Shiranami', 'sable', 'o', 'acero', '#e8f4ff', 'Ola blanca. Hoja larga, curva suave. Corta la espuma sin mojarse, según los que la vieron.'],
+  ['rompemares', 'Rompemares', 'hacha_guerra', 'o', 'negra', '#c83a3a', 'Hacha de abordaje de hoja negra. Partió el palo mayor de un galeón de un solo golpe.'],
+  ['durgan', 'Durgan', 'mandoble', 'o', 'oro', '#ffd27a', 'Espada ancha de empuñadura dorada. Sus dueños nunca mueren en la cama.'],
   ['colibri', 'Colibrí', 'estoque', 'ryo', 'plata', null, 'Ligero como una pluma. Pica tres veces antes de que veas la primera.'],
   ['kagero', 'Kagerō', 'katana', 'ryo', 'carmesi', null, 'Hoja de reflejos rojos. Tiembla como el aire caliente cuando se desenvaina.'],
   ['campana', 'Campana de Bronce', 'maza', 'ryo', 'bronce', null, 'Suena al golpear. Los marineros dicen que se oye desde la otra punta del puerto.'],
   ['diente', 'Diente de Sirena', 'daga', 'ryo', 'hueso', null, 'Hoja de hueso blanco, más dura que el acero. Nadie sabe de qué animal salió.'],
   ['arpon_norte', 'Arpón del Norte', 'lanza', 'ryo', 'azul', null, 'Forjado para cazar reyes marinos. Tiene la punta mellada por algo muy grande.'],
   ['nagi', 'Nagi', 'katana', 'waza', 'acero', null, 'Calma chicha. Una katana honrada, sin historia, que no falla.'],
-  ['viento_sur', 'Viento Sur', 'espada', 'waza', 'acero', null, 'Espada de oficial retirado. Bien equilibrada, mejor cuidada.'],
+  ['viento_sur', 'Viento Sur', 'espada_corta', 'waza', 'acero', null, 'Espada de oficial retirado. Bien equilibrada, mejor cuidada.'],
   ['lenadora', 'Leñadora', 'hacha', 'waza', 'acero', null, 'Empezó cortando troncos en un astillero y acabó cortando otras cosas.'],
   ['aguja', 'Aguja de Plata', 'estoque', 'waza', 'plata', null, 'Fina como un hilo. Se dobla y no se rompe.'],
   ['escama', 'Escama', 'daga', 'waza', 'verdemar', null, 'Daga corta de hoja verdosa. Cabe en una bota.'],
-  ['astillero', 'Martillo de Astillero', 'maza', 'waza', 'acero', null, 'Clavaba quillas. Ahora rompe cascos.'],
-  ['sable_marinero', 'Sable de marinero', 'katana', 'sin', 'acero', null, 'Un sable curvo cualquiera, de los que se venden en todos los puertos.'],
-  ['espada_ronda', 'Espada de ronda', 'espada', 'sin', 'acero', null, 'La espada reglamentaria de los guardias de puerto.'],
-  ['pistola_chispa', 'Pistola de chispa', 'pistola', 'sin', 'acero', null, 'Un tiro y a recargar. Más ruido que puntería.'],
-  ['mosquete_marina', 'Mosquete de la Marina', 'mosquete', 'sin', 'acero', null, 'El arma de los marines rasos. Larga, pesada y sorprendentemente precisa.'],
+  ['astillero', 'Martillo de Astillero', 'martillo', 'waza', 'acero', null, 'Clavaba quillas. Ahora rompe cascos.'],
+  ['colmillo_negro', 'Colmillo Negro', 'guadana', 'ryo', 'negra', null, 'La guadaña de «Garra» Dorne. La hoja es curva como un garfio y está mellada en tres sitios.'],
+  ['remo', 'Remo', 'baston', 'sin', 'madera', null, 'El remo de Brin. Lleva cuarenta años en el agua y un día en la espalda de un pirata.'],
+  ['reglamento', 'Espada de reglamento', 'espada_corta', 'sin', null, null, 'La espada corta de los marines rasos. Fea, fiable y sin nombre.'],
 ].map(([id, n, tipo, grado, hoja, aura, desc]) => ({ id, n, tipo, grado, hoja, aura, desc }));
-// las armas de tu padre: una por tipo, viejas pero buenas
-const DEL_PADRE = { katana: 'Marejada', espada: 'Rompeolas', estoque: 'Aguijón', daga: 'Colmillo', lanza: 'Arpón Viejo', hacha: 'Hacha de Proa', maza: 'Ancla de Mano' };
-for (const [tipo, n] of Object.entries(DEL_PADRE)) ARMAS.push({ id: 'padre_' + tipo, n, tipo, grado: 'sin', hoja: 'oxido', desc: 'Era de tu padre. Está mellada y la empuñadura huele a sal, pero el filo aguanta.' });
-for (const tipo of Object.keys(DEL_PADRE)) ARMAS.push({ id: 'madera_' + tipo, n: TIPOS[tipo] + ' de madera', tipo, grado: 'sin', hoja: 'madera', desc: 'De entrenamiento. Duele igual, pero no corta.' });
+// las armas de tu padre: una por cada tipo inicial, viejas pero buenas
+const DEL_PADRE = { sable: 'Marejada', mandoble: 'Rompeolas', espada_corta: 'Aguja de Proa', martillo: 'Ancla de Mano', hacha: 'Hacha de Proa', lanza: 'Arpón Viejo', arco: 'Arco de Gaviero', daga: 'Colmillo' };
+for (const [tipo, n] of Object.entries(DEL_PADRE)) ARMAS.push({ id: 'padre_' + tipo, n, tipo, grado: 'sin', hoja: 'oxido', desc: 'Era de tu padre. Está gastada y huele a sal, pero aguanta.' });
+for (const tipo of INICIALES) ARMAS.push({ id: 'madera_' + tipo, n: TIPOS[tipo] + ' de madera', tipo, grado: 'sin', hoja: 'madera', desc: 'De entrenamiento. Duele igual, pero no corta.' });
+const DESC_TIPO = { comun: 'Un arma corriente, de las que se venden en cualquier puerto.', oficio: 'Un arma de oficio: hace falta saber usarla.', personaje: 'No es un arma que lleve cualquiera.' };
+for (const [tipo, [n, gr]] of Object.entries(TIPO)) if (!ARMAS.some(a => a.id === tipo)) ARMAS.push({ id: tipo, n, tipo, grado: 'sin', hoja: null, desc: DESC_TIPO[gr] });
 const arma = id => ARMAS.find(a => a.id === id);
 
 // ---------- en el personaje ----------
-// atlas por tipo (ver herramientas/prep_armas.py): arriba celdas de 64 (caminar 0-3, estocada 4-7, caída 8); abajo el tajo en celdas de 192
-const ARMA_IMG = {}, ARMA_TINTE = {};
-function atlasArma(tipo, tras) { const k = tipo + (tras ? '_tras' : ''); if (!(k in ARMA_IMG)) { ARMA_IMG[k] = null; loadImg('assets/armas/' + k + '.png').then(i => ARMA_IMG[k] = i, () => {}); } return ARMA_IMG[k]; }
-// la hoja (píxeles grises) toma la rampa del arma; la empuñadura conserva su color
-function tinte(a, tras) { const k = a.id + (tras ? '_t' : ''); if (ARMA_TINTE[k]) return ARMA_TINTE[k]; const im = atlasArma(a.tipo, tras); if (!im) return null;
-  const [c, g] = mkCanvas(im.width, im.height); g.drawImage(im, 0, 0); const id = g.getImageData(0, 0, c.width, c.height), d = id.data, ramp = HOJA[a.hoja].map(h => parseInt(h.slice(1), 16));
-  for (let i = 0; i < d.length; i += 4) { if (!d[i + 3]) continue; const r = d[i], gg = d[i + 1], b = d[i + 2], mx = Math.max(r, gg, b), mn = Math.min(r, gg, b);
-    if (mx > 40 && (mx - mn) / mx < .22) { const v = ramp[Math.min(3, Math.floor((.3 * r + .59 * gg + .11 * b) / 64))]; d[i] = v >> 16 & 255; d[i + 1] = v >> 8 & 255; d[i + 2] = v & 255; }
-    else if (a.hoja === 'madera' || a.hoja === 'oxido') { d[i] = d[i] * .8 | 0; d[i + 1] = d[i + 1] * .7 | 0; d[i + 2] = d[i + 2] * .6 | 0; } }
+// assets/armas/<tipo>.png + armas.json: por animación, delante (f) y detrás (b): [y, celda, cuadros]
+let ARMA_MAN = {}; const ARMA_IMG = {}, ARMA_TINTE = {};
+const cargarArmas = async () => { try { ARMA_MAN = await (await fetch('assets/armas/armas.json')).json(); } catch (e) { ARMA_MAN = {}; } };
+function atlasArma(tipo) { if (!(tipo in ARMA_IMG)) { ARMA_IMG[tipo] = null; loadImg('assets/armas/' + tipo + '.png').then(i => ARMA_IMG[tipo] = i, () => {}); } return ARMA_IMG[tipo]; }
+// con qué animación del cuerpo ataca: la que el arma trae
+const golpeDe = a => { if (!a) return 'slash'; if (TIPO[a.tipo][2] === 'fuego') return 'shoot'; const m = ARMA_MAN[a.tipo] || {}; return m.slash ? 'slash' : m.thrust ? 'thrust' : m.shoot ? 'shoot' : 'slash'; };
+// color propio solo para las que lo tienen: la hoja (gris claro) toma la rampa; la madera tiñe todo
+function tinte(a) { const im = atlasArma(a.tipo); if (!im || !a.hoja) return im; const k = a.id; if (ARMA_TINTE[k]) return ARMA_TINTE[k];
+  const [c, g] = mkCanvas(im.width, im.height); g.drawImage(im, 0, 0); const id = g.getImageData(0, 0, c.width, c.height), d = id.data, ramp = HOJA[a.hoja].map(h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]), todo = a.hoja === 'madera';
+  for (let i = 0; i < d.length; i += 4) { if (!d[i + 3]) continue; const r = d[i], gg = d[i + 1], b = d[i + 2], mx = Math.max(r, gg, b), mn = Math.min(r, gg, b), l = (.3 * r + .59 * gg + .11 * b) / 255;
+    if (todo || (mx > 70 && (mx - mn) / mx < .16)) { const t = Math.min(2.999, l * 3.2), k0 = Math.floor(t), f = t - k0, A = ramp[k0], B = ramp[k0 + 1]; d[i] = A[0] + (B[0] - A[0]) * f; d[i + 1] = A[1] + (B[1] - A[1]) * f; d[i + 2] = A[2] + (B[2] - A[2]) * f; } }
   g.putImageData(id, 0, 0); return ARMA_TINTE[k] = c; }
 function drawArma(g, a, x, y, dir, anim, frame, tras) {
-  if (a.tipo === 'pistola' || a.tipo === 'mosquete') return tras ? null : drawFuego(g, a, x, y, dir, anim, frame);
-  const im = tinte(a, tras); if (!im) return; const r = ROW[dir], f = frame | 0;
-  if (anim === 'slash') g.drawImage(im, f * 192, 576 + r * 192, 192, 192, Math.round(x - 96), Math.round(y - 124), 192, 192);
-  else { const sy = anim === 'thrust' ? 256 + r * 64 : anim === 'hurt' ? 512 : r * 64, sx = anim === 'walk' || anim === 'thrust' || anim === 'hurt' ? f * 64 : 0;
-    g.drawImage(im, sx, sy, 64, 64, Math.round(x - 32), Math.round(y - 60), 64, 64); }
+  if (TIPO[a.tipo] && TIPO[a.tipo][2] === 'fuego') return tras ? null : drawFuego(g, a, x, y, dir, anim, frame);
+  if (anim === 'hurt') return; const e = (ARMA_MAN[a.tipo] || {})[anim]; if (!e) return; const L = e[tras ? 'b' : 'f']; if (!L) return; const im = tinte(a); if (!im) return;
+  const [y0, c, n] = L, f = Math.min(frame | 0, n - 1), off = (c - 64) / 2;
+  g.drawImage(im, f * c, y0 + ROW[dir] * c, c, c, Math.round(x - 32 - off), Math.round(y - 60 - off), c, c);
 }
 // pistola y mosquete: en la cadera al caminar; con el brazo extendido en la pose de disparar (cuadros 4 en adelante)
 function drawFuego(g, a, x, y, dir, anim, f) {
-  const H = HOJA[a.hoja], largo = a.tipo === 'mosquete' ? 20 : 9, s = dir === 'left' ? -1 : 1;
+  const H = HOJA[a.hoja || 'acero'], largo = a.tipo === 'mosquete' ? 20 : 9, s = dir === 'left' ? -1 : 1;
   g.save(); g.translate(Math.round(x), Math.round(y - 60));
   const arma = (px, py, ang) => { g.save(); g.translate(px, py); g.rotate(ang); g.fillStyle = '#2a1a12'; g.fillRect(-2, -2, largo + 3, 4); g.fillStyle = H[1]; g.fillRect(-1, -1, largo + 1, 2); g.fillStyle = H[3]; g.fillRect(0, -1, largo, 1);
     g.fillStyle = '#6a4228'; g.fillRect(-4, -1, 4, 5); g.fillStyle = '#3a2414'; g.fillRect(-4, 3, 4, 1); g.restore(); };
@@ -74,21 +85,37 @@ function drawFuego(g, a, x, y, dir, anim, f) {
 }
 
 // ---------- icono (bolsa, avisos) ----------
-// dibujado en 32x32 y escalado sin suavizar, para que se vea como el resto del píxel
+// dibujado en 32x32 y escalado sin suavizar. Las espadas salen de unos pocos números: largo, ancho, curva y guarda.
+const FORMA_ESPADA = { daga: [11, 3, 0, 'cruz'], espada_corta: [15, 3, 0, 'cruz'], sable: [17, 2.6, .35, 'cazoleta'], mandoble: [22, 4, 0, 'cruz'], mandoble_fino: [21, 2.4, 0, 'cruz'], cimitarra: [16, 3.6, .6, 'cruz'], katana: [19, 2, .22, 'tsuba'], estoque: [21, 1.4, 0, 'taza'] };
 function iconoArma(a, px = 64) {
-  const [c, g] = mkCanvas(32, 32), H = HOJA[a.hoja], O = '#1a1210', wood = ['#3a2414', '#6a4228', '#9a6a3e'];
+  const [c, g] = mkCanvas(32, 32), H = HOJA[a.hoja || 'acero'], O = '#1a1210', wood = ['#3a2414', '#6a4228', '#9a6a3e'], t = a.tipo;
   if (a.aura) { const gr = g.createRadialGradient(16, 16, 2, 16, 16, 16); gr.addColorStop(0, a.aura + 'aa'); gr.addColorStop(1, a.aura + '00'); g.fillStyle = gr; g.fillRect(0, 0, 32, 32); }
-  const line = (pts, w, col) => { g.strokeStyle = col; g.lineWidth = w; g.lineCap = 'square'; g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.stroke(); };
-  const hoja = (pts, w) => { line(pts, w + 2, O); line(pts, w, H[2]); line(pts.map(([x, y]) => [x - .7, y - .7]), 1, H[3]); };
-  const mango = (a0, a1, w = 3) => { line([a0, a1], w + 2, O); line([a0, a1], w, a.tipo === 'katana' ? '#2a2a3a' : wood[1]); if (a.tipo === 'katana') for (let t = .2; t < 1; t += .25) { const x = a0[0] + (a1[0] - a0[0]) * t, y = a0[1] + (a1[1] - a0[1]) * t; g.fillStyle = '#d8d0c0'; g.fillRect(x - 1, y - 1, 2, 2); } };
-  const t = a.tipo;
-  if (t === 'katana') { mango([5, 27], [11, 21]); g.fillStyle = O; g.beginPath(); g.ellipse(12, 20, 4, 2.5, -.8, 0, 7); g.fill(); g.fillStyle = '#c8a040'; g.beginPath(); g.ellipse(12, 20, 3, 1.6, -.8, 0, 7); g.fill(); hoja([[13, 19], [20, 11], [25, 6], [28, 2]], 2); }
-  else if (t === 'espada') { mango([5, 27], [10, 22]); line([[7, 18], [14, 25]], 4, O); line([[7, 18], [14, 25]], 2, '#c8a040'); hoja([[11, 21], [27, 5]], 4); g.fillStyle = '#c8a040'; g.fillRect(3, 27, 3, 3); }
-  else if (t === 'estoque') { mango([5, 27], [9, 23], 2); g.strokeStyle = O; g.lineWidth = 3; g.beginPath(); g.arc(10, 22, 4, 0, 7); g.stroke(); g.strokeStyle = H[3]; g.lineWidth = 1.5; g.stroke(); hoja([[12, 20], [29, 3]], 1.5); }
-  else if (t === 'daga') { mango([8, 24], [12, 20]); line([[9, 17], [15, 23]], 3, O); line([[9, 17], [15, 23]], 1.5, H[1]); hoja([[13, 19], [22, 10]], 3.5); }
-  else if (t === 'lanza') { line([[3, 29], [22, 10]], 4, O); line([[3, 29], [22, 10]], 2, wood[2]); g.fillStyle = O; g.beginPath(); g.moveTo(29, 3); g.lineTo(18, 9); g.lineTo(23, 14); g.closePath(); g.fill(); g.fillStyle = H[2]; g.beginPath(); g.moveTo(28, 4); g.lineTo(19.5, 9.5); g.lineTo(22.5, 12.5); g.closePath(); g.fill(); }
-  else if (t === 'hacha') { line([[5, 29], [22, 8]], 4, O); line([[5, 29], [22, 8]], 2, wood[2]); g.fillStyle = O; g.beginPath(); g.moveTo(17, 7); g.quadraticCurveTo(29, 6, 28, 18); g.lineTo(20, 13); g.closePath(); g.fill(); g.fillStyle = H[2]; g.beginPath(); g.moveTo(19, 8); g.quadraticCurveTo(27, 8, 26.5, 16); g.lineTo(21, 12); g.closePath(); g.fill(); g.fillStyle = H[3]; g.fillRect(25, 10, 1, 5); }
-  else if (t === 'maza') { line([[5, 29], [19, 13]], 4, O); line([[5, 29], [19, 13]], 2, wood[2]); g.fillStyle = O; g.beginPath(); g.arc(22, 10, 7, 0, 7); g.fill(); g.fillStyle = H[2]; g.beginPath(); g.arc(22, 10, 5.5, 0, 7); g.fill(); g.fillStyle = H[3]; g.fillRect(19, 7, 2, 2); g.fillStyle = H[0]; for (const [dx, dy] of [[-7, 0], [7, 0], [0, -7], [0, 7]]) g.fillRect(22 + dx - 1, 10 + dy - 1, 3, 3); }
+  const line = (pts, w, col, cap = 'square') => { g.strokeStyle = col; g.lineWidth = w; g.lineCap = cap; g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.stroke(); };
+  const palo = (a0, a1, w = 2) => { line([a0, a1], w + 2, O); line([a0, a1], w, wood[2]); };
+  const metal = (path, fill = H[2]) => { g.fillStyle = O; path(1.2); g.fill(); g.fillStyle = fill; path(0); g.fill(); };
+  if (FORMA_ESPADA[t]) { const [L, W, cur, guard] = FORMA_ESPADA[t], bx = 10, by = 22, ex = bx + L * .72, ey = by - L * .72, cx = (bx + ex) / 2 - cur * 6, cy = (by + ey) / 2 - cur * 6;
+    line([[4, 28], [bx - 1, by + 1]], 5, O); line([[4, 28], [bx - 1, by + 1]], 3, t === 'katana' ? '#2a2a3a' : wood[1]); if (t === 'katana') for (const k of [.3, .65]) { g.fillStyle = '#d8d0c0'; g.fillRect(4 + (bx - 5) * k, 28 - (28 - by - 1) * k - 1, 2, 2); }
+    g.lineCap = 'round'; g.strokeStyle = O; g.lineWidth = W + 2; g.beginPath(); g.moveTo(bx, by); g.quadraticCurveTo(cx, cy, ex, ey); g.stroke(); g.strokeStyle = H[2]; g.lineWidth = W; g.stroke(); g.strokeStyle = H[3]; g.lineWidth = 1; g.beginPath(); g.moveTo(bx, by - 1); g.quadraticCurveTo(cx - .6, cy - .6, ex - .5, ey - .5); g.stroke();
+    if (guard === 'cruz') { line([[bx - 4, by - 4], [bx + 3, by + 3]], 4, O); line([[bx - 4, by - 4], [bx + 3, by + 3]], 2, '#c8a040'); }
+    if (guard === 'tsuba') { g.fillStyle = O; g.beginPath(); g.ellipse(bx, by, 3.5, 2.2, -.8, 0, 7); g.fill(); g.fillStyle = '#c8a040'; g.beginPath(); g.ellipse(bx, by, 2.6, 1.4, -.8, 0, 7); g.fill(); }
+    if (guard === 'cazoleta' || guard === 'taza') { g.strokeStyle = O; g.lineWidth = 3; g.beginPath(); g.arc(bx - 1, by + 1, guard === 'taza' ? 4 : 3, 0, 7); g.stroke(); g.strokeStyle = '#c8a040'; g.lineWidth = 1.5; g.stroke(); }
+    g.fillStyle = '#c8a040'; g.fillRect(3, 27, 3, 3); }
+  else if (t === 'hacha' || t === 'hacha_guerra') { palo([5, 29], [21, 9], 2); const d = t === 'hacha_guerra';
+    metal(o => { g.beginPath(); g.moveTo(18 - o, 7 - o); g.quadraticCurveTo(29 + o, 6, 28 + o, 18 + o); g.lineTo(20, 13); g.closePath(); if (d) { g.moveTo(17 + o, 9); g.quadraticCurveTo(6 - o, 6, 8 - o, 18 + o); g.lineTo(15, 13); g.closePath(); } }); g.fillStyle = H[3]; g.fillRect(25, 10, 1, 5); }
+  else if (t === 'martillo' || t === 'maza' || t === 'pico' || t === 'garrote' || t === 'mangual') { if (t === 'garrote') { line([[5, 29], [23, 9]], 7, O, 'round'); line([[5, 29], [23, 9]], 5, wood[1], 'round'); line([[14, 19], [24, 8]], 7, O, 'round'); line([[14, 19], [24, 8]], 5, wood[2], 'round'); }
+    else if (t === 'mangual') { palo([4, 29], [13, 18]); g.strokeStyle = '#6a6878'; g.lineWidth = 1; for (let k = 0; k < 4; k++) g.strokeRect(13 + k * 2.5, 15 - k * 2.5, 2, 2); g.fillStyle = O; g.beginPath(); g.arc(24, 8, 5.5, 0, 7); g.fill(); g.fillStyle = H[1]; g.beginPath(); g.arc(24, 8, 4, 0, 7); g.fill(); g.fillStyle = H[0]; for (const [dx, dy] of [[-6, 0], [6, 0], [0, -6], [0, 6]]) g.fillRect(24 + dx - 1, 8 + dy - 1, 2, 2); }
+    else { palo([5, 29], [19, 13]); if (t === 'martillo') metal(o => { g.beginPath(); g.rect(14 - o, 4 - o, 14 + 2 * o, 8 + 2 * o); }); else if (t === 'pico') { line([[11, 6], [20, 9], [29, 6]], 5, O, 'round'); line([[11, 6], [20, 9], [29, 6]], 3, H[2], 'round'); } else { metal(o => { g.beginPath(); g.arc(22, 10, 6.5 + o, 0, 7); }); g.fillStyle = H[0]; for (const [dx, dy] of [[-7, 0], [7, 0], [0, -7], [0, 7]]) g.fillRect(22 + dx - 1, 10 + dy - 1, 3, 3); }
+      if (t === 'martillo') { g.fillStyle = H[3]; g.fillRect(15, 5, 12, 1); } } }
+  else if (['lanza', 'lanza_larga', 'lanza_dragon', 'tridente', 'alabarda', 'guadana', 'baston'].includes(t)) { palo([3, 30], [24, 9], t === 'baston' ? 2.5 : 2);
+    if (t === 'tridente') { for (const [a0, a1] of [[[24, 9], [29, 3]], [[22, 7], [25, 1]], [[26, 11], [31, 7]]]) { line([a0, a1], 4, O); line([a0, a1], 2, H[2]); } }
+    else if (t === 'guadana') { g.lineCap = 'round'; g.strokeStyle = O; g.lineWidth = 4.5; g.beginPath(); g.moveTo(24, 9); g.quadraticCurveTo(14, 1, 4, 6); g.stroke(); g.strokeStyle = H[2]; g.lineWidth = 2.5; g.stroke(); }
+    else if (t === 'alabarda') { metal(o => { g.beginPath(); g.moveTo(19 - o, 9); g.quadraticCurveTo(19, 18 + o, 27 + o, 15 + o); g.lineTo(23, 11); g.closePath(); }); metal(o => { g.beginPath(); g.moveTo(30 + o, 2 - o); g.lineTo(21 - o, 8); g.lineTo(25, 12 + o); g.closePath(); }); }
+    else if (t !== 'baston') metal(o => { g.beginPath(); g.moveTo(30 + o, 2 - o); g.lineTo(20 - o, 8); g.lineTo(24, 13 + o); g.closePath(); }, t === 'lanza_dragon' ? '#c8402e' : H[2]); }
+  else if (t === 'arco' || t === 'ballesta') { if (t === 'arco') { g.strokeStyle = O; g.lineWidth = 4; g.beginPath(); g.arc(4, 28, 22, -1.45, -.12); g.stroke(); g.strokeStyle = wood[2]; g.lineWidth = 2; g.stroke(); line([[6, 6], [26, 25]], 1, '#e8e2d0'); line([[9, 24], [27, 6]], 3, O); line([[9, 24], [27, 6]], 1.5, wood[1]); g.fillStyle = H[2]; g.fillRect(25, 5, 3, 3); }
+    else { palo([6, 26], [24, 8], 3); g.strokeStyle = O; g.lineWidth = 4; g.beginPath(); g.moveTo(11, 5); g.quadraticCurveTo(20, 9, 26, 19); g.stroke(); g.strokeStyle = H[1]; g.lineWidth = 2; g.stroke(); line([[11, 5], [26, 19]], 1, '#e8e2d0'); } }
+  else if (t === 'tirachinas') { line([[13, 30], [15, 18]], 4, O); line([[13, 30], [15, 18]], 2, wood[2]); line([[15, 18], [10, 8]], 4, O); line([[15, 18], [10, 8]], 2, wood[2]); line([[15, 18], [22, 9]], 4, O); line([[15, 18], [22, 9]], 2, wood[2]); line([[10, 8], [16, 14], [22, 9]], 1.2, '#7a4a2a'); }
+  else if (t === 'bumeran') { g.lineCap = 'round'; for (const [w, col] of [[6, O], [4, wood[2]]]) { g.strokeStyle = col; g.lineWidth = w; g.beginPath(); g.moveTo(5, 24); g.quadraticCurveTo(10, 8, 16, 9); g.quadraticCurveTo(22, 8, 28, 24); g.stroke(); } }
+  else if (t === 'latigo') { line([[4, 29], [9, 23]], 5, O); line([[4, 29], [9, 23]], 3, wood[1]); g.strokeStyle = O; g.lineWidth = 2.5; g.beginPath(); g.moveTo(9, 23); g.bezierCurveTo(30, 18, 2, 6, 27, 4); g.stroke(); g.strokeStyle = '#7a4a2a'; g.lineWidth = 1.2; g.stroke(); }
   else if (t === 'pistola' || t === 'mosquete') { const L = t === 'mosquete' ? 26 : 16, x0 = t === 'mosquete' ? 3 : 8; g.fillStyle = O; g.fillRect(x0 + 6, 11, L - 4, 5); g.fillStyle = H[2]; g.fillRect(x0 + 7, 12, L - 6, 2); g.fillStyle = H[3]; g.fillRect(x0 + 7, 12, L - 6, 1);
     g.fillStyle = O; g.beginPath(); g.moveTo(x0 + 9, 15); g.lineTo(x0 + 2, 25); g.lineTo(x0 + 7, 26); g.lineTo(x0 + 13, 16); g.fill(); g.fillStyle = wood[2]; g.beginPath(); g.moveTo(x0 + 9, 16); g.lineTo(x0 + 3.5, 24); g.lineTo(x0 + 6.5, 24.5); g.lineTo(x0 + 11.5, 16); g.fill(); g.fillStyle = '#c8a040'; g.fillRect(x0 + 8, 9, 2, 3); }
   const [o, og] = mkCanvas(px, px); og.imageSmoothingEnabled = false; og.drawImage(c, 0, 0, px, px); return o;
