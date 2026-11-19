@@ -49,7 +49,7 @@ const DREAMS = [
 ];
 const rnd = Math.random, pick = a => a[Math.floor(rnd() * a.length)];
 const S = {}, player = { name: '', last: '' };
-function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], bag: [], arma: null, dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
+function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], bag: [], arma: null, cuerpo: {}, cant: {}, dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
   STATS.forEach(([k]) => S.st[k] = 8); Object.keys(OFICIOS).forEach(k => S.of[k] = 0); S.tag = t => S.tags.filter(x => x === t).length; }
 function apply(fx) { if (!fx) return; for (const k in fx.ax || {}) S.ax[k] += fx.ax[k]; for (const k in fx.st || {}) S.st[k] += fx.st[k]; for (const k in fx.of || {}) S.of[k] += fx.of[k];
   (fx.tr || []).forEach(t => S.trs.includes(t) || S.trs.push(t)); (fx.tags || []).forEach(t => S.tags.push(t)); if (fx.bond) S.bonds.push(fx.bond); if (fx.item) { S.items.push(fx.item); darObjeto('mapa', true); } }
@@ -71,9 +71,9 @@ const keys = h => { keyHandler = e => { if (e.target.tagName === 'INPUT' && e.ke
 function menu() {
   attract.on = true; requestAnimationFrame(attractFrame);
   show(`<div class="col"><h1 class="logo"><span>One</span><span>Peak</span></h1><nav class="menu" aria-label="Menú principal">
-    <button class="mi" data-a="new" type="button">${ANCHOR}Nueva partida</button><button class="mi" type="button" disabled>${ANCHOR}Continuar</button>
+    <button class="mi" data-a="new" type="button">${ANCHOR}Nueva partida</button><button class="mi" data-a="cont" type="button"${leerGuardado() ? '' : ' disabled'}>${ANCHOR}Continuar</button>
     <button class="mi" data-a="opt" type="button">${ANCHOR}Opciones</button><button class="mi" data-a="cred" type="button">${ANCHOR}Créditos</button></nav></div><div class="ver">v0.5</div>`, false);
-  const items = [...root.querySelectorAll('.mi:not(:disabled)')]; items.forEach(b => b.onclick = () => ({ new: create, opt: options, cred: credits })[b.dataset.a]());
+  const items = [...root.querySelectorAll('.mi:not(:disabled)')]; items.forEach(b => b.onclick = () => ({ new: create, cont: continuar, opt: options, cred: credits })[b.dataset.a]());
   keys(e => { const i = items.indexOf(document.activeElement); if (e.key === 'ArrowDown') { items[(i + 1) % items.length].focus(); e.preventDefault(); } if (e.key === 'ArrowUp') { items[(i - 1 + items.length) % items.length].focus(); e.preventDefault(); } });
 }
 function options() { show(`<div class="col"><div class="kick">Opciones</div><div class="glass" style="padding:8px 22px"><div class="tog">Música<button class="sw" type="button" aria-pressed="true" aria-label="Música"></button></div><div class="tog">Efectos de sonido<button class="sw" type="button" aria-pressed="true" aria-label="Efectos"></button></div><div class="tog" style="border:0">Textos rápidos<button class="sw" type="button" aria-pressed="false" aria-label="Textos rápidos"></button></div></div><div class="row"><button class="btn ghost" type="button" id="back">Volver</button></div></div>`);
@@ -214,6 +214,9 @@ function makePeople() {
       first: L('gente', 'Doctor Ansel', 'El médico de Kalé. Tranquilo y observador.'),
       topics: [
         { id: 'herido', once: true, ask: '¿Ha venido alguien del barco negro?', a: () => ['Anoche me trajeron a uno de esos piratas con un corte en el brazo.', 'Tenía la medusa tatuada. Y una cicatriz muy vieja, de las que hace un garfio.'], learn: L('rumores', 'El pirata herido', 'El médico curó anoche a un pirata con la medusa tatuada y una cicatriz de garfio.') },
+        { id: 'irme', once: true, ask: { def: 'Doctor, dentro de poco me voy de Kalé.', temerario: 'Me voy de Kalé, doctor. Pronto.' }, a: () => { later(300, () => { darObjeto('emulsion', false, 3); darObjeto('vendas', false, 5); });
+            return ['(El doctor deja la pluma y te mira por encima de las gafas.)', '¿Irte? Ya. Todos los jóvenes de esta isla se van algún día.', 'Entonces llévate esto. Emulsión de árnica, para las heridas, y vendas de lino.', 'Primero la emulsión, sobre la herida limpia. Después la venda, bien apretada.', ...(Object.values(S.cuerpo || {}).includes('herida') ? ['(Te mira de arriba abajo.) Y empieza ya, que vienes hecho un mapa.'] : ['En el mar no hay médico. Lo vas a tener que hacer tú solo.'])]; },
+          learn: L('yo', 'Curas del doctor', 'El doctor Ansel me dio emulsión y vendas. Primero la emulsión sobre la herida; después la venda.') },
         { id: 'ayudar', once: true, need: () => S.of.medico >= 3, ask: '¿Necesitas ayuda?', a: () => ['Siempre. Pásame esas vendas. (Trabajáis un rato.)', 'Tienes buen pulso. Ojalá te quedaras en Kalé.'], aff: () => 2 },
         { id: 'padre', once: true, need: () => knows('Papá y la medusa'), ask: '¿Conociste a mi padre?', a: () => ['(El doctor deja la pluma.)', 'Le curé una mano la noche antes de que se fuera. Una herida de garfio.', 'No me preguntes más. Le prometí a tu madre que no hablaría.'], learn: L('familia', 'La herida de papá', 'El doctor le curó a papá una herida de garfio la noche antes de que se fuera.') },
       ] },
@@ -286,16 +289,17 @@ function blocked(x, y) {
   const I = interior(G.scene); return x < WALL + 2 || x > I.w - WALL - 2 || y > I.h - WALL || hit(I.blocks, x, y) || crowd;
 }
 function fade(cb) { const f = document.getElementById('fadeov'); f.style.opacity = 1; setTimeout(() => { cb(); f.style.opacity = 0; }, 330); }
-function enter(scene, [x, y], dir) { G.scene = scene; G.x = x; G.y = y; G.dir = dir; clearBubbles(); const pn = document.getElementById('placeName'); pn.textContent = scene === 'town' ? 'Kalé' : interior(scene).name; pn.style.opacity = 1; clearTimeout(pn._t); pn._t = setTimeout(() => pn.style.opacity = 0, 2600); }
+function enter(scene, [x, y], dir) { G.scene = scene; G.x = x; G.y = y; G.dir = dir; clearBubbles(); const pn = document.getElementById('placeName'); pn.textContent = scene === 'town' ? 'Kalé' : interior(scene).name; pn.style.opacity = 1; clearTimeout(pn._t); pn._t = setTimeout(() => pn.style.opacity = 0, 2600); if (G.listo) guardarAuto(); }
 let OBJS = [];
-function startGame() {
+function startGame(rest) {
   attract.on = false; keyHandler = null; show(''); app.classList.add('playing'); cv.hidden = false; document.getElementById('hud').hidden = false; fitGame();
   PEOPLE = makePeople().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
   OBJS = OBJECTS().map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; });
   if (matchMedia('(pointer:coarse)').matches) document.getElementById('pad').hidden = false;
   else { const tip = document.createElement('div'); tip.className = 'tip glass'; tip.innerHTML = CONTROLES.slice(0, 5).map(([k, v]) => `<span><kbd>${k}</kbd>${v}</span>`).join(''); document.getElementById('overlays').appendChild(tip); setTimeout(() => tip.classList.add('out'), 9000); setTimeout(() => tip.remove(), 9800); }
-  const [sc, at] = place('casa', [8.6, 4.2]); enter(sc, at, 'down'); G.paused = false; G.minutes = 8 * 60;
-  actoInit();
+  G.listo = false; const [sc, at] = place('casa', [8.6, 4.2]); enter(sc, at, 'down'); G.paused = false; G.minutes = 8 * 60;
+  actoInit(); G.listo = true;
+  if (rest) { restaurar(rest); requestAnimationFrame(loop); return; }
   const corso = PEOPLE.find(n => n.id === 'corso');
   setTimeout(() => say(corso, { lines: ['¡Por fin te despiertas! Mamá te está esperando en la cocina.', 'Y hay un barco negro en el puerto. ¡Un barco pirata de verdad!'] }), 600);
   requestAnimationFrame(loop);
@@ -373,8 +377,8 @@ function interact() {
   else fade(() => enter(t.d.to, t.d.at[0], t.d.at[1]));
 }
 document.addEventListener('keydown', e => { if (cv.hidden) return; const k = e.key.toLowerCase();
-  if (document.querySelector('.wanted-ov')) return;
-  if (document.querySelector('.panelj')) { if (k === 'escape' || (k === 'j' && PANEL.tab === 'diario') || ((k === 'i' || k === 'tab') && PANEL.tab === 'bolsa')) closePanel(); else if (k === 'j') openPanel('diario'); else if (k === 'i' || k === 'tab') openPanel('bolsa'); if (k === 'tab') e.preventDefault(); return; }
+  if (document.querySelector('.wanted-ov, .ver-ov')) return;
+  if (document.querySelector('.panelj')) { if (k === 'escape' || (k === 'j' && PANEL.tab === 'diario') || (k === 'k' && PANEL.tab === 'cuerpo') || ((k === 'i' || k === 'tab') && PANEL.tab === 'bolsa')) closePanel(); else if (k === 'j') openPanel('diario'); else if (k === 'k') openPanel('cuerpo'); else if (k === 'i' || k === 'tab') openPanel('bolsa'); if (k === 'tab') e.preventDefault(); return; }
   if (document.querySelector('.pausa')) { if (k === 'escape') closePause(); return; }
   if (k === 'escape' && !G.talking && !G.paused) { openPause(); return; }
   if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', 'shift'].includes(k)) { G.keys[k] = true; e.preventDefault(); }
@@ -382,15 +386,16 @@ document.addEventListener('keydown', e => { if (cv.hidden) return; const k = e.k
   if (k === '+' || k === '=') zoom(1.15); if (k === '-' || k === '_') zoom(1 / 1.15);
   if (k === 'j' && !G.talking && !G.paused) openDiary();
   if ((k === 'i' || k === 'tab') && !G.talking && !G.paused) { e.preventDefault(); openPanel('bolsa'); }
+  if (k === 'k' && !G.talking && !G.paused) openPanel('cuerpo');
   if (k === 'c' && !G.talking) toggleBrujula(); });
 document.addEventListener('keyup', e => { G.keys[e.key.toLowerCase()] = false; });
 addEventListener('blur', () => { G.keys = {}; });
 document.getElementById('openBag').onclick = () => !G.talking && !G.paused && openPanel(document.getElementById('openBag').classList.contains('new-d') && !document.getElementById('openBag').classList.contains('new') ? 'diario' : 'bolsa');
 document.getElementById('compBtn').onclick = () => toggleBrujula();
-const CONTROLES = [['WASD / flechas', 'Caminar'], ['Mayús', 'Correr'], ['E · Espacio', 'Hablar, abrir, mirar'], ['I', 'Bolsa'], ['J', 'Diario'], ['C', 'Brújula (cuando la tengas)'], ['Rueda · + −', 'Acercar y alejar'], ['Esc', 'Pausa']];
+const CONTROLES = [['WASD / flechas', 'Caminar'], ['Mayús', 'Correr'], ['E · Espacio', 'Hablar, abrir, mirar'], ['I', 'Bolsa'], ['K', 'Cuerpo'], ['J', 'Diario'], ['C', 'Brújula (cuando la tengas)'], ['Rueda · + −', 'Acercar y alejar'], ['Esc', 'Pausa']];
 function openPause() { G.paused = true; G.keys = {}; const ov = document.getElementById('overlays'), el = document.createElement('div'); el.className = 'pausa glass'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'Pausa');
-  el.innerHTML = `<div class="kick">Pausa</div><dl>${CONTROLES.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><div class="pb"><button class="btn" type="button" data-a="c">Continuar</button><button class="btn ghost" type="button" data-a="m">Salir al menú</button></div><small>Salir pierde la partida: todavía no hay guardado.</small>`;
-  ov.appendChild(el); el.querySelector('[data-a="c"]').onclick = closePause; el.querySelector('[data-a="m"]').onclick = () => location.reload(); el.querySelector('button').focus(); }
+  el.innerHTML = `<div class="kick">Pausa</div><dl>${CONTROLES.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><div class="pb"><button class="btn" type="button" data-a="c">Continuar</button><button class="btn ghost" type="button" data-a="g">Guardar</button><button class="btn ghost" type="button" data-a="m">Salir al menú</button></div><small>${sePuedeGuardar() ? 'La partida también se guarda sola cada vez que cambias de lugar.' : 'Ahora no se puede guardar: pasa algo en la plaza. Al salir, vuelves al último guardado.'}</small>`;
+  ov.appendChild(el); el.querySelector('[data-a="c"]').onclick = closePause; el.querySelector('[data-a="m"]').onclick = () => location.reload(); el.querySelector('[data-a="g"]').onclick = () => { if (guardar(true)) closePause(); }; el.querySelector('button').focus(); }
 function closePause() { const el = document.querySelector('.pausa'); el && el.remove(); G.paused = false; }
 document.getElementById('pauseBtn').onclick = () => !G.talking && !G.paused && openPause();
 document.getElementById('actBtn').addEventListener('pointerdown', e => { e.preventDefault(); interact(); });

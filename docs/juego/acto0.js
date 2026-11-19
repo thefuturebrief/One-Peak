@@ -84,7 +84,7 @@ function actoInit() {
 }
 function descansar() {
   const h = hourNow(); if (h >= 16.5 || F.campana) return narr(['No tienes sueño. Y no es momento de dormir.']);
-  narr(['Te tumbas un rato en la cama. Se oye el mar y, a lo lejos, a Corso cantando.'], () => { G.paused = true; timelapse(Math.min(17 * 60 - 10, G.minutes + 120), 2600, () => { G.paused = false; rutinas(true); }); });
+  narr(['Te tumbas un rato en la cama. Se oye el mar y, a lo lejos, a Corso cantando.'], () => { G.paused = true; timelapse(Math.min(17 * 60 - 10, G.minutes + 120), 2600, () => { G.paused = false; rutinas(true); guardarAuto(); }); });
 }
 let lastTick = 0;
 function actoTick(now) {
@@ -146,7 +146,7 @@ function instinto() {
   return list;
 }
 function pelea(o) {
-  const meMax = 40 + S.st.resistencia * 6; F.fight = { kind: o.kind, foe: o.foe, foeName: o.foeName, me: meMax, meMax, foeHP: o.foeMax, foeMax: o.foeMax, round: 0, rounds: o.rounds, corso: o.kind === 'plaza', protected: false, hard: 0, arma: o.arma, fin: o.fin };
+  const C = Object.values(S.cuerpo || {}), meMax = 40 + S.st.resistencia * 6 - 5 * C.filter(e => e === 'herida').length - 2 * C.filter(e => e === 'tratada').length; F.fight = { kind: o.kind, foe: o.foe, foeName: o.foeName, me: meMax, meMax, foeHP: o.foeMax, foeMax: o.foeMax, round: 0, rounds: o.rounds, corso: o.kind === 'plaza', protected: false, hard: 0, arma: o.arma, fin: o.fin };
   G.paused = true; G.arma0 = S.arma; S.arma = o.arma; G.dir = dirTo(G, o.foe); o.foe.dir = dirTo(o.foe, G);
   const ov = document.getElementById('overlays'), box = document.createElement('div'); box.className = 'fight glass'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Pelea'); ov.appendChild(box);
   document.getElementById('hud').classList.add('talking'); momento();
@@ -186,7 +186,7 @@ function contra(stun, o, ok) {
   if (stun) { emote(foe, '?', 1200); fightUI(f.kind === 'duelo' ? 'Yago se queda un segundo sin saber dónde está. Ganas un respiro.' : 'El pirata no puede responder. Ganas un respiro.'); return later(1200, sigue); }
   atacar(foe, foe.arma, G);
   const hitP = .62 - (o.dodge && ok ? .35 : 0) - (f.kind === 'duelo' ? .08 : 0), dmg = (f.kind === 'duelo' ? 10 : 14) + Math.floor(Math.random() * 12) + (o.protect && ok ? 6 : 0);
-  if (Math.random() < hitP) { f.me -= dmg; if (dmg >= 22 && f.kind === 'plaza') f.hard++; later(180, () => { encaja(G); golpeVisual('me'); }); fightUI(f.kind === 'duelo' ? (dmg >= 18 ? 'La madera te da en el hombro. Suena feo.' : 'Te roza el brazo. Escuece.') : dmg >= 22 ? 'El golpe te llega a la ceja. Ves blanco un instante.' : 'Te alcanza en el costado. Duele, pero sigues en pie.'); }
+  if (Math.random() < hitP) { f.me -= dmg; if (dmg >= 22 && f.kind === 'plaza') f.hard++; later(200, () => herir(dmg >= 22 && f.kind === 'plaza' ? 'cara' : pick(f.kind === 'duelo' ? ['brazos', 'torso', 'piernas'] : ['brazos', 'torso', 'piernas', 'cabeza']))); later(180, () => { encaja(G); golpeVisual('me'); }); fightUI(f.kind === 'duelo' ? (dmg >= 18 ? 'La madera te da en el hombro. Suena feo.' : 'Te roza el brazo. Escuece.') : dmg >= 22 ? 'El golpe te llega a la ceja. Ves blanco un instante.' : 'Te alcanza en el costado. Duele, pero sigues en pie.'); }
   else { later(150, () => lunge(G, hacia(G, foe) * -12, 320)); fightUI(f.kind === 'duelo' ? 'Yago golpea al aire. «¡Quieto!»' : 'El pirata golpea al aire.'); }
   later(1300, sigue);
 }
@@ -204,22 +204,23 @@ function forastero() {
   if (!f.down) G.act = null;
   say(d, { lines: ['Basta de juegos. Si quieres algo bien hecho...', '(Dorne da un paso hacia ti, con el garfio por delante.)'], done: () => { act(d, 'slash', { stop: 2, hold: true, fps: 10 });
     walkTo(fo, [35.4, 22.6], 55, () => { fo.dir = 'left'; for (const n of PEOPLE) if (n.scene === 'town' && n !== fo && Math.hypot(n.x - fo.x, n.y - fo.y) < 14 * T) { n.dir = dirTo(n, fo); } G.dir = dirTo(G, fo); for (const n of PEOPLE.filter(n => ['lin', 'rosa', 'pura', 'brin', 'corso'].includes(n.id))) emote(n, '?', 1400);
-      say(fo, { lines: ['Dorne. Veinte años y sigues peleándote con críos.'], done: () => { d.act = null; haki(fo); G.paused = true; later(2600, () => (G.paused = false, narr(['Por un instante, todos en la plaza sienten un peso en el pecho, como si el aire se hubiera vuelto agua.', 'Casi todos caen redondos. Rosa, Doña Pura, Lin, los dos piratas.', 'Tú aguantas de rodillas. Corso tiembla, pero sigue en pie. Dorne también: es el único que no aparta la vista.'],
+      say(fo, { lines: ['Dorne. Veinte años y sigues peleándote con críos.'], done: () => { d.act = null; haki(fo); G.paused = true; later(3100, () => (G.paused = false, narr(['Por un instante, todos en la plaza sienten un peso en el pecho, como si el aire se hubiera vuelto agua.', 'Casi todos caen redondos. Rosa, Doña Pura, Lin, los dos piratas.', 'Tú aguantas de rodillas. Corso tiembla, pero sigue en pie. Dorne también: es el único que no aparta la vista.'],
         () => { G.act = null; say(d, { lines: ['(Dorne da un paso atrás. Después otro.)', 'Tú... Krakaka. Así que eras tú. Esto no ha terminado.', '¡Arriba, gandules! ¡Nos vamos!'], done: dorneSeVa }); }))); } }); }); } });
 }
 // Haki del rey: una onda que sale del forastero; el aire se oscurece, rayos negros con filo rojo; la plaza cae
+const HAKI_CARGA = .6;
 function haki(fo) {
-  F.haki = { t0: performance.now(), x: fo.x, y: fo.y - 30 };
+  F.haki = { t0: performance.now(), x: fo.x, y: fo.y - 30, hx: fo.x, hy: fo.y }; const R = HAKI_CARGA * 1000;
   const el = document.getElementById('game');
-  el.animate([{ filter: 'none' }, { filter: 'grayscale(.85) contrast(1.5) brightness(.8)', offset: .15 }, { filter: 'grayscale(.6) contrast(1.3)', offset: .7 }, { filter: 'none' }], { duration: 2200, easing: 'ease-out' });
-  el.animate([0, 1, 2, 3, 4, 5, 6, 7].map(k => ({ transform: k % 7 ? `translate(${(k % 2 ? -1 : 1) * (5 - k * .6)}px,${(k % 3 - 1) * 2}px)` : 'translate(0,0)' })), { duration: 700 });
-  emote(G, '!!', 2000); later(350, () => act(G, 'hurt', { stop: 3, hold: true, fps: 8 }));
-  for (const n of PEOPLE) { if (n === fo || n.scene !== 'town' || Math.hypot(n.x - fo.x, n.y - fo.y) > 16 * T) continue; const d = 120 + Math.random() * 380;
+  el.animate([{ filter: 'none' }, { filter: 'brightness(.9) contrast(1.15)', offset: .2 }, { filter: 'grayscale(.95) contrast(1.7) brightness(.75)', offset: .24 }, { filter: 'grayscale(.7) contrast(1.35) brightness(.85)', offset: .7 }, { filter: 'none' }], { duration: 2800, easing: 'ease-out' });
+  later(R, () => el.animate([0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(k => ({ transform: k % 9 ? `translate(${(k % 2 ? -1 : 1) * (7 - k * .7)}px,${(k % 3 - 1) * 3}px)` : 'translate(0,0)' })), { duration: 800 }));
+  later(R, () => { emote(G, '!!', 2000); later(200, () => act(G, 'hurt', { stop: 3, hold: true, fps: 8 })); });
+  for (const n of PEOPLE) { if (n === fo || n.scene !== 'town' || Math.hypot(n.x - fo.x, n.y - fo.y) > 16 * T) continue; const d = R + 60 + Math.random() * 340;
     if (n.id === 'dorneP') { later(d, () => { emote(n, '!!', 1800); lunge(n, -hacia(n, fo) * 6, 900); }); continue; }
-    if (n.id === 'corso') { later(d, () => emote(n, '!', 2400)); const t0 = performance.now(), sh = setInterval(() => { n.dx = Math.round(Math.sin((performance.now() - t0) / 30)); if (performance.now() - t0 > 2400) { clearInterval(sh); n.dx = 0; } }, 30); continue; }
+    if (n.id === 'corso') { later(d, () => { emote(n, '!', 2400); const t0 = performance.now(), sh = setInterval(() => { n.dx = Math.round(Math.sin((performance.now() - t0) / 30)); if (performance.now() - t0 > 2400) { clearInterval(sh); n.dx = 0; } }, 30); }); continue; }
     if (n.id === 'pirata' && F.plazaFight && F.plazaFight.won) continue;
-    later(d, () => emote(n, '!', 700)); later(d + 500, () => { n.desmayado = true; act(n, 'hurt', { hold: true, fps: 10 }); }); later(d + 2400, () => n.desmayado && emote(n, 'zzz', 5000)); }
-  later(2600, () => F.haki = null);
+    later(d, () => emote(n, '!', 600)); later(d + 380, () => { n.desmayado = true; act(n, 'hurt', { hold: true, fps: 11 }); }); later(d + 2300, () => n.desmayado && emote(n, 'zzz', 5000)); }
+  later(R + 2600, () => F.haki = null);
 }
 function despertar() { for (const n of PEOPLE) if (n.desmayado) { const d = Math.random() * 1400; later(d, () => { n.act = null; n.desmayado = false; emote(n, '?', 1600); }); } }
 function dorneSeVa() {
@@ -285,7 +286,7 @@ function duelo(tipo) {
     pelea({ kind: 'duelo', foe: y, foeName: 'Yago', foeMax: 70, rounds: 3, arma: tipo === 'punos' ? null : 'madera_' + tipo, fin: finDuelo }); } });
 }
 function finDuelo(f) {
-  const y = P('yago'); F.duelo = true; y.arma = 'madera_katana'; const won = f.foe <= 0, tipo = F.armaTipo;
+  const y = P('yago'); F.duelo = true; later(3000, guardarAuto); y.arma = 'madera_katana'; const won = f.foe <= 0, tipo = F.armaTipo;
   learn(['yo', 'El duelo del astillero', `Peleé con Yago en el astillero ${tipo === 'punos' ? 'a puñetazo limpio' : 'con ' + { katana: 'una katana', espada: 'una espada', estoque: 'un estoque', lanza: 'una lanza', hacha: 'un hacha', maza: 'una maza', daga: 'una daga' }[tipo] + ' de madera'}. ${won ? 'Gané.' : f.down ? 'Acabé en el suelo.' : 'Quedamos en tablas.'}`]);
   later(500, () => { y.act = null; y.emo = null; G.act = null; y.dir = dirTo(y, G);
     say(y, { lines: [won ? '(Yago se levanta frotándose las costillas.) Vale, vale. Invito yo al pan.' : f.down ? '(Yago te tiende la mano para levantarte.) No está mal. Para ser la primera vez.' : '(Yago jadea.) Tablas. Odio las tablas.',
@@ -305,7 +306,7 @@ function cavar() {
   later(900, () => narr(['Cavas con las manos al lado de la Vieja. A un palmo, la tierra suena a madera.', 'Una caja pequeña, envuelta en lona encerada. Dentro hay un arma vieja, una brújula y una nota doblada.'], () => {
     F.caja = true; const tipo = F.armaTipo && F.armaTipo !== 'punos' ? F.armaTipo : 'daga', id = 'padre_' + tipo;
     darObjeto(id); darObjeto('brujula'); darObjeto('nota'); S.arma = id;
-    learn(['familia', 'El arma de papá', `En la caja había ${arma(id).n}, el arma de papá. ${F.armaTipo === 'punos' ? 'Una daga: dice Brin que no hay puño que no mejore con una.' : 'La misma que elegí con Yago, como si lo hubiera sabido.'}`]);
+    later(4000, guardarAuto); learn(['familia', 'El arma de papá', `En la caja había ${arma(id).n}, el arma de papá. ${F.armaTipo === 'punos' ? 'Una daga: dice Brin que no hay puño que no mejore con una.' : 'La misma que elegí con Yago, como si lo hubiera sabido.'}`]);
     learn(['familia', 'La brújula de papá', 'Estaba en la caja. No apunta al norte: tiembla y señala adonde tengo que ir.']);
     const o = OBJS.find(o => o.label === 'Cavar'); if (o) o.label = 'Mirar';
     later(3600, () => !G.talking && bubble({ x: G.x, y: G.y, scene: G.scene }, 'C para sacar la brújula', 3200)); }));
@@ -320,7 +321,10 @@ function objetivo() {
 }
 
 function atardecer() {
-  F.invitacion = true; G.paused = true; timelapse(Math.max(G.minutes, 18.5 * 60), 5200, () => { G.paused = false; narr(['El sol ya toca el mar. Tienes hasta esta noche para decidir.', 'El forastero espera en la punta del muelle. La teniente, frente al destacamento.']); }); for (const n of PEOPLE) n.nextBark = performance.now() + 9000 + Math.random() * 8000;
+  F.invitacion = true; G.paused = true; timelapse(Math.max(G.minutes, 18.5 * 60), 5200, () => { G.paused = false; guardarAuto(); narr(['El sol ya toca el mar. Tienes hasta esta noche para decidir.', 'El forastero espera en la punta del muelle. La teniente, frente al destacamento.']); }); atardecerEstado();
+}
+function atardecerEstado() {
+  for (const n of PEOPLE) n.nextBark = performance.now() + 9000 + Math.random() * 8000;
   for (const id of ['mar2', 'mar3']) { const n = P(id); if (n) n.scene = 'none'; }
   learn(['gente', 'El forastero', 'Encapuchado, de negro. No le vi la cara. Dorne retrocedió solo con verlo. Dice que zarpa esta noche y que hay sitio para mí.']);
   learn(['gente', 'Teniente Breda Nisi', 'Oficial de la Marina de Loguetown. Me ofreció alistarme. Su barco sale esta noche.']);
@@ -393,30 +397,46 @@ function actoDrawOver(g, [cx, cy], now, VW, VH) {
   const fx = F.fx; if (fx && now - fx.t0 < 220) { const k = (now - fx.t0) / 220, x = fx.x - cx, y = fx.y - cy, r = 6 + k * 16; g.save(); g.globalAlpha = 1 - k;
     g.fillStyle = fx.me ? '#ff6a4a' : '#fff6dc'; g.beginPath(); for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, rr = i % 2 ? r * .45 : r; g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } g.fill();
     g.strokeStyle = '#2a1a12'; g.lineWidth = 1; g.stroke(); g.strokeStyle = '#fff6dc'; for (let i = 0; i < 6; i++) { const a = hash(i, fx.t0 | 0, 3) * 7; g.beginPath(); g.moveTo(x + Math.cos(a) * (r + 3), y + Math.sin(a) * (r + 3)); g.lineTo(x + Math.cos(a) * (r + 12), y + Math.sin(a) * (r + 12)); g.stroke(); } g.restore(); }
-  const H = F.haki; if (!H) return; const t = (now - H.t0) / 1000; if (t > 2.4) return;
-  const x = H.x - cx, y = H.y - cy, fade = t < .15 ? t / .15 : Math.max(0, 1 - (t - .9) / 1.5);
-  // el aire se vuelve pesado: viñeta oscura que nace del forastero
-  const vg = g.createRadialGradient(x, y, 20, x, y, Math.max(VW, VH)); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(.5, `rgba(20,0,8,${.35 * fade})`); vg.addColorStop(1, `rgba(10,0,4,${.7 * fade})`); g.fillStyle = vg; g.fillRect(0, 0, VW, VH);
-  // ondas
-  for (let k = 0; k < 3; k++) { const tt = t - k * .22; if (tt < 0 || tt > 1.2) continue; const r = 12 + tt * Math.max(VW, VH) * .9, a = (1 - tt / 1.2);
-    g.beginPath(); for (let i = 0; i <= 72; i++) { const an = i / 72 * Math.PI * 2, rr = r * (1 + (hash(i, k, Math.floor(now / 60)) - .5) * .02); g.lineTo(x + Math.cos(an) * rr, y + Math.sin(an) * rr * .6); }
-    g.strokeStyle = `rgba(0,0,0,${.85 * a})`; g.lineWidth = 6 * a + 1; g.stroke(); g.strokeStyle = `rgba(200,20,40,${.7 * a})`; g.lineWidth = 1.5; g.stroke(); }
-  // rayos: cambian cada 70 ms, negros con borde rojo
-  if (t < 1.6) { const seed = Math.floor(now / 70); g.save(); g.lineCap = 'round';
-    for (let b = 0; b < 7; b++) { if (hash(b, seed, 5) < .35) continue; let an = hash(b, seed, 1) * Math.PI * 2, px = x, py = y; const pts = [[px, py]], len = 60 + hash(b, seed, 2) * 140;
-      for (let s = 0; s < 7; s++) { an += (hash(b, s, seed) - .5) * 1.4; px += Math.cos(an) * len / 7; py += Math.sin(an) * len / 7 * .7; pts.push([px, py]); }
-      for (const [w, c] of [[5, 'rgba(220,30,50,.55)'], [2.2, 'rgba(0,0,0,.95)']]) { g.strokeStyle = c; g.lineWidth = w; g.beginPath(); pts.forEach(([a, b2]) => g.lineTo(a, b2)); g.stroke(); } }
+  const H = F.haki; if (!H) return; const t = (now - H.t0) / 1000, r = t - HAKI_CARGA; if (r > 2.6) return;
+  const x = H.x - cx, y = H.y - cy, hx = H.hx - cx, hy = H.hy - cy, M = Math.max(VW, VH);
+  // carga: el aire se oscurece alrededor y le sube un aura negra con filo rojo, como llamas
+  if (r < 0) { const k = t / HAKI_CARGA; const vg = g.createRadialGradient(x, y, 10, x, y, M * .9); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, `rgba(12,0,6,${.55 * k})`); g.fillStyle = vg; g.fillRect(0, 0, VW, VH);
+    for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2, rr = 13 + Math.sin(now / 40 + i * 2) * 2, h = (14 + hash(i, Math.floor(now / 60), 3) * 18) * k, bx = hx + Math.cos(a) * rr, by = hy - 30 + Math.sin(a) * rr * 1.6;
+      g.fillStyle = i % 3 ? `rgba(8,0,6,${.85 * k})` : `rgba(200,20,40,${.7 * k})`; g.beginPath(); g.moveTo(bx - 3, by + 6); g.quadraticCurveTo(bx + Math.sin(now / 50 + i) * 4, by - h * .6, bx, by - h); g.lineTo(bx + 3, by + 6); g.fill(); }
+    for (let i = 0; i < 10; i++) { const a = hash(i, 1, 8) * 7, d = 20 + hash(i, 2, 8) * 40, lift = k * (8 + hash(i, 3, 8) * 16); g.fillStyle = '#5a5048'; g.fillRect(Math.round(hx + Math.cos(a) * d), Math.round(hy + Math.sin(a) * d * .5 - lift), 2, 2); }
+    return; }
+  // descarga: la imagen se refracta en la onda (copia escalada dentro de un anillo), aberración y destello
+  const snap = actoDrawOver.snap || (actoDrawOver.snap = document.createElement('canvas')); if (snap.width !== VW || snap.height !== VH) { snap.width = VW; snap.height = VH; }
+  const sg = snap.getContext('2d'); sg.clearRect(0, 0, VW, VH); sg.drawImage(g.canvas, 0, 0);
+  for (let k = 0; k < 2; k++) { const tt = r - k * .28; if (tt < 0 || tt > 1.1) continue; const rad = 10 + tt * M * 1.05, w = 26 * (1 - tt / 1.1) + 6;
+    g.save(); g.beginPath(); g.ellipse(x, y, rad + w, (rad + w) * .62, 0, 0, 7); g.ellipse(x, y, Math.max(1, rad - w), Math.max(1, rad - w) * .62, 0, 0, 7, true); g.clip('evenodd');
+    const sc = 1.06 + .04 * (1 - tt); g.translate(x, y); g.scale(sc, sc); g.translate(-x, -y); g.drawImage(snap, 0, 0); g.restore();
+    const a = 1 - tt / 1.1; g.lineWidth = 3 * a + 1; g.strokeStyle = `rgba(0,0,0,${.75 * a})`; g.beginPath(); g.ellipse(x, y, rad, rad * .62, 0, 0, 7); g.stroke(); g.lineWidth = 1.2; g.strokeStyle = `rgba(230,40,60,${.8 * a})`; g.beginPath(); g.ellipse(x, y, rad - 3, (rad - 3) * .62, 0, 0, 7); g.stroke(); }
+  if (r < .35) { const k = 1 - r / .35; g.save(); g.globalAlpha = .35 * k; g.globalCompositeOperation = 'lighter'; g.drawImage(snap, 4 * k, 0); g.fillStyle = `rgba(255,0,40,${.12 * k})`; g.fillRect(0, 0, VW, VH); g.drawImage(snap, -4 * k, 0); g.restore(); }
+  // presión: viñeta que late dos veces, como un corazón apretado
+  const beat = Math.max(0, Math.sin(r * 9)) * Math.exp(-r * 1.6), fade = Math.max(0, 1 - r / 2.4), vg = g.createRadialGradient(x, y, 30, x, y, M); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(.45, `rgba(20,0,8,${(.25 + .25 * beat) * fade})`); vg.addColorStop(1, `rgba(8,0,4,${(.6 + .3 * beat) * fade})`); g.fillStyle = vg; g.fillRect(0, 0, VW, VH);
+  // rayos: negros con filo rojo, pegados a él, que crepitan hacia afuera; y algunos largos que cruzan la plaza
+  if (r < 1.8) { const seed = Math.floor(now / 55); g.save(); g.lineCap = g.lineJoin = 'round';
+    for (let b = 0; b < 10; b++) { if (hash(b, seed, 5) < .3) continue; const longo = b < 3; let an = hash(b, seed, 1) * Math.PI * 2, px = hx + Math.cos(an) * 10, py = hy - 28 + Math.sin(an) * 14; const pts = [[px, py]], len = longo ? 160 + hash(b, seed, 2) * 200 : 40 + hash(b, seed, 2) * 70, n = longo ? 10 : 6;
+      for (let s2 = 0; s2 < n; s2++) { an += (hash(b, s2, seed) - .5) * 1.5; px += Math.cos(an) * len / n; py += Math.sin(an) * len / n * .6; pts.push([px, py]); if (s2 === 3 && hash(b, 7, seed) > .5) pts.push([px + 12, py - 10], [px, py]); }
+      const al = longo ? Math.max(0, 1 - r / 1.2) : 1; for (const [w, c] of [[7, `rgba(210,20,50,${.35 * al})`], [3.2, `rgba(255,60,80,${.55 * al})`], [1.8, `rgba(0,0,0,${.95 * al})`]]) { g.strokeStyle = c; g.lineWidth = w; g.beginPath(); pts.forEach(([a2, b2], i) => i ? g.lineTo(a2, b2) : g.moveTo(a2, b2)); g.stroke(); } }
     g.restore(); }
-  // destello inicial
-  if (t < .12) { g.fillStyle = `rgba(255,255,255,${.5 * (1 - t / .12)})`; g.fillRect(0, 0, VW, VH); }
+  // destello al soltarlo
+  if (r < .1) { g.fillStyle = `rgba(255,255,255,${.6 * (1 - r / .1)})`; g.fillRect(0, 0, VW, VH); }
 }
 function actoDrawTown(g, [cx, cy], now) {
+  const Hk = F.haki; if (Hk) { const r = (now - Hk.t0) / 1000 - HAKI_CARGA; if (r > 0) { const fx = Hk.hx - cx, fy = Hk.hy - cy, al = Math.max(0, 1 - r / 3);
+    g.save(); g.strokeStyle = `rgba(20,12,10,${.75 * al})`; g.lineCap = 'round';
+    for (let i = 0; i < 9; i++) { let an = i / 9 * Math.PI * 2 + hash(i, 1, 4), px = fx, py = fy, L = Math.min(1, r * 4) * (40 + hash(i, 2, 4) * 50); g.lineWidth = 2; g.beginPath(); g.moveTo(px, py);
+      for (let k = 0; k < 5; k++) { an += (hash(i, k, 6) - .5) * .9; px += Math.cos(an) * L / 5; py += Math.sin(an) * L / 5 * .55; g.lineTo(px, py); g.lineWidth = 2 - k * .3; } g.stroke(); }
+    for (let i = 0; i < 26; i++) { const an = i / 26 * Math.PI * 2, d = 18 + r * 160 + hash(i, 3, 4) * 20; g.fillStyle = `rgba(180,165,140,${.5 * Math.max(0, 1 - r / 1.2)})`; g.beginPath(); g.ellipse(fx + Math.cos(an) * d, fy + Math.sin(an) * d * .5, 4, 2, 0, 0, 7); g.fill(); }
+    g.restore(); } }
   // tierra removida junto a la Vieja: casi no se ve hasta que sabes buscarla
   const hx = HOYO[0] * T - cx, hy = HOYO[1] * T - cy, sabe = knows('La caja de papá');
   g.fillStyle = F.caja ? 'rgba(40,24,12,.7)' : `rgba(110,76,44,${sabe ? .55 : .25})`; g.beginPath(); g.ellipse(hx, hy, 13, 6, 0, 0, 7); g.fill();
   if (sabe && !F.caja) { g.fillStyle = '#8a8a94'; for (const [a, b] of [[-6, -3], [-3, -1], [0, 0], [3, 1], [6, 3], [-6, 3], [-3, 1], [3, -1], [6, -3]]) g.fillRect(Math.round(hx + a) - 1, Math.round(hy + b) - 1, 3, 2); }
   if (F.caja) { g.fillStyle = 'rgba(140,100,60,.8)'; g.beginPath(); g.ellipse(hx + 12, hy + 3, 7, 3, 0, 0, 7); g.fill(); }
-  if (F.refuerzos) drawMarineShip(g, 5.4 * T - cx, 17.4 * T - cy, 8 * T, 3.2 * T);
+  if (F.refuerzos) { const b = WORLD.barcoMarina || (WORLD.barcoMarina = barcoSprite('marina', 0.6 * T, 33.4 * T, 9 * T)); g.drawImage(b.canvas, Math.round(b.x - cx), Math.round(b.y - cy)); }
 }
 // cadena de verdad: eslabones alternos que cuelgan entre la argolla del ancla y las manos de quien tira
 function drawChain(g, a, b, sag, t) { const n = Math.max(6, Math.round(Math.hypot(b[0] - a[0], b[1] - a[1]) / 5));

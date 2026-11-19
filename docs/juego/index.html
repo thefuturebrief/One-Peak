@@ -232,6 +232,23 @@ input.name:focus{border-color:var(--gold)}
 .wanted .cifra{font:900 28px Georgia,serif;margin-top:2px;display:flex;justify-content:center;align-items:baseline;gap:4px}.wanted .cifra span{font-size:22px}.wanted .cifra small{font-size:20px}
 .wanted .mar{font:800 12px Georgia,serif;letter-spacing:.5em;margin-top:6px;opacity:.75}
 #hud:has(.panelj) #pad,#hud:has(.panelj) .hbtns,#hud:has(.wanted-ov) #pad,#hud:has(.pausa) #pad{display:none}
+.guardado{position:absolute;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));padding:7px 12px;border-radius:10px;background:rgba(20,14,10,.8);color:var(--gold2);font-size:12px;font-weight:800;letter-spacing:.06em;transition:opacity .5s}.guardado.out{opacity:0}
+.slot .ct{position:absolute;right:6px;bottom:5px;font-style:normal;font-size:12px;font-weight:800;color:var(--fg)}.cnt{color:var(--gold2);font-size:.85em}
+.cuerpo{display:grid;grid-template-columns:1fr 300px;height:100%}
+.fig{width:100%;max-height:100%;padding:18px;box-sizing:border-box}
+.fig .zona{stroke:#1a120c;stroke-width:2;cursor:pointer;transition:fill .15s}.fig .zona:focus-visible{outline:none;stroke:#fff;stroke-width:3}
+.fig .cuello{fill:#6a5a4a;stroke:#1a120c;stroke-width:2}
+.fig .e-sana{fill:#6a5a4a}.fig .e-herida{fill:#c8402e}.fig .e-tratada{fill:#e0a040}.fig .e-vendada{fill:#efe6d0}
+.fig .zona.sel{stroke:var(--gold);stroke-width:3.5}.fig .zona:hover{filter:brightness(1.15)}
+.grado.e-sana{color:#a89a8a}.grado.e-herida,b.e-herida{color:#ff7a5e}.grado.e-tratada,b.e-tratada{color:#ffc86a}.grado.e-vendada,b.e-vendada{color:#f4ecd8}b.e-sana{color:var(--dim)}
+.curas{display:flex;gap:8px;flex-wrap:wrap}.curas .btn[disabled]{opacity:.45;cursor:default}
+.zonas{list-style:none;margin:6px 0 0;padding:10px 0 0;border-top:1px solid var(--edge);display:grid;gap:6px;font-size:14px}.zonas li{display:flex;justify-content:space-between}.zonas b{font-size:13px}
+.peq{font-size:13px!important}
+.ver-ov{position:absolute;inset:0;display:grid;place-items:center;background:rgba(10,6,4,.7);padding:16px;cursor:pointer;animation:pin .2s ease-out}
+.papel{background:linear-gradient(180deg,#f2e4c0,#e2cf9e);color:#3a2414;box-shadow:0 30px 60px rgba(0,0,0,.5),inset 0 0 50px rgba(120,80,30,.35);border-radius:2px}
+.nota-p{width:min(440px,90vw);padding:34px 38px;transform:rotate(1.2deg);font:600 26px/1.45 Caveat,cursive}.nota-p p{margin:0 0 6px}.nota-p .firma{text-align:right;margin-top:14px}
+.lienzo{width:min(600px,92vw);padding:14px;transform:rotate(-.8deg);display:grid;gap:8px}.lienzo canvas{width:100%;height:auto;display:block}.lienzo small{font:600 18px Caveat,cursive;text-align:center}
+@media (max-width:700px){.cuerpo{grid-template-columns:1fr;grid-template-rows:auto 1fr;overflow:auto}.fig{max-height:260px}}
 @media (max-width:700px){.bolsa{display:flex;flex-direction:column;overflow:auto}.slots{overflow:visible;grid-template-columns:repeat(4,1fr)}.slot.vacio:nth-child(n+9){display:none}.det{border-left:0;border-top:1px solid var(--edge);overflow:visible}.det .ic{height:110px}.det .ic canvas{width:96px;height:96px}.diario{grid-template-columns:1fr;grid-template-rows:auto 1fr}.diario .sub{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid var(--edge)}#brujula{width:120px;height:120px;top:30%}}
 @media (prefers-reduced-motion:reduce){#bg,.screen,.bubble{animation:none}.mi,.opt,.btn{transition:none}}
 </style>
@@ -257,5 +274,6 @@ input.name:focus{border-color:var(--gold)}
 <script src="personaje.js"></script>
 <script src="armas.js"></script>
 <script src="bolsa.js"></script>
+<script src="guardado.js"></script>
 <script src="acto0.js"></script>
 <script src="juego.js"></script>

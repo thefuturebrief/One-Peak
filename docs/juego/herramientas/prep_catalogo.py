@@ -58,6 +58,9 @@ cat['familia'] = {
 # cada capa lleva todas sus animaciones en una sola imagen: caminar, tajo, estocada, disparo y caída (filas como en lpc-build2.js)
 ANIMS = [('walk', 0, 9, 4), ('slash', 4, 6, 4), ('thrust', 8, 8, 4), ('shoot', 12, 13, 4), ('hurt', 16, 6, 1)]
 def anim_src(src, a): return src.replace('/walk.png', f'/{a}.png') if src.endswith('/walk.png') else src.replace('/walk/', f'/{a}/')
+# heridas y vendas que se ven en el personaje (las demás se dibujan por código en el juego)
+cat['marcas'] = {'herida_brazos': take('spritesheets/body/wound/arm/walk.png', 'herida_brazo.png'), 'herida_cara': take('spritesheets/body/wound/mouth/walk.png', 'herida_boca.png'),
+  'venda_cabeza': take(res('hat/headband/thick/adult', 'male'), 'venda_cabeza.png'), 'venda_brazos': {b: take(res('arms/bracers', b), 'venda_brazos_' + res('arms/bracers', b).split('/')[-2] + '.png') for b in BODIES}}
 missing = [s for s in need if s not in files]
 if missing: print('faltan en el repo:', missing); sys.exit(1)
 allsrc = {anim_src(s, a) for s in need for a, *_ in ANIMS} & files

@@ -183,11 +183,12 @@ function buildIsland(P) {
   for (const o of ob('puestos')) for (let i = 0; i < 3; i++) WORLD.sprites.push(stall((o.x + i * 2.8) * T, o.y * T, i));
   // botes amarrados y el barco de Dorne
   for (const [x, y] of M.botes) put(g, hash(x, y, 2) < .5 ? R.boat : R.boat2, x * T - 60, y * T - 30);
-  drawBlackShip(g, ...M.barcoNegro.map(v => v * T));
+  { const [bx, by, bw, bh] = M.barcoNegro; WORLD.barcoNegro = barcoSprite('pirata', bx * T, (by + bh) * T, bw * T); }
   WORLD.ground = c;
   WORLD.beach = beach;
   // espuma: puntos sobre la costa
   for (let i = 0; i < land.length; i += 2) WORLD.foam.push(land[i]);
+  WORLD.sprites.push(WORLD.barcoNegro);
   // edificios
   for (const b of P.edificios) { const s = buildBuilding(b); WORLD.sprites.push({ kind: 'bld', canvas: s.canvas, x: s.x, y: s.y, key: s.base, s }); WORLD.blocks.push(s.foot); WORLD.doors.push(s); }
   // objetos con volumen
@@ -196,8 +197,10 @@ function buildIsland(P) {
     if (o.t === 'tablon') WORLD.sprites.push(noticeBoard(o.x * T, o.y * T));
     if (o.t === 'pozo') { const [cc, cg] = mkCanvas(110, 80); put(cg, R.windlass, 4, 4); put(cg, R.wellRing, 22, 32); cg.fillStyle = '#1d3f6e'; cg.beginPath(); cg.ellipse(54, 48, 21, 9, 0, 0, 7); cg.fill(); cg.fillStyle = 'rgba(170,215,240,.7)'; cg.fillRect(44, 44, 8, 2); WORLD.sprites.push({ canvas: cc, x: o.x * T - 54, y: o.y * T - 64, key: o.y * T + 14 }); WORLD.blocks.push([o.x * T - 32, o.y * T - 20, 64, 34]); }
     if (o.t === 'empalizada') { const x0 = o.x * T, y0 = o.y * T, x1 = (o.x + o.w) * T, y1 = (o.y + o.h) * T, gap = [(o.puerta - 1) * T, (o.puerta + 1) * T];
-      for (let x = x0; x < x1; x += 70) { WORLD.sprites.push({ img: R.fence, x, y: y0 - 20, key: y0 }); if (x + 70 <= gap[0] || x >= gap[1]) WORLD.sprites.push({ img: R.fence, x, y: y1 - 20, key: y1 }); }
-      for (let y = y0; y < y1; y += 22) for (const x of [x0 - 4, x1 - 4]) WORLD.sprites.push({ rect: [x, y - 20, 6, 24, '#5a3a22'], key: y });
+      const tramo = (a, b, y) => { const c = valla(b - a); WORLD.sprites.push({ canvas: c, x: a - 3, y: y - 26, key: y + 2 }); };
+      tramo(x0, x1, y0); tramo(x0, gap[0], y1); tramo(gap[1], x1, y1);
+      for (const x of [x0, x1]) for (let y = y0 + 16; y < y1 - 4; y += 16) WORLD.sprites.push({ canvas: postePerfil(), x: x - 4, y: y - 26, key: y + 2 });
+      for (const x of [gap[0], gap[1]]) WORLD.sprites.push({ canvas: posteGrande(), x: x - 5, y: y1 - 32, key: y1 + 3 });
       WORLD.blocks.push([x0, y0 - 6, x1 - x0, 10], [x0, y1 - 6, gap[0] - x0, 10], [gap[1], y1 - 6, x1 - gap[1], 10], [x0 - 4, y0, 8, y1 - y0], [x1 - 4, y0, 8, y1 - y0]); }
     if (o.t === 'astillero') { WORLD.sprites.push(shipyard(o.x * T, o.y * T, o.w * T, o.h * T)); }
   }
@@ -420,3 +423,71 @@ function vida(g, [cx, cy], now, VW, VH, h, fase) {
   const fa = WORLD.doors.find(s => s.lantern && s.b.ext.redondo); if (night && fa) { const [lx, ly] = fa.lantern, a = t * .7, gr = g.createRadialGradient(lx - cx, ly - cy, 4, lx - cx, ly - cy, 700);
     gr.addColorStop(0, 'rgba(255,240,170,.35)'); gr.addColorStop(1, 'rgba(255,240,170,0)'); g.save(); g.globalCompositeOperation = 'lighter'; g.fillStyle = gr; g.beginPath(); g.moveTo(lx - cx, ly - cy); g.arc(lx - cx, ly - cy, 700, a - .12, a + .12); g.closePath(); g.fill(); g.restore(); }
 }
+// ---------- barcos: de perfil, como las fachadas, con proa al este ----------
+// estilo 'pirata' (casco negro, velas negras con la medusa) o 'marina' (casco blanco y azul, velas con la gaviota)
+function barcoCanvas(estilo, L = 300) {
+  const P = estilo === 'pirata', W = L + 70, H = 320, [c, g] = mkCanvas(W, H), O = '#120c0e', wl = H - 40, x0 = 10, x1 = x0 + L;
+  const C = P ? { casco: ['#1a1416', '#2a2024', '#3a2e32'], franja: '#8a6a2a', vela: ['#1e1a1e', '#2e282e', '#3e363e'], marca: '#e8e2d8', bandera: '#141014', luz: '#ffcf6a' }
+    : { casco: ['#d8dce4', '#eef2f6', '#ffffff'], franja: '#2f4f9a', vela: ['#d8dce4', '#eef0f4', '#ffffff'], marca: '#2f4f9a', bandera: '#2f4f9a', luz: '#ffe8a8' };
+  // reflejo y sombra en el agua
+  g.fillStyle = 'rgba(0,15,35,.35)'; g.beginPath(); g.ellipse(x0 + L / 2 + 6, wl + 14, L / 2 + 14, 16, 0, 0, 7); g.fill();
+  // casco: línea de cubierta, popa alta, proa que sube
+  const hull = [[x0, wl - 62], [x0 + 46, wl - 62], [x0 + 52, wl - 44], [x1 - 40, wl - 46], [x1, wl - 60], [x1 + 6, wl - 50], [x1 - 20, wl - 6], [x0 + 36, wl + 2], [x0 + 8, wl - 10]];
+  poly(g, hull); g.fillStyle = O; g.fill(); g.lineWidth = 3; g.strokeStyle = O; g.stroke();
+  g.save(); poly(g, hull); g.clip();
+  const gr = g.createLinearGradient(0, wl - 62, 0, wl + 2); gr.addColorStop(0, C.casco[2]); gr.addColorStop(.35, C.casco[1]); gr.addColorStop(1, C.casco[0]); g.fillStyle = gr; g.fillRect(x0, wl - 70, L + 10, 80);
+  g.strokeStyle = 'rgba(0,0,0,.28)'; g.lineWidth = 1; for (let y = wl - 56; y < wl; y += 6) { g.beginPath(); g.moveTo(x0, y); g.lineTo(x1 + 8, y + (y - wl) * .04); g.stroke(); }
+  for (let k = 0; k < 40; k++) { const px = x0 + hash(k, 1, 51) * L, py = wl - 50 + hash(k, 2, 51) * 46; g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(px, py, 1, 4); }
+  g.fillStyle = C.franja; g.fillRect(x0, wl - 40, L + 10, 4); g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(x0, wl - 40, L + 10, 1);
+  g.fillStyle = P ? '#3a5a3a' : '#7a2a2a'; g.fillRect(x0, wl - 6, L + 10, 10); // obra viva
+  g.restore();
+  // cañoneras
+  for (let k = 0; k < 7; k++) { const px = x0 + 66 + k * (L - 120) / 6, py = wl - 31; g.fillStyle = O; g.fillRect(px - 5, py - 4, 10, 9); g.fillStyle = P ? '#5a2a1a' : '#24304a'; g.fillRect(px - 4, py - 3, 8, 7); g.fillStyle = '#0a0a0c'; g.beginPath(); g.arc(px, py + 1, 2.4, 0, 7); g.fill(); }
+  // castillo de popa con ventanas encendidas
+  g.fillStyle = O; g.fillRect(x0 - 2, wl - 86, 56, 26); g.fillStyle = C.casco[1]; g.fillRect(x0, wl - 84, 52, 22); g.fillStyle = C.franja; g.fillRect(x0, wl - 84, 52, 3);
+  for (let k = 0; k < 3; k++) { g.fillStyle = O; g.fillRect(x0 + 6 + k * 15, wl - 78, 9, 9); g.fillStyle = C.luz; g.fillRect(x0 + 7 + k * 15, wl - 77, 7, 7); g.fillStyle = 'rgba(255,255,255,.6)'; g.fillRect(x0 + 7 + k * 15, wl - 77, 2, 3); }
+  for (let px = x0 + 54; px < x1 - 30; px += 7) { g.fillStyle = O; g.fillRect(px, wl - 54, 2, 8); } g.fillStyle = O; g.fillRect(x0 + 52, wl - 56, L - 84, 2); // borda
+  // bauprés y mascarón
+  g.strokeStyle = O; g.lineWidth = 4; g.beginPath(); g.moveTo(x1 - 6, wl - 54); g.lineTo(x1 + 56, wl - 84); g.stroke(); g.strokeStyle = '#6a4a2a'; g.lineWidth = 2; g.stroke();
+  if (P) { g.fillStyle = '#d8d0b8'; g.beginPath(); g.arc(x1 + 4, wl - 46, 5, 0, 7); g.fill(); g.strokeStyle = '#d8d0b8'; g.lineWidth = 1.5; for (let k = 0; k < 5; k++) { g.beginPath(); g.moveTo(x1 + 2 + k, wl - 42); g.quadraticCurveTo(x1 + 8 + k * 2, wl - 30, x1 + k * 3, wl - 24); g.stroke(); } }
+  else { g.fillStyle = '#f4f6fa'; g.beginPath(); g.moveTo(x1 - 2, wl - 50); g.lineTo(x1 + 14, wl - 56); g.lineTo(x1 + 4, wl - 44); g.fill(); g.fillStyle = '#f0a030'; g.fillRect(x1 + 12, wl - 56, 4, 2); }
+  // mástiles, vergas y velas
+  const masts = [[x0 + 110, 200], [x0 + 210, 176]];
+  g.strokeStyle = 'rgba(30,20,20,.75)'; g.lineWidth = 1; for (const [mx, mh] of masts) for (const tx of [x0 + 20, x1 + 50, mx - 60, mx + 60]) { g.beginPath(); g.moveTo(mx, wl - 50 - mh + 14); g.lineTo(tx, tx === x1 + 50 ? wl - 82 : wl - 54); g.stroke(); }
+  for (const [mx, mh] of masts) { const top = wl - 50 - mh;
+    g.fillStyle = O; g.fillRect(mx - 3, top, 6, mh); g.fillStyle = '#6a4a2a'; g.fillRect(mx - 2, top, 4, mh); g.fillStyle = '#8a6a3a'; g.fillRect(mx - 2, top, 1, mh);
+    g.fillStyle = O; g.fillRect(mx - 9, top + 18, 18, 5); // cofa
+    for (const [yy, ww, hh] of [[top + 30, 104, 58], [top + 96, 128, 66]]) {
+      g.fillStyle = O; g.fillRect(mx - ww / 2 - 2, yy - 3, ww + 4, 5);
+      g.beginPath(); g.moveTo(mx - ww / 2, yy); g.lineTo(mx + ww / 2, yy); g.quadraticCurveTo(mx + ww / 2 + 8, yy + hh / 2, mx + ww / 2 - 4, yy + hh); g.quadraticCurveTo(mx, yy + hh + 10, mx - ww / 2 + 4, yy + hh); g.quadraticCurveTo(mx - ww / 2 - 8, yy + hh / 2, mx - ww / 2, yy); g.closePath();
+      g.fillStyle = O; g.lineWidth = 3; g.strokeStyle = O; g.stroke(); const sg = g.createLinearGradient(mx - ww / 2, 0, mx + ww / 2, 0); sg.addColorStop(0, C.vela[0]); sg.addColorStop(.35, C.vela[2]); sg.addColorStop(1, C.vela[1]); g.fillStyle = sg; g.fill();
+      g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 1; for (let k = 1; k < 4; k++) { g.beginPath(); g.moveTo(mx - ww / 2 + k * ww / 4, yy + 2); g.quadraticCurveTo(mx - ww / 2 + k * ww / 4 + 3, yy + hh / 2, mx - ww / 2 + k * ww / 4, yy + hh); g.stroke(); }
+      if (P) for (let k = 0; k < 3; k++) { g.fillStyle = 'rgba(0,0,0,.5)'; g.fillRect(mx - ww / 2 + 10 + hash(k, mx, 3) * (ww - 20), yy + hh - 6 - hash(k, 2, mx) * 10, 3, 6); } } }
+  // emblema en la vela grande
+  const [ex, eh] = masts[0], ey = wl - 50 - eh + 96 + 30;
+  if (P) { g.fillStyle = C.marca; g.beginPath(); g.ellipse(ex, ey - 6, 15, 11, 0, Math.PI, 0); g.fill(); g.fillRect(ex - 15, ey - 6, 30, 3); g.strokeStyle = C.marca; g.lineWidth = 2.5; for (let k = 0; k < 6; k++) { const sx = ex - 12 + k * 5; g.beginPath(); g.moveTo(sx, ey - 3); g.bezierCurveTo(sx - 5, ey + 8, sx + 6, ey + 14, sx + (k % 2 ? 4 : -4), ey + 22); g.stroke(); }
+    g.fillStyle = '#1e1a1e'; g.fillRect(ex - 7, ey - 11, 4, 3); g.fillRect(ex + 3, ey - 11, 4, 3); }
+  else { g.fillStyle = C.marca; g.beginPath(); g.moveTo(ex - 24, ey - 6); g.quadraticCurveTo(ex - 10, ey - 18, ex, ey - 6); g.quadraticCurveTo(ex + 10, ey - 18, ex + 24, ey - 6); g.quadraticCurveTo(ex + 10, ey - 12, ex, ey); g.quadraticCurveTo(ex - 10, ey - 12, ex - 24, ey - 6); g.fill();
+    g.font = '900 15px Georgia, serif'; g.textAlign = 'center'; g.fillText('MARINE', ex, ey + 20); const [ex2, eh2] = masts[1]; g.fillText('MARINE', ex2, wl - 50 - eh2 + 96 + 40); }
+  // banderas en lo alto
+  for (const [mx, mh] of masts) { const top = wl - 50 - mh; g.fillStyle = O; g.fillRect(mx - 1, top - 16, 2, 18); g.fillStyle = C.bandera; g.beginPath(); g.moveTo(mx + 1, top - 16); g.lineTo(mx + 26, top - 13); g.lineTo(mx + 22, top - 8); g.lineTo(mx + 27, top - 3); g.lineTo(mx + 1, top - 4); g.fill();
+    g.fillStyle = P ? C.marca : '#ffffff'; g.beginPath(); g.arc(mx + 11, top - 10, 2.5, 0, 7); g.fill(); }
+  // espuma en la línea de flotación
+  g.fillStyle = 'rgba(255,255,255,.7)'; for (let k = 0; k < 26; k++) g.fillRect(x0 + 30 + k * (L - 40) / 25 + hash(k, 1, 61) * 6, wl + 1 + hash(k, 2, 61) * 3, 4 + hash(k, 3, 61) * 5, 1);
+  return { canvas: c, ox: x0, wl };
+}
+// coloca un barco: x, y es la proa-popa a la altura de la línea de flotación (en píxeles del mundo)
+function barcoSprite(estilo, x, y, L) { const b = barcoCanvas(estilo, L); return { canvas: b.canvas, x: x - b.ox, y: y - b.wl, key: y + 4, barco: true }; }
+
+// ---------- vallas de madera hechas a medida: estacas con punta, dos travesaños y sombra ----------
+const VALLA = ['#2a1a10', '#5a3a22', '#7a5030', '#9a6a40'];
+function valla(len) { const w = Math.round(len) + 6, [c, g] = mkCanvas(w, 32), O = VALLA[0];
+  g.fillStyle = 'rgba(20,12,6,.25)'; g.fillRect(2, 28, w - 4, 3);
+  for (const ry of [11, 20]) { g.fillStyle = O; g.fillRect(1, ry - 1, w - 2, 6); g.fillStyle = VALLA[1]; g.fillRect(2, ry, w - 4, 4); g.fillStyle = VALLA[2]; g.fillRect(2, ry, w - 4, 1); }
+  const n = Math.max(2, Math.round(len / 14)); for (let k = 0; k <= n; k++) { const px = Math.round(3 + k * (len / n)) - 2; g.fillStyle = O; g.beginPath(); g.moveTo(px - 1, 29); g.lineTo(px - 1, 6); g.lineTo(px + 2.5, 2); g.lineTo(px + 6, 6); g.lineTo(px + 6, 29); g.fill();
+    g.fillStyle = VALLA[2]; g.fillRect(px, 6, 5, 22); g.fillStyle = VALLA[3]; g.fillRect(px, 6, 1, 22); g.fillStyle = VALLA[1]; g.fillRect(px + 4, 6, 1, 22); g.fillStyle = VALLA[2]; g.beginPath(); g.moveTo(px, 6); g.lineTo(px + 2.5, 3); g.lineTo(px + 5, 6); g.fill(); }
+  return c; }
+let _poste, _posteG;
+function postePerfil() { if (_poste) return _poste; const [c, g] = mkCanvas(8, 30); g.fillStyle = 'rgba(20,12,6,.25)'; g.fillRect(0, 26, 8, 3); g.fillStyle = VALLA[0]; g.fillRect(1, 4, 6, 24); g.fillStyle = VALLA[2]; g.fillRect(2, 5, 4, 22); g.fillStyle = VALLA[3]; g.fillRect(2, 5, 1, 22);
+  g.fillStyle = VALLA[1]; g.fillRect(2, 12, 4, 3); g.fillRect(2, 20, 4, 3); g.fillStyle = VALLA[0]; g.fillRect(2, 2, 4, 3); return _poste = c; }
+function posteGrande() { if (_posteG) return _posteG; const [c, g] = mkCanvas(10, 36); g.fillStyle = VALLA[0]; g.fillRect(0, 2, 10, 32); g.fillStyle = VALLA[1]; g.fillRect(1, 4, 8, 29); g.fillStyle = VALLA[3]; g.fillRect(1, 4, 2, 29); g.fillStyle = '#c8a040'; g.fillRect(0, 0, 10, 4); g.fillStyle = VALLA[0]; g.fillRect(0, 4, 10, 1); return _posteG = c; }

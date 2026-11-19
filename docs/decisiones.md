@@ -238,6 +238,20 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
     - humo de chimenea, gaviotas, mariposas, una ardilla, luciérnagas y el haz del faro.
   - **Tiempo y movimiento:** el atardecer y el descanso pasan a la vista, no de golpe, y el zoom es suave.
   - **Frases según el momento del acto,** sin repetir las últimas.
+- **Versión 0.6:**
+  - **Guardado de partida** en el navegador:
+    - se guarda solo al cambiar de lugar y en momentos clave;
+    - también a mano desde la pausa;
+    - "Continuar" en el menú;
+    - no se guarda durante el ataque a la plaza.
+  - **Heridas por zona:** cabeza, cara, torso, brazos y piernas. Los golpes de las peleas hieren una zona, y las heridas se ven en el personaje.
+  - **El doctor Ansel te da emulsión y vendas** si le dices que te vas.
+  - **Pestaña Cuerpo (K):** una figura por zonas; primero la emulsión, después la venda. Las vendas se ven en el sprite. Las heridas sin curar bajan el aguante en las peleas.
+  - **Haki:** carga con aura negra y roja, descarga con onda que deforma la imagen, rayos pegados al forastero, grietas en el suelo y una presión que late.
+  - **Barcos de perfil**, como las fachadas. El de Dorne lleva velas negras con la medusa. El de la Marina, blanco y azul, con la gaviota y "MARINE".
+  - **Vallas a medida,** con estacas, travesaños y postes de portón.
+  - **La nota, el mapa y el retrato** se pueden ver de cerca desde la bolsa.
+  - **Armería** (artifact aparte): las 27 armas de LPC sobre el personaje, con su golpe animado, para elegir cuáles entran.
 - **Armas:** plan en `docs/armas.md`.
   - LPC para espadas, contundentes y astas, con paletas.
   - Armas de fuego dibujadas por código sobre la pose de disparar.
