@@ -42,6 +42,8 @@ function farolPared(g, x, y) { g.fillStyle = IRON[0]; g.fillRect(x - 1, y - 4, 2
 function boyas(g, x, y) { g.strokeStyle = '#a89a7a'; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + 18, y + 10, x + 36, y); g.stroke(); for (const [k, c] of [[6, '#c8402e'], [18, '#f4ecd8'], [30, '#c8402e']]) { g.fillStyle = c; g.beginPath(); g.arc(x + k, y + 4 + Math.sin(k / 36 * Math.PI) * 5, 3.5, 0, 7); g.fill(); g.strokeStyle = INK; g.stroke(); } }
 // ---------- por edificio ----------
 const it = (add, fn, key) => add.item({ fn, key });
+const gaviota = (g, x, y) => { g.fillStyle = '#2f4f9a'; g.beginPath(); g.moveTo(x - 14, y); g.quadraticCurveTo(x - 6, y - 8, x, y); g.quadraticCurveTo(x + 6, y - 8, x + 14, y); g.quadraticCurveTo(x + 6, y - 4, x, y + 3); g.quadraticCurveTo(x - 6, y - 4, x - 14, y); g.fill(); };
+function catalejoTripode(g, x, y) { g.strokeStyle = '#3a2418'; g.lineWidth = 2; for (const dx of [-8, 0, 8]) { g.beginPath(); g.moveTo(x, y - 22); g.lineTo(x + dx, y); g.stroke(); } g.save(); g.translate(x, y - 24); g.rotate(-.35); g.fillStyle = '#2a1a10'; g.fillRect(-14, -4, 30, 8); g.fillStyle = '#c8962e'; g.fillRect(-13, -3, 28, 6); g.fillStyle = '#f0d27a'; g.fillRect(-13, -3, 28, 1); g.fillStyle = '#9fd0f0'; g.fillRect(14, -2, 2, 4); g.restore(); }
 const DECOR = {
   casa: [
     { at: [7, .5], fn: (g, X, Y) => { g.fillStyle = '#e8d6a8'; g.fillRect(X(6.6), Y(0) - 52, 36, 24); g.fillStyle = '#7a5a3a'; for (let i = 0; i < 4; i++) g.fillRect(X(6.6) + 4 + i * 8, Y(0) - 46 + (i % 2) * 6, 6, 1); g.fillStyle = '#c8402e'; g.fillRect(X(6.6) + 26, Y(0) - 40, 3, 3);
@@ -82,6 +84,14 @@ const DECOR = {
     { at: [1.2, 3.5], fn: (g, X, Y) => cuadro(g, X(0.7), Y(3) - 2 * T + 8, 32, 24, 'diploma') },
     { at: [8.2, 5], fn: (g, X, Y, add) => it(add, gg => { put(gg, RD.calavera, X(7.3), Y(4.4) - 30); put(gg, RD.pocion1, X(8.2), Y(4.4) - 30); put(gg, RD.pocion3, X(8.8), Y(4.4) - 37); put(gg, RD.frasco, X(9.1), Y(4.4) - 30); }, Y(5.6) + 2) },
     { at: [0.9, 7.5], fn: (g, X, Y, add) => { add.item({ img: RD.palangana, x: X(0.9) - 14, y: Y(7.7) - 16, key: Y(7.7) }); add.item({ img: R.plant, x: X(6.6) - 16, y: Y(7.7) - 57, key: Y(7.7) }); } },
+  ],
+  faro: [
+    { at: [3.5, 1], fn: (g, X, Y, add) => { cuadro(g, X(0.6), Y(0) - 2 * T + 10, 30, 22, 'mar'); farolPared(g, X(3.5), Y(0) - 2 * T + 8); add.fire({ x: X(3.5), y: Y(0) - 2 * T + 14, r: 60, kind: 'vela' }); } },
+    { at: [6, 2.4], fn: (g, X, Y, add) => { it(add, gg => catalejoTripode(gg, X(6.1), Y(3.2)), Y(3.2)); add.block([X(6.1) - 9, Y(3.2) - 6, 18, 6]); add.item({ img: RD.soga, x: X(1.2) - 9, y: Y(6.3) - 29, key: Y(6.3) }); } },
+    { at: [5.3, 4.9], fn: (g, X, Y, add) => it(add, gg => { gg.fillStyle = '#efe2bf'; gg.fillRect(X(5) , Y(4.4) - 22, 18, 12); gg.fillStyle = '#5a4030'; for (let k = 0; k < 3; k++) gg.fillRect(X(5) + 3, Y(4.4) - 19 + k * 3, 12, 1); put(gg, RD.frasco, X(5.9), Y(4.4) - 28); }, Y(5.5) + 2) },
+  ],
+  marina: [
+    { at: [6, 6], fn: (g, X, Y) => { gaviota(g, X(5.5), Y(4) - 2 * T + 22); g.fillStyle = '#2f4f9a'; g.font = '900 11px Georgia, serif'; g.textAlign = 'center'; g.fillText('MARINE', X(5.5), Y(4) - 2 * T + 40); cuadro(g, X(1.4), Y(4) - 2 * T + 10, 34, 24, 'mar'); g.fillStyle = '#efe2bf'; g.fillRect(X(10.2), Y(4) - 2 * T + 12, 18, 24); g.fillStyle = '#5a4030'; for (let k = 0; k < 5; k++) g.fillRect(X(10.2) + 3, Y(4) - 2 * T + 16 + k * 4, 12, 1); } },
   ],
   panaderia: [
     { at: [4, 1], fn: (g, X, Y, add) => { estantePan(g, X(3.15), Y(0) - 2 * T + 6, 1.8 * T); harina(g, X(0.4), Y(1.4), 2.8 * T, 0.9 * T); it(add, gg => palaHorno(gg, X(4.6), Y(1.7)), Y(1.7)); add.item({ img: R.logs, x: X(6.3) - 15, y: Y(2.3) - 32, key: Y(2.3) }); } },

@@ -65,4 +65,12 @@ module.exports = [
     ['head/heads/human/male', 'body:olive'], ['eyes/human/adult/anger', 'eye:brown'], ['eyes/eyebrows/thick/adult', 'hair:black'],
     ['feet/boots/fold', 'cloth:black'], ['legs/pantaloons', 'cloth:black'], ['torso/clothes/sleeveless/sleeveless2', 'cloth:slate'],
     ['beards/beard/basic', 'hair:black'], ['hat/cloth/bandana2/adult', 'cloth:red']] },
+  { id: 'sargento', name: 'Sargento', body: 'muscular', skin: 'bronze', layers: [
+    ['head/heads/human/male', 'body:bronze'], ['eyes/human/adult/default', 'eye:brown'], ['eyes/eyebrows/thick/adult', 'hair:black'],
+    ['feet/boots/fold', 'cloth:black'], ['legs/pants', 'cloth:white'], ['torso/clothes/longsleeve/longsleeve', 'cloth:white'],
+    ['beards/mustache/basic', 'hair:black'], ['shoulders/epaulets', 'cloth:yellow'], ['code:collar'], ['code:marinecap:oro']] },
+  { id: 'capitanm', name: 'Capitán de la Marina', body: 'male', skin: 'taupe', layers: [
+    ['head/heads/human/male', 'body:taupe'], ['eyes/human/adult/default', 'eye:gray'], ['eyes/eyebrows/thick/adult', 'hair:gray'],
+    ['<cape/solid/bg', 'cloth:white'], ['feet/shoes/basic', 'cloth:black'], ['legs/pants', 'cloth:white'], ['torso/clothes/longsleeve/formal', 'cloth:white'],
+    ['hair/buzzcut/adult', 'hair:gray'], ['beards/beard/basic', 'hair:gray'], ['cape/solid/fg', 'cloth:white'], ['cape/trim', 'cloth:navy'], ['shoulders/mantal', 'cloth:white'], ['shoulders/epaulets', 'cloth:yellow'], ['neck/tie/necktie', 'cloth:navy']] },
 ];

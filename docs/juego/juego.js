@@ -1,9 +1,9 @@
 // Menú, prólogo, conversaciones, diario y el bucle del juego. El mundo lo construye mundo.js desde plano.json.
-const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata'];
+const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata', 'sargento', 'capitanm'];
 const SHEETS = {}, ROW = { up: 0, left: 1, down: 2, right: 3 };
 const loadImg = s => new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ko(new Error('No se pudo cargar ' + s)); i.src = s; });
 // animaciones de la hoja: fila inicial y cuadros; la caída tiene una sola fila (mira hacia abajo)
-const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'] };
+const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'], sargento: ['shoot'] };
 const animOk = (id, a) => a === 'walk' || (SHEETS[id] && SHEETS[id].anims ? SHEETS[id].anims.has(a) : !(SIN_ANIM[id] || []).includes(a));
 function drawLPC(g, id, x, y, dir, frame, scale = 1, anim = 'walk') { const im = SHEETS[id]; if (!im) return; if (!animOk(id, anim)) { anim = 'walk'; frame = 0; }
   const [r0, n] = ANIM[anim], row = r0 + (anim === 'hurt' ? 0 : ROW[dir]); g.drawImage(im, Math.min(frame | 0, n - 1) * 64, row * 64, 64, 64, Math.round(x - 32 * scale), Math.round(y - 60 * scale), 64 * scale, 64 * scale); }
@@ -49,7 +49,7 @@ const DREAMS = [
 ];
 const rnd = Math.random, pick = a => a[Math.floor(rnd() * a.length)];
 const S = {}, player = { name: '', last: '' };
-function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], bag: [], arma: null, cuerpo: {}, cant: {}, dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
+function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], bag: [], arma: null, cuerpo: {}, cant: {}, berries: 300, comido: 0, dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
   STATS.forEach(([k]) => S.st[k] = 8); Object.keys(OFICIOS).forEach(k => S.of[k] = 0); S.tag = t => S.tags.filter(x => x === t).length; }
 function apply(fx) { if (!fx) return; for (const k in fx.ax || {}) S.ax[k] += fx.ax[k]; for (const k in fx.st || {}) S.st[k] += fx.st[k]; for (const k in fx.of || {}) S.of[k] += fx.of[k];
   (fx.tr || []).forEach(t => S.trs.includes(t) || S.trs.push(t)); (fx.tags || []).forEach(t => S.tags.push(t)); if (fx.bond) S.bonds.push(fx.bond); if (fx.item) { S.items.push(fx.item); darObjeto('mapa', true); } }
@@ -150,7 +150,7 @@ function makePeople() {
       greet: c => c.n === 0 ? 'Ah, el chico de Marla. ¿Vienes a ver el barco negro, como todos?' : c.aff >= 2 ? pick(['Siéntate, chico.', 'Tú otra vez. Bien.']) : { dia: ['Buenos días, si lo son.', 'Sigue sin picar nada.'], tarde: ['Sigue sin picar nada.', '¿Qué quieres, chico?'], noche: ['¿Qué haces aquí a estas horas? El muelle de noche no es para chiquillos.'] }[c.tod],
       first: L('gente', 'Viejo Brin', 'Pescador del muelle. Vive en una choza sobre pilotes.'),
       topics: [
-        { id: 'redes', hideAfter: 2, ask: '¿Te echo una mano con las redes?', a: c => c.n === 0 ? ['(Te pasa un extremo de la red sin decir nada. Trabajáis un rato en silencio.)', 'Tienes buenas manos. Como... Bueno. Tienes buenas manos.'] : ['Por hoy ya está. Gracias, chico.'], aff: c => c.n === 0 ? 2 : 0 },
+        { id: 'redes', hideAfter: 2, ask: '¿Te echo una mano con las redes?', a: c => c.n === 0 ? (later(600, () => cobrar(25)), ['(Te pasa un extremo de la red sin decir nada. Trabajáis un rato en silencio.)', 'Tienes buenas manos. Como... Bueno. Tienes buenas manos.', '(Te pone unas monedas en la mano.) Toma. El trabajo se paga.']) : ['Por hoy ya está. Gracias, chico.'], aff: c => c.n === 0 ? 2 : 0 },
         { id: 'bandera', hideAfter: 2, ask: { def: 'Esa bandera, ¿la conoces?', temerario: 'Vamos, Brin. Tú sabes algo de esa bandera.' },
           a: c => c.n === 0 ? ['Una medusa. La vi una vez, hace veinte años. Aquel invierno el mar se tragó tres barcas.', 'Y algo más se fue de Kalé aquel invierno. Pero eso no me toca contarlo a mí.'] : c.aff >= 2 ? ['(Brin suspira.)', 'Tu padre se fue la misma noche que se fue ese barco. Ya está. Ya lo he dicho.'] : ['Ya te he dicho lo que tenía que decir. El resto, pregúntaselo a tu madre.'],
           learn: c => c.n === 0 ? L('rumores', 'La bandera de la medusa', 'Brin la vio hace veinte años, el invierno en que el mar se tragó tres barcas.') : c.aff >= 2 ? L('familia', 'Papá y la medusa', 'Según Brin, papá se fue la misma noche que el barco de la medusa, hace veinte años.') : [] },
@@ -169,7 +169,7 @@ function makePeople() {
       ] },
     { id: 'rosa', scene: 'town', at: [26.8, 24.4], sprite: 'pescadora', dir: 'right', name: 'Rosa', chat: true,
       barks: { dia: ['¡Fresco, recién salido del agua!', 'Hoy el pescado está caro.'], tarde: ['A mitad de precio, que se pone malo.'], noche: ['Ya está bien por hoy.'] },
-      greet: () => pick(['¿Vas a comprar o a mirar?', '¡Hombre, el de Marla!']), topics: [{ id: 'tomas', once: true, ask: '¿Tu marido no sale a faenar?', a: () => ['Mi Tomás dice que con ese barco ahí fuera no se le ha perdido nada en el mar.', 'Veinte años lleva diciendo que se jubila. Hoy por fin tiene excusa.'] }] },
+      greet: () => pick(['¿Vas a comprar o a mirar?', '¡Hombre, el de Marla!']), topics: [{ id: 'favor', once: true, ask: '¿Necesitas algo?', a: () => { later(300, () => darObjeto('pescado')); encargo('El pescado de Rosa', 'Rosa me dio dos besugos para Mara, la de la taberna.'); return ['¡Ay, sí! Llévale este pescado a Mara, a la taberna. Es para el guiso.', 'Y no te lo comas por el camino, que te conozco.']; } }, { id: 'tomas', once: true, ask: '¿Tu marido no sale a faenar?', a: () => ['Mi Tomás dice que con ese barco ahí fuera no se le ha perdido nada en el mar.', 'Veinte años lleva diciendo que se jubila. Hoy por fin tiene excusa.'] }] },
     { id: 'pura', scene: 'town', at: [28.1, 24.4], sprite: 'vecina', dir: 'left', name: 'Doña Pura', chat: true,
       barks: { dia: ['En mis tiempos esto no pasaba.', '¿Y tu madre, cómo está?'], tarde: ['Qué calor, Señor.'], noche: ['A estas horas, a casa.'] },
       greet: c => c.n === 0 ? '¡Ay, el hijo de Marla! Cada día te pareces más a... (se calla) ...a tu madre, claro.' : pick(['¿Y tu madre?', 'Dale recuerdos a Marla.']),
@@ -184,6 +184,7 @@ function makePeople() {
       greet: c => c.n === 0 ? '¿Lo de siempre? Hoy no fío, que la Marina anda rara.' : pick(['¿Qué te pongo?', '¿Otra?', 'Dime, que tengo prisa.']),
       first: L('gente', 'Mara', 'Tabernera de El Ancla Seca. Se entera de todo.'),
       topics: [
+        { id: 'comprar', tienda: 'mara', ask: 'Ponme algo de comer.', a: () => [] }, { id: 'pescado', once: true, need: () => tiene('pescado'), ask: 'Te traigo el pescado de Rosa.', a: () => { quitarObjeto('pescado'); later(400, () => cobrar(30)); encargoHecho('El pescado de Rosa', 'Se lo llevé a Mara. Me dio 30 ฿ por el paseo.'); return ['¡Por fin! Sin esto no hay guiso.', '(Te deja unas monedas en la barra.) Por el paseo.']; }, aff: () => 1 },
         { id: 'cuenta', once: true, ask: '¿Qué se cuenta hoy?', a: () => ['Que el del rincón lleva toda la mañana preguntando por alguien de Kalé.', 'No ha dicho por quién. Pero ha dicho tu apellido dos veces.'], learn: L('rumores', 'El del garfio pregunta', `Según Mara, el del rincón ha preguntado por los ${fam}.`) },
         { id: 'quien', once: true, ask: '¿Quién es el del rincón?', a: () => ['"Garra" Dorne. El capitán del barco negro. Paga bien y mira mal.'] },
         { id: 'cocina', once: true, need: () => S.of.cocinero >= 3, ask: 'Si necesitas ayuda en la cocina...', a: () => ['Siempre fuiste el mejor pinche que tuve.', 'Hoy no, que hay mucho pirata suelto. Mañana, si el pueblo sigue en pie.'], aff: () => 1 },
@@ -204,6 +205,7 @@ function makePeople() {
       greet: c => c.n === 0 ? 'Aparejos Gaspar. Si no compras, no toques.' : pick(['¿Qué quieres?', 'Tú otra vez.']),
       first: L('gente', 'Gaspar', 'Dueño de la tienda de aparejos. Gruñón, pero sabe todo lo que se compra y se vende en Kalé.'),
       topics: [
+        { id: 'comprar', tienda: 'gaspar', ask: 'Quiero comprar algo.', a: () => [] }, { id: 'genio', once: true, ask: 'Te noto de mal humor.', a: () => { F.catalejoPerdido = true; encargo('El catalejo de Gaspar', 'Gaspar perdió el catalejo de su abuelo en la playa del sur, junto a la grada del astillero. Paga bien si aparece.'); return ['¿Más de lo normal? (Gruñe.) Perdí el catalejo de mi abuelo en la playa del sur, junto a la grada.', 'Si lo encuentras, te lo pago bien. Y si no, pues nada, como siempre.']; } }, { id: 'catalejo', once: true, need: () => tiene('catalejo'), ask: 'Encontré tu catalejo.', a: () => { quitarObjeto('catalejo'); later(400, () => cobrar(80)); encargoHecho('El catalejo de Gaspar', 'Se lo devolví. Me pagó 80 ฿ sin regatear, que en Gaspar es un milagro.'); return ['(Gaspar lo mira, lo limpia con la manga y se le escapa una sonrisa.)', 'El viejo me pegaba si lo tocaba. Toma, 80 berries. Y ni una palabra de que he sonreído.']; }, aff: () => 1 },
         { id: 'vende', once: true, ask: '¿Qué vendes?', a: () => ['Cuerda, redes, anzuelos, brea, velas. Lo que haga falta para no hundirse.'] },
         { id: 'piratas', once: true, ask: '¿Los del barco negro te han comprado algo?', a: () => ['Buenos clientes, los piratas. Pagan sin regatear.', 'Esta mañana se llevaron cien brazas de cadena gruesa. ¿Para qué quiere tanta cadena un barco fondeado?'], learn: L('rumores', 'Mucha cadena', 'Gaspar les vendió a los del barco negro cien brazas de cadena gruesa.') },
         { id: 'ancla', once: true, need: () => knows('Quieren levantar el ancla') && !F.campana, ask: '¿Y si quieren levantar el ancla de la plaza?', a: () => ['(Gaspar deja de contar monedas.)', 'Esa ancla no se mueve. Mi abuelo decía que si alguien la levanta, Kalé se hunde.', 'Tonterías de viejos. ...Supongo.'], learn: L('kale', 'La leyenda del ancla', 'Según el abuelo de Gaspar, si alguien levanta el ancla de la plaza, Kalé se hunde.') },
@@ -213,6 +215,7 @@ function makePeople() {
       greet: c => c.n === 0 ? (S.of.medico >= 3 ? `¡${nom}! Mi mejor ayudante. ¿Vienes a echarme una mano?` : 'Buenos días. ¿Te duele algo?') : pick(['¿Otra vez por aquí?', 'Siéntate, siéntate.']),
       first: L('gente', 'Doctor Ansel', 'El médico de Kalé. Tranquilo y observador.'),
       topics: [
+        { id: 'comprar', tienda: 'medico', need: () => asked('medico', 'irme'), ask: '¿Me vende más curas?', a: () => [] }, { id: 'hogaza', once: true, need: () => tiene('hogaza'), ask: 'Nell le manda pan.', a: () => { quitarObjeto('hogaza'); later(400, () => cobrar(20)); encargoHecho('Pan para el doctor', 'Se la llevé. El doctor me dio 20 ฿ y se la comió delante de mí.'); return ['¿Otra vez? Esa chica me va a cebar. (Se le escapa una sonrisa.)', 'Toma, por las molestias. Y dile que gracias.']; }, aff: () => 1 },
         { id: 'herido', once: true, ask: '¿Ha venido alguien del barco negro?', a: () => ['Anoche me trajeron a uno de esos piratas con un corte en el brazo.', 'Tenía la medusa tatuada. Y una cicatriz muy vieja, de las que hace un garfio.'], learn: L('rumores', 'El pirata herido', 'El médico curó anoche a un pirata con la medusa tatuada y una cicatriz de garfio.') },
         { id: 'irme', once: true, ask: { def: 'Doctor, dentro de poco me voy de Kalé.', temerario: 'Me voy de Kalé, doctor. Pronto.' }, a: () => { later(300, () => { darObjeto('emulsion', false, 3); darObjeto('vendas', false, 5); });
             return ['(El doctor deja la pluma y te mira por encima de las gafas.)', '¿Irte? Ya. Todos los jóvenes de esta isla se van algún día.', 'Entonces llévate esto. Emulsión de árnica, para las heridas, y vendas de lino.', 'Primero la emulsión, sobre la herida limpia. Después la venda, bien apretada.', ...(Object.values(S.cuerpo || {}).includes('herida') ? ['(Te mira de arriba abajo.) Y empieza ya, que vienes hecho un mapa.'] : ['En el mar no hay médico. Lo vas a tener que hacer tú solo.'])]; },
@@ -225,6 +228,7 @@ function makePeople() {
       greet: c => c.n === 0 ? '¡Hola! ¿Pan del día? Es lo último que queda.' : pick(['¡Hola otra vez!', '¿Vienes a por más?']),
       first: L('gente', 'Nell', 'La hija del panadero. Lo sabe todo, y lo cuenta todo.'),
       topics: [
+        { id: 'comprar', tienda: 'nell', ask: 'Quiero pan.', a: () => [] }, { id: 'favor', once: true, ask: '¿Te ayudo en algo?', a: () => { later(300, () => darObjeto('hogaza')); encargo('Pan para el doctor', 'Nell me dio una hogaza para el doctor Ansel. Dice que se olvida de comer.'); return ['¡Sí! ¿Le llevas esta hogaza al doctor? Se olvida de comer y luego se marea con los enfermos.', 'Está abierto de once a seis.']; } },
         { id: 'trabajo', once: true, ask: '¿Mucho trabajo hoy?', a: () => ['¡Los del barco negro! Vinieron a por pan para treinta.', 'Pagaron con monedas viejas, de las de antes. Mi padre dice que esas monedas no se ven desde hace veinte años.'], learn: L('rumores', 'Monedas viejas', 'Los piratas pagaron el pan con monedas que no circulan desde hace veinte años.') },
         { id: 'veinte', once: true, need: () => knows('Monedas viejas') && knows('La bandera de la medusa'), ask: 'Veinte años... como la bandera.', a: () => ['¡Uy! ¿Tú crees?', '(Se ríe, pero se queda mirando hacia el puerto.)'] },
       ] },
@@ -240,21 +244,21 @@ const OBJECTS = () => [
 const CHAT = [['pura', '¿Has visto el barco que entró anoche?'], ['rosa', 'Bandera negra. Mi Tomás no quiere salir a faenar.'], ['pura', 'Dicen que buscan a alguien.'], ['rosa', 'En Kalé no hay nada que buscar... salvo lo de siempre.'], ['pura', 'Calla, que te oyen.']];
 // lo que encuentras en la puerta de un sitio cerrado
 const CLOSED = { faro: 'La puerta del faro está cerrada con llave.', marina: 'Un marine de guardia te corta el paso: «Solo personal de la Marina».', pura: 'Es la casa de Doña Pura. No está.', rosa: 'Es la casa de Rosa. No hay nadie.' };
-const LOCKED = new Set(['faro', 'marina']);
+const LOCKED = new Set();
 const horas = r => r.map(([a, b]) => `de ${a} a ${b}`).join(' y ');
 const openNow = b => !b.ext.horario || b.ext.horario.some(([a, z]) => hourNow() >= a && hourNow() < z);
 
 // =====================================================================
 // DIARIO
 // =====================================================================
-const DIARY = { yo: [], familia: [], gente: [], rumores: [], kale: [] };
+const DIARY = { yo: [], familia: [], gente: [], rumores: [], kale: [], encargos: [] };
 function learn(e) { if (!e) return; const [sec, title, txt] = e; if (DIARY[sec].some(x => x.title === title)) return; DIARY[sec].push({ title, txt }); document.getElementById('openBag').classList.add('new-d'); }
-function diarioHTML(tab) { const TABS = [['yo', 'Yo'], ['familia', 'Familia'], ['gente', 'Gente'], ['rumores', 'Rumores'], ['kale', 'Kalé']];
+function diarioHTML(tab) { const TABS = [['yo', 'Yo'], ['familia', 'Familia'], ['gente', 'Gente'], ['rumores', 'Rumores'], ['kale', 'Kalé'], ['encargos', 'Encargos']];
   const page = k => { if (k === 'yo') { const top = Object.entries(S.of).sort((a, b) => b[1] - a[1])[0], of = top[1] > 0 ? OFICIOS[top[0]] : 'Sin oficio fijo';
       return `<div class="entry"><b>${fullName()}</b><span>17 años. Nací en Kalé, en el East Blue. ${of}.</span></div><div class="entry"><b>Mi sueño</b><span>${S.dream}<br><i>${motive()}</i></span></div>
       <div class="axes">${Object.entries(AX).map(([k, [a, b]]) => { const v = Math.max(-4, Math.min(4, S.ax[k])); return `<div class="ax"><span class="${v < 0 ? 'on' : ''}">${a}</span><span class="tr"><i style="left:${50 + v * 12}%"></i></span><span class="${v > 0 ? 'on' : ''}">${b}</span></div>`; }).join('')}</div>
       <div class="stats">${STATS.map(([k, n]) => `<div>${n}<b>${S.st[k]}</b></div>`).join('')}</div>${S.trs.length ? `<div class="entry"><b>Marcas</b><span>${S.trs.join(' · ')}</span></div>` : ''}`; }
-    return DIARY[k].length ? [...DIARY[k]].reverse().map(e => `<div class="entry"><b>${e.title}</b><span>${e.txt}</span></div>`).join('') : '<p class="empty">Todavía no has escrito nada aquí.</p>'; };
+    return DIARY[k].length ? [...DIARY[k]].reverse().map(e => `<div class="entry${e.hecho ? ' hecho' : ''}"><b>${e.title}</b><span>${e.txt}</span></div>`).join('') : '<p class="empty">Todavía no has escrito nada aquí.</p>'; };
   return `<div class="diario"><nav class="sub">${TABS.map(([k, n]) => `<button type="button" data-k="${k}" class="${k === tab ? 'on' : ''}">${n}${k !== 'yo' && DIARY[k].length ? `<i>${DIARY[k].length}</i>` : ''}</button>`).join('')}</nav><div class="page">${page(tab)}</div></div>`; }
 const openDiary = (tab = 'yo') => openPanel('diario', tab), closeDiary = () => closePanel();
 
@@ -342,6 +346,7 @@ function choose(i) {
   if (actoChoose(t, i)) return;
   const tops = topicsOf(t.npc); if (i >= tops.length) { G.talking = null; renderTalk(); return; }
   const tp = tops[i], id = t.npc.id, n = asked(id, tp.id), c = ctxOf(t.npc, n);
+  if (tp.tienda) { S.asked[id][tp.id] = n + 1; G.talking = null; renderTalk(); return abrirTienda(tp.tienda); }
   const lines = tp.a(c), l = typeof tp.learn === 'function' ? tp.learn(c) : tp.learn, d = typeof tp.aff === 'function' ? tp.aff(c) : (tp.aff || 0);
   S.asked[id][tp.id] = n + 1; S.aff[id] = aff(id) + d; (l || []).forEach(learn);
   G.talking = { npc: t.npc, conv: { lines, topics: true }, i: 0 }; renderTalk();
@@ -374,6 +379,7 @@ function interact() {
     if (!openNow(b)) return note(`${b.n}. En la puerta, un cartel: «Abierto ${horas(b.ext.horario)}».`);
     fade(() => { const e = bld(b.id).entrance, d = e.doors.find(d => d.to === 'town'), [at, dir] = e.doorArrival(...d.args); enter(e.id, at, dir); }); }
   else if (t.d.to === 'town') fade(() => { const s = WORLD.doors.find(d => d.id === interior(G.scene).bid); enter('town', [s.door[0], s.door[1] + 18], 'down'); });
+  else if (t.d.to.startsWith('marina:') && !interior(t.d.to).rooms.some(r => r.n === 'Guardia')) return note('El sargento levanta la vista: «Ahí dentro no se te ha perdido nada, chaval.»');
   else fade(() => enter(t.d.to, t.d.at[0], t.d.at[1]));
 }
 document.addEventListener('keydown', e => { if (cv.hidden) return; const k = e.key.toLowerCase();
@@ -444,7 +450,7 @@ function draw(now) {
   const ov = document.getElementById('overlays'); let pr = ov.querySelector('.prompt'); const t = !G.talking && !G.paused && nearest();
   if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'idoor' ? (t.d.to === 'town' ? 'Salir' : 'Abrir') : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
     const [px, py] = t.type === 'npc' ? [t.n.x, t.n.y - 62] : t.type === 'obj' ? [t.x, t.y - 26] : t.type === 'door' ? [t.s.door[0], t.s.door[1] - 56] : [G.x, G.y - 62]; const [sx, sy] = toScr(px, py); pr.style.left = sx + 'px'; pr.style.top = sy + 'px'; } else if (pr) pr.remove();
-  drawBrujula(now);
+  drawBrujula(now); const pb = document.querySelector('.purse span'); if (pb && pb.textContent != berries()) pb.textContent = berries().toLocaleString('es-ES');
   const m = Math.floor(G.minutes) % 1440; document.getElementById('hour').textContent = `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 }
 // ---------- actores: animación en curso, arma en la mano y signos sobre la cabeza ----------

@@ -1479,7 +1479,13 @@
     "fachada": "piedra",
     "puerta": 2,
     "ventanas": [],
-    "redondo": true
+    "redondo": true,
+    "horario": [
+     [
+      9,
+      18
+     ]
+    ]
    },
    "int": {
     "w": 7,
@@ -1675,7 +1681,7 @@
   {
    "id": "marina",
    "n": "Destacamento de la Marina",
-   "entrable": false,
+   "entrable": true,
    "ext": {
     "x": 40,
     "y": 5,
@@ -1688,7 +1694,13 @@
      2,
      8
     ],
-    "bandera": true
+    "bandera": true,
+    "horario": [
+     [
+      9,
+      17
+     ]
+    ]
    },
    "int": {
     "w": 12,

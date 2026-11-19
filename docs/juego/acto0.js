@@ -55,7 +55,7 @@ function intro(done) {
 const RUTINA = {
   marla: [[0, 12, 'casa', [2.6, 8.4]], [12, 15, 'town', [17.2, 26.4]], [15, 24, 'casa', [2.6, 8.4]]],
   brin: [[0, 12, 'town', [3.2, 24.6]], [12, 14, 'taberna', [7.6, 8.8]], [14, 24, 'town', [3.2, 24.6]]],
-  lin: [[0, 12.5, 'town', [31.6, 23.8]], [12.5, 15, 'town', [55.2, 9.8]], [15, 24, 'town', [31.6, 23.8]]],
+  lin: [[0, 12.5, 'town', [31.6, 23.8]], [12.5, 15, 'faro', [5.2, 3.9]], [15, 24, 'town', [31.6, 23.8]]],
   rosa: [[0, 13, 'town', [26.8, 24.4]], [13, 24, 'town', [18.6, 26.4]]],
   pura: [[0, 13, 'town', [28.1, 24.4]], [13, 15.5, 'none'], [15.5, 24, 'town', [28.1, 24.4]]],
   yago: [[0, 24, 'town', [24.6, 30.3]]],
@@ -78,7 +78,7 @@ function npcAdd(id, sprite, name, scene, at, dir, extra = {}) { const [sc, [x, y
 const P = id => PEOPLE.find(n => n.id === id);
 function actoInit() {
   for (const k in F) delete F[k];
-  yagoInit(); brinCaja(); rutinas(true);
+  yagoInit(); brinCaja(); faroYMarina(); rutinas(true);
   OBJS.push({ scene: 'town', x: HOYO[0] * T, y: HOYO[1] * T, label: 'Cavar', act: cavar });
   OBJS.push(...[{ scene: 'casa', at: [7.25, 4.1], label: 'Descansar', act: descansar }].map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; }));
 }
@@ -152,7 +152,7 @@ function instinto() {
   return list;
 }
 function pelea(o) {
-  const C = Object.values(S.cuerpo || {}), meMax = 40 + S.st.resistencia * 6 - 5 * C.filter(e => e === 'herida').length - 2 * C.filter(e => e === 'tratada').length; F.fight = { kind: o.kind, foe: o.foe, foeName: o.foeName, me: meMax, meMax, foeHP: o.foeMax, foeMax: o.foeMax, round: 0, rounds: o.rounds, corso: o.kind === 'plaza', protected: false, hard: 0, arma: o.arma, fin: o.fin };
+  const C = Object.values(S.cuerpo || {}), meMax = 40 + S.st.resistencia * 6 - 5 * C.filter(e => e === 'herida').length - 2 * C.filter(e => e === 'tratada').length + (S.comido || 0); S.comido = 0; F.fight = { kind: o.kind, foe: o.foe, foeName: o.foeName, me: meMax, meMax, foeHP: o.foeMax, foeMax: o.foeMax, round: 0, rounds: o.rounds, corso: o.kind === 'plaza', protected: false, hard: 0, arma: o.arma, fin: o.fin };
   G.paused = true; G.arma0 = S.arma; S.arma = o.arma; G.dir = dirTo(G, o.foe); o.foe.dir = dirTo(o.foe, G);
   const ov = document.getElementById('overlays'), box = document.createElement('div'); box.className = 'fight glass'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Pelea'); ov.appendChild(box);
   document.getElementById('hud').classList.add('talking'); momento();
@@ -300,6 +300,27 @@ function finDuelo(f) {
       'Oye... peleas como si ya hubieras tenido un arma en la mano. ¿Quién te enseñó?', '¿Nadie? Pues el viejo Brin siempre dice que tu padre peleaba igual. Pregúntale a él.'],
       learn: [['familia', 'Papá peleaba', 'Yago dice que el viejo Brin cuenta que papá peleaba igual que yo.']] }); });
 }
+// el faro abre de día y el destacamento deja ver la sala de guardia; el catalejo de Gaspar espera en la playa
+function faroYMarina() {
+  const o = (scene, at, label, extra) => { const [sc, [x, y]] = place(scene, at); OBJS.push({ scene: sc, x, y, label, ...extra }); };
+  o('faro', [5.35, 5.1], 'Leer', { act: () => narr(['El diario del farero, abierto por la última página escrita. La letra tiembla.', '«Invierno. Esta noche ha vuelto la medusa. Un hombre de la isla ha subido a su barco por su propio pie.»', '«Le he visto la cara a la luz del faro. No lo pondré aquí. Que lo cuente él, si vuelve.»'], () => learn(['kale', 'El diario del farero', 'El farero escribió que la noche de la medusa, hace veinte años, un hombre de Kalé subió a ese barco por su propio pie. No quiso poner su nombre.'])) });
+  o('faro', [1.45, 2.9], 'Mirar', { text: 'Libros de mareas, cartas de estrellas, un tratado de nudos. Uno, sin título, habla de islas que «se borran de los mapas cuando alguien paga por ello».', learn: ['kale', 'Islas que se borran', 'En el faro hay un libro sin título sobre islas que se borran de los mapas cuando alguien paga por ello.'] });
+  o('marina', [8.3, 4.9], 'Leer', { cartel: 'dorne', learn: ['rumores', 'Dorne tiene recompensa', 'El tablón de la Marina ofrece 8.000.000 de berries por «Garra» Dorne.'] });
+  o('town', [24, 38.3], 'Mirar', { act: () => { if (F.catalejo) return narr(['Arena, conchas y el hoyo donde estaba el catalejo.']); F.catalejo = true; darObjeto('catalejo'); narr([F.catalejoPerdido ? 'Medio enterrado en la arena, junto a la grada: el catalejo de Gaspar.' : 'Algo brilla medio enterrado en la arena: un catalejo viejo, con una G grabada.']); } });
+  npcAdd('sargento', 'sargento', 'Sargento Bruno Vela', 'marina', [6, 5.05], 'down', { arma: 'reglamento', nextBark: performance.now() + 8000,
+    barks: { dia: ['Siguiente.', 'Esto no es una taberna.'], tarde: ['Firmes, que viene el capitán.'], noche: [''] }, fases: { despedida: ['Vaya día. Vaya día.'] },
+    greet: c => c.n === 0 ? 'Destacamento de Kalé. Si vienes a denunciar algo, habla claro y rápido.' : pick(['¿Otra vez tú?', 'Dime.']),
+    first: L('gente', 'Sargento Bruno Vela', 'El sargento del destacamento. Gorra con banda dorada y cara de no haber dormido en diez años.'),
+    topics: [
+      { id: 'galones', once: true, ask: '¿Qué significan los galones?', a: () => ['(Se señala la gorra.) Banda azul, marinero. Banda dorada y charreteras, sargento.', 'Los oficiales llevan el abrigo de la Justicia sobre los hombros. Teniente, capitán, comodoro... y más arriba, gente que tú y yo no vamos a ver nunca.'], learn: L('rumores', 'Los rangos de la Marina', 'Banda azul en la gorra, marinero. Banda dorada y charreteras, sargento. Los oficiales llevan el abrigo de la Justicia sobre los hombros.') },
+      { id: 'entrar', once: true, ask: { def: '¿Cómo se entra en la Marina?', temerario: 'Quiero ser marine. ¿Dónde firmo?' }, a: () => ['Con dieciocho años y ganas de obedecer. Tú tienes una de las dos.', 'Si de verdad quieres, el destacamento de Loguetown recluta. Pregunta por un oficial, no por mí.'] },
+      { id: 'dorne', once: true, need: () => !F.campana, ask: '¿Por qué no detenéis a Dorne?', a: () => ['¿Con seis hombres y un cañón oxidado? Esperamos refuerzos de Loguetown.', 'Y hasta entonces, nadie hace nada raro. ¿Entendido?'], learn: L('rumores', 'La Marina espera refuerzos', 'El destacamento espera refuerzos de Loguetown antes de enfrentarse a Dorne.') } ] });
+  npcAdd('capitanm', 'capitanm', 'Capitán Oren Malva', 'marina', [10.6, 5.4], 'left', { nextBark: performance.now() + 14000,
+    barks: { dia: ['(Repasa un informe sin leerlo.)', 'Seis hombres. Seis.'], tarde: ['¿Dónde están esos refuerzos?'], noche: [''] }, fases: { despedida: ['La teniente Nisi ha hecho en una tarde lo que yo no hice en un año.'] },
+    greet: c => c.n === 0 ? 'No tengo tiempo para chiquillos. ¿Qué quieres?' : 'Sé breve.',
+    first: L('gente', 'Capitán Oren Malva', 'El capitán del destacamento de Kalé. Abrigo blanco sobre los hombros, charreteras doradas y muchas ojeras.'),
+    topics: [{ id: 'kale', once: true, ask: '¿Por qué hay un destacamento en una isla tan pequeña?', a: () => ['(Te mira un buen rato.) Buena pregunta. Me la hago todos los días.', 'Órdenes de arriba. Hace veinte años alguien decidió que Kalé necesitaba vigilancia. Nadie me dijo de qué.'], learn: L('kale', 'Vigilancia desde hace veinte años', 'El capitán Malva dice que el destacamento existe porque hace veinte años alguien de arriba decidió vigilar Kalé. No sabe de qué.') }] });
+}
 // lo que Brin sabe de la caja (se suma a sus temas al empezar)
 function brinCaja() {
   const b = P('brin'); b.topics.unshift({ id: 'caja', once: true, need: () => knows('Papá peleaba'), ask: { def: 'Yago dice que mi padre peleaba como yo.', temerario: 'Brin, ¿cómo peleaba mi padre?' },
@@ -432,6 +453,7 @@ function actoDrawOver(g, [cx, cy], now, VW, VH) {
   if (r < .1) { g.fillStyle = `rgba(255,255,255,${.6 * (1 - r / .1)})`; g.fillRect(0, 0, VW, VH); }
 }
 function actoDrawTown(g, [cx, cy], now) {
+  if (!F.catalejo) { const x = 24 * T - cx, y = 38 * T - cy, k = (Math.sin(now / 260) + 1) / 2; if (k > .55) { g.fillStyle = `rgba(255,250,220,${k})`; g.fillRect(x - 1, y - 4, 2, 8); g.fillRect(x - 4, y - 1, 8, 2); } g.fillStyle = '#c8962e'; g.fillRect(x - 3, y + 2, 6, 2); }
   const Hk = F.haki; if (Hk) { const r = (now - Hk.t0) / 1000 - HAKI_CARGA; if (r > 0) { const fx = Hk.hx - cx, fy = Hk.hy - cy, al = Math.max(0, 1 - r / 3);
     g.save(); g.strokeStyle = `rgba(20,12,10,${.75 * al})`; g.lineCap = 'round';
     for (let i = 0; i < 9; i++) { let an = i / 9 * Math.PI * 2 + hash(i, 1, 4), px = fx, py = fy, L = Math.min(1, r * 4) * (40 + hash(i, 2, 4) * 50); g.lineWidth = 2; g.beginPath(); g.moveTo(px, py);

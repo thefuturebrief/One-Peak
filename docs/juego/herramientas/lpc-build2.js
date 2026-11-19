@@ -43,11 +43,12 @@ const data = plan.map(c => ({ id: c.id, code: c.code, head: c.headIdx - 1 + c.la
           if (x1 < 0) continue; const dir = a === 'hurt' ? 'down' : ['up', 'left', 'down', 'right'][r], px = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(X0 + x, Y0 + y, w, h); };
           const cx = Math.round((x0 + x1) / 2), hw = x1 - x0 + 1;
           for (const k of c.code) {
-            if (k === 'marinecap') { const top = y0 - 1, L = x0 - 1, Wc = hw + 2; // copa blanca, banda azul y visera hacia donde mira
+            const [kk, var1] = k.split(':'), banda = var1 === 'oro' ? '#d8a830' : '#2f4f9a';
+            if (kk === 'marinecap') { const top = y0 - 1, L = x0 - 1, Wc = hw + 2; // copa blanca, banda (azul o dorada) y visera hacia donde mira
               px(L + 1, top - 1, Wc - 2, 1, '#2a2a3a'); px(L, top, Wc, 5, '#2a2a3a'); px(L + 1, top, Wc - 2, 4, '#f4f6fa'); px(L + 1, top, Wc - 2, 1, '#ffffff'); px(L + Wc - 4, top + 1, 2, 3, '#c8ccd8');
-              px(L, top + 4, Wc, 3, '#2a2a3a'); px(L + 1, top + 4, Wc - 2, 2, '#2f4f9a'); if (dir !== 'up') px(cx - 2, top + 4, 4, 1, '#e8eef8');
+              px(L, top + 4, Wc, 3, '#2a2a3a'); px(L + 1, top + 4, Wc - 2, 2, banda); if (dir !== 'up') px(cx - 2, top + 4, 4, 1, '#e8eef8');
               if (dir === 'down') px(L + 2, top + 7, Wc - 4, 1, '#3a3a4a'); if (dir === 'left') px(L - 3, top + 6, 5, 2, '#2a2a3a'); if (dir === 'right') px(L + Wc - 2, top + 6, 5, 2, '#2a2a3a'); }
-            if (k === 'collar') { const ny = y1 + 1; // cuello marinero azul con raya blanca
+            if (kk === 'collar') { const ny = y1 + 1; // cuello marinero azul con raya blanca
               if (dir === 'up') { px(cx - 7, ny - 1, 14, 8, '#1e2a52'); px(cx - 6, ny - 1, 12, 7, '#2f4f9a'); px(cx - 6, ny + 4, 12, 1, '#f4f6fa'); }
               else if (dir === 'down') { px(cx - 6, ny - 1, 12, 2, '#2f4f9a'); px(cx - 3, ny + 1, 2, 2, '#2f4f9a'); px(cx + 1, ny + 1, 2, 2, '#2f4f9a'); px(cx - 1, ny + 2, 2, 3, '#c83a3a'); px(cx - 6, ny, 12, 1, '#f4f6fa'); }
               else { const s = dir === 'left' ? 1 : -1; px(cx - 4 + s * 2, ny - 1, 8, 2, '#2f4f9a'); px(cx + s * 4 - 2, ny, 5, 5, '#2f4f9a'); px(cx + s * 4 - 2, ny + 3, 5, 1, '#f4f6fa'); } } } } }
