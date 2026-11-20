@@ -3,8 +3,8 @@
 Diseño de la primera isla después de Kalé. Camino pirata.
 
 **Estado:**
-- hecho en la versión 0.8 (`docs/juego/shells.js` e `islas/shells.json`);
-- probado de principio a fin con los tres compañeros (`shells-test.js`);
+- versión 2 hecha (`docs/juego/shells.js`, `vecinos.js`, `cine.js` e `islas/shells.json`);
+- probada de principio a fin con los tres compañeros, ganando y perdiendo con Severin (`herramientas/pruebas/shells2-test.js`);
 - el guardado funciona en la isla.
 
 ## Decisiones de fondo
@@ -144,6 +144,63 @@ Desde ahora se anota lo que hiciste:
 - a quién ayudaste.
 
 Esto alimenta el periódico y el cartel de después de Loguetown.
+
+## Versión 2 (después de la primera prueba)
+
+### Decisiones
+- **La fruta:**
+  - los poderes se despiertan en la pelea final de Loguetown, pero no hay que usarlos enseguida;
+  - al comerla hay una prueba breve y torpe;
+  - las Logia no tienen ninguna traba: si te toca una, mejor;
+  - las frutas más fuertes del canon quedan reservadas para personajes importantes (la lista se discute aparte).
+- **Nombres y apellidos.** Todos los importantes llevan apellido:
+  - **Rufo Brasa**, cocinero (se queda);
+  - **Niklas Brand**, exrecluta (antes Tobi Garra);
+  - **Nerea Calma**, práctica del puerto y tahúr (antes Iria, con historia nueva);
+  - el rival es el **cadete Darío Severin** (Severin es el apellido), y su cartel muestra el nombre completo.
+- **Nerea Calma, la historia nueva:**
+  - guía barcos entre los arrecifes de Shells Town y gana a las cartas en la cantina;
+  - aprendió el oficio con el viejo Tadeo, el práctico del puerto, a quien encerraron por meter a un barco pirata en el puerto (una tormenta, veinte vidas);
+  - la Marina le quitó a Tadeo su Libro de Corrientes, y Nerea lo quiere de vuelta;
+  - sueña con cruzar un Calm Belt, donde «el mar se queda quieto»;
+  - su encargo: pillar a un marine que hace trampas a las cartas.
+- **Lo más canon posible:**
+  - la base de la Marina domina la ciudad desde la loma: edificio grande de tres plantas, muralla alta, patio de armas con el poste;
+  - la estatua del capitán va en lo alto de la base, como en la obra;
+  - el cañón de la batería gira y dispara hacia atrás, contra la estatua del tejado.
+
+### La ciudad, rediseñada
+- **Casas de dos plantas**, fachadas de estuco, piedra, ladrillo y madera, tejados de colores.
+- **Detalles de calle:** balcones, toldos, tendederos entre casas, bancos, pozo, fuente en la plaza, carteles de oficios.
+- **La base:**
+  - cuartel de tres plantas con el emblema y «MARINE»;
+  - dos torres de vigía;
+  - patio de armas con mástil y bandera, el poste, muñecos de entrenamiento, armeros y pirámides de balas;
+  - barracón y armería.
+- **El puerto:**
+  - muelles con barcas, redes tendidas y pescado secándose;
+  - almacenes;
+  - un fanal en el espigón.
+- **El Foso:** gradas de madera, público, una mesa de apuestas y antorchas.
+
+### Más vida
+- **Una veintena de vecinos con casa y horario.** Salen por la puerta, caminan por las calles hasta el trabajo, el mercado o la cantina, y vuelven a casa.
+- **Conversación:** con algunos se puede hablar; los demás saludan o comentan.
+- **Brújula:** apunta a lo que toca hacer (los candidatos, el punto de encuentro, el muelle), para que no te pierdas.
+
+### Cinemáticas
+- **Para los momentos clave:** la llegada, el control, el cañonazo, la pelea partida y la huida.
+- **Cómo se ven:** franjas de cine y una cámara que se mueve sola. Los personajes caminan, reaccionan, hacen gestos y hablan en globos.
+
+### El cierre, rediseñado
+- **La pelea partida:** Severin y dos marines bajan al patio. Tu compañero se lleva a los marines aparte (se oyen golpes y se ve polvo) y tú peleas con Severin.
+  - **Si ganas**, tu compañero vuelve con los dos marines en el suelo.
+  - **Si pierdes**, tu compañero aparece en el último segundo, derriba a Severin y te levanta.
+- **La huida:**
+  - campanas, disparos, gente que corre, marines detrás;
+  - la Tortuga Parda ya se está separando del muelle y saltáis a cubierta;
+  - en el muelle, Severin jura que te encontrará;
+  - después, la tiza.
 
 ## Pruebas
 - **Recorrido con cada uno de los tres compañeros:**

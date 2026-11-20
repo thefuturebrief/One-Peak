@@ -91,11 +91,11 @@ const DECOR = {
     { at: [5.3, 4.9], fn: (g, X, Y, add) => it(add, gg => { gg.fillStyle = '#efe2bf'; gg.fillRect(X(5) , Y(4.4) - 22, 18, 12); gg.fillStyle = '#5a4030'; for (let k = 0; k < 3; k++) gg.fillRect(X(5) + 3, Y(4.4) - 19 + k * 3, 12, 1); put(gg, RD.frasco, X(5.9), Y(4.4) - 28); }, Y(5.5) + 2) },
   ],
   cuartel: [
-    { at: [8, 6], fn: (g, X, Y, add) => { gaviota(g, X(8), Y(4) - 2 * T + 22); g.fillStyle = '#2f4f9a'; g.font = '900 11px Georgia, serif'; g.textAlign = 'center'; g.fillText('MARINE', X(8), Y(4) - 2 * T + 40);
-      for (const px of [3.6, 4.3, 11.6, 12.3]) { g.fillStyle = '#efe2bf'; g.fillRect(X(px), Y(4) - 2 * T + 12, 18, 24); g.fillStyle = '#5a4030'; g.fillRect(X(px) + 4, Y(4) - 2 * T + 16, 10, 9); g.fillRect(X(px) + 3, Y(4) - 2 * T + 28, 12, 2); }
-      farolPared(g, X(6.2), Y(4) - 2 * T + 8); farolPared(g, X(10), Y(4) - 2 * T + 8); add.fire({ x: X(6.2), y: Y(4) - 2 * T + 14, r: 70, kind: 'vela' }); add.fire({ x: X(10), y: Y(4) - 2 * T + 14, r: 70, kind: 'vela' }); } },
-    { at: [3, 2], fn: (g, X, Y) => { cuadro(g, X(4.4), Y(0) - 2 * T + 10, 30, 22, 'mar'); } },
-    { at: [8.5, 2], fn: (g, X, Y) => { cuadro(g, X(8.6), Y(0) - 2 * T + 6, 34, 28, 'retrato'); gaviota(g, X(7.4), Y(0) - 2 * T + 30); } },
+    { at: [9, 6], fn: (g, X, Y, add) => { gaviota(g, X(9), Y(4) - 2 * T + 22); g.fillStyle = '#2f4f9a'; g.font = '900 11px Georgia, serif'; g.textAlign = 'center'; g.fillText('MARINE', X(9), Y(4) - 2 * T + 40);
+      for (const px of [4.2, 4.9, 13.4, 14.1]) { g.fillStyle = '#efe2bf'; g.fillRect(X(px), Y(4) - 2 * T + 12, 18, 24); g.fillStyle = '#5a4030'; g.fillRect(X(px) + 4, Y(4) - 2 * T + 16, 10, 9); g.fillRect(X(px) + 3, Y(4) - 2 * T + 28, 12, 2); }
+      farolPared(g, X(7), Y(4) - 2 * T + 8); farolPared(g, X(11), Y(4) - 2 * T + 8); add.fire({ x: X(7), y: Y(4) - 2 * T + 14, r: 70, kind: 'vela' }); add.fire({ x: X(11), y: Y(4) - 2 * T + 14, r: 70, kind: 'vela' }); } },
+    { at: [3, 2], fn: (g, X, Y) => { cuadro(g, X(4.2), Y(0) - 2 * T + 10, 30, 22, 'mar'); } },
+    { at: [9, 2], fn: (g, X, Y) => { cuadro(g, X(9.8), Y(0) - 2 * T + 6, 34, 28, 'retrato'); gaviota(g, X(8.2), Y(0) - 2 * T + 30); } },
   ],
   bateria: [
     { at: [6, 2], fn: (g, X, Y, add) => { for (const cx of [2, 5, 8, 10.7]) { const x = X(cx), y = Y(3.6); it(add, gg => { gg.fillStyle = 'rgba(0,0,0,.3)'; gg.beginPath(); gg.ellipse(x, y + 2, 20, 6, 0, 0, 7); gg.fill();

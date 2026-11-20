@@ -1,9 +1,9 @@
 // Menú, prólogo, conversaciones, diario y el bucle del juego. El mundo lo construye mundo.js desde plano.json.
-const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata', 'sargento', 'capitanm', 'rufo', 'iria', 'tobi', 'severin', 'brisco', 'quill'];
+const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata', 'sargento', 'capitanm', 'rufo', 'iria', 'tobi', 'severin', 'brisco', 'quill', 'v_pescador', 'v_panadera', 'v_anciana', 'v_herrero', 'v_comerciante', 'v_moza', 'v_estibador'];
 const SHEETS = {}, ROW = { up: 0, left: 1, down: 2, right: 3 };
 const loadImg = s => new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ko(new Error('No se pudo cargar ' + s)); i.src = s; });
 // animaciones de la hoja: fila inicial y cuadros; la caída tiene una sola fila (mira hacia abajo)
-const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'], sargento: ['shoot'], rufo: ['shoot'] };
+const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'], sargento: ['shoot'], rufo: ['shoot'], v_herrero: ['shoot'], v_estibador: ['shoot'] };
 const animOk = (id, a) => a === 'walk' || (SHEETS[id] && SHEETS[id].anims ? SHEETS[id].anims.has(a) : !(SIN_ANIM[id] || []).includes(a));
 function drawLPC(g, id, x, y, dir, frame, scale = 1, anim = 'walk') { const im = SHEETS[id]; if (!im) return; if (!animOk(id, anim)) { anim = 'walk'; frame = 0; }
   const [r0, n] = ANIM[anim], row = r0 + (anim === 'hurt' ? 0 : ROW[dir]); g.drawImage(im, Math.min(frame | 0, n - 1) * 64, row * 64, 64, 64, Math.round(x - 32 * scale), Math.round(y - 60 * scale), 64 * scale, 64 * scale); }
@@ -20,7 +20,7 @@ const ISLA = () => ISLAS[S.isla || 'kale'];
 function poblar() { PEOPLE = ISLA().gente().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
   OBJS = [...ISLA().objetos(), ...objetosBarcos()].map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; }); }
 // cambiar de isla: se arma su mundo, se olvidan los interiores de la anterior (no los barcos) y se puebla
-async function irAIsla(id) { const I = ISLAS[id]; if (!I.datos) I.datos = await (await fetch(I.plano)).json(); PLANO = I.datos; S.isla = id;
+async function irAIsla(id) { const I = ISLAS[id]; if (!I.datos) I.datos = await (await fetch(I.plano)).json(); PLANO = I.datos; S.isla = id; CALLES = null;
   for (const k of Object.keys(BLD)) if (!BARCOS[k]) { BLD[k].scenes.forEach(s => delete SC[s.id]); delete BLD[k]; }
   buildIsland(PLANO); barcosEnPueblo(); poblar(); I.init && I.init(); }
 
@@ -450,20 +450,20 @@ function loop(now) {
       G.dir = vx < 0 ? 'left' : vx > 0 ? 'right' : vy < 0 ? 'up' : 'down'; G.walk += dt * (running ? 17 : 12); }
     if (!G.lapse) G.minutes += dt * 1.0; ISLA().tick && ISLA().tick(now, dt);
     for (const n of PEOPLE) { if (n.route) { n.t = (n.t || rnd() * 100) + dt; const [x, y, d] = where(n.route.map(([a, b]) => [a * T, b * T]), n.speed, n.t); n.x = x; n.y = y; n.dir = d; n.frame = 1 + Math.floor(n.t * 9) % 8; }
-      if (n.scene === G.scene && now > n.nextBark && !n.chat && Math.hypot(n.x - G.x, n.y - G.y) < 240) { bubble(n, barkOf(n)); n.nextBark = now + 11000 + rnd() * 12000; } }
+      if (n.scene === G.scene && now > n.nextBark && now > (G.ultBark || 0) + 1600 && !n.chat && Math.hypot(n.x - G.x, n.y - G.y) < 240) { bubble(n, barkOf(n)); G.ultBark = now; n.nextBark = now + 11000 + rnd() * 12000; } }
     const pura = PEOPLE.find(n => n.id === 'pura');
     if (G.scene === 'town' && pura && !G.chat && !F.campana && Math.hypot(pura.x - G.x, pura.y - G.y) < 130 && !knows('Buscan a alguien')) G.chat = { i: 0, next: now };
     if (G.chat && now >= G.chat.next) { const line = CHAT[G.chat.i]; if (!line) { G.chat = null; learn(['rumores', 'Buscan a alguien', 'Las vecinas dicen que los del barco negro buscan a alguien. Y que en Kalé hay «lo de siempre».']); } else { bubble(PEOPLE.find(n => n.id === line[0]), line[1], 2600); G.chat.i++; G.chat.next = now + 2700; } }
   }
-  stepWalkers(dt); cv.style.transform = F.navegando && G.scene !== 'town' ? `scale(1.04) rotate(${(Math.sin(now / 1300) * .7).toFixed(3)}deg) translateY(${(Math.sin(now / 900) * 2).toFixed(1)}px)` : '';
+  stepWalkers(dt); moverCamara(now); cv.style.transform = F.navegando && G.scene !== 'town' ? `scale(1.04) rotate(${(Math.sin(now / 1300) * .7).toFixed(3)}deg) translateY(${(Math.sin(now / 900) * 2).toFixed(1)}px)` : '';
   if (G.zoomT && Math.abs(G.zoomT - G.zoom) > .002) { G.zoom += (G.zoomT - G.zoom) * Math.min(1, dt * 12); fitGame(); }
   draw(now); if (!cv.hidden) requestAnimationFrame(loop);
 }
 function draw(now) {
   const VW = G.VW, VH = G.VH, inside = G.scene !== 'town', I = inside && interior(G.scene), SW = inside ? I.w : WORLD.w, SH = inside ? I.h : WORLD.h;
-  const [fx, fy] = G.foco || [G.x, G.y], cam = [Math.round(SW < VW ? -(VW - SW) / 2 : Math.max(0, Math.min(SW - VW, fx - VW / 2))), Math.round(SH < VH ? -(VH - SH) / 2 : Math.max(0, Math.min(SH - VH, fy - VH / 2)))];
+  const [fx, fy] = G.foco || [G.x, G.y], cam = [Math.round(SW < VW ? -(VW - SW) / 2 : Math.max(0, Math.min(SW - VW, fx - VW / 2))), Math.round(SH < VH ? -(VH - SH) / 2 : Math.max(inside ? 0 : -(WORLD.margenN || 0) * T, Math.min(SH - VH, fy - VH / 2)))]; // margenN: la cámara puede subir sobre el mar del norte
   const chars = PEOPLE.filter(n => n.scene === G.scene).map(n => actor(n, n.sprite, n.route || n.paso ? n.frame : 0, now));
-  chars.push(actor(G, 'grumete', G.moving ? 1 + Math.floor(G.walk) % 8 : 0, now, S.arma && arma(S.arma)));
+  if (!G.oculto) chars.push(actor(G, 'grumete', G.moving ? 1 + Math.floor(G.walk) % 8 : 0, now, S.arma && arma(S.arma)));
   if (inside) drawInterior(g, I, cam, VW, VH, chars, now, hourNow()); else drawTown(g, cam, VW, VH, chars, now, hourNow());
   // globos y aviso de acción siguen a quien corresponde
   const toScr = (x, y) => [(x - cam[0]) * G.scale, (y - cam[1]) * G.scale + parseFloat(cv.style.top)];

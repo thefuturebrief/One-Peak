@@ -93,6 +93,7 @@ input.name:focus{border-color:var(--gold)}
 .dlg{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(760px,calc(100% - 24px));padding:16px 20px 16px 16px;display:grid;grid-template-columns:76px 1fr;gap:16px;align-items:start}
 .dlg .face{width:76px;height:76px;border-radius:12px;background:radial-gradient(circle at 50% 30%,#4a6a9a,#22344e);overflow:hidden;position:relative}
 .dlg .face canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.franjas{position:absolute;inset:0;pointer-events:none}.franjas::before,.franjas::after{content:'';position:absolute;left:0;right:0;height:0;background:#050403;transition:height .6s ease}.franjas::before{top:0}.franjas::after{bottom:0}body.cine .franjas::before,body.cine .franjas::after{height:10vh}body.cine #hud .hbtns,body.cine #hud .clock,body.cine .purse,body.cine #pad{opacity:0;transition:opacity .4s}.destello{position:absolute;inset:0;pointer-events:none}
 .dlg.pedir{grid-template-columns:1fr}.dlg.pedir label{display:grid;gap:6px;margin:10px 0 4px}.dlg.pedir .err{display:block;min-height:1.2em;color:#ffb48a}
 .dlg b.nm{font-size:15px;font-weight:800;color:var(--gold2);letter-spacing:.04em}
 .dlg p{margin:4px 0 0;font-size:18px;line-height:1.45}
@@ -275,6 +276,7 @@ input.name:focus{border-color:var(--gold)}
     <div class="purse glass"><i></i><span>300</span><b>฿</b></div>
     <div class="hbtns"><button class="hb glass" id="compBtn" type="button" hidden aria-pressed="false">Brújula <kbd>C</kbd></button><button class="hb glass" id="openBag" type="button">Bolsa <kbd>I</kbd></button><button class="hb glass" id="pauseBtn" type="button" aria-label="Pausa">❚❚</button></div>
     <div id="brujula" hidden aria-label="Brújula"><canvas id="bruCv" width="220" height="220"></canvas></div>
+    <div class="franjas" aria-hidden="true"></div>
     <div id="overlays"></div>
     <div id="pad" hidden><div class="pad"><span></span><button data-d="up" aria-label="Arriba">▲</button><span></span><button data-d="left" aria-label="Izquierda">◀</button><span></span><button data-d="right" aria-label="Derecha">▶</button><span></span><button data-d="down" aria-label="Abajo">▼</button><span></span></div><button class="act" id="actBtn" aria-label="Interactuar">E</button><button class="run" id="runBtn" type="button" aria-pressed="false">Correr</button></div>
   </div>
@@ -292,5 +294,7 @@ input.name:focus{border-color:var(--gold)}
 <script src="tiza.js"></script>
 <script src="acto0.js"></script>
 <script src="viaje.js"></script>
+<script src="cine.js"></script>
+<script src="vecinos.js"></script>
 <script src="shells.js"></script>
 <script src="juego.js"></script>

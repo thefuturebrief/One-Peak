@@ -255,6 +255,23 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
     4. huida al muelle;
     5. pagas todo lo que tengas en la Tortuga Parda, rumbo a Goa.
   - **Fama:** lo que hiciste en Shells Town queda anotado para el periódico y el cartel.
+  - **Versión 2 de Shells Town (después de la primera prueba):**
+    - **La ciudad, rediseñada:**
+      - base de la Marina de tres plantas con el emblema, torres de vigía, patio de armas con mástil, el poste, muñecos, armeros y el cañón de saludo;
+      - la estatua del capitán va en lo alto del cuartel, como en la obra;
+      - casas de dos plantas con estuco, ladrillo, balcones, toldos y tendederos, y una plaza con fuente.
+    - **Unos 25 vecinos con casa y agenda.** Salen por la puerta, caminan por las calles (red de calles con rutas cortas), trabajan, van a la cantina y vuelven a casa. Con algunos se habla.
+    - **Nombres:**
+      - los candidatos son Rufo Brasa, Niklas Brand (antes Tobi) y Nerea Calma (antes Iria);
+      - Nerea es la práctica del puerto y tahúr: su maestro, el viejo Tadeo, salvó a veinte personas de un barco pirata y está preso, y su encargo es pillar a un cabo que hace trampas a las cartas;
+      - el rival es el cadete Darío Severin.
+    - **Cinemáticas con el motor:** franjas, cámara que viaja sola y personajes que caminan, reaccionan y hablan en globos. Las hay en la llegada, el control, la partida de cartas, el cañonazo, la pelea partida y la huida.
+    - **El cierre:**
+      - tu compañero se lleva a dos marines al fondo del patio (polvo y golpes) mientras peleas con Severin;
+      - si pierdes, tu compañero te rescata;
+      - la huida tiene campanas, disparos y gente corriendo, y saltas a la Tortuga Parda cuando ya se separa del muelle.
+    - **La brújula** apunta a lo que toca hacer.
+    - **Frutas:** la propuesta de cuáles quedan reservadas está en `docs/frutas.md`.
   - **Detalles:**
     - el nombre de la tripulación se elige con Corso en el desayuno;
     - las cubiertas de los barcos se dibujan con detalle y la escotilla ya no traba.

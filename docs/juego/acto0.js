@@ -299,6 +299,7 @@ function cavar() {
 }
 // adónde apunta la brújula: siempre hacia lo siguiente que importa
 function objetivo() {
+  if (S.isla && S.isla !== 'kale') return ISLA().objetivo ? ISLA().objetivo() : null;
   if (F.invitacion) { const f = P('forastero'); return f && f.scene === 'town' ? { scene: 'town', x: f.x, y: f.y } : null; }
   if (F.campana && !F.plaza) return { scene: 'town', x: 30 * T, y: 22.5 * T };
   if (F.campana) return null;
