@@ -11,6 +11,12 @@ const BARCOS = {
     subir: () => null, cerrada: () => !F.zarpado && 'Un marine se cruza de brazos: «Abajo solo la tripulación, chaval.»',
     bajo: { w: 12, h: 6, cuartos: [['Literas', 0, 0, 12, 6, 'madera']], paredes: [], puertas: [[5.5, 0, 'h', 1, 'cubierta']], ventanas: [[0, 2.5, 'v', 1, 'O'], [12, 2.5, 'v', 1, 'E']],
       muebles: [['Cama', 0.3, 0.6, 1.4, 2.2], ['Cama', 0.3, 3.4, 1.4, 2.2], ['Cama', 10.3, 0.6, 1.4, 2.2], ['Cama', 10.3, 3.4, 1.4, 2.2], ['Mesa', 4.6, 3.6, 2.8, 1.3], ['Baúl', 2.2, 0.5, 1.2, 0.8], ['Baúl', 8.6, 0.5, 1.2, 0.8], ['Barriles', 8.4, 4.4, 1.3, 1.3]] } },
+  tortuga: { n: 'La Tortuga Parda', isla: 'shells', estilo: 'mercante', L: 14, H: 6, mastiles: [5.4, 9.6], timon: [2.2, 3], escotilla: [7.5, 3], canones: [11.2], cabrestante: [11, 3], ancla: 12.3, farol: [1, 1.3],
+    pasarela: [39, 41.3], bajada: [[39, 41.8], 'down'], sprite: [34, 40.6, 10], tablon: 41, pasarelaCubierta: 7.5,
+    visible: () => !F.tortugaFuera, cosas: [['crate', 3.4, 1.2], ['crate', 4.3, 1.1], ['barrel', 8.6, 1.1], ['barrel', 9.3, 1], ['sacks', 9, 5], ['crate', 3.8, 5.1], ['soga', 10.2, 5.2]],
+    subir: () => F.stHuida ? null : 'Una marinera te corta el paso en la pasarela: «Sin pasaje no se sube. Se paga al zarpar: habla con la capitana.»', cerrada: () => null,
+    bajo: { w: 10, h: 5, cuartos: [['Bodega', 0, 0, 10, 5, 'madera']], paredes: [], puertas: [[4.5, 0, 'h', 1, 'cubierta']], ventanas: [[0, 2, 'v', 1, 'O'], [10, 2, 'v', 1, 'E']],
+      muebles: [['Cajas', 0.3, 0.3, 2.4, 1.4], ['Barriles', 7.4, 0.3, 2.2, 1.6], ['Sacos', 0.3, 3.2, 1.6, 1.4], ['Cama', 7.8, 2.4, 1.6, 2.4]] } },
 };
 const MARGEN = 2; // casillas de mar alrededor del casco en la escena de cubierta
 function casco(def) { const x0 = MARGEN * T, x1 = (MARGEN + def.L) * T, y0 = MARGEN * T, y1 = (MARGEN + def.H) * T, ym = (y0 + y1) / 2;
@@ -74,11 +80,12 @@ function construirBarco(id) {
   if (def.bandera) { const [qx, qy] = def.bandera.map(v => (v + MARGEN) * T); items.push({ key: qy + 12, fn: gg => { gg.fillStyle = O; gg.fillRect(qx - 11, qy - 3, 22, 9); gg.fillStyle = '#18181c'; gg.fillRect(qx - 10, qy - 2, 20, 7); gg.fillStyle = '#2c2c34'; gg.fillRect(qx - 10, qy - 2, 20, 2); gg.fillRect(qx - 3, qy - 2, 1, 7); } }); }
   for (const [k, x, y] of def.cosas) { const r = R[k] || RD[k]; const px = (x + MARGEN) * T, py = (y + MARGEN) * T; items.push({ img: r, x: px - r[3] / 2, y: py - r[4], key: py }); blocks.push([px - r[3] / 2 + 3, py - 10, r[3] - 6, 10]); }
   // pasarela al muelle (solo amarrado)
-  const pxp = (def.pasarelaCubierta || 6.5) * T + MARGEN * T, pyp = (MARGEN + def.H) * T;
+  const pxp = (def.pasarelaCubierta || 6.5) * T + MARGEN * T, AR = !!def.pasarelaArriba, pyp = (MARGEN + (AR ? 0 : def.H)) * T; // arriba: el muelle queda al norte del barco
   const S0 = { id: id + ':cubierta', name: def.n + ' · Cubierta', bid: id, rooms: [{ n: 'Cubierta' }], canvas: c, w: W, h: H, blocks, items, fires, lights: [], doors, X: v => v * T, Y: v => v * T, area: [0, 0, W, H], mar: true,
-    dentro: (x, y) => inPoly([x, y], dentroP) || (S0.amarrado && x > pxp - 14 && x < pxp + 14 && y > pyp - 12 && y < H), amarrado: true };
-  items.push({ key: H, fn: gg => { if (!S0.amarrado) return; gg.fillStyle = '#2a1a10'; gg.fillRect(pxp - 12, pyp - 8, 24, H - pyp + 8); gg.fillStyle = '#8a5a34'; gg.fillRect(pxp - 10, pyp - 8, 20, H - pyp + 8); gg.fillStyle = '#5a3a22'; for (let y = pyp - 4; y < H; y += 7) gg.fillRect(pxp - 10, y, 20, 1); } });
-  S0.pasarela = { r: [pxp - 16, H - 26, 32, 26], look: 'down', to: 'town', salida: [def.bajada[0].map(v => v * T), def.bajada[1]], entra: [[pxp, pyp - 14], 'up'] };
+    dentro: (x, y) => inPoly([x, y], dentroP) || (S0.amarrado && x > pxp - 14 && x < pxp + 14 && (AR ? y < pyp + 12 && y > 0 : y > pyp - 12 && y < H)), amarrado: true };
+  const [t0, t1] = AR ? [0, pyp + 8] : [pyp - 8, H];
+  items.push({ key: AR ? pyp - 20 : H, fn: gg => { if (!S0.amarrado) return; gg.fillStyle = '#2a1a10'; gg.fillRect(pxp - 12, t0, 24, t1 - t0); gg.fillStyle = '#8a5a34'; gg.fillRect(pxp - 10, t0, 20, t1 - t0); gg.fillStyle = '#5a3a22'; for (let y = t0 + 4; y < t1; y += 7) gg.fillRect(pxp - 10, y, 20, 1); } });
+  S0.pasarela = { r: AR ? [pxp - 16, 0, 32, 26] : [pxp - 16, H - 26, 32, 26], look: AR ? 'up' : 'down', to: 'town', salida: [def.bajada[0].map(v => v * T), def.bajada[1]], entra: AR ? [[pxp, pyp + 16], 'down'] : [[pxp, pyp - 14], 'up'] };
   doors.push(S0.pasarela);
   // bajo cubierta
   const B = buildInteriors({ id, n: def.n, int: def.bajo }), bajo = B.scenes[0], puerta = bajo.doors.find(d => d.to === 'town');
@@ -87,11 +94,11 @@ function construirBarco(id) {
   return { scenes: [S0, ...B.scenes], entrance: S0, sceneOfPt: B.sceneOfPt, def };
 }
 // dibujo en el pueblo: el barco amarrado, solo cuando corresponde
-function barcosEnPueblo() { for (const [id, def] of Object.entries(BARCOS)) { const [x, wl, L] = def.sprite, s = barcoSprite(def.estilo, x * T, wl * T, L * T); s.visible = def.visible; WORLD.sprites.push(s);
+function barcosEnPueblo() { for (const [id, def] of Object.entries(BARCOS)) { if ((def.isla || 'kale') !== S.isla) continue; const [x, wl, L] = def.sprite, s = barcoSprite(def.estilo, x * T, wl * T, L * T); s.visible = def.visible; WORLD.sprites.push(s);
   const [px] = def.pasarela.map(v => v * T), a = def.tablon * T, b = wl * T - 56, top = Math.min(a, b) - 2, bot = Math.max(a, b) + 2, [c, g] = mkCanvas(18, bot - top); g.fillStyle = '#2a1a10'; g.fillRect(0, 0, 18, c.height); g.fillStyle = '#8a5a34'; g.fillRect(2, 0, 14, c.height); g.fillStyle = '#5a3a22'; for (let y = 4; y < c.height; y += 7) g.fillRect(2, y, 14, 1);
   WORLD.sprites.push({ canvas: c, x: px - 9, y: top, key: Math.max(top + 2, wl * T + 6), visible: def.visible }); } }
 // pasarela más cercana (en el pueblo)
-function pasarelaCerca() { for (const [id, def] of Object.entries(BARCOS)) { if (!def.visible()) continue; const [px, py] = def.pasarela.map(v => v * T); if (Math.hypot(G.x - px, G.y - py) < 26) return { type: 'barco', id, def }; } return null; }
+function pasarelaCerca() { for (const [id, def] of Object.entries(BARCOS)) { if ((def.isla || 'kale') !== S.isla || !def.visible()) continue; const [px, py] = def.pasarela.map(v => v * T); if (Math.hypot(G.x - px, G.y - py) < 26) return { type: 'barco', id, def }; } return null; }
 function subirA(id) { const def = BARCOS[id], no = def.subir(); if (no) return note(no); const s = bld(id).entrance; fade(() => enter(s.id, ...s.pasarela.entra)); }
 
 // lo que se puede mirar en cada cubierta (coordenadas del barco, sin el margen de mar)

@@ -1,9 +1,9 @@
 // Menú, prólogo, conversaciones, diario y el bucle del juego. El mundo lo construye mundo.js desde plano.json.
-const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata', 'sargento', 'capitanm'];
+const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata', 'sargento', 'capitanm', 'rufo', 'iria', 'tobi', 'severin', 'brisco', 'quill'];
 const SHEETS = {}, ROW = { up: 0, left: 1, down: 2, right: 3 };
 const loadImg = s => new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ko(new Error('No se pudo cargar ' + s)); i.src = s; });
 // animaciones de la hoja: fila inicial y cuadros; la caída tiene una sola fila (mira hacia abajo)
-const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'], sargento: ['shoot'] };
+const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'], sargento: ['shoot'], rufo: ['shoot'] };
 const animOk = (id, a) => a === 'walk' || (SHEETS[id] && SHEETS[id].anims ? SHEETS[id].anims.has(a) : !(SIN_ANIM[id] || []).includes(a));
 function drawLPC(g, id, x, y, dir, frame, scale = 1, anim = 'walk') { const im = SHEETS[id]; if (!im) return; if (!animOk(id, anim)) { anim = 'walk'; frame = 0; }
   const [r0, n] = ANIM[anim], row = r0 + (anim === 'hurt' ? 0 : ROW[dir]); g.drawImage(im, Math.min(frame | 0, n - 1) * 64, row * 64, 64, 64, Math.round(x - 32 * scale), Math.round(y - 60 * scale), 64 * scale, 64 * scale); }
@@ -12,8 +12,17 @@ const listo = (async () => {
   await Promise.all([...Object.entries(ATLAS).map(([k, s]) => loadImg(s).then(i => A[k] = i)), ...PERSONAJES.map(id => loadImg('assets/personajes/' + id + '.png').then(i => SHEETS[id] = i))]);
   await cargarCatalogo(); await cargarArmas();
   PLANO = await (await fetch('plano.json')).json(); CREDITOS = await (await fetch('assets/creditos.json')).json();
-  buildIsland(PLANO); barcosEnPueblo();
+  ISLAS.kale.datos = PLANO; buildIsland(PLANO); barcosEnPueblo();
 })();
+ISLAS.kale = { n: 'Kalé', plano: 'plano.json', gente: () => makePeople(), objetos: () => OBJECTS(), tick: (now, dt) => actoTick(now, dt), dibujar: (g, cam, now) => actoDrawTown(g, cam, now), encima: (...a) => actoDrawOver(...a) };
+const ISLA = () => ISLAS[S.isla || 'kale'];
+// gente y objetos de la isla actual, puestos en su sitio
+function poblar() { PEOPLE = ISLA().gente().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
+  OBJS = [...ISLA().objetos(), ...objetosBarcos()].map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; }); }
+// cambiar de isla: se arma su mundo, se olvidan los interiores de la anterior (no los barcos) y se puebla
+async function irAIsla(id) { const I = ISLAS[id]; if (!I.datos) I.datos = await (await fetch(I.plano)).json(); PLANO = I.datos; S.isla = id;
+  for (const k of Object.keys(BLD)) if (!BARCOS[k]) { BLD[k].scenes.forEach(s => delete SC[s.id]); delete BLD[k]; }
+  buildIsland(PLANO); barcosEnPueblo(); poblar(); I.init && I.init(); }
 
 // =====================================================================
 // PRÓLOGO: seis recuerdos, cada uno define una sola cosa
@@ -49,7 +58,7 @@ const DREAMS = [
 ];
 const rnd = Math.random, pick = a => a[Math.floor(rnd() * a.length)];
 const S = {}, player = { name: '', last: '' };
-function reset() { Object.assign(S, { step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], bag: [], arma: null, cuerpo: {}, cant: {}, berries: 300, comido: 0, dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
+function reset() { Object.assign(S, { isla: 'kale', step: 0, ax: { coraje: 0, corazon: 0, orgullo: 0, libertad: 0, ambicion: 0 }, st: {}, of: {}, trs: [], tags: [], bonds: [], items: [], bag: [], arma: null, cuerpo: {}, cant: {}, berries: 300, comido: 0, dream: null, ev: 1 + Math.floor(rnd() * 4), evDone: false, asked: {}, aff: {}, talks: {} });
   STATS.forEach(([k]) => S.st[k] = 8); Object.keys(OFICIOS).forEach(k => S.of[k] = 0); S.tag = t => S.tags.filter(x => x === t).length; }
 function apply(fx) { if (!fx) return; for (const k in fx.ax || {}) S.ax[k] += fx.ax[k]; for (const k in fx.st || {}) S.st[k] += fx.st[k]; for (const k in fx.of || {}) S.of[k] += fx.of[k];
   (fx.tr || []).forEach(t => S.trs.includes(t) || S.trs.push(t)); (fx.tags || []).forEach(t => S.tags.push(t)); if (fx.bond) S.bonds.push(fx.bond); if (fx.item) { S.items.push(fx.item); darObjeto('mapa', true); } }
@@ -254,9 +263,9 @@ const openNow = b => !b.ext.horario || b.ext.horario.some(([a, z]) => hourNow() 
 // =====================================================================
 // DIARIO
 // =====================================================================
-const DIARY = { yo: [], familia: [], gente: [], rumores: [], kale: [], encargos: [] };
+const DIARY = { yo: [], familia: [], gente: [], rumores: [], kale: [], shells: [], encargos: [] };
 function learn(e) { if (!e) return; const [sec, title, txt] = e; if (DIARY[sec].some(x => x.title === title)) return; DIARY[sec].push({ title, txt }); document.getElementById('openBag').classList.add('new-d'); }
-function diarioHTML(tab) { const TABS = [['yo', 'Yo'], ['familia', 'Familia'], ['gente', 'Gente'], ['rumores', 'Rumores'], ['kale', 'Kalé'], ['encargos', 'Encargos']];
+function diarioHTML(tab) { const TABS = [['yo', 'Yo'], ['familia', 'Familia'], ['gente', 'Gente'], ['rumores', 'Rumores'], ['kale', 'Kalé'], ['shells', 'Shells Town'], ['encargos', 'Encargos']].filter(([k]) => k !== 'shells' || DIARY.shells.length);
   const page = k => { if (k === 'yo') { const top = Object.entries(S.of).sort((a, b) => b[1] - a[1])[0], of = top[1] > 0 ? OFICIOS[top[0]] : 'Sin oficio fijo';
       return `<div class="entry"><b>${fullName()}</b><span>17 años. Nací en Kalé, en el East Blue. ${of}.</span></div><div class="entry"><b>Mi sueño</b><span>${S.dream}<br><i>${motive()}</i></span></div>
       <div class="axes">${Object.entries(AX).map(([k, [a, b]]) => { const v = Math.max(-4, Math.min(4, S.ax[k])); return `<div class="ax"><span class="${v < 0 ? 'on' : ''}">${a}</span><span class="tr"><i style="left:${50 + v * 12}%"></i></span><span class="${v > 0 ? 'on' : ''}">${b}</span></div>`; }).join('')}</div>
@@ -296,12 +305,11 @@ function blocked(x, y) {
   const I = interior(G.scene); if (I.dentro) return !I.dentro(x, y) || hit(I.blocks, x, y) || crowd; return x < WALL + 2 || x > I.w - WALL - 2 || y > I.h - WALL || hit(I.blocks, x, y) || crowd;
 }
 function fade(cb) { sfx('puerta'); const f = document.getElementById('fadeov'); f.style.opacity = 1; setTimeout(() => { cb(); f.style.opacity = 0; }, 330); }
-function enter(scene, [x, y], dir) { G.scene = scene; G.x = x; G.y = y; G.dir = dir; clearBubbles(); const pn = document.getElementById('placeName'); pn.textContent = scene === 'town' ? 'Kalé' : interior(scene).name; pn.style.opacity = 1; clearTimeout(pn._t); pn._t = setTimeout(() => pn.style.opacity = 0, 2600); if (G.listo) guardarAuto(); }
+function enter(scene, [x, y], dir) { G.scene = scene; G.x = x; G.y = y; G.dir = dir; clearBubbles(); const pn = document.getElementById('placeName'); pn.textContent = scene === 'town' ? ISLA().n : interior(scene).name; pn.style.opacity = 1; clearTimeout(pn._t); pn._t = setTimeout(() => pn.style.opacity = 0, 2600); if (G.listo) guardarAuto(); }
 let OBJS = [];
 function startGame(rest) {
   attract.on = false; keyHandler = null; show(''); app.classList.add('playing'); cv.hidden = false; document.getElementById('hud').hidden = false; fitGame();
-  PEOPLE = makePeople().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
-  OBJS = [...OBJECTS(), ...objetosBarcos()].map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; });
+  poblar();
   if (matchMedia('(pointer:coarse)').matches) document.getElementById('pad').hidden = false;
   else { const tip = document.createElement('div'); tip.className = 'tip glass'; tip.innerHTML = CONTROLES.slice(0, 5).map(([k, v]) => `<span><kbd>${k}</kbd>${v}</span>`).join(''); document.getElementById('overlays').appendChild(tip); setTimeout(() => tip.classList.add('out'), 9000); setTimeout(() => tip.remove(), 9800); }
   G.listo = false; const [sc, at] = place('casa', [8.6, 4.2]); enter(sc, at, 'down'); G.paused = false; G.minutes = 8 * 60;
@@ -369,8 +377,8 @@ function barkOf(n) { const ph = fase(), pool = (ph && n.fases && n.fases[ph]) ||
 // ---------- interacción ----------
 function nearest() {
   let best = null, bd = 44;
-  for (const n of PEOPLE) if (n.scene === G.scene && n.greet) { const d = Math.hypot(n.x - G.x, n.y - G.y); if (d < bd) { bd = d; best = { type: 'npc', n }; } }
-  for (const o of OBJS) if (o.scene === G.scene) { const d = Math.hypot(o.x - G.x, o.y - G.y); if (d < bd) { bd = d; best = { type: 'obj', o, x: o.x, y: o.y }; } }
+  for (const n of PEOPLE) if (n.scene === G.scene && n.greet && !(F.stSigue && n.id === F.stCompa)) { const d = Math.hypot(n.x - G.x, n.y - G.y); if (d < bd) { bd = d; best = { type: 'npc', n }; } }
+  for (const o of OBJS) if (o.scene === G.scene && (!o.si || o.si())) { const d = Math.hypot(o.x - G.x, o.y - G.y); if (d < bd) { bd = d; best = { type: 'obj', o, x: o.x, y: o.y }; } }
   if (G.scene === 'town') { const pb = pasarelaCerca(); if (pb) return pb; for (const s of WORLD.doors) { const [dx, dy] = s.door; if (Math.abs(G.x - dx) < 18 && G.y > dy - 6 && G.y < dy + 26) return { type: 'door', s }; } }
   else for (const d of interior(G.scene).doors) if (hit([d.r], G.x, G.y)) return { type: 'idoor', d };
   return best;
@@ -391,6 +399,7 @@ function interact() {
     if (!openNow(b)) return note(`${b.n}. En la puerta, un cartel: «Abierto ${horas(b.ext.horario)}».`);
     fade(() => { const e = bld(b.id).entrance, d = e.doors.find(d => d.to === 'town'), [at, dir] = e.doorArrival(...d.args); enter(e.id, at, dir); }); }
   else if (t.d.to === 'town') fade(() => { const s = WORLD.doors.find(d => d.id === interior(G.scene).bid); enter('town', [s.door[0], s.door[1] + 18], 'down'); });
+  else if (ISLA().bloquea && ISLA().bloquea(t.d)) return note(ISLA().bloquea(t.d));
   else if (t.d.to.startsWith('marina:') && !interior(t.d.to).rooms.some(r => r.n === 'Guardia')) return note('El sargento levanta la vista: «Ahí dentro no se te ha perdido nada, chaval.»');
   else fade(() => enter(t.d.to, t.d.at[0], t.d.at[1]));
 }
@@ -439,7 +448,7 @@ function loop(now) {
     if (G.moving) { const running = K.shift || G.run, sp = (running ? 175 : 112) * dt * (vx && vy ? .7071 : 1), nx = G.x + vx * sp, ny = G.y + vy * sp;
       if (!blocked(nx - 6, G.y) && !blocked(nx + 6, G.y)) G.x = nx; if (!blocked(G.x - 6, ny) && !blocked(G.x + 6, ny)) G.y = ny;
       G.dir = vx < 0 ? 'left' : vx > 0 ? 'right' : vy < 0 ? 'up' : 'down'; G.walk += dt * (running ? 17 : 12); }
-    if (!G.lapse) G.minutes += dt * 1.0; actoTick(now, dt);
+    if (!G.lapse) G.minutes += dt * 1.0; ISLA().tick && ISLA().tick(now, dt);
     for (const n of PEOPLE) { if (n.route) { n.t = (n.t || rnd() * 100) + dt; const [x, y, d] = where(n.route.map(([a, b]) => [a * T, b * T]), n.speed, n.t); n.x = x; n.y = y; n.dir = d; n.frame = 1 + Math.floor(n.t * 9) % 8; }
       if (n.scene === G.scene && now > n.nextBark && !n.chat && Math.hypot(n.x - G.x, n.y - G.y) < 240) { bubble(n, barkOf(n)); n.nextBark = now + 11000 + rnd() * 12000; } }
     const pura = PEOPLE.find(n => n.id === 'pura');
@@ -452,7 +461,7 @@ function loop(now) {
 }
 function draw(now) {
   const VW = G.VW, VH = G.VH, inside = G.scene !== 'town', I = inside && interior(G.scene), SW = inside ? I.w : WORLD.w, SH = inside ? I.h : WORLD.h;
-  const cam = [Math.round(SW < VW ? -(VW - SW) / 2 : Math.max(0, Math.min(SW - VW, G.x - VW / 2))), Math.round(SH < VH ? -(VH - SH) / 2 : Math.max(0, Math.min(SH - VH, G.y - VH / 2)))];
+  const [fx, fy] = G.foco || [G.x, G.y], cam = [Math.round(SW < VW ? -(VW - SW) / 2 : Math.max(0, Math.min(SW - VW, fx - VW / 2))), Math.round(SH < VH ? -(VH - SH) / 2 : Math.max(0, Math.min(SH - VH, fy - VH / 2)))];
   const chars = PEOPLE.filter(n => n.scene === G.scene).map(n => actor(n, n.sprite, n.route || n.paso ? n.frame : 0, now));
   chars.push(actor(G, 'grumete', G.moving ? 1 + Math.floor(G.walk) % 8 : 0, now, S.arma && arma(S.arma)));
   if (inside) drawInterior(g, I, cam, VW, VH, chars, now, hourNow()); else drawTown(g, cam, VW, VH, chars, now, hourNow());
@@ -460,7 +469,7 @@ function draw(now) {
   const toScr = (x, y) => [(x - cam[0]) * G.scale, (y - cam[1]) * G.scale + parseFloat(cv.style.top)];
   G.bubbles = G.bubbles.filter(b => { if (now > b.until || b.npc.scene !== G.scene) { b.el.remove(); return false; } const [x, y] = toScr(b.npc.x, b.npc.y - 58); b.el.style.left = x + 'px'; b.el.style.top = y + 'px'; return true; });
   const ov = document.getElementById('overlays'); let pr = ov.querySelector('.prompt'); const t = !G.talking && !G.paused && nearest();
-  if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'barco' ? 'Subir a ' + t.def.n : t.type === 'idoor' ? (t.d.salida ? 'Bajar al muelle' : t.d.to === 'town' ? 'Salir' : t.d.to.endsWith(':cubierta') ? 'Subir a cubierta' : 'Abrir') : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
+  if (t) { if (!pr) { pr = document.createElement('div'); pr.className = 'prompt'; ov.appendChild(pr); } const lbl = t.type === 'npc' ? 'Hablar' : t.type === 'obj' ? t.o.label : t.type === 'barco' ? 'Subir a ' + t.def.n : t.type === 'idoor' ? (t.d.salida ? (t.d.etiqueta || 'Bajar al muelle') : t.d.to === 'town' ? 'Salir' : t.d.to.endsWith(':cubierta') ? 'Subir a cubierta' : 'Abrir') : 'Entrar'; pr.innerHTML = `<kbd>E</kbd>${lbl}`;
     const [px, py] = t.type === 'npc' ? [t.n.x, t.n.y - 62] : t.type === 'obj' ? [t.x, t.y - 26] : t.type === 'door' ? [t.s.door[0], t.s.door[1] - 56] : t.type === 'barco' ? [t.def.pasarela[0] * T, t.def.pasarela[1] * T - 44] : [G.x, G.y - 62]; const [sx, sy] = toScr(px, py); pr.style.left = sx + 'px'; pr.style.top = sy + 'px'; } else if (pr) pr.remove();
   drawBrujula(now); const pb = document.querySelector('.purse span'); if (pb && pb.textContent != berries()) pb.textContent = berries().toLocaleString('es-ES');
   const dia = 'Día ' + (Math.floor(G.minutes / 1440) + 1), de = document.getElementById('day'); if (de.textContent !== dia) de.textContent = dia;
@@ -502,7 +511,7 @@ function drawTown(g, cam, VW, VH, chars, now, h) {
   // mar que se mueve
   const wp = pat(g, R.water); wp.setTransform(new DOMMatrix().translate(-cx + Math.round(Math.sin(t * .6) * 6), -cy + Math.round(t * 4) % 32)); g.fillStyle = wp; g.fillRect(0, 0, VW, VH);
   g.fillStyle = 'rgba(255,255,255,.75)'; for (let i = 0; i < WORLD.foam.length; i++) { const [x, y] = WORLD.foam[i]; if (x < cx - 20 || x > cx + VW + 20 || y < cy - 20 || y > cy + VH + 20) continue; if (Math.sin(t * 2 + i * 1.7) > .2) g.fillRect(Math.round(x - cx - 2), Math.round(y - cy), 4, 1); }
-  g.drawImage(WORLD.ground, cx, cy, VW, VH, 0, 0, VW, VH); actoDrawTown(g, cam, now);
+  g.drawImage(WORLD.ground, cx, cy, VW, VH, 0, 0, VW, VH); ISLA().dibujar && ISLA().dibujar(g, cam, now);
   // sombras según el sol
   const sn = sun(h);
   if (sn) { g.fillStyle = `rgba(15,20,45,${sn.alpha})`;
@@ -522,7 +531,7 @@ function drawTown(g, cam, VW, VH, chars, now, h) {
     for (let i = 0; i < 6; i++) { const x = ((hash(i, 1, 91) * MW + t * 9) % (MW + 600)) - 300 - cx, y = hash(i, 2, 91) * MH - cy, rx = 160 + hash(i, 3, 91) * 140;
       if (x < -rx || x > VW + rx || y < -rx || y > VH + rx) continue; const gr = g.createRadialGradient(x, y, 0, x, y, rx); gr.addColorStop(0, `rgba(20,30,60,${.13 * sn.alpha / .3})`); gr.addColorStop(1, 'rgba(20,30,60,0)');
       g.save(); g.translate(x, y); g.scale(1, .55); g.translate(-x, -y); g.fillStyle = gr; g.fillRect(x - rx, y - rx, 2 * rx, 2 * rx); g.restore(); } }
-  actoDrawOver(g, cam, now, VW, VH);
+  ISLA().encima && ISLA().encima(g, cam, now, VW, VH);
   const [r, gg, b, a] = ambient(h); if (a > 0) { g.fillStyle = `rgba(${r | 0},${gg | 0},${b | 0},${a})`; g.fillRect(0, 0, VW, VH); }
   if (night) { g.globalCompositeOperation = 'lighter';
     const glow = (x, y, rad, c) => { const gr = g.createRadialGradient(x, y, 0, x, y, rad); gr.addColorStop(0, c); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(x - rad, y - rad, 2 * rad, 2 * rad); };

@@ -1,0 +1,1534 @@
+{
+ "tile": 32,
+ "mapa": {
+  "w": 64,
+  "h": 48,
+  "costa": [
+   [
+    6,
+    6
+   ],
+   [
+    12,
+    3
+   ],
+   [
+    22,
+    1.5
+   ],
+   [
+    34,
+    1
+   ],
+   [
+    46,
+    1.5
+   ],
+   [
+    56,
+    3
+   ],
+   [
+    61,
+    7
+   ],
+   [
+    62.5,
+    14
+   ],
+   [
+    62,
+    22
+   ],
+   [
+    61,
+    29
+   ],
+   [
+    58,
+    33.5
+   ],
+   [
+    52,
+    36
+   ],
+   [
+    44,
+    36.6
+   ],
+   [
+    36,
+    36.6
+   ],
+   [
+    28,
+    36.6
+   ],
+   [
+    20,
+    36.6
+   ],
+   [
+    14,
+    37.6
+   ],
+   [
+    11,
+    40.5
+   ],
+   [
+    6,
+    41
+   ],
+   [
+    3,
+    37
+   ],
+   [
+    2,
+    30
+   ],
+   [
+    3,
+    22
+   ],
+   [
+    2.5,
+    14
+   ]
+  ],
+  "playa": [
+   [
+    3,
+    33.5
+   ],
+   [
+    7,
+    34.6
+   ],
+   [
+    11,
+    36.6
+   ],
+   [
+    14,
+    37.6
+   ],
+   [
+    11,
+    40.5
+   ],
+   [
+    6,
+    41
+   ],
+   [
+    3,
+    37
+   ]
+  ],
+  "acantilado": [
+   [
+    2,
+    25.5
+   ],
+   [
+    4.6,
+    26
+   ],
+   [
+    5.6,
+    29.4
+   ],
+   [
+    4.4,
+    32.6
+   ],
+   [
+    2.2,
+    31.6
+   ]
+  ],
+  "bosque": [
+   [
+    47,
+    3.5
+   ],
+   [
+    56,
+    3.5
+   ],
+   [
+    60.5,
+    8
+   ],
+   [
+    60.5,
+    12.6
+   ],
+   [
+    55,
+    13.2
+   ],
+   [
+    47,
+    9
+   ]
+  ],
+  "arbolado": {
+   "bosque": [
+    47,
+    3.5,
+    13.5,
+    9.5
+   ],
+   "sueltos": [
+    4,
+    4,
+    56,
+    30
+   ],
+   "n": 34
+  },
+  "caminos": [
+   {
+    "n": "Calle Mayor",
+    "p": [
+     [
+      5,
+      21
+     ],
+     [
+      28.5,
+      21
+     ]
+    ]
+   },
+   {
+    "n": "Calle Mayor",
+    "p": [
+     [
+      37.5,
+      21
+     ],
+     [
+      60,
+      21
+     ]
+    ]
+   },
+   {
+    "n": "Cuesta de la Base",
+    "p": [
+     [
+      33,
+      11
+     ],
+     [
+      33,
+      16.6
+     ]
+    ]
+   },
+   {
+    "n": "Calle del Puerto",
+    "p": [
+     [
+      33,
+      25.4
+     ],
+     [
+      33,
+      34.5
+     ]
+    ]
+   },
+   {
+    "n": "Calle de la Ribera",
+    "p": [
+     [
+      10,
+      29.6
+     ],
+     [
+      57,
+      29.6
+     ]
+    ]
+   },
+   {
+    "n": "Calle del Oeste",
+    "p": [
+     [
+      10,
+      21
+     ],
+     [
+      10,
+      29.6
+     ]
+    ]
+   },
+   {
+    "n": "Paseo del Muelle",
+    "p": [
+     [
+      16,
+      34.5
+     ],
+     [
+      56,
+      34.5
+     ]
+    ]
+   },
+   {
+    "n": "Senda de la Cala",
+    "p": [
+     [
+      10,
+      29.6
+     ],
+     [
+      8.6,
+      32.4
+     ],
+     [
+      7.4,
+      35.6
+     ],
+     [
+      7.6,
+      38.4
+     ]
+    ]
+   },
+   {
+    "n": "",
+    "p": [
+     [
+      32.5,
+      34.5
+     ],
+     [
+      32.5,
+      36.4
+     ]
+    ],
+    "madera": true
+   }
+  ],
+  "plaza": {
+   "x": 33,
+   "y": 21,
+   "r": 4.5
+  },
+  "muelle": [
+   [
+    31.5,
+    36,
+    2,
+    5
+   ],
+   [
+    18,
+    41,
+    28,
+    2
+   ]
+  ],
+  "botes": [
+   [
+    22.5,
+    45.2
+   ],
+   [
+    27.5,
+    45.6
+   ]
+  ],
+  "objetos": [
+   {
+    "n": "Muralla de la base",
+    "t": "muralla",
+    "x": 21,
+    "y": 3,
+    "w": 24,
+    "h": 12,
+    "puerta": 33,
+    "canones": [
+     25,
+     28.5,
+     37.5,
+     41
+    ]
+   },
+   {
+    "n": "Escalera a la batería",
+    "t": "escalera",
+    "x": 24.2,
+    "y": 14.4
+   },
+   {
+    "n": "Estatua del capitán Brisco",
+    "t": "estatua",
+    "x": 33,
+    "y": 20.2
+   },
+   {
+    "n": "Tablón de anuncios",
+    "t": "tablon",
+    "x": 38.6,
+    "y": 18.2
+   },
+   {
+    "n": "Mercado de pescado",
+    "t": "puestos",
+    "x": 20.2,
+    "y": 34.1,
+    "w": 8,
+    "h": 1.5
+   },
+   {
+    "n": "El Foso",
+    "t": "foso",
+    "x": 44,
+    "y": 30.9,
+    "w": 7,
+    "h": 3.3
+   }
+  ],
+  "props": [
+   [
+    "barrel",
+    29.2,
+    36.3
+   ],
+   [
+    "barrel",
+    29.9,
+    36.5
+   ],
+   [
+    "crate",
+    35.6,
+    36.2
+   ],
+   [
+    "crate",
+    36.7,
+    36.3
+   ],
+   [
+    "sacks",
+    27,
+    36.3
+   ],
+   [
+    "tuna",
+    21.2,
+    42.6
+   ],
+   [
+    "cart",
+    21.6,
+    22.7
+   ],
+   [
+    "woodpile",
+    8.6,
+    13.6
+   ],
+   [
+    "barrel",
+    21.2,
+    19.8
+   ],
+   [
+    "logs",
+    42.6,
+    36.3
+   ],
+   [
+    "crate",
+    43.3,
+    30.4
+   ],
+   [
+    "barrel",
+    51.6,
+    30.3
+   ]
+  ],
+  "faroles": [
+   [
+    28,
+    17.4
+   ],
+   [
+    38,
+    17.4
+   ],
+   [
+    28,
+    24.6
+   ],
+   [
+    38,
+    24.6
+   ],
+   [
+    20.6,
+    22.4
+   ],
+   [
+    46,
+    22.4
+   ],
+   [
+    13.4,
+    30.9
+   ],
+   [
+    30.6,
+    35.6
+   ],
+   [
+    45,
+    35.6
+   ],
+   [
+    54,
+    22.4
+   ]
+  ]
+ },
+ "edificios": [
+  {
+   "id": "cuartel",
+   "n": "Base de la Marina · Cuartel",
+   "entrable": true,
+   "ext": {
+    "x": 25,
+    "y": 4.5,
+    "w": 16,
+    "d": 6.5,
+    "techo": "pizarra-azul",
+    "fachada": "piedra",
+    "puerta": 8,
+    "ventanas": [
+     2.5,
+     5,
+     11,
+     13.5
+    ],
+    "bandera": true
+   },
+   "int": {
+    "w": 16,
+    "h": 9,
+    "cuartos": [
+     [
+      "Oficina de cartas",
+      0,
+      0,
+      6,
+      4,
+      "madera"
+     ],
+     [
+      "Despacho del capitán",
+      6,
+      0,
+      5,
+      4,
+      "madera"
+     ],
+     [
+      "Almacén de decomisos",
+      11,
+      0,
+      5,
+      4,
+      "piedra"
+     ],
+     [
+      "Guardia",
+      0,
+      4,
+      16,
+      5,
+      "piedra"
+     ]
+    ],
+    "paredes": [
+     [
+      0,
+      4,
+      16,
+      4
+     ],
+     [
+      6,
+      0,
+      6,
+      4
+     ],
+     [
+      11,
+      0,
+      11,
+      4
+     ]
+    ],
+    "puertas": [
+     [
+      2.5,
+      4,
+      "h",
+      1,
+      "a la oficina"
+     ],
+     [
+      8,
+      4,
+      "h",
+      1,
+      "al despacho"
+     ],
+     [
+      13,
+      4,
+      "h",
+      1,
+      "al almacén"
+     ],
+     [
+      7.5,
+      9,
+      "h",
+      1,
+      "patio"
+     ]
+    ],
+    "ventanas": [
+     [
+      2,
+      0,
+      "h",
+      1.5,
+      "N"
+     ],
+     [
+      8,
+      0,
+      "h",
+      1,
+      "N"
+     ],
+     [
+      2,
+      9,
+      "h",
+      1.5,
+      "S"
+     ],
+     [
+      12.5,
+      9,
+      "h",
+      1.5,
+      "S"
+     ]
+    ],
+    "muebles": [
+     [
+      "Mesa",
+      0.8,
+      1.4,
+      2.6,
+      1.3
+     ],
+     [
+      "Mapa",
+      3.8,
+      0.2,
+      1.8,
+      0.8
+     ],
+     [
+      "Estante",
+      0.3,
+      0.2,
+      1.2,
+      0.8
+     ],
+     [
+      "Cajas",
+      4.4,
+      2.7,
+      1.3,
+      1
+     ],
+     [
+      "Escritorio",
+      7,
+      1.5,
+      2.6,
+      1.2
+     ],
+     [
+      "Libros",
+      6.3,
+      0.2,
+      1.6,
+      0.8
+     ],
+     [
+      "Planta",
+      10.1,
+      0.3,
+      0.7,
+      0.7
+     ],
+     [
+      "Cajas",
+      11.3,
+      0.3,
+      1.6,
+      1.2
+     ],
+     [
+      "Baúl",
+      13,
+      0.3,
+      1.3,
+      0.9
+     ],
+     [
+      "Barriles",
+      14.6,
+      0.3,
+      1.2,
+      2
+     ],
+     [
+      "Sacos",
+      11.3,
+      2.5,
+      1.4,
+      1.2
+     ],
+     [
+      "Cofre",
+      13.4,
+      2.8,
+      1.3,
+      0.9
+     ],
+     [
+      "Mesa",
+      2,
+      5.6,
+      2.6,
+      1.3
+     ],
+     [
+      "Banco",
+      2,
+      7.4,
+      2.6,
+      0.7
+     ],
+     [
+      "Estante",
+      0.3,
+      4.2,
+      1.6,
+      0.8
+     ],
+     [
+      "Banco",
+      11,
+      7.8,
+      3,
+      0.7
+     ],
+     [
+      "Barriles",
+      14.6,
+      4.4,
+      1.2,
+      2
+     ]
+    ],
+    "notas": "La guardia es el vestíbulo. La oficina de cartas es donde trabaja Iria; el despacho guarda la llave del almacén de decomisos."
+   }
+  },
+  {
+   "id": "bateria",
+   "n": "Base de la Marina · Batería",
+   "entrable": true,
+   "oculto": true,
+   "ext": {
+    "x": 23.5,
+    "y": 13,
+    "w": 1,
+    "d": 1,
+    "techo": "pizarra",
+    "fachada": "piedra",
+    "puerta": 0.5,
+    "ventanas": []
+   },
+   "int": {
+    "w": 12,
+    "h": 4,
+    "cuartos": [
+     [
+      "Batería",
+      0,
+      0,
+      12,
+      4,
+      "piedra"
+     ]
+    ],
+    "paredes": [],
+    "puertas": [
+     [
+      5.5,
+      0,
+      "h",
+      1,
+      "patio"
+     ]
+    ],
+    "ventanas": [
+     [
+      1.4,
+      4,
+      "h",
+      1.2,
+      "S"
+     ],
+     [
+      4.4,
+      4,
+      "h",
+      1.2,
+      "S"
+     ],
+     [
+      7.4,
+      4,
+      "h",
+      1.2,
+      "S"
+     ],
+     [
+      10.1,
+      4,
+      "h",
+      1.2,
+      "S"
+     ]
+    ],
+    "muebles": [
+     [
+      "Sacos",
+      0.3,
+      0.3,
+      1.2,
+      1
+     ],
+     [
+      "Barriles",
+      10.5,
+      0.3,
+      1.2,
+      1.3
+     ],
+     [
+      "Cajas",
+      3,
+      0.3,
+      1.4,
+      0.9
+     ]
+    ],
+    "notas": "Casamata dentro de la muralla sur: cuatro cañones apuntan a la plaza por las troneras. Se sube por la escalera del patio."
+   }
+  },
+  {
+   "id": "cantina",
+   "n": "Cantina El Caldero",
+   "entrable": true,
+   "ext": {
+    "x": 10,
+    "y": 14,
+    "w": 10,
+    "d": 6,
+    "techo": "tejas",
+    "fachada": "piedra",
+    "puerta": 5,
+    "ventanas": [
+     2,
+     8
+    ],
+    "chimenea": 8.5,
+    "cartel": true
+   },
+   "int": {
+    "w": 14,
+    "h": 10,
+    "cuartos": [
+     [
+      "Cocina",
+      0,
+      0,
+      5,
+      4,
+      "piedra"
+     ],
+     [
+      "Salón",
+      5,
+      0,
+      9,
+      4,
+      "madera"
+     ],
+     [
+      "Salón",
+      0,
+      4,
+      14,
+      6,
+      "madera"
+     ]
+    ],
+    "paredes": [
+     [
+      5,
+      0,
+      5,
+      4
+     ],
+     [
+      0,
+      4,
+      5,
+      4
+     ]
+    ],
+    "puertas": [
+     [
+      5,
+      1.5,
+      "v",
+      1,
+      "a la barra"
+     ],
+     [
+      6.5,
+      10,
+      "h",
+      1,
+      "calle"
+     ]
+    ],
+    "ventanas": [
+     [
+      1.5,
+      0,
+      "h",
+      1.5,
+      "N"
+     ],
+     [
+      14,
+      6,
+      "v",
+      1.5,
+      "E"
+     ],
+     [
+      1.5,
+      10,
+      "h",
+      2,
+      "S"
+     ],
+     [
+      11,
+      10,
+      "h",
+      2,
+      "S"
+     ]
+    ],
+    "muebles": [
+     [
+      "Fogón",
+      0.3,
+      0.2,
+      2.6,
+      1
+     ],
+     [
+      "Despensa",
+      0.3,
+      2.5,
+      1.6,
+      1.2
+     ],
+     [
+      "Botellero",
+      5.4,
+      0.2,
+      6,
+      0.8
+     ],
+     [
+      "Chimenea",
+      11.6,
+      0.2,
+      2.2,
+      1
+     ],
+     [
+      "Barra",
+      5.6,
+      2,
+      7,
+      1.1
+     ],
+     [
+      "Taburetes",
+      5.8,
+      3.3,
+      6.6,
+      0.5
+     ],
+     [
+      "Mesa",
+      1.5,
+      6,
+      1.7,
+      1.4
+     ],
+     [
+      "Mesa",
+      5,
+      6,
+      1.7,
+      1.4
+     ],
+     [
+      "Mesa",
+      8.8,
+      7.4,
+      1.7,
+      1.4
+     ],
+     [
+      "Mesa",
+      11.6,
+      5.2,
+      1.7,
+      1.4
+     ],
+     [
+      "Barriles",
+      0.3,
+      7.6,
+      1.2,
+      2.2
+     ]
+    ],
+    "notas": "La cantina de Rufo. Barra larga y cocina detrás con puerta propia."
+   }
+  },
+  {
+   "id": "posada",
+   "n": "Posada La Concha",
+   "entrable": true,
+   "ext": {
+    "x": 12,
+    "y": 23,
+    "w": 12,
+    "d": 6,
+    "techo": "tejas",
+    "fachada": "entramado",
+    "puerta": 6.5,
+    "ventanas": [
+     2,
+     10
+    ],
+    "chimenea": 3,
+    "cartel": true
+   },
+   "int": {
+    "w": 14,
+    "h": 10,
+    "cuartos": [
+     [
+      "Habitación",
+      0,
+      0,
+      6,
+      4,
+      "madera"
+     ],
+     [
+      "Comedor",
+      6,
+      0,
+      8,
+      4,
+      "madera"
+     ],
+     [
+      "Comedor",
+      0,
+      4,
+      14,
+      6,
+      "madera"
+     ]
+    ],
+    "paredes": [
+     [
+      0,
+      4,
+      6,
+      4
+     ],
+     [
+      6,
+      0,
+      6,
+      4
+     ]
+    ],
+    "puertas": [
+     [
+      2.5,
+      4,
+      "h",
+      1,
+      "a la habitación"
+     ],
+     [
+      6.5,
+      10,
+      "h",
+      1,
+      "calle"
+     ]
+    ],
+    "ventanas": [
+     [
+      2,
+      0,
+      "h",
+      1.5,
+      "N"
+     ],
+     [
+      10,
+      0,
+      "h",
+      1.5,
+      "N"
+     ],
+     [
+      0,
+      6.5,
+      "v",
+      1.5,
+      "O"
+     ],
+     [
+      2,
+      10,
+      "h",
+      2,
+      "S"
+     ],
+     [
+      11,
+      10,
+      "h",
+      2,
+      "S"
+     ]
+    ],
+    "muebles": [
+     [
+      "Cama",
+      0.4,
+      0.5,
+      1.8,
+      3
+     ],
+     [
+      "Baúl",
+      3,
+      0.3,
+      1.3,
+      0.9
+     ],
+     [
+      "Silla",
+      4.6,
+      1.4,
+      0.8,
+      0.8
+     ],
+     [
+      "Mostrador",
+      6.4,
+      1.8,
+      4,
+      1.1
+     ],
+     [
+      "Estantes",
+      7,
+      0.2,
+      4,
+      0.8
+     ],
+     [
+      "Barriles",
+      12.4,
+      0.3,
+      1.3,
+      2.2
+     ],
+     [
+      "Mesa",
+      2,
+      6.2,
+      2.4,
+      1.4
+     ],
+     [
+      "Mesa",
+      7.4,
+      6.2,
+      2.4,
+      1.4
+     ],
+     [
+      "Alfombra",
+      9.8,
+      7.6,
+      3.4,
+      1.8
+     ],
+     [
+      "Planta",
+      0.3,
+      9,
+      0.8,
+      0.8
+     ]
+    ],
+    "notas": "La posada de Doña Celes. Una habitación de alquiler y un comedor grande."
+   }
+  },
+  {
+   "id": "pertrechos",
+   "n": "Pertrechos Ulloa",
+   "entrable": true,
+   "ext": {
+    "x": 47,
+    "y": 15,
+    "w": 8,
+    "d": 5,
+    "techo": "tejas",
+    "fachada": "madera",
+    "puerta": 4,
+    "ventanas": [
+     1.5,
+     6.5
+    ],
+    "cartel": true,
+    "horario": [
+     [
+      9,
+      13
+     ],
+     [
+      16,
+      20
+     ]
+    ]
+   },
+   "int": {
+    "w": 10,
+    "h": 8,
+    "cuartos": [
+     [
+      "Almacén",
+      0,
+      0,
+      10,
+      3,
+      "madera"
+     ],
+     [
+      "Tienda",
+      0,
+      3,
+      10,
+      5,
+      "madera"
+     ]
+    ],
+    "paredes": [
+     [
+      0,
+      3,
+      10,
+      3
+     ]
+    ],
+    "puertas": [
+     [
+      8,
+      3,
+      "h",
+      1,
+      "al almacén"
+     ],
+     [
+      4.5,
+      8,
+      "h",
+      1,
+      "calle"
+     ]
+    ],
+    "ventanas": [
+     [
+      10,
+      1,
+      "v",
+      1,
+      "E"
+     ],
+     [
+      1,
+      8,
+      "h",
+      2,
+      "S"
+     ],
+     [
+      7,
+      8,
+      "h",
+      2,
+      "S"
+     ]
+    ],
+    "muebles": [
+     [
+      "Cajas",
+      0.3,
+      0.3,
+      3,
+      1.6
+     ],
+     [
+      "Barriles",
+      3.9,
+      0.3,
+      2,
+      1.6
+     ],
+     [
+      "Lonas y velas",
+      6.6,
+      0.3,
+      1.6,
+      1
+     ],
+     [
+      "Estantes",
+      0.2,
+      3.2,
+      7.4,
+      0.8
+     ],
+     [
+      "Mostrador",
+      1.5,
+      4.7,
+      5,
+      1
+     ],
+     [
+      "Barriles",
+      8.3,
+      4.4,
+      1.4,
+      1.4
+     ],
+     [
+      "Sogas y redes",
+      8.4,
+      6.2,
+      1.3,
+      1.4
+     ],
+     [
+      "Cajas",
+      0.3,
+      6.3,
+      1.4,
+      1.4
+     ]
+    ],
+    "notas": "Pertrechos para barcos y viajeros."
+   }
+  },
+  {
+   "id": "casa_no",
+   "n": "Casa de los Llanes",
+   "entrable": false,
+   "ext": {
+    "x": 4.5,
+    "y": 15,
+    "w": 4.5,
+    "d": 5,
+    "techo": "paja",
+    "fachada": "madera",
+    "puerta": 2.25,
+    "ventanas": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "casa_ne",
+   "n": "Casa de Lalo",
+   "entrable": false,
+   "ext": {
+    "x": 56,
+    "y": 15.5,
+    "w": 5,
+    "d": 4.5,
+    "techo": "paja",
+    "fachada": "madera",
+    "puerta": 2.5,
+    "ventanas": [
+     1
+    ]
+   }
+  },
+  {
+   "id": "casa_s1",
+   "n": "Casa de los Ferrán",
+   "entrable": false,
+   "ext": {
+    "x": 38,
+    "y": 24,
+    "w": 7,
+    "d": 5,
+    "techo": "tejas",
+    "fachada": "entramado",
+    "puerta": 3.5,
+    "ventanas": [
+     1.2,
+     5.8
+    ],
+    "chimenea": 5.5
+   }
+  },
+  {
+   "id": "casa_s2",
+   "n": "Casa de la viuda Amaro",
+   "entrable": false,
+   "ext": {
+    "x": 47,
+    "y": 24,
+    "w": 6,
+    "d": 5,
+    "techo": "paja",
+    "fachada": "madera",
+    "puerta": 3,
+    "ventanas": [
+     1.2,
+     4.8
+    ]
+   }
+  },
+  {
+   "id": "casa_s3",
+   "n": "Casa del herrero",
+   "entrable": false,
+   "ext": {
+    "x": 24.5,
+    "y": 24.6,
+    "w": 5.5,
+    "d": 4.4,
+    "techo": "pizarra",
+    "fachada": "piedra",
+    "puerta": 2.75,
+    "ventanas": [
+     1
+    ],
+    "chimenea": 4.5
+   }
+  },
+  {
+   "id": "almacen_o",
+   "n": "Almacén del puerto",
+   "entrable": false,
+   "ext": {
+    "x": 19,
+    "y": 30.8,
+    "w": 8,
+    "d": 3,
+    "techo": "tablas",
+    "fachada": "madera",
+    "puerta": 4,
+    "ventanas": []
+   }
+  },
+  {
+   "id": "almacen_c",
+   "n": "Almacén de la Compañía",
+   "entrable": false,
+   "ext": {
+    "x": 35.5,
+    "y": 30.8,
+    "w": 7,
+    "d": 3,
+    "techo": "tablas",
+    "fachada": "madera",
+    "puerta": 3.5,
+    "ventanas": []
+   }
+  },
+  {
+   "id": "almacen_e",
+   "n": "Almacén de sal",
+   "entrable": false,
+   "ext": {
+    "x": 51.5,
+    "y": 30.8,
+    "w": 5,
+    "d": 3,
+    "techo": "tablas",
+    "fachada": "madera",
+    "puerta": 2.5,
+    "ventanas": []
+   }
+  }
+ ]
+}

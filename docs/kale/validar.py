@@ -11,13 +11,21 @@ def segs(path):
     for a,b in zip(path,path[1:]):
         n=int(max(abs(b[0]-a[0]),abs(b[1]-a[1]))*4)+1
         for i in range(n+1):yield (a[0]+(b[0]-a[0])*i/n,a[1]+(b[1]-a[1])*i/n)
-rects=[(b['id'],b['ext']['x'],b['ext']['y'],b['ext']['w'],b['ext']['d']) for b in B]
+rects=[(b['id'],b['ext']['x'],b['ext']['y'],b['ext']['w'],b['ext']['d']) for b in B if not b.get('oculto')]
 for o in M['objetos']:
-    if 'w' in o and o['t'] not in('empalizada','grada'):rects.append((o['n'],o['x'],o['y'],o['w'],o['h']))
+    if 'w' in o and o['t'] not in('empalizada','grada','muralla'):rects.append((o['n'],o['x'],o['y'],o['w'],o['h']))
 for i,a in enumerate(rects):
     for b in rects[i+1:]:
         if a[1]<b[1]+b[3] and b[1]<a[1]+a[3] and a[2]<b[2]+b[4] and b[2]<a[2]+a[4]:err.append(f'se pisan: {a[0]} y {b[0]}')
+for o in M['objetos']:
+    if o['t']!='muralla':continue
+    for b in B:
+        e=b['ext']
+        if b.get('oculto'):continue
+        inside_x=o['x']<e['x']+e['w'] and e['x']<o['x']+o['w'];inside_y=o['y']<e['y']+e['d'] and e['y']<o['y']+o['h']
+        if inside_x and inside_y and not(o['x']+.6<=e['x'] and e['x']+e['w']<=o['x']+o['w']-.6 and o['y']+.6<=e['y'] and e['y']+e['d']<=o['y']+o['h']-.6):err.append(f"{b['id']} pisa la muralla")
 for b in B:
+    if b.get('oculto'):continue  # solo interior (la batería de la muralla): se entra por un objeto, no por una puerta de calle
     e=b['ext'];corn=[(e['x'],e['y']),(e['x']+e['w'],e['y']),(e['x'],e['y']+e['d']),(e['x']+e['w'],e['y']+e['d'])]
     if not e.get('pilotes'):
         for c in corn:

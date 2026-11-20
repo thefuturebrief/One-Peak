@@ -89,7 +89,7 @@ El bote del Acto 1 no cruza Reverse Mountain. En Loguetown hace falta un barco d
    - cosas para mirar;
    - el nombre de la tripulación con Corso;
    - el Cuervo sin nombre.
-2. **Motor de islas:**
+2. **Motor de islas (hecho):**
    - cada isla con su plano;
    - el juego carga la que toca;
    - se puede guardar en el mar y en otras islas.
@@ -101,9 +101,13 @@ El bote del Acto 1 no cruza Reverse Mountain. En Loguetown hace falta un barco d
    - El dibujo, último y con su propia revisión.
 4. **Periódico diario.**
 5. **Catálogo de frutas:** datos y hoja de diseños para aprobar. El sistema de comer y usar entra con Loguetown.
-6. **La parada corta**, cuando la isla esté decidida.
+6. **Shells Town** (Acto 1, hecho): ver `docs/shells-town.md`. Va antes que el mapa y el periódico.
 
-## Lo que falta decidir
-- La parada corta: ¿Shells Town, una isla propia u otra?
-- La Terminal Gris: ¿antes o después del incendio del canon? Depende del año en que transcurre el juego.
-- El apodo del forastero: ¿se queda "el Cuervo"? Encaja con su barco, la Corneja, y con la pista que ya te da.
+## Decisiones de la segunda ronda
+- **Forastero:** la Medusa Gris, con la medusa de la bandera de Dorne como pista.
+- **Parada corta:** Shells Town, que pasa a ser el Acto 1. Se llega a Goa en un mercante, huyendo; el barco propio se resuelve en Goa.
+- **Terminal Gris:** después del incendio, reconstruida (lo decidí yo, las razones están en `docs/shells-town.md`).
+- **La fruta:** se come por impulso en la subasta y se despierta en la pelea final.
+- **Rareza por tipo:** la Logia es rara y la Zoan mítica rarísima.
+
+El diseño completo del Acto 1 está en `docs/shells-town.md`.

@@ -37,6 +37,8 @@ const TIENDAS = {
   gaspar: { n: 'Aparejos Gaspar', vende: ['cuerda', 'anzuelos', 'vendas', 'daga', 'garrote'], compra: true, hola: 'Mira, pero no toques lo que no vayas a pagar.' },
   nell: { n: 'Panadería', vende: ['pan'], hola: '¡Pan del día! Lo demás, mañana.' },
   mara: { n: 'El Ancla Seca', vende: ['guiso'], hola: 'Guiso del día. Lo que haya, no preguntes.' },
+  celes: { n: 'Posada La Concha', vende: ['pan', 'guiso'], hola: 'Pan y guiso. Lo de la cama se habla aparte, cielo.' },
+  ulloa: { n: 'Pertrechos Ulloa', vende: ['cuerda', 'anzuelos', 'vendas', 'emulsion', 'daga', 'garrote'], compra: true, hola: 'Lo que un barco necesita, y lo que no sabe que necesita.' },
   medico: { n: 'Doctor Ansel', vende: ['emulsion', 'vendas'], hola: 'Al precio de coste. Que no se diga.' },
 };
 let TIENDA = null;

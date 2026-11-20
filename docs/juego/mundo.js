@@ -1,6 +1,8 @@
 // Kalé construida desde plano.json con piezas LPC. Todo se mide en casillas de 32 px.
 // Capas: mar animado, suelo (estático), sombras según el sol, objetos y personajes ordenados por su base, luz.
 const T = 32;
+// islas: cada una registra su plano, su gente, sus objetos y sus ganchos (tick, dibujar, encima, restaurar). Kalé en juego.js.
+const ISLAS = {};
 const ATLAS = { ter: 'assets/terreno.png', ext: 'assets/exterior.png', obj: 'assets/objetos.png', int: 'assets/interior.png', cab: 'assets/cabana.png', paja: 'assets/paja.png', pue: 'assets/puertas.png', casa: 'assets/casa.png' };
 const A = {};
 const R = { // recortes exactos [atlas, x, y, w, h]
@@ -80,11 +82,12 @@ function drawSign(g, cx, y, icon) {
   g.fillStyle = '#2a1a12'; g.fillRect(cx - 15, y, 30, 18); g.fillStyle = '#8a5a34'; g.fillRect(cx - 14, y + 1, 28, 16); g.fillStyle = '#a8744a'; g.fillRect(cx - 14, y + 1, 28, 2);
   g.fillStyle = '#f2d27a';
   if (icon === 'jarra') { g.fillRect(cx - 5, y + 5, 8, 9); g.fillStyle = '#fff6dc'; g.fillRect(cx - 5, y + 4, 8, 3); g.fillStyle = '#f2d27a'; g.fillRect(cx + 3, y + 7, 3, 1); g.fillRect(cx + 5, y + 7, 1, 5); g.fillRect(cx + 3, y + 11, 3, 1); }
+  else if (icon === 'concha') { g.beginPath(); g.moveTo(cx, y + 15); g.lineTo(cx - 8, y + 6); g.quadraticCurveTo(cx, y + 1, cx + 8, y + 6); g.closePath(); g.fill(); g.fillStyle = '#c8962e'; for (const dx of [-4, 0, 4]) g.fillRect(cx + dx * .8, y + 6, 1, 8); }
   else if (icon === 'ancla') { g.fillRect(cx - 1, y + 3, 2, 11); g.fillRect(cx - 4, y + 5, 8, 2); g.fillRect(cx - 6, y + 12, 12, 2); g.fillRect(cx - 6, y + 10, 2, 2); g.fillRect(cx + 4, y + 10, 2, 2); }
   else { g.fillRect(cx - 8, y + 7, 16, 6); g.fillStyle = '#c88a3a'; g.fillRect(cx - 8, y + 11, 16, 2); g.fillStyle = '#fff2c0'; g.fillRect(cx - 5, y + 8, 2, 2); g.fillRect(cx + 1, y + 8, 2, 2); }
 }
-const DOORCOLOR = { casa: 'azul', taberna: 'marron', brin: 'verde', tienda: 'roja', medico: 'verde', faro: 'roja', panaderia: 'azul', marina: 'marron', pura: 'verde', rosa: 'roja' };
-const SIGN = { taberna: 'jarra', tienda: 'ancla', panaderia: 'pan' };
+const DOORCOLOR = { cantina: 'marron', posada: 'azul', pertrechos: 'roja', cuartel: 'marron', casa_no: 'verde', casa_ne: 'azul', casa_s1: 'roja', casa_s2: 'verde', casa_s3: 'marron', casa: 'azul', taberna: 'marron', brin: 'verde', tienda: 'roja', medico: 'verde', faro: 'roja', panaderia: 'azul', marina: 'marron', pura: 'verde', rosa: 'roja' };
+const SIGN = { taberna: 'jarra', tienda: 'ancla', panaderia: 'pan', cantina: 'jarra', pertrechos: 'ancla', posada: 'concha' };
 function buildBuilding(b) {
   const e = b.ext, wx = e.x * T, wy = e.y * T, w = e.w * T, base = (e.y + e.d) * T, over = T / 2;
   if (e.redondo) return buildLighthouse(b);
@@ -137,9 +140,10 @@ const distPts = (pts, x, y) => { let m = 1e9; for (let i = 0; i < pts.length - 1
 // ---------- isla ----------
 const WORLD = { ready: false, sprites: [], blocks: [], doors: [], trees: [], lamps: [], foam: [] };
 function buildIsland(P) {
+  Object.assign(WORLD, { ready: false, sprites: [], blocks: [], doors: [], trees: [], lamps: [], foam: [], barcoNegro: null });
   const M = P.mapa, S = p => p.map(([x, y]) => [x * T, y * T]);
   const land = wobble(S(M.costa), 10, 7), beach = wobble(S(M.playa), 8, 8), cliff = wobble(S(M.acantilado), 8, 9);
-  WORLD.land = land; WORLD.w = M.w * T; WORLD.h = M.h * T;
+  WORLD.land = land; WORLD.w = M.w * T; WORLD.h = M.h * T; const xs = M.costa.map(p => p[0]), ys = M.costa.map(p => p[1]); WORLD.bbox = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
   const [c, g] = mkCanvas(WORLD.w, WORLD.h);
   // muelles y su sombra sobre el agua (el mar se dibuja aparte, animado)
   for (const [x, y, w, h] of M.muelle) { g.fillStyle = 'rgba(0,20,40,.3)'; g.fillRect(x * T + 6, y * T + 8, w * T, h * T); }
@@ -177,20 +181,25 @@ function buildIsland(P) {
   // huerto: surcos y verduras
   const ob = (t) => M.objetos.filter(o => o.t === t);
   for (const o of ob('huerto')) { for (let r = 0; r < o.h * 2; r++) { g.fillStyle = r % 2 ? '#6a4a2c' : '#7d5834'; g.fillRect(o.x * T, o.y * T + r * T / 2, o.w * T, T / 2); } for (let r = 0; r < o.h * 2; r += 2) { const v = R.veg[(r / 2) % 3]; for (let px = 2; px + v[3] <= o.w * T; px += v[3] + 4) put(g, v, o.x * T + px, o.y * T + (r + 1) * T / 2 - v[4] + 4); } }
+  for (const o of ob('muralla')) { g.fillStyle = pat(g, R.dirt); g.fillRect((o.x + .4) * T, o.y * T, (o.w - .8) * T, (o.h - .4) * T); g.fillStyle = 'rgba(90,70,50,.25)'; g.fillRect((o.x + .4) * T, o.y * T, (o.w - .8) * T, (o.h - .4) * T);
+    for (let k = 0; k < 500; k++) { g.fillStyle = k % 2 ? 'rgba(60,45,30,.35)' : 'rgba(240,225,200,.3)'; g.fillRect((o.x + .5 + hash(k, 1, 95) * (o.w - 1)) * T, (o.y + hash(k, 2, 95) * (o.h - .5)) * T, 2, 1); } }
+  for (const o of ob('foso')) { g.fillStyle = 'rgba(60,40,20,.35)'; g.fillRect(o.x * T - 4, o.y * T - 4, o.w * T + 8, o.h * T + 8); g.fillStyle = pat(g, R.sand); g.fillRect(o.x * T, o.y * T, o.w * T, o.h * T);
+    for (let k = 0; k < 60; k++) { g.fillStyle = k % 3 ? 'rgba(120,90,50,.35)' : 'rgba(255,240,200,.4)'; g.fillRect(o.x * T + hash(k, 1, 93) * o.w * T, o.y * T + hash(k, 2, 93) * o.h * T, 2, 1); }
+    g.strokeStyle = 'rgba(120,80,40,.5)'; g.lineWidth = 1; g.strokeRect(o.x * T + 6, o.y * T + 6, o.w * T - 12, o.h * T - 12); }
   for (const o of ob('grada')) { g.fillStyle = pat(g, R.planks); g.fillRect(o.x * T, o.y * T, o.w * T, o.h * T); g.fillStyle = 'rgba(0,0,0,.25)'; for (let i = 0; i < o.h; i++) g.fillRect(o.x * T, (o.y + i) * T, o.w * T, 2); }
   for (const o of ob('astillero')) { g.fillStyle = 'rgba(90,60,30,.25)'; g.fillRect(o.x * T, o.y * T, o.w * T, o.h * T); for (let i = 0; i < 40; i++) { g.fillStyle = 'rgba(220,180,120,.7)'; g.fillRect(o.x * T + hash(i, 1, 30) * o.w * T, o.y * T + hash(i, 2, 30) * o.h * T, 3, 1); } }
   // mercado: toldos con pescado
   for (const o of ob('puestos')) for (let i = 0; i < 3; i++) WORLD.sprites.push(stall((o.x + i * 2.8) * T, o.y * T, i));
   // botes amarrados y el barco de Dorne
-  for (const [x, y] of M.botes) put(g, hash(x, y, 2) < .5 ? R.boat : R.boat2, x * T - 60, y * T - 30);
-  { const [bx, by, bw, bh] = M.barcoNegro; WORLD.barcoNegro = barcoSprite('pirata', bx * T, (by + bh) * T, bw * T); }
+  for (const [x, y] of M.botes || []) put(g, hash(x, y, 2) < .5 ? R.boat : R.boat2, x * T - 60, y * T - 30);
+  if (M.barcoNegro) { const [bx, by, bw, bh] = M.barcoNegro; WORLD.barcoNegro = barcoSprite('pirata', bx * T, (by + bh) * T, bw * T); }
   WORLD.ground = c;
   WORLD.beach = beach;
   // espuma: puntos sobre la costa
   for (let i = 0; i < land.length; i += 2) WORLD.foam.push(land[i]);
-  WORLD.sprites.push(WORLD.barcoNegro);
+  if (WORLD.barcoNegro) WORLD.sprites.push(WORLD.barcoNegro);
   // edificios
-  for (const b of P.edificios) { const s = buildBuilding(b); WORLD.sprites.push({ kind: 'bld', canvas: s.canvas, x: s.x, y: s.y, key: s.base, s }); WORLD.blocks.push(s.foot); WORLD.doors.push(s); }
+  for (const b of P.edificios) { if (b.oculto) continue; const s = buildBuilding(b); WORLD.sprites.push({ kind: 'bld', canvas: s.canvas, x: s.x, y: s.y, key: s.base, s }); WORLD.blocks.push(s.foot); WORLD.doors.push(s); }
   // objetos con volumen
   for (const o of M.objetos) {
     if (o.t === 'monumento') WORLD.sprites.push(monument(o.x * T, o.y * T));
@@ -203,17 +212,25 @@ function buildIsland(P) {
       for (const x of [gap[0], gap[1]]) WORLD.sprites.push({ canvas: posteGrande(), x: x - 5, y: y1 - 32, key: y1 + 3 });
       WORLD.blocks.push([x0, y0 - 6, x1 - x0, 10], [x0, y1 - 6, gap[0] - x0, 10], [gap[1], y1 - 6, x1 - gap[1], 10], [x0 - 4, y0, 8, y1 - y0], [x1 - 4, y0, 8, y1 - y0]); }
     if (o.t === 'astillero') { WORLD.sprites.push(shipyard(o.x * T, o.y * T, o.w * T, o.h * T)); }
+    if (o.t === 'muralla') construirMuralla(o);
+    if (o.t === 'escalera') WORLD.sprites.push(escaleraMuro(o.x * T, o.y * T));
+    if (o.t === 'estatua') { for (const est of ['tapada', 'descubierta', 'rota']) WORLD.sprites.push({ canvas: estatuaCanvas(est), x: o.x * T - 60, y: o.y * T - 182 + 26, key: o.y * T + 26, visible: () => (WORLD.estatua || 'tapada') === est }); WORLD.blocks.push([o.x * T - 38, o.y * T + 4, 76, 24]); }
+    if (o.t === 'foso') { const x0 = o.x * T, y0 = o.y * T, x1 = (o.x + o.w) * T, y1 = (o.y + o.h) * T, cuerda = (len) => { const [cc, cg] = mkCanvas(len, 14); cg.strokeStyle = '#2a1a10'; cg.lineWidth = 3; cg.beginPath(); cg.moveTo(0, 4); cg.quadraticCurveTo(len / 2, 12, len, 4); cg.stroke(); cg.strokeStyle = '#b89a6a'; cg.lineWidth = 1.5; cg.stroke(); return cc; };
+      WORLD.sprites.push({ canvas: cuerda(x1 - x0), x: x0, y: y0 - 22, key: y0 }, { canvas: cuerda(x1 - x0), x: x0, y: y1 - 22, key: y1 });
+      for (const [px, py] of [[x0, y0], [x1, y0], [x0, y1], [x1, y1], [(x0 + x1) / 2, y0], [(x0 + x1) / 2, y1]]) WORLD.sprites.push({ canvas: postePerfil(), x: px - 4, y: py - 26, key: py + 1 }); }
   }
   // árboles: el bosquecillo y algunos sueltos, lejos de edificios y caminos
-  const bosque = S(M.bosque), free = (x, y) => inPoly([x, y], land) && !WORLD.blocks.some(([a, b, w, h]) => x > a - 40 && x < a + w + 40 && y > b - 30 && y < b + h + 70) && !M.caminos.some(cm => near(cm.p.map(([a, b]) => [a * T, b * T]), x, y) < 2.8 * T) && !WORLD.doors.some(d => Math.hypot(d.door[0] - x, d.door[1] + 2 * T - y) < 3.5 * T) && Math.hypot(x - pz.x * T, y - pz.y * T) > (pz.r + 2) * T && !inPoly([x, y], beach);
+  const bosque = S(M.bosque || []), free = (x, y) => inPoly([x, y], land) && !M.objetos.some(o => o.t === 'muralla' && x > o.x * T - 40 && x < (o.x + o.w) * T + 40 && y > o.y * T - 30 && y < (o.y + o.h) * T + 90) && !WORLD.blocks.some(([a, b, w, h]) => x > a - 40 && x < a + w + 40 && y > b - 30 && y < b + h + 70) && !M.caminos.some(cm => near(cm.p.map(([a, b]) => [a * T, b * T]), x, y) < 2.8 * T) && !WORLD.doors.some(d => Math.hypot(d.door[0] - x, d.door[1] + 2 * T - y) < 3.5 * T) && Math.hypot(x - pz.x * T, y - pz.y * T) > (pz.r + 2) * T && !inPoly([x, y], beach);
   const near = (pts, x, y) => { let m = 1e9; for (let i = 0; i < pts.length - 1; i++) { const [a, b] = [pts[i], pts[i + 1]], dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / (dx * dx + dy * dy || 1))); m = Math.min(m, Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy)); } return m; };
-  for (let i = 0; i < 400 && WORLD.trees.length < 46; i++) { const inB = i < 160, x = inB ? (53 + hash(i, 1, 40) * 9) * T : (14 + hash(i, 1, 41) * 47) * T, y = inB ? (6.5 + hash(i, 2, 40) * 7) * T : (5 + hash(i, 2, 41) * 33) * T;
+  const AR = M.arbolado || {}, caja = pts => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); return [Math.min(...xs), Math.min(...ys), Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)]; },
+    [qx, qy, qw, qh] = AR.bosque || (M.bosque ? caja(M.bosque) : [0, 0, 0, 0]), [ux, uy, uw, uh] = AR.sueltos || caja(M.costa), nArb = AR.n ?? 46;
+  for (let i = 0; i < 400 && WORLD.trees.length < nArb; i++) { const inB = i < 160, x = inB ? (qx + hash(i, 1, 40) * qw) * T : (ux + hash(i, 1, 41) * uw) * T, y = inB ? (qy + hash(i, 2, 40) * qh) * T : (uy + hash(i, 2, 41) * uh) * T;
     if ((inB ? inPoly([x, y], bosque) : hash(i, 3, 42) < .5) && free(x, y) && !WORLD.trees.some(t => Math.hypot(t[0] - x, t[1] - y) < 70)) WORLD.trees.push([x, y]); }
   for (const [x, y] of WORLD.trees) { WORLD.sprites.push({ tree: true, x, y, key: y }); WORLD.blocks.push([x - 12, y - 10, 24, 14]); }
   // cosas sueltas que dan vida
-  const props = [['barrel', 13.4, 20.4], ['barrel', 14.1, 20.6], ['crate', 6.4, 22.8], ['crate', 7.5, 22.8], ['sacks', 9.9, 23], ['tuna', 3.6, 22.6], ['woodpile', 43.6, 31.6], ['cart', 33.6, 20.4], ['barrel', 30.8, 15.8], ['crate', 31, 33.2], ['logs', 25.5, 35.3], ['stump', 20, 30], ['sack', 18.8, 19.8], ['barrel', 41.8, 18.6]];
+  const props = M.props || [];
   for (const [k, x, y] of props) { const r = R[k]; WORLD.sprites.push({ img: r, x: x * T - r[3] / 2, y: y * T - r[4], key: y * T }); WORLD.blocks.push([x * T - r[3] / 2 + 2, y * T - 12, r[3] - 4, 12]); }
-  for (const [x, y] of [[26, 22.8], [34, 22.8], [22.2, 17.4], [35.4, 25.4], [14.8, 20.7], [50, 22.8], [59.2, 30.4]]) { WORLD.lamps.push([x * T, y * T]); WORLD.sprites.push({ lamp: true, x: x * T, y: y * T, key: y * T }); WORLD.blocks.push([x * T - 4, y * T - 6, 8, 8]); }
+  for (const [x, y] of M.faroles || []) { WORLD.lamps.push([x * T, y * T]); WORLD.sprites.push({ lamp: true, x: x * T, y: y * T, key: y * T }); WORLD.blocks.push([x * T - 4, y * T - 6, 8, 8]); }
   WORLD.ready = true;
 }
 function stall(x, y, i) { const [c, g] = mkCanvas(76, 70), col = ['#c8402e', '#2f78b7', '#d39418'][i % 3];
@@ -404,7 +421,8 @@ function vida(g, [cx, cy], now, VW, VH, h, fase) {
     for (let k = 0; k < 9; k++) { const a = ((t * .22 + k / 9) % 1), x = x0 + a * 26 + Math.sin(t * 1.3 + k) * 3 * a, y = y0 - a * 70, r = 3 + a * 9;
       g.fillStyle = `rgba(${night ? '120,120,140' : '235,235,240'},${(1 - a) * .45})`; g.beginPath(); g.arc(x - cx, y - cy, r, 0, 7); g.fill(); } }
   // mariposas de día cerca de las flores, luciérnagas de noche
-  for (let i = 0; i < 14; i++) { const hx = (14 + hash(i, 1, 61) * 46) * T, hy = (8 + hash(i, 2, 61) * 30) * T; if (!inPoly([hx, hy], WORLD.land) || !inV(hx, hy)) continue;
+  const [bx0, by0, bx1, by1] = WORLD.bbox;
+  for (let i = 0; i < 14; i++) { const hx = (bx0 + 2 + hash(i, 1, 61) * (bx1 - bx0 - 4)) * T, hy = (by0 + 4 + hash(i, 2, 61) * (by1 - by0 - 8)) * T; if (!inPoly([hx, hy], WORLD.land) || !inV(hx, hy)) continue;
     if (!night && h > 7 && h < 18.5 && i < 8) { const x = hx + Math.sin(t * .7 + i) * 26 + Math.sin(t * 2.3 + i * 2) * 6, y = hy + Math.cos(t * .5 + i) * 14 + Math.sin(t * 3.1 + i) * 4 - 14, fl = Math.sin(t * 22 + i) > 0, col = ['#fff6dc', '#ffd85a', '#e8a0ff', '#9ad8ff'][i % 4];
       g.fillStyle = 'rgba(0,0,0,.18)'; g.fillRect(Math.round(x - cx - 1), Math.round(y - cy + 16), 3, 1); g.fillStyle = col; if (fl) { g.fillRect(Math.round(x - cx - 3), Math.round(y - cy - 1), 2, 3); g.fillRect(Math.round(x - cx + 2), Math.round(y - cy - 1), 2, 3); } else { g.fillRect(Math.round(x - cx - 1), Math.round(y - cy - 2), 1, 3); g.fillRect(Math.round(x - cx + 1), Math.round(y - cy - 2), 1, 3); }
       g.fillStyle = '#2a1a12'; g.fillRect(Math.round(x - cx), Math.round(y - cy - 1), 1, 3); }
@@ -426,8 +444,8 @@ function vida(g, [cx, cy], now, VW, VH, h, fase) {
 // ---------- barcos: de perfil, como las fachadas, con proa al este ----------
 // estilo 'pirata' (casco negro, velas negras con la medusa) o 'marina' (casco blanco y azul, velas con la gaviota)
 function barcoCanvas(estilo, L = 300) {
-  const K = estilo === 'corneja', P = estilo === 'pirata' || K, W = L + 70, H = 320, [c, g] = mkCanvas(W, H), O = '#120c0e', wl = H - 40, x0 = 10, x1 = x0 + L;
-  const C = K ? { casco: ['#24242c', '#34343e', '#464652'], franja: '#7a2a2a', vela: ['#3a3a44', '#4c4c58', '#5e5e6a'], marca: '#e8e2d8', bandera: '#141014', luz: '#ffcf6a' } : P ? { casco: ['#1a1416', '#2a2024', '#3a2e32'], franja: '#8a6a2a', vela: ['#1e1a1e', '#2e282e', '#3e363e'], marca: '#e8e2d8', bandera: '#141014', luz: '#ffcf6a' }
+  const K = estilo === 'corneja', MC = estilo === 'mercante', P = estilo === 'pirata' || K, W = L + 70, H = 320, [c, g] = mkCanvas(W, H), O = '#120c0e', wl = H - 40, x0 = 10, x1 = x0 + L;
+  const C = MC ? { casco: ['#4a2e1a', '#6a4428', '#8a5c36'], franja: '#d8c8a0', vela: ['#cfc2a4', '#e2d6ba', '#f0e6cc'], marca: '#d8b04a', bandera: '#3f6a44', luz: '#ffcf6a' } : K ? { casco: ['#24242c', '#34343e', '#464652'], franja: '#7a2a2a', vela: ['#3a3a44', '#4c4c58', '#5e5e6a'], marca: '#e8e2d8', bandera: '#141014', luz: '#ffcf6a' } : P ? { casco: ['#1a1416', '#2a2024', '#3a2e32'], franja: '#8a6a2a', vela: ['#1e1a1e', '#2e282e', '#3e363e'], marca: '#e8e2d8', bandera: '#141014', luz: '#ffcf6a' }
     : { casco: ['#d8dce4', '#eef2f6', '#ffffff'], franja: '#2f4f9a', vela: ['#d8dce4', '#eef0f4', '#ffffff'], marca: '#2f4f9a', bandera: '#2f4f9a', luz: '#ffe8a8' };
   // reflejo y sombra en el agua
   g.fillStyle = 'rgba(0,15,35,.35)'; g.beginPath(); g.ellipse(x0 + L / 2 + 6, wl + 14, L / 2 + 14, 16, 0, 0, 7); g.fill();
@@ -439,10 +457,10 @@ function barcoCanvas(estilo, L = 300) {
   g.strokeStyle = 'rgba(0,0,0,.28)'; g.lineWidth = 1; for (let y = wl - 56; y < wl; y += 6) { g.beginPath(); g.moveTo(x0, y); g.lineTo(x1 + 8, y + (y - wl) * .04); g.stroke(); }
   for (let k = 0; k < 40; k++) { const px = x0 + hash(k, 1, 51) * L, py = wl - 50 + hash(k, 2, 51) * 46; g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(px, py, 1, 4); }
   g.fillStyle = C.franja; g.fillRect(x0, wl - 40, L + 10, 4); g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(x0, wl - 40, L + 10, 1);
-  g.fillStyle = P ? '#3a5a3a' : '#7a2a2a'; g.fillRect(x0, wl - 6, L + 10, 10); // obra viva
+  g.fillStyle = P || MC ? '#3a5a3a' : '#7a2a2a'; g.fillRect(x0, wl - 6, L + 10, 10); // obra viva
   g.restore();
   // cañoneras
-  for (let k = 0, nk = K ? 3 : 7; k < nk; k++) { const px = x0 + 66 + k * (L - 120) / Math.max(1, nk - 1), py = wl - 31; g.fillStyle = O; g.fillRect(px - 5, py - 4, 10, 9); g.fillStyle = P ? '#5a2a1a' : '#24304a'; g.fillRect(px - 4, py - 3, 8, 7); g.fillStyle = '#0a0a0c'; g.beginPath(); g.arc(px, py + 1, 2.4, 0, 7); g.fill(); }
+  for (let k = 0, nk = K ? 3 : MC ? 2 : 7; k < nk; k++) { const px = x0 + 66 + k * (L - 120) / Math.max(1, nk - 1), py = wl - 31; g.fillStyle = O; g.fillRect(px - 5, py - 4, 10, 9); g.fillStyle = P || MC ? '#5a2a1a' : '#24304a'; g.fillRect(px - 4, py - 3, 8, 7); g.fillStyle = '#0a0a0c'; g.beginPath(); g.arc(px, py + 1, 2.4, 0, 7); g.fill(); }
   // castillo de popa con ventanas encendidas
   g.fillStyle = O; g.fillRect(x0 - 2, wl - 86, 56, 26); g.fillStyle = C.casco[1]; g.fillRect(x0, wl - 84, 52, 22); g.fillStyle = C.franja; g.fillRect(x0, wl - 84, 52, 3);
   for (let k = 0; k < 3; k++) { g.fillStyle = O; g.fillRect(x0 + 6 + k * 15, wl - 78, 9, 9); g.fillStyle = C.luz; g.fillRect(x0 + 7 + k * 15, wl - 77, 7, 7); g.fillStyle = 'rgba(255,255,255,.6)'; g.fillRect(x0 + 7 + k * 15, wl - 77, 2, 3); }
@@ -450,6 +468,7 @@ function barcoCanvas(estilo, L = 300) {
   // bauprés y mascarón
   g.strokeStyle = O; g.lineWidth = 4; g.beginPath(); g.moveTo(x1 - 6, wl - 54); g.lineTo(x1 + 56, wl - 84); g.stroke(); g.strokeStyle = '#6a4a2a'; g.lineWidth = 2; g.stroke();
   if (P) { g.fillStyle = '#d8d0b8'; g.beginPath(); g.arc(x1 + 4, wl - 46, 5, 0, 7); g.fill(); g.strokeStyle = '#d8d0b8'; g.lineWidth = 1.5; for (let k = 0; k < 5; k++) { g.beginPath(); g.moveTo(x1 + 2 + k, wl - 42); g.quadraticCurveTo(x1 + 8 + k * 2, wl - 30, x1 + k * 3, wl - 24); g.stroke(); } }
+  else if (MC) { g.fillStyle = O; g.beginPath(); g.ellipse(x1 + 6, wl - 47, 9, 6, -.3, 0, 7); g.fill(); g.fillStyle = '#6a8a4a'; g.beginPath(); g.ellipse(x1 + 6, wl - 47, 7, 4.5, -.3, 0, 7); g.fill(); g.fillStyle = O; g.fillRect(x1 + 9, wl - 50, 2, 2); }
   else { g.fillStyle = '#f4f6fa'; g.beginPath(); g.moveTo(x1 - 2, wl - 50); g.lineTo(x1 + 14, wl - 56); g.lineTo(x1 + 4, wl - 44); g.fill(); g.fillStyle = '#f0a030'; g.fillRect(x1 + 12, wl - 56, 4, 2); }
   // mástiles, vergas y velas
   const masts = K ? [[x0 + L * .52, 190]] : [[x0 + 110, 200], [x0 + 210, 176]];
@@ -462,16 +481,17 @@ function barcoCanvas(estilo, L = 300) {
       g.beginPath(); g.moveTo(mx - ww / 2, yy); g.lineTo(mx + ww / 2, yy); g.quadraticCurveTo(mx + ww / 2 + 8, yy + hh / 2, mx + ww / 2 - 4, yy + hh); g.quadraticCurveTo(mx, yy + hh + 10, mx - ww / 2 + 4, yy + hh); g.quadraticCurveTo(mx - ww / 2 - 8, yy + hh / 2, mx - ww / 2, yy); g.closePath();
       g.fillStyle = O; g.lineWidth = 3; g.strokeStyle = O; g.stroke(); const sg = g.createLinearGradient(mx - ww / 2, 0, mx + ww / 2, 0); sg.addColorStop(0, C.vela[0]); sg.addColorStop(.35, C.vela[2]); sg.addColorStop(1, C.vela[1]); g.fillStyle = sg; g.fill();
       g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 1; for (let k = 1; k < 4; k++) { g.beginPath(); g.moveTo(mx - ww / 2 + k * ww / 4, yy + 2); g.quadraticCurveTo(mx - ww / 2 + k * ww / 4 + 3, yy + hh / 2, mx - ww / 2 + k * ww / 4, yy + hh); g.stroke(); }
+      if (MC) for (let k = 0; k < 3; k++) { const px = mx - ww / 2 + 12 + hash(k, mx, 5) * (ww - 34), py = yy + 8 + hash(mx, k, 6) * (hh - 26); g.fillStyle = 'rgba(120,90,50,.28)'; g.fillRect(px, py, 14 + k * 3, 11); g.strokeStyle = 'rgba(90,60,30,.5)'; g.setLineDash([2, 2]); g.strokeRect(px + .5, py + .5, 13 + k * 3, 10); g.setLineDash([]); }
       if (P) for (let k = 0; k < 3; k++) { g.fillStyle = 'rgba(0,0,0,.5)'; g.fillRect(mx - ww / 2 + 10 + hash(k, mx, 3) * (ww - 20), yy + hh - 6 - hash(k, 2, mx) * 10, 3, 6); } } }
   // emblema en la vela grande
   const [ex, eh] = masts[0], ey = wl - 50 - eh + 96 + 30;
-  if (K) { /* la balandra no lleva emblema */ } else if (P) { g.fillStyle = C.marca; g.beginPath(); g.ellipse(ex, ey - 6, 15, 11, 0, Math.PI, 0); g.fill(); g.fillRect(ex - 15, ey - 6, 30, 3); g.strokeStyle = C.marca; g.lineWidth = 2.5; for (let k = 0; k < 6; k++) { const sx = ex - 12 + k * 5; g.beginPath(); g.moveTo(sx, ey - 3); g.bezierCurveTo(sx - 5, ey + 8, sx + 6, ey + 14, sx + (k % 2 ? 4 : -4), ey + 22); g.stroke(); }
+  if (K || MC) { /* la balandra y el mercante no llevan emblema */ } else if (P) { g.fillStyle = C.marca; g.beginPath(); g.ellipse(ex, ey - 6, 15, 11, 0, Math.PI, 0); g.fill(); g.fillRect(ex - 15, ey - 6, 30, 3); g.strokeStyle = C.marca; g.lineWidth = 2.5; for (let k = 0; k < 6; k++) { const sx = ex - 12 + k * 5; g.beginPath(); g.moveTo(sx, ey - 3); g.bezierCurveTo(sx - 5, ey + 8, sx + 6, ey + 14, sx + (k % 2 ? 4 : -4), ey + 22); g.stroke(); }
     g.fillStyle = '#1e1a1e'; g.fillRect(ex - 7, ey - 11, 4, 3); g.fillRect(ex + 3, ey - 11, 4, 3); }
   else { g.fillStyle = C.marca; g.beginPath(); g.moveTo(ex - 24, ey - 6); g.quadraticCurveTo(ex - 10, ey - 18, ex, ey - 6); g.quadraticCurveTo(ex + 10, ey - 18, ex + 24, ey - 6); g.quadraticCurveTo(ex + 10, ey - 12, ex, ey); g.quadraticCurveTo(ex - 10, ey - 12, ex - 24, ey - 6); g.fill();
     g.font = '900 15px Georgia, serif'; g.textAlign = 'center'; g.fillText('MARINE', ex, ey + 20); const [ex2, eh2] = masts[1]; g.fillText('MARINE', ex2, wl - 50 - eh2 + 96 + 40); }
   // banderas en lo alto
   if (!K) for (const [mx, mh] of masts) { const top = wl - 50 - mh; g.fillStyle = O; g.fillRect(mx - 1, top - 16, 2, 18); g.fillStyle = C.bandera; g.beginPath(); g.moveTo(mx + 1, top - 16); g.lineTo(mx + 26, top - 13); g.lineTo(mx + 22, top - 8); g.lineTo(mx + 27, top - 3); g.lineTo(mx + 1, top - 4); g.fill();
-    g.fillStyle = P ? C.marca : '#ffffff'; g.beginPath(); g.arc(mx + 11, top - 10, 2.5, 0, 7); g.fill(); }
+    g.fillStyle = P || MC ? C.marca : '#ffffff'; g.beginPath(); g.arc(mx + 11, top - 10, MC ? 3.5 : 2.5, 0, 7); g.fill(); }
   // espuma en la línea de flotación
   g.fillStyle = 'rgba(255,255,255,.7)'; for (let k = 0; k < 26; k++) g.fillRect(x0 + 30 + k * (L - 40) / 25 + hash(k, 1, 61) * 6, wl + 1 + hash(k, 2, 61) * 3, 4 + hash(k, 3, 61) * 5, 1);
   return { canvas: c, ox: x0, wl };
@@ -491,3 +511,70 @@ let _poste, _posteG;
 function postePerfil() { if (_poste) return _poste; const [c, g] = mkCanvas(8, 30); g.fillStyle = 'rgba(20,12,6,.25)'; g.fillRect(0, 26, 8, 3); g.fillStyle = VALLA[0]; g.fillRect(1, 4, 6, 24); g.fillStyle = VALLA[2]; g.fillRect(2, 5, 4, 22); g.fillStyle = VALLA[3]; g.fillRect(2, 5, 1, 22);
   g.fillStyle = VALLA[1]; g.fillRect(2, 12, 4, 3); g.fillRect(2, 20, 4, 3); g.fillStyle = VALLA[0]; g.fillRect(2, 2, 4, 3); return _poste = c; }
 function posteGrande() { if (_posteG) return _posteG; const [c, g] = mkCanvas(10, 36); g.fillStyle = VALLA[0]; g.fillRect(0, 2, 10, 32); g.fillStyle = VALLA[1]; g.fillRect(1, 4, 8, 29); g.fillStyle = VALLA[3]; g.fillRect(1, 4, 2, 29); g.fillStyle = '#c8a040'; g.fillRect(0, 0, 10, 4); g.fillStyle = VALLA[0]; g.fillRect(0, 4, 10, 1); return _posteG = c; }
+// ---------- muralla de piedra (base de la Marina): caras al sur, almenas, portón y troneras con cañón ----------
+const PIEDRA = ['#24242c', '#44444e', '#5e5e68', '#7c7c86', '#9a9aa2'];
+function muroFrente(len, { H = 46, D = 14, troneras = [], almenas = 'frente' } = {}) {
+  const AL = 8, [c, g] = mkCanvas(len, AL + D + H), y0 = AL, yf = AL + D, O = PIEDRA[0];
+  // cara superior (adarve)
+  g.fillStyle = PIEDRA[3]; g.fillRect(0, y0, len, D); g.fillStyle = PIEDRA[4]; g.fillRect(0, y0, len, 1); g.fillStyle = 'rgba(0,0,0,.18)'; for (let x = 0; x < len; x += 12) g.fillRect(x, y0 + 1, 1, D - 1);
+  // cara frontal: sillares en hileras alternas
+  g.fillStyle = PIEDRA[1]; g.fillRect(0, yf, len, H);
+  for (let r = 0, y = yf; y < yf + H; r++, y += 8) for (let x = (r % 2) * -8; x < len; x += 16) { const k = hash(x, y, 81); g.fillStyle = k < .15 ? PIEDRA[2] : k > .9 ? '#3a3a42' : PIEDRA[1]; g.fillRect(x + 1, y + 1, 14, 6); g.fillStyle = 'rgba(255,255,255,.07)'; g.fillRect(x + 1, y + 1, 14, 1); }
+  g.fillStyle = 'rgba(0,0,0,.35)'; for (let y = yf; y < yf + H; y += 8) g.fillRect(0, y, len, 1);
+  for (let x = 0; x < len; x += 3) { const k = hash(x, 7, 82); if (k > .55) { g.fillStyle = k > .8 ? 'rgba(70,110,50,.55)' : 'rgba(50,80,40,.4)'; g.fillRect(x, yf + H - 2 - k * 7, 2, 2 + k * 7); } } // musgo al pie
+  g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(0, yf, len, 2); g.fillStyle = O; g.fillRect(0, yf + H - 1, len, 1);
+  // almenas
+  const ya = almenas === 'frente' ? yf - AL : y0 - AL + 2; for (let x = 2; x < len - 8; x += 18) { g.fillStyle = O; g.fillRect(x - 1, ya - 1, 12, AL + 2); g.fillStyle = PIEDRA[3]; g.fillRect(x, ya, 10, AL); g.fillStyle = PIEDRA[4]; g.fillRect(x, ya, 10, 1); }
+  // troneras con la boca del cañón asomando
+  for (const tx of troneras) { g.fillStyle = O; g.fillRect(tx - 10, yf + 12, 20, 16); g.fillStyle = '#121218'; g.fillRect(tx - 8, yf + 14, 16, 13); g.fillStyle = '#2c2c34'; g.beginPath(); g.arc(tx, yf + 21, 6, 0, 7); g.fill(); g.fillStyle = '#0a0a0c'; g.beginPath(); g.arc(tx, yf + 21, 3.5, 0, 7); g.fill(); g.fillStyle = '#5a5a66'; g.fillRect(tx - 5, yf + 16, 3, 1); }
+  return c;
+}
+function muroLado(h, D = 14) { const [c, g] = mkCanvas(D + 8, h); g.fillStyle = PIEDRA[0]; g.fillRect(2, 0, D + 4, h); g.fillStyle = PIEDRA[3]; g.fillRect(4, 0, D, h); g.fillStyle = 'rgba(0,0,0,.2)'; for (let y = 0; y < h; y += 10) g.fillRect(4, y, D, 1); g.fillStyle = PIEDRA[4]; g.fillRect(4, 0, 1, h); return c; }
+function pilar(alto) { const [c, g] = mkCanvas(28, alto + 26), O = PIEDRA[0]; g.fillStyle = O; g.fillRect(3, 14, 22, alto + 12); g.fillStyle = PIEDRA[2]; g.fillRect(5, 16, 18, alto + 8); g.fillStyle = PIEDRA[3]; g.fillRect(5, 16, 18, 4);
+  for (let y = 24; y < alto + 22; y += 9) { g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(5, y, 18, 1); }
+  g.fillStyle = O; g.fillRect(0, 8, 28, 8); g.fillStyle = PIEDRA[4]; g.fillRect(1, 9, 26, 5); g.fillStyle = O; g.fillRect(10, 0, 8, 9); g.fillStyle = '#ffd98a'; g.fillRect(12, 2, 4, 6); return c; }
+function construirMuralla(o) {
+  const x0 = o.x * T, y0 = o.y * T, x1 = (o.x + o.w) * T, y1 = (o.y + o.h) * T, gx0 = (o.puerta - 1) * T, gx1 = (o.puerta + 1) * T, D = 14, H = 46, alto = 8 + D + H;
+  WORLD.sprites.push({ canvas: muroFrente(x1 - x0, { almenas: 'atras' }), x: x0, y: y0 - alto, key: y0 });
+  const tro = (a, b) => (o.canones || []).map(cx => cx * T - a).filter(v => v > 10 && v < b - a - 10);
+  WORLD.sprites.push({ canvas: muroFrente(gx0 - x0, { troneras: tro(x0, gx0) }), x: x0, y: y1 - alto, key: y1 + 2 });
+  WORLD.sprites.push({ canvas: muroFrente(x1 - gx1, { troneras: tro(gx1, x1) }), x: gx1, y: y1 - alto, key: y1 + 2 });
+  for (let y = y0; y < y1 - 4; y += 32) for (const x of [x0, x1 - D]) WORLD.sprites.push({ canvas: muroLado(Math.min(32, y1 - y), D), x: x - 4, y: y - H - D, key: y + Math.min(32, y1 - y) });
+  for (const px of [gx0 - 14, gx1 - 14]) WORLD.sprites.push({ canvas: pilar(H + D), x: px, y: y1 - H - D - 26, key: y1 + 4 });
+  WORLD.lamps.push([gx0, y1 - 20], [gx1, y1 - 20]);
+  WORLD.blocks.push([x0, y0 - D, x1 - x0, D + 4], [x0, y1 - D, gx0 - x0, D + 4], [gx1, y1 - D, x1 - gx1, D + 4], [x0, y0 - D, D, y1 - y0 + D], [x1 - D, y0 - D, D, y1 - y0 + D]);
+}
+// escalera de piedra pegada a la cara interior de la muralla (sube hacia el este)
+function escaleraMuro(x, y) { const [c, g] = mkCanvas(84, 64); for (let k = 0; k < 6; k++) { const sx = 4 + k * 12, sy = 56 - k * 8; g.fillStyle = PIEDRA[0]; g.fillRect(sx - 1, sy - 1, 14, 64 - sy); g.fillStyle = PIEDRA[2]; g.fillRect(sx, sy, 12, 64 - sy); g.fillStyle = PIEDRA[4]; g.fillRect(sx, sy, 12, 2); }
+  return { canvas: c, x: x - 42, y: y - 64, key: y }; }
+// ---------- estatua de la plaza: tapada con lona, descubierta o hecha pedazos ----------
+function estatuaCanvas(estado) { const [c, g] = mkCanvas(120, 190), O = '#1a1210', cx = 60, base = 182, BR = ['#4a321a', '#6e4c26', '#946a36', '#c09050', '#e0b878'];
+  // pedestal de dos cuerpos con placa
+  g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.ellipse(cx + 4, base - 2, 44, 9, 0, 0, 7); g.fill();
+  const bloque = (w, h, y) => { g.fillStyle = O; g.fillRect(cx - w / 2 - 1, y - h - 1, w + 2, h + 2); g.fillStyle = PIEDRA[2]; g.fillRect(cx - w / 2, y - h, w, h); g.fillStyle = PIEDRA[4]; g.fillRect(cx - w / 2, y - h, w, 3); g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(cx + w / 2 - 6, y - h + 3, 6, h - 3); };
+  bloque(76, 16, base); bloque(52, 40, base - 16); g.fillStyle = BR[1]; g.fillRect(cx - 15, base - 44, 30, 14); g.fillStyle = BR[3]; g.fillRect(cx - 15, base - 44, 30, 1); g.fillStyle = BR[4]; for (let k = 0; k < 4; k++) g.fillRect(cx - 11 + k * 6, base - 38, 4, 1);
+  const top = base - 56;
+  if (estado === 'rota') { // tocones de las botas, grietas y pedazos por el suelo
+    g.fillStyle = O; g.fillRect(cx - 13, top - 14, 11, 15); g.fillRect(cx + 3, top - 10, 11, 11); g.fillStyle = BR[2]; g.fillRect(cx - 12, top - 13, 9, 13); g.fillRect(cx + 4, top - 9, 9, 9); g.fillStyle = BR[0]; g.fillRect(cx - 12, top - 13, 9, 2); g.fillRect(cx + 4, top - 9, 9, 2);
+    g.strokeStyle = O; g.lineWidth = 1.5; g.beginPath(); g.moveTo(cx - 20, base - 52); g.lineTo(cx - 10, base - 36); g.lineTo(cx - 14, base - 22); g.stroke();
+    for (let k = 0; k < 11; k++) { const px = cx - 54 + hash(k, 1, 91) * 108, py = base - 6 + hash(k, 2, 91) * 8, w = 5 + hash(k, 3, 91) * 9; g.fillStyle = O; g.fillRect(px - 1, py - 5, w + 2, 7); g.fillStyle = BR[1 + (k % 3)]; g.fillRect(px, py - 4, w, 5); }
+    g.fillStyle = O; g.beginPath(); g.ellipse(cx + 40, base - 4, 13, 6, .2, 0, 7); g.fill(); g.fillStyle = BR[2]; g.beginPath(); g.ellipse(cx + 40, base - 5, 11, 4.5, .2, 0, 7); g.fill(); // el sombrero, rodando
+    return c; }
+  if (estado === 'tapada') { g.fillStyle = O; g.beginPath(); g.moveTo(cx - 26, top + 2); g.quadraticCurveTo(cx - 30, top - 60, cx - 12, top - 104); g.quadraticCurveTo(cx + 2, top - 126, cx + 16, top - 102); g.quadraticCurveTo(cx + 34, top - 66, cx + 28, top + 2); g.closePath(); g.fill();
+    g.fillStyle = '#b8ab8c'; g.beginPath(); g.moveTo(cx - 23, top); g.quadraticCurveTo(cx - 27, top - 60, cx - 10, top - 101); g.quadraticCurveTo(cx + 2, top - 121, cx + 14, top - 99); g.quadraticCurveTo(cx + 31, top - 64, cx + 25, top); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(80,70,50,.5)'; g.lineWidth = 1; for (const k of [-12, -2, 9, 18]) { g.beginPath(); g.moveTo(cx + k, top - 2); g.quadraticCurveTo(cx + k * .6, top - 50, cx + k * .3, top - 95); g.stroke(); }
+    g.strokeStyle = '#6a4a2a'; g.lineWidth = 2; g.beginPath(); g.moveTo(cx - 26, top - 40); g.quadraticCurveTo(cx, top - 32, cx + 28, top - 42); g.stroke(); g.beginPath(); g.moveTo(cx + 26, top - 42); g.quadraticCurveTo(cx + 46, top - 20, cx + 40, base - 4); g.stroke(); // la cuerda para tirar
+    return c; }
+  // el capitán Brisco en bronce: bicornio, capote, una mano en la cadera y el sable en alto
+  const p = (pts, col) => { poly(g, pts); g.fillStyle = col; g.fill(); }, ol = pts => { poly(g, pts); g.lineWidth = 3; g.strokeStyle = O; g.stroke(); };
+  const capote = [[cx - 20, top], [cx - 24, top - 52], [cx - 16, top - 74], [cx + 14, top - 74], [cx + 22, top - 52], [cx + 19, top]];
+  ol(capote); p(capote, BR[1]); p([[cx - 11, top - 2], [cx - 13, top - 60], [cx + 9, top - 60], [cx + 11, top - 2]], BR[2]); p([[cx - 3, top - 58], [cx + 2, top - 58], [cx + 3, top - 4], [cx - 2, top - 4]], BR[3]);
+  for (let k = 0; k < 4; k++) { g.fillStyle = BR[4]; g.fillRect(cx - 7, top - 52 + k * 11, 2, 2); }
+  ol([[cx - 26, top - 70], [cx - 34, top - 44], [cx - 20, top - 40], [cx - 16, top - 66]]); p([[cx - 26, top - 70], [cx - 34, top - 44], [cx - 20, top - 40], [cx - 16, top - 66]], BR[1]); // brazo en jarra
+  ol([[cx + 13, top - 72], [cx + 30, top - 96], [cx + 36, top - 92], [cx + 20, top - 66]]); p([[cx + 13, top - 72], [cx + 30, top - 96], [cx + 36, top - 92], [cx + 20, top - 66]], BR[2]); // brazo en alto
+  g.fillStyle = O; g.fillRect(cx + 31, top - 140, 5, 50); g.fillStyle = BR[4]; g.fillRect(cx + 32, top - 138, 2, 44); g.fillStyle = O; g.fillRect(cx + 26, top - 96, 15, 4); // sable
+  g.fillStyle = O; g.beginPath(); g.arc(cx - 1, top - 84, 11, 0, 7); g.fill(); g.fillStyle = BR[2]; g.beginPath(); g.arc(cx - 1, top - 84, 9, 0, 7); g.fill(); g.fillStyle = BR[3]; g.fillRect(cx - 6, top - 88, 4, 3); g.fillStyle = BR[0]; g.fillRect(cx - 7, top - 79, 12, 2); // cara y bigote
+  p([[cx - 24, top - 90], [cx - 1, top - 106], [cx + 22, top - 90], [cx, top - 94]], O); p([[cx - 21, top - 91], [cx - 1, top - 103], [cx + 19, top - 91], [cx, top - 95]], BR[1]); g.fillStyle = BR[4]; g.fillRect(cx - 2, top - 101, 3, 3); // bicornio
+  g.fillStyle = 'rgba(255,240,200,.35)'; g.fillRect(cx - 14, top - 70, 3, 40);
+  return c;
+}

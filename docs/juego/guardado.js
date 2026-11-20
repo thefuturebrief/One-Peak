@@ -2,7 +2,7 @@
 // y a mano desde la pausa. No se guarda durante el ataque a la plaza: si sales ahí, vuelves al último guardado de antes.
 const CLAVE = 'onepeak-partida-v1';
 const leerGuardado = () => { try { const t = localStorage.getItem(CLAVE); return t ? JSON.parse(t) : null; } catch (e) { return null; } };
-const sePuedeGuardar = () => !cv.hidden && !(F.campana && !F.invitacion) && !G.lapse && !F.zarpado;
+const sePuedeGuardar = () => !cv.hidden && !(F.campana && !F.invitacion) && !G.lapse && !(F.zarpado && S.isla === 'kale') && !F.noGuardar;
 function guardar(manual) {
   if (!sePuedeGuardar()) return false;
   const flags = {}; for (const [k, v] of Object.entries(F)) if (['string', 'number', 'boolean'].includes(typeof v)) flags[k] = v;
@@ -18,7 +18,8 @@ function avisoGuardado() { const el = document.createElement('div'); el.classNam
 // continuar: se rehace el mundo como al empezar y encima se pone lo guardado
 function continuar() {
   const d = leerGuardado(); if (!d) return menu();
-  reset(); Object.assign(S, d.S); Object.assign(player, d.player); for (const k in DIARY) DIARY[k] = d.DIARY[k] || [];
+  // se arranca en Kalé y restaurar() viaja a la isla guardada
+  reset(); Object.assign(S, d.S, { isla: 'kale' }); Object.assign(player, d.player); for (const k in DIARY) DIARY[k] = d.DIARY[k] || [];
   aplicarAspecto(player.look); startGame(d);
 }
 function restaurar(d) {
@@ -26,7 +27,9 @@ function restaurar(d) {
   if (tiene('brujula')) document.getElementById('compBtn').hidden = false;
   if (F.caja) { const o = OBJS.find(o => o.label === 'Cavar'); if (o) o.label = 'Mirar'; }
   if (F.invitacion) restaurarNoche(); else { rutinas(true); if (F.mesaCorso && !F.campana) moveNpc(P('corso'), 'casa', [5.6, 8], 'down'); }
-  enter(d.G.scene, [d.G.x, d.G.y], d.G.dir);
+  const isla = d.S.isla || 'kale';
+  if (isla === 'kale') return enter(d.G.scene, [d.G.x, d.G.y], d.G.dir);
+  G.paused = true; irAIsla(isla).then(() => { const I = ISLA(); I.restaurar && I.restaurar(d); enter(d.G.scene, [d.G.x, d.G.y], d.G.dir); G.paused = false; });
 }
 // de noche: la plaza ya pasó; vuelven el forastero y la teniente a sus sitios y todos a sus frases de despedida
 function restaurarNoche() {

@@ -90,6 +90,31 @@ const DECOR = {
     { at: [6, 2.4], fn: (g, X, Y, add) => { it(add, gg => catalejoTripode(gg, X(6.1), Y(3.2)), Y(3.2)); add.block([X(6.1) - 9, Y(3.2) - 6, 18, 6]); add.item({ img: RD.soga, x: X(1.2) - 9, y: Y(6.3) - 29, key: Y(6.3) }); } },
     { at: [5.3, 4.9], fn: (g, X, Y, add) => it(add, gg => { gg.fillStyle = '#efe2bf'; gg.fillRect(X(5) , Y(4.4) - 22, 18, 12); gg.fillStyle = '#5a4030'; for (let k = 0; k < 3; k++) gg.fillRect(X(5) + 3, Y(4.4) - 19 + k * 3, 12, 1); put(gg, RD.frasco, X(5.9), Y(4.4) - 28); }, Y(5.5) + 2) },
   ],
+  cuartel: [
+    { at: [8, 6], fn: (g, X, Y, add) => { gaviota(g, X(8), Y(4) - 2 * T + 22); g.fillStyle = '#2f4f9a'; g.font = '900 11px Georgia, serif'; g.textAlign = 'center'; g.fillText('MARINE', X(8), Y(4) - 2 * T + 40);
+      for (const px of [3.6, 4.3, 11.6, 12.3]) { g.fillStyle = '#efe2bf'; g.fillRect(X(px), Y(4) - 2 * T + 12, 18, 24); g.fillStyle = '#5a4030'; g.fillRect(X(px) + 4, Y(4) - 2 * T + 16, 10, 9); g.fillRect(X(px) + 3, Y(4) - 2 * T + 28, 12, 2); }
+      farolPared(g, X(6.2), Y(4) - 2 * T + 8); farolPared(g, X(10), Y(4) - 2 * T + 8); add.fire({ x: X(6.2), y: Y(4) - 2 * T + 14, r: 70, kind: 'vela' }); add.fire({ x: X(10), y: Y(4) - 2 * T + 14, r: 70, kind: 'vela' }); } },
+    { at: [3, 2], fn: (g, X, Y) => { cuadro(g, X(4.4), Y(0) - 2 * T + 10, 30, 22, 'mar'); } },
+    { at: [8.5, 2], fn: (g, X, Y) => { cuadro(g, X(8.6), Y(0) - 2 * T + 6, 34, 28, 'retrato'); gaviota(g, X(7.4), Y(0) - 2 * T + 30); } },
+  ],
+  bateria: [
+    { at: [6, 2], fn: (g, X, Y, add) => { for (const cx of [2, 5, 8, 10.7]) { const x = X(cx), y = Y(3.6); it(add, gg => { gg.fillStyle = 'rgba(0,0,0,.3)'; gg.beginPath(); gg.ellipse(x, y + 2, 20, 6, 0, 0, 7); gg.fill();
+        gg.fillStyle = '#2a1a10'; gg.fillRect(x - 15, y - 14, 30, 16); gg.fillStyle = '#5a3a22'; gg.fillRect(x - 14, y - 13, 28, 14); gg.fillStyle = '#1a1a20'; gg.beginPath(); gg.arc(x - 9, y + 1, 5, 0, 7); gg.arc(x + 9, y + 1, 5, 0, 7); gg.fill();
+        gg.fillStyle = '#1a1a20'; gg.fillRect(x - 6, y - 22, 12, 30); gg.fillStyle = '#3a3a46'; gg.fillRect(x - 5, y - 21, 10, 28); gg.fillStyle = '#5a5a66'; gg.fillRect(x - 5, y - 21, 2, 28); gg.fillStyle = '#0a0a0c'; gg.beginPath(); gg.ellipse(x, y + 8, 4, 2, 0, 0, 7); gg.fill(); }, y + 4);
+        add.block([x - 15, y - 14, 30, 18]); }
+      for (const [bx, by] of [[3.4, 3.4], [6.5, 3.5], [9.4, 3.4]]) it(add, gg => { for (let k = 0; k < 3; k++) { gg.fillStyle = '#1a1a20'; gg.beginPath(); gg.arc(X(bx) + k * 7 - 7, Y(by), 3.5, 0, 7); gg.fill(); } gg.fillStyle = '#1a1a20'; gg.beginPath(); gg.arc(X(bx), Y(by) - 5, 3.5, 0, 7); gg.fill(); }, Y(by) + 2); } },
+  ],
+  cantina: [
+    { at: [1, .5], fn: (g, X, Y) => { put(g, R.pots, X(1.6), Y(0) - 2 * T); pescadoSeco(g, X(3), Y(0) - 2 * T + 6); } },
+    { at: [2.6, 2.6], fn: (g, X, Y, add) => { add.item({ img: RD.caldero, x: X(2.8) - 15, y: Y(2.2) - 31, key: Y(2.2) }); add.block([X(2.8) - 14, Y(2.2) - 12, 28, 12]); add.fire({ x: X(2.8), y: Y(2) - 20, r: 90, kind: 'fuego', flame: false }); } },
+    { at: [3, 5.5], fn: (g, X, Y) => { cuadro(g, X(0.6), Y(4) - 2 * T + 10, 30, 22, 'mar'); put(g, RD.antorcha, X(3.6), Y(4) - 2 * T + 4); cartel(g, X(2.4), Y(4) - 2 * T + 10); } },
+    { at: [12, 6], fn: (g, X, Y, add) => { add.item({ img: RD.candelabro, x: X(13.3) - 16, y: Y(8.6) - 71, key: Y(8.6) }); add.block([X(13.3) - 12, Y(8.6) - 10, 24, 10]); add.fire({ x: X(13.3), y: Y(8.6) - 56, r: 110, kind: 'vela' }); } },
+  ],
+  posada: [
+    { at: [3, 1.5], fn: (g, X, Y) => { espejo(g, X(4.9), Y(0) - 44); cuadro(g, X(0.6), Y(0) - 2 * T + 10, 26, 20, 'mar'); } },
+    { at: [9, 1.5], fn: (g, X, Y, add) => { it(add, gg => { barcoBotella(gg, X(7), Y(1.8) - 6); put(gg, RD.botella1, X(9.4), Y(1.8) - 30); }, Y(2.9) + 2); farolPared(g, X(12), Y(0) - 2 * T + 10); add.fire({ x: X(12), y: Y(0) - 2 * T + 16, r: 80, kind: 'vela' }); } },
+    { at: [3, 6], fn: (g, X, Y, add) => { cuadro(g, X(8), Y(4) - 2 * T + 8, 34, 24, 'mar'); it(add, gg => cesta(gg, X(4.8), Y(6.1)), Y(6.1)); } },
+  ],
   marina: [
     { at: [6, 6], fn: (g, X, Y) => { gaviota(g, X(5.5), Y(4) - 2 * T + 22); g.fillStyle = '#2f4f9a'; g.font = '900 11px Georgia, serif'; g.textAlign = 'center'; g.fillText('MARINE', X(5.5), Y(4) - 2 * T + 40); cuadro(g, X(1.4), Y(4) - 2 * T + 10, 34, 24, 'mar'); g.fillStyle = '#efe2bf'; g.fillRect(X(10.2), Y(4) - 2 * T + 12, 18, 24); g.fillStyle = '#5a4030'; for (let k = 0; k < 5; k++) g.fillRect(X(10.2) + 3, Y(4) - 2 * T + 16 + k * 4, 12, 1); } },
   ],

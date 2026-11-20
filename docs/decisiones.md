@@ -238,6 +238,26 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
     - humo de chimenea, gaviotas, mariposas, una ardilla, luciérnagas y el haz del faro.
   - **Tiempo y movimiento:** el atardecer y el descanso pasan a la vista, no de golpe, y el zoom es suave.
   - **Frases según el momento del acto,** sin repetir las últimas.
+- **Versión 0.8: Acto 1, Shells Town** (diseño en `docs/shells-town.md`, plan en `docs/plan-v08.md`):
+  - **Motor de islas:**
+    - cada isla tiene su plano, su gente, sus objetos y sus reglas;
+    - Kalé es una isla más;
+    - se puede guardar y continuar en otra isla.
+  - **La Medusa Gris:** el forastero se llama así en el mar y no dice su nombre. Te deja al amanecer en una cala, detrás de Shells Town.
+  - **Shells Town:**
+    - **los lugares:** la base de la Marina con muralla, batería y portón; la cantina El Caldero; la Posada La Concha; Pertrechos Ulloa; el Foso; el muelle con la Tortuga Parda; la cala;
+    - **personajes nuevos:** Rufo, Iria, Tobi, el cadete Severin (el rival), el capitán Brisco y la capitana Quill.
+  - **Tres candidatos a compañero,** cada uno con su encargo; eliges uno.
+  - **El desfile, en un solo tramo:**
+    1. entras en la base y recuperas lo que le confiscaron a tu compañero;
+    2. un tropiezo en la batería dispara el cañón de saludo y la bala destroza la estatua del capitán justo al destaparla;
+    3. pelea con Severin;
+    4. huida al muelle;
+    5. pagas todo lo que tengas en la Tortuga Parda, rumbo a Goa.
+  - **Fama:** lo que hiciste en Shells Town queda anotado para el periódico y el cartel.
+  - **Detalles:**
+    - el nombre de la tripulación se elige con Corso en el desayuno;
+    - las cubiertas de los barcos se dibujan con detalle y la escotilla ya no traba.
 - **Versión 0.7: zarpar** (plan en `docs/plan-v07.md`):
   - **Armas para todos:** las 27 de LPC en tres grupos:
     - comunes;

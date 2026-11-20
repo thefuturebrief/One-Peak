@@ -109,7 +109,7 @@ function instinto() {
   return list;
 }
 function pelea(o) {
-  const C = Object.values(S.cuerpo || {}), meMax = 40 + S.st.resistencia * 6 - 5 * C.filter(e => e === 'herida').length - 2 * C.filter(e => e === 'tratada').length + (S.comido || 0); S.comido = 0; F.fight = { kind: o.kind, foe: o.foe, foeName: o.foeName, me: meMax, meMax, foeHP: o.foeMax, foeMax: o.foeMax, round: 0, rounds: o.rounds, corso: o.kind === 'plaza', protected: false, hard: 0, arma: o.arma, fin: o.fin };
+  const C = Object.values(S.cuerpo || {}), meMax = 40 + S.st.resistencia * 6 - 5 * C.filter(e => e === 'herida').length - 2 * C.filter(e => e === 'tratada').length + (S.comido || 0); S.comido = 0; F.fight = { kind: o.kind, foe: o.foe, foeName: o.foeName, me: meMax, meMax, foeHP: o.foeMax, foeMax: o.foeMax, round: 0, rounds: o.rounds, corso: o.kind === 'plaza', protected: false, hard: 0, arma: o.arma, fin: o.fin, tx: o.tx, hitP: o.hitP, dmgBase: o.dmgBase };
   G.paused = true; G.arma0 = S.arma; S.arma = o.arma; G.dir = dirTo(G, o.foe); o.foe.dir = dirTo(o.foe, G);
   const ov = document.getElementById('overlays'), box = document.createElement('div'); box.className = 'fight glass'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Pelea'); ov.appendChild(box);
   document.getElementById('hud').classList.add('talking'); momento();
@@ -120,7 +120,7 @@ function fightUI(text, opts) {
   if (opts) { const bs = [...box.querySelectorAll('button')]; bs.forEach(b => b.onclick = () => elegir(opts[+b.dataset.i])); bs[0].focus(); keyHandler = e => { const n = +e.key; if (n >= 1 && n <= opts.length) elegir(opts[n - 1]); }; }
   else keyHandler = null;
 }
-function momento() { const f = F.fight; f.round++; fightUI(f.round === 1 ? (f.kind === 'duelo' ? 'Yago levanta el arma y sonríe. «Cuando quieras.»' : 'El pirata se te echa encima. El tiempo se estira: lo ves venir.') : 'Otra vez. Respiras. Decides.', instinto()); }
+function momento() { const f = F.fight; f.round++; fightUI(f.round === 1 ? f.tx ? f.tx.inicio : (f.kind === 'duelo' ? 'Yago levanta el arma y sonríe. «Cuando quieras.»' : 'El pirata se te echa encima. El tiempo se estira: lo ves venir.') : (f.tx && f.tx.otra) || 'Otra vez. Respiras. Decides.', instinto()); }
 const later = (ms, fn) => setTimeout(fn, ms);
 function golpeVisual(quien) { sfx('golpe'); const f = F.fight, tg = quien === 'me' ? G : f.foe; if (tg) F.fx = { x: tg.x + (tg.dx || 0), y: tg.y - 26, t0: performance.now(), me: quien === 'me' }; const el = document.getElementById('game'); el.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-4px,2px)' }, { transform: 'translate(3px,-2px)' }, { transform: 'translate(0,0)' }], { duration: 220 });
   if (quien === 'me') { const fl = document.createElement('div'); fl.className = 'hitflash'; document.getElementById('overlays').appendChild(fl); later(380, () => fl.remove()); } }
@@ -145,15 +145,15 @@ function elegir(o) {
 }
 function contra(stun, o, ok) {
   const f = F.fight, foe = f.foe;
-  if (f.foeHP <= 0) { act(foe, 'hurt', { hold: true, fps: 10 }); later(900, () => emote(foe, f.kind === 'duelo' ? '…' : 'zzz', 4000)); return finPelea(f.kind === 'duelo' ? 'Yago acaba sentado en el serrín, riéndose sin aire.' : 'El pirata cae de espaldas, sin aire. Nadie en la plaza se lo esperaba.'); }
-  if (stun) { emote(foe, '?', 1200); fightUI(f.kind === 'duelo' ? 'Yago se queda un segundo sin saber dónde está. Ganas un respiro.' : 'El pirata no puede responder. Ganas un respiro.'); return later(1200, sigue); }
+  if (f.foeHP <= 0) { act(foe, 'hurt', { hold: true, fps: 10 }); later(900, () => emote(foe, f.kind === 'duelo' ? '…' : 'zzz', 4000)); return finPelea(f.tx ? f.tx.cae : f.kind === 'duelo' ? 'Yago acaba sentado en el serrín, riéndose sin aire.' : 'El pirata cae de espaldas, sin aire. Nadie en la plaza se lo esperaba.'); }
+  if (stun) { emote(foe, '?', 1200); fightUI(f.tx ? f.tx.aturde : f.kind === 'duelo' ? 'Yago se queda un segundo sin saber dónde está. Ganas un respiro.' : 'El pirata no puede responder. Ganas un respiro.'); return later(1200, sigue); }
   atacar(foe, foe.arma, G);
-  const hitP = .62 - (o.dodge && ok ? .35 : 0) - (f.kind === 'duelo' ? .08 : 0), dmg = (f.kind === 'duelo' ? 10 : 14) + Math.floor(Math.random() * 12) + (o.protect && ok ? 6 : 0);
-  if (Math.random() < hitP) { f.me -= dmg; if (dmg >= 22 && f.kind === 'plaza') f.hard++; later(200, () => herir(dmg >= 22 && f.kind === 'plaza' ? 'cara' : pick(f.kind === 'duelo' ? ['brazos', 'torso', 'piernas'] : ['brazos', 'torso', 'piernas', 'cabeza']))); later(180, () => { encaja(G); golpeVisual('me'); }); fightUI(f.kind === 'duelo' ? (dmg >= 18 ? 'La madera te da en el hombro. Suena feo.' : 'Te roza el brazo. Escuece.') : dmg >= 22 ? 'El golpe te llega a la ceja. Ves blanco un instante.' : 'Te alcanza en el costado. Duele, pero sigues en pie.'); }
-  else { later(150, () => lunge(G, hacia(G, foe) * -12, 320)); fightUI(f.kind === 'duelo' ? 'Yago golpea al aire. «¡Quieto!»' : 'El pirata golpea al aire.'); }
+  const hitP = (f.hitP ?? .62) - (o.dodge && ok ? .35 : 0) - (f.kind === 'duelo' ? .08 : 0), dmg = (f.dmgBase ?? (f.kind === 'duelo' ? 10 : 14)) + Math.floor(Math.random() * 12) + (o.protect && ok ? 6 : 0);
+  if (Math.random() < hitP) { f.me -= dmg; if (dmg >= 22 && f.kind === 'plaza') f.hard++; later(200, () => herir(dmg >= 22 && f.kind === 'plaza' ? 'cara' : pick(f.kind === 'duelo' ? ['brazos', 'torso', 'piernas'] : ['brazos', 'torso', 'piernas', 'cabeza']))); later(180, () => { encaja(G); golpeVisual('me'); }); fightUI(f.tx ? (dmg >= 18 ? f.tx.fuerte : f.tx.flojo) : f.kind === 'duelo' ? (dmg >= 18 ? 'La madera te da en el hombro. Suena feo.' : 'Te roza el brazo. Escuece.') : dmg >= 22 ? 'El golpe te llega a la ceja. Ves blanco un instante.' : 'Te alcanza en el costado. Duele, pero sigues en pie.'); }
+  else { later(150, () => lunge(G, hacia(G, foe) * -12, 320)); fightUI(f.tx ? f.tx.falla : f.kind === 'duelo' ? 'Yago golpea al aire. «¡Quieto!»' : 'El pirata golpea al aire.'); }
   later(1300, sigue);
 }
-function sigue() { const f = F.fight; if (f.me <= 0) { act(G, 'hurt', { hold: true, fps: 10 }); return finPelea(f.kind === 'duelo' ? 'Acabas en el suelo, mirando el cielo entre los andamios.' : 'Caes al suelo. Lo último que ves es la bota del pirata.', true); } if (f.round >= f.rounds) return finPelea(f.kind === 'duelo' ? 'Paráis los dos a la vez, sin aire. Ninguno quiere decir que está cansado.' : 'Seguís en pie los dos, jadeando. El pirata ya no sonríe.'); momento(); }
+function sigue() { const f = F.fight; if (f.me <= 0) { act(G, 'hurt', { hold: true, fps: 10 }); return finPelea(f.tx ? f.tx.caes : f.kind === 'duelo' ? 'Acabas en el suelo, mirando el cielo entre los andamios.' : 'Caes al suelo. Lo último que ves es la bota del pirata.', true); } if (f.round >= f.rounds) return finPelea(f.tx ? f.tx.tablas : f.kind === 'duelo' ? 'Paráis los dos a la vez, sin aire. Ninguno quiere decir que está cansado.' : 'Seguís en pie los dos, jadeando. El pirata ya no sonríe.'); momento(); }
 function finPelea(txt, caido) {
   const f = F.fight; f.won = f.foeHP <= 0; f.down = !!caido; fightUI(txt);
   if (f.hard) { S.trs.push('Cicatriz en la ceja'); learn(['yo', 'Una cicatriz', 'La pelea de la plaza me dejó una cicatriz en la ceja. Cada vez que la toco, me acuerdo de Corso.']); }
