@@ -12,6 +12,9 @@ const RUTINA = {
   yago: [[0, 24, 'town', [24.6, 30.3]]],
 };
 function moveNpc(n, scene, at, dir) { const [sc, [x, y]] = place(scene, at); Object.assign(n, { scene: sc, x, y }); if (dir) n.dir = dir; }
+// un rato después de hablar con Marla, Corso baja a desayunar: si estás en su cuarto lo ves salir por la puerta
+function corsoALaMesa() { const c = P('corso'); if (!c || !String(c.scene).startsWith('casa')) return; F.mesaCorso = true; const sentarse = () => moveNpc(c, 'casa', [5.6, 8], 'down');
+  if (c.scene !== G.scene) return sentarse(); emote(c, '!'); walkTo(c, place('casa', [11.5, 5.7])[1], 70, sentarse); }
 function rutinas(force) {
   if (F.campana) return; const h = hourNow();
   for (const n of PEOPLE) { const r = RUTINA[n.id]; if (!r) continue; const k = r.findIndex(([a, b]) => h >= a && h < b); if (k === n.slot) continue;
@@ -41,6 +44,8 @@ let lastTick = 0;
 function actoTick(now) {
   if (now - lastTick < 400) return; lastTick = now;
   rutinas(false);
+  if (S.talks.marla && F.marlaMin == null) F.marlaMin = G.minutes;
+  if (!F.mesaCorso && F.marlaMin != null && G.minutes - F.marlaMin >= 25 && hourNow() < 13 && !F.campana && !G.talking) corsoALaMesa();
   const y = P('yago'); if (y && y.scene === 'town' && !F.campana && !y.act && !y.goal && !G.paused && !G.talking && Math.random() < .55 && Math.hypot(y.x - G.x, y.y - G.y) < 500) { y.dir = 'right'; act(y, 'slash', { fps: 13 }); F.golpeMuneco = performance.now() + 260; }
   if (F.navegando && !F.entra && F.desperto && performance.now() - F.desperto > 45000 && !G.talking) return entraJefe(F.camino);
   if (!F.campana && hourNow() >= 17) return campana();

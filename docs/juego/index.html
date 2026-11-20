@@ -93,6 +93,7 @@ input.name:focus{border-color:var(--gold)}
 .dlg{position:absolute;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(760px,calc(100% - 24px));padding:16px 20px 16px 16px;display:grid;grid-template-columns:76px 1fr;gap:16px;align-items:start}
 .dlg .face{width:76px;height:76px;border-radius:12px;background:radial-gradient(circle at 50% 30%,#4a6a9a,#22344e);overflow:hidden;position:relative}
 .dlg .face canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.dlg.pedir{grid-template-columns:1fr}.dlg.pedir label{display:grid;gap:6px;margin:10px 0 4px}.dlg.pedir .err{display:block;min-height:1.2em;color:#ffb48a}
 .dlg b.nm{font-size:15px;font-weight:800;color:var(--gold2);letter-spacing:.04em}
 .dlg p{margin:4px 0 0;font-size:18px;line-height:1.45}
 .dlg .ch{display:flex;flex-direction:column;gap:6px;margin-top:10px}

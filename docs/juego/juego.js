@@ -135,9 +135,12 @@ function makePeople() {
       ] },
     { id: 'corso', scene: 'casa', at: [10.8, 4.9], sprite: 'nino', dir: 'left', name: `Corso ${fam}`,
       barks: { dia: ['¡Mira, un barco!', '¿Jugamos a piratas?'], tarde: ['Mamá está rara hoy.', '¡Me aburrooo!'], noche: ['No puedo dormir...', '¿Tú crees que los piratas duermen?'] },
-      greet: c => c.aff >= 3 ? pick(['¡Capitán!', '¡Mi capitán!']) : { dia: ['¡Eh!', '¿Ya te has despertado del todo?'], tarde: ['¿Me llevas al muelle? ¿Porfa?', '¡Por fin vuelves!'], noche: ['¿Tú tampoco puedes dormir?', 'Shh, que mamá se despierta.'] }[c.tod],
+      greet: c => F.mesaCorso && !S.tripulacion ? '(Corso está sentado a la mesa, con la boca llena de pan.) ¡Eh! Siéntate un momento, que te quiero preguntar una cosa.' : c.aff >= 3 ? pick(['¡Capitán!', '¡Mi capitán!']) : { dia: ['¡Eh!', '¿Ya te has despertado del todo?'], tarde: ['¿Me llevas al muelle? ¿Porfa?', '¡Por fin vuelves!'], noche: ['¿Tú tampoco puedes dormir?', 'Shh, que mamá se despierta.'] }[c.tod],
       first: L('familia', `Mi hermano: Corso ${fam}`, 'Once años. Me sigue a todas partes y dibuja barcos en todas las paredes.'),
       topics: [
+        { id: 'tripulacion', once: true, need: () => F.mesaCorso && !S.tripulacion, ask: 'Dime.', a: () => ['(Te sientas a su lado. Corso te pasa media hogaza sin preguntar.)', 'Cuando tengas tu barco... porque lo vas a tener, ¿eh?', 'Tu tripulación necesitará un nombre. Uno que dé miedo. O que dé risa, pero que se recuerde.', '¿Cómo se va a llamar?'],
+          then: () => pedirTexto({ titulo: 'Tu tripulación', ayuda: 'Nombre de la tripulación', done: n => { S.tripulacion = n; learn(['yo', 'Mi tripulación', `Corso y yo decidimos en el desayuno cómo se llamará mi tripulación: «${n}».`]);
+            say(P('corso'), { lines: [`«${n}»...`, '(Corso lo repite en voz baja, probando cómo suena.)', '¡Me gusta! Voy a dibujar la bandera. Tú pon el barco, que yo pongo el nombre en la vela.'] }); } }) },
         { id: 'dibujos', hideAfter: 2, ask: '¿Qué dibujas?', a: c => c.n === 0 ? ['Barcos. Este es el mío. Va a ser más grande que el del puerto.', 'Y este de aquí eres tú. Eres el capitán. Bueno, segundo capitán.'] : ['¡Hoy he dibujado una medusa! Como la de la bandera. Con muchos brazos.'], aff: c => c.n === 0 ? 1 : 0 },
         { id: 'papa', once: true, ask: { def: '¿Te acuerdas de papá?', compasivo: '¿Echas de menos a papá?' }, a: () => ['Yo era muy pequeño... Solo me acuerdo de una voz que cantaba.', 'Pero mamá guarda algo en el cofre de su cuarto. La he visto abrirlo de noche.'], learn: L('familia', 'El cofre de mamá', 'Corso dice que mamá abre de noche un cofre que guarda en su cuarto.') },
         { id: 'navegar', once: true, ask: { def: 'Algún día me iré a navegar.', temerario: 'Algún día tendré mi propio barco.', ambicioso: 'Algún día voy a ser el pirata más famoso del mar.' }, a: () => ['¿En serio? ¿Y me llevarás?', '¡Prométemelo!'] },
@@ -298,7 +301,7 @@ let OBJS = [];
 function startGame(rest) {
   attract.on = false; keyHandler = null; show(''); app.classList.add('playing'); cv.hidden = false; document.getElementById('hud').hidden = false; fitGame();
   PEOPLE = makePeople().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
-  OBJS = OBJECTS().map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; });
+  OBJS = [...OBJECTS(), ...objetosBarcos()].map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; });
   if (matchMedia('(pointer:coarse)').matches) document.getElementById('pad').hidden = false;
   else { const tip = document.createElement('div'); tip.className = 'tip glass'; tip.innerHTML = CONTROLES.slice(0, 5).map(([k, v]) => `<span><kbd>${k}</kbd>${v}</span>`).join(''); document.getElementById('overlays').appendChild(tip); setTimeout(() => tip.classList.add('out'), 9000); setTimeout(() => tip.remove(), 9800); }
   G.listo = false; const [sc, at] = place('casa', [8.6, 4.2]); enter(sc, at, 'down'); G.paused = false; G.minutes = 8 * 60;
@@ -349,8 +352,14 @@ function choose(i) {
   if (tp.tienda) { S.asked[id][tp.id] = n + 1; G.talking = null; renderTalk(); return abrirTienda(tp.tienda); }
   const lines = tp.a(c), l = typeof tp.learn === 'function' ? tp.learn(c) : tp.learn, d = typeof tp.aff === 'function' ? tp.aff(c) : (tp.aff || 0);
   S.asked[id][tp.id] = n + 1; S.aff[id] = aff(id) + d; (l || []).forEach(learn);
-  G.talking = { npc: t.npc, conv: { lines, topics: true }, i: 0 }; renderTalk();
+  G.talking = { npc: t.npc, conv: tp.then ? { lines, done: tp.then } : { lines, topics: true }, i: 0 }; renderTalk();
 }
+// cuadro para escribir un nombre (la tripulación). Solo letras, espacios, guiones y apóstrofos: después se muestra como texto.
+function pedirTexto({ titulo, ayuda, max = 24, done }) { G.paused = true; G.keys = {}; const el = document.createElement('div'); el.className = 'dlg glass pedir'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', titulo);
+  el.innerHTML = `<div><b class="nm">${titulo}</b><label class="f" for="ptx">${ayuda}<input class="name" id="ptx" maxlength="${max}" autocomplete="off"></label><small class="err" aria-live="polite"></small><div class="ch"><button type="button">Decidido</button></div></div>`;
+  document.getElementById('overlays').appendChild(el); const inp = el.querySelector('input'), err = el.querySelector('.err'); inp.focus();
+  const ok = () => { const v = inp.value.replace(/\s+/g, ' ').trim(); if (v.length < 2) return err.textContent = 'Tiene que tener al menos dos letras.'; if (!/^[\p{L}' -]+$/u.test(v)) return err.textContent = 'Solo letras, espacios, guiones y apóstrofos.'; el.remove(); G.paused = false; done(v); };
+  el.querySelector('button').onclick = ok; inp.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') ok(); }); }
 function advance() { const t = G.talking; if (!t) return; if (t.typing) return t.finishType(); if (t.i < t.conv.lines.length - 1) { t.i++; renderTalk(); } else if (!t.conv.topics && !t.conv.opts) { (t.conv.learn || []).forEach(learn); G.talking = null; renderTalk(); t.conv.done && t.conv.done(); } }
 function clearBubbles() { G.bubbles.forEach(b => b.el.remove()); G.bubbles = []; G.chat = null; }
 function bubble(npc, text, ms = 3200) { if (!text) return; const el = document.createElement('div'); el.className = 'bubble'; el.textContent = text; document.getElementById('overlays').appendChild(el); G.bubbles.push({ npc, el, until: performance.now() + ms }); }

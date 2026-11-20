@@ -25,7 +25,7 @@ function restaurar(d) {
   Object.assign(F, d.F); G.minutes = d.G.minutes;
   if (tiene('brujula')) document.getElementById('compBtn').hidden = false;
   if (F.caja) { const o = OBJS.find(o => o.label === 'Cavar'); if (o) o.label = 'Mirar'; }
-  if (F.invitacion) restaurarNoche(); else rutinas(true);
+  if (F.invitacion) restaurarNoche(); else { rutinas(true); if (F.mesaCorso && !F.campana) moveNpc(P('corso'), 'casa', [5.6, 8], 'down'); }
   enter(d.G.scene, [d.G.x, d.G.y], d.G.dir);
 }
 // de noche: la plaza ya pasó; vuelven el forastero y la teniente a sus sitios y todos a sus frases de despedida

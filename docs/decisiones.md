@@ -263,7 +263,7 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
     - en el mar la imagen se mece.
   - **Zarpar:**
     - escenas de tiza nuevas;
-    - despertás en el camarote, investigás, y entra el forastero (Corvo) o la teniente (Nisi) a conversar sobre tu padre;
+    - despertás en el camarote, investigás, y entra el forastero (el Cuervo; su nombre queda en secreto) o la teniente (Nisi) a conversar sobre tu padre;
     - el forastero da una pista y se va por asuntos pendientes;
     - destino: Reino de Goa (pirata) o Loguetown (marine).
   - **Sonido generado en el navegador:**
