@@ -36,7 +36,25 @@ Decidido por el usuario.
   - si queremos un guiño a la "medusa" de la bandera de Dorne, este es el lugar.
 - **Ventaja narrativa:** encaja con el apodo, con su ropa y con el misterio. Que nadie lo haya visto transformado hasta muy tarde hace que la revelación pese.
 
-## Subasta de Loguetown: catálogo (en construcción)
+## Decisiones nuevas (protagonista y rival)
+- **Severin tiene fruta fija: la Tormenta.** Se pensó para el duelo final: su tormenta voraz contra la fruta del protagonista. Detalle de personaje: el hombre del orden carga con el poder más caótico, y lo domina a fuerza de disciplina. Cuando pierde el control, la tormenta arrasa.
+- **El catálogo se parte en dos:**
+  - **Sorteo del protagonista:** solo frutas "de protagonista", pensadas como respuesta a la tormenta. Una sola figura contra la tormenta entera, con estéticas opuestas.
+  - **Frutas del mundo:** las 15 de abajo, menos la Tormenta, existen y aparecen en otros personajes (tripulación, aliados, rivales, secundarios).
+- **El cofre (propuesta):** cuatro frutas. Severin, encapuchado, salta y se lleva la suya sin que se vea bien. Tú eliges entre las otras tres.
+- **Candidata confirmada para el protagonista:** la **Aurora**. Su contraste: el caos de la tormenta contra una luz constante y serena.
+- **Rasgos de la creación:** no deciden la fruta. Como mucho, son un matiz en cómo te "llama" cada una en la subasta.
+
+## Sorteo del protagonista (en construcción)
+| Fruta | Tipo | Qué es | La imagen contra la tormenta | Estado |
+|---|---|---|---|---|
+| **Aurora** (Kyokkō Kyokkō no Mi) | Logia | Cortinas de luz de colores que envuelven, atan, queman y deslumbran. Lenta y constante. Siente los campos magnéticos. Hay que separarla de la luz de Kizaru: la aurora no es un láser, es una marea de luz. | Una luz serena que se abre paso en el centro de la tormenta | Candidata |
+| **Quietud** (Tome Tome no Mi) | Paramecia | Fija en el sitio lo que toca o lo que entra en su zona: gotas, balas, un rayo a medio caer, él mismo en medio del viento. Tiene que separarse del tiempo (reservado): no detiene el tiempo, detiene el movimiento. | Una persona de pie, inmóvil, en medio del huracán; alrededor, la lluvia y los rayos quietos en el aire | Propuesta |
+| **Rumbo** (Muki Muki no Mi) | Paramecia | Cambia la dirección de lo que toca o de lo que entra en su alcance: la lluvia que sube, el viento que gira, el rayo que vuelve. Es el pirata que tiene rumbo en medio del caos. | Una figura que avanza contra la tormenta y la tuerce a su paso | Propuesta |
+| **Qilin** (Ushi Ushi no Mi, modelo Qilin) | Zoan mítica | La bestia benévola de Oriente: escamas, melena de fuego sagrado, camina sobre el aire y las nubes, aparece en tiempos de justicia y no daña al inocente. Guiño: en japonés "kirin" es también la jirafa de Kaku. | Una bestia luminosa que trepa por las nubes de la tormenta, pisándolas | Propuesta |
+| Niebla, Erupción | Logia | Del catálogo de 15 | Sin pensar todavía el contraste | En duda |
+
+## Frutas del mundo: el catálogo de 15 (en construcción)
 
 ### La idea
 - **Por qué hay frutas top en el East Blue:** es una subasta clandestina de gente muy poderosa, en Loguetown, la última parada antes del Grand Line. Ahí aparece mercancía que no debería estar en el mar más débil.
