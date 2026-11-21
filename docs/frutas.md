@@ -8,7 +8,8 @@ Los nombres y los usuarios del canon los doy de memoria. Antes de cerrar la list
 - **Sin trabas para la Logia:** si te toca una, mejor.
 - **Al comerla:** una prueba breve y torpe. El poder se despierta en la pelea final y se usa cuando haga falta.
 - **Técnicas según el tipo:** las Zoan no lanzan proyectiles.
-- **Las dos que no eliges no desaparecen:** una se la queda el rival y la otra vuelve más adelante en la historia.
+- **Las que no te tocan existen en el mundo:** una se la queda el rival. Del resto del catálogo, algunas las tendrán personajes futuros (no necesariamente todas).
+- **Catálogo cerrado en 15 por ahora:** se puede cambiar si hace falta. Las técnicas por nivel están en `docs/frutas-tecnicas.md`.
 - **Potencial top, dominio desde cero:** las frutas de la subasta son de primer nivel, pero quien la come arranca sin saber usarla. En Loguetown se ve un destello torpe y el poder crece con el viaje. Así el protagonista y el rival no salen del East Blue ya resueltos.
 
 ## Reservadas (nunca salen en la subasta)
@@ -116,7 +117,7 @@ Cuentas con las 15 confirmadas: 5 Paramecia, 1 Zoan carnívora, 2 antiguas, 4 Lo
 
 ## Próximos pasos
 1. **Catálogo cerrado en 15.** Falta verificar los nombres contra el canon.
-2. **Ficha de cada fruta:** técnicas por nivel de dominio (al comerla, avanzado y despertar).
+2. **Ficha de cada fruta:** hecha, en `docs/frutas-tecnicas.md`.
 3. **Diseñar las frutas:** sprite e ilustración grande para la subasta, junto con la Kurage no Hinotama.
 4. **Sistema en el juego:**
    - comerla en la subasta;
