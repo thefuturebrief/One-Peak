@@ -4,11 +4,12 @@ Los nombres y los usuarios del canon los doy de memoria. Antes de cerrar la list
 
 ## Reglas ya decididas
 - **Sorteo de la subasta de Loguetown:** tres frutas al azar, sin repetir.
-- **Pesos del sorteo:** Paramecia y Zoan, 1; Logia, 0,35; Zoan mítica, 0,06.
+- **Pesos del sorteo:** se revisan con el catálogo nuevo (ver la subasta, más abajo).
 - **Sin trabas para la Logia:** si te toca una, mejor.
 - **Al comerla:** una prueba breve y torpe. El poder se despierta en la pelea final y se usa cuando haga falta.
 - **Técnicas según el tipo:** las Zoan no lanzan proyectiles.
-- **Las dos que no eliges no desaparecen:** vuelven a aparecer en la historia (otro comprador, un rival, una subasta posterior).
+- **Las dos que no eliges no desaparecen:** una se la queda el rival y la otra vuelve más adelante en la historia.
+- **Potencial top, dominio desde cero:** las frutas de la subasta son de primer nivel, pero quien la come arranca sin saber usarla. En Loguetown se ve un destello torpe y el poder crece con el viaje. Así el protagonista y el rival no salen del East Blue ya resueltos.
 
 ## Reservadas (nunca salen en la subasta)
 Decidido: las frutas fuertes o icónicas del canon quedan para personajes que aparezcan más adelante y formen parte de la historia. No tienen por qué ser personajes importantes. Que un almirante tenga la fruta de Buggy no tendría sentido.
@@ -34,64 +35,82 @@ Decidido por el usuario.
   - si queremos un guiño a la "medusa" de la bandera de Dorne, este es el lugar.
 - **Ventaja narrativa:** encaja con el apodo, con su ropa y con el misterio. Que nadie lo haya visto transformado hasta muy tarde hace que la revelación pese.
 
-## Subasta de Loguetown: mi opinión
-Preguntaste si todas las frutas de la subasta deberían ser originales: **sí, lo recomiendo**, con un catálogo de 15.
+## Subasta de Loguetown: catálogo (en construcción)
 
-**A favor:**
-- **Ningún choque con el canon:** cero problemas de "esa fruta la tiene tal personaje".
-- **Sorpresa real:** como se muestra el diseño y no el nombre, el jugador no puede saber qué hace. Con frutas del canon, cualquier fan la reconocería por el dibujo.
-- **Equilibrio a medida:** las diseñamos para el nivel de juego que queremos (media a media-alta), sin la carga de cómo escala esa fruta en el anime.
-- **Identidad:** son "las frutas de One Peak".
+### La idea
+- **Por qué hay frutas top en el East Blue:** es una subasta clandestina de gente muy poderosa, en Loguetown, la última parada antes del Grand Line. Ahí aparece mercancía que no debería estar en el mar más débil.
+- **Todas originales:** así no chocan con nadie del canon y el jugador no las reconoce por el dibujo. Las frutas menores del canon aparecerán en otros personajes.
+- **Nombres:** provisionales. Hay que verificar que ninguno exista en el canon.
 
-**En contra:**
-- **Se pierde el guiño:** reconocer una fruta del canon tiene su gracia.
-- **Solución:** las frutas menores del canon (Bara Bara, Sube Sube, Bane Bane, Supa Supa, Doru Doru, Bomu Bomu, Kilo Kilo, Noro Noro, Awa Awa, Ori Ori, Sabi Sabi, Beri Beri, bisonte, lobo, halcón, topo, jirafa) aparecen más adelante en otros personajes. El guiño se mantiene sin estar en el sorteo.
+### Confirmadas (13)
+| # | Fruta | Tipo | Qué hace | Contra qué le cuesta | Techo (dominio máximo) | Aspecto de la fruta |
+|---|---|---|---|---|---|---|
+| 1 | **Kasumi Kasumi no Mi** (niebla) | Logia | Se vuelve bruma y se mueve como niebla. Ciega zonas, crea siluetas falsas, aparece y desaparece. Pelea de sigilo e inteligencia. | El viento fuerte la dispersa | Un banco de niebla que cubre una isla, lleno de figuras que no existen | Gris perla, con espirales que se deshacen en los bordes |
+| 2 | **Shio Shio no Mi** (sal) | Logia | Cuerpo de sal y cristales cortantes. Seca y agrieta lo que toca. | La humedad la vuelve pastosa | Deshidratar a distancia y levantar columnas de sal; dejar a alguien convertido en estatua de sal | Blanca y cristalina, con espirales en facetas |
+| 3 | **Arashi Arashi no Mi** (tormenta) | Logia | Se vuelve tormenta y maneja sus partes: viento, lluvia, presión y rayos. Al principio son síntomas: una racha, unas gotas, una chispa. | Cuanto más grande, más tarda en formarse y menos precisa es (puede dar a los suyos). Roza la Goro Goro de Enel solo en el rayo. | Una tormenta colosal que pone en peligro una isla entera | Gris pizarra con una veta eléctrica que la recorre |
+| 4 | **Funka Funka no Mi** (erupción) | Logia | Se vuelve material piroclástico: gas ardiente y ceniza. Avalanchas que avanzan a gran velocidad, golpes que estallan, nubes de ceniza que ciegan y rayos volcánicos dentro de la ceniza (pasa de verdad). Absorbe la idea del azufre: su firma son llamas azules. | Arrasa sin distinguir: en espacios cerrados o con aliados cerca es un problema | Una erupción continua que arrasa una costa | Negra con grietas naranjas y un brillo azul en el centro |
+| 5 | **Kame Kame no Mi, modelo Genbu** | Zoan mítica | La Tortuga Negra del Norte: placas negro verdosas, una serpiente que sale de la espalda y ataca sola, caparazón que bloquea casi todo, embestida pesada y resistencia que se recupera sin pausa. | Lenta | Una tortuga gigante envuelta en vaho helado; la serpiente lucha como un segundo guerrero | Verde negra con relieve hexagonal y una espiral que es una serpiente |
+| 6 | **Uma Uma no Mi, modelo Hipocampo** | Zoan mítica | Torso de caballo y cola de pez. "Nada" en corrientes propias por tierra y aire a velocidad extrema, con saltos enormes, coletazos y embestidas montado en la corriente. La corriente arrastra al rival. | Como todo usuario, en el mar real se hunde: la ironía es parte del personaje | Corrientes que se quedan en el aire y forman rutas para él (y para quien elija) | Verde agua con escamas y una espiral que ondula |
+| 7 | **Hito Hito no Mi, modelo Anteo** | Zoan mítica | El gigante hijo de la Tierra: musculatura enorme, marcas de roca en el cuerpo. Mientras toca el suelo recupera resistencia y fuerza sin parar. | Si lo levantan o lo separan del suelo pierde la ventaja. El rival tiene que ingeniárselas. | Un coloso que no se cansa mientras pise tierra | Marrón tierra con vetas de roca |
+| 8 | **Inu Inu no Mi, modelo Pachycrocuta** | Zoan antigua | La hiena gigante prehistórica: mandíbula que tritura hueso, cuello grueso, presión constante con mordidas y arrastres. Forma híbrida intimidante, de cabeza enorme y postura encorvada. | Poco alcance: todo es cuerpo a cuerpo | Una mordida que parte acero | Pardo manchado, con espirales como dentelladas |
+| 9 | **Chiku Chiku no Mi** (acumulación) | Paramecia | Guarda la energía de los golpes, caídas e impactos que recibe; se ve como grietas luminosas en el cuerpo. La suelta de golpe, en un solo puño o para impulsarse. | Tiene un tope, la energía guardada se va perdiendo y, si se pasa, las grietas lo lastiman a él | Devolver en un solo golpe toda una pelea | Gris piedra con grietas doradas que brillan |
+| 10 | **Kyō Kyō no Mi** (resonancia) | Paramecia | Encuentra la frecuencia de lo que toca: rompe acero, vidrio o hueso con un toque preciso, lanza ondas de choque, amplifica sonidos y detecta por vibración. Es más quirúrgica que el temblor de Barbablanca. | Necesita tiempo de contacto para "afinar" lo que es muy duro | Hacer vibrar un barco entero hasta desarmarlo | Azul pálido con espirales en ondas |
+| 11 | **Un Un no Mi** (fortuna) | Paramecia | Mueve probabilidades pequeñas por contacto: que algo sencillo le salga bien o que al rival se le escape la espada. No hace milagros ni controla el destino. En nuestro combate mueve las probabilidades del golpe y se ve: hilos dorados, tréboles, monedas que giran. | Lo imposible sigue siendo imposible; la suerte que da, la toma de algún lado | Encadenar golpes de suerte que parecen un plan | Dorada con un trébol en la espiral |
+| 12 | **Kokuyō Kokuyō no Mi** (obsidiana) | Paramecia | Cuerpo de vidrio volcánico: filos extremos, se rompe en mil esquirlas cortantes y se vuelve a armar. | Cada vez que se rompe se cansa, y sí siente el golpe | Una tormenta de esquirlas que se rearma en otro sitio | Negra con reflejos violeta |
+| 13 | **Eda Eda no Mi** (ramificaciones) | Paramecia | Ramifica lo que toca y sus golpes: una espada se abre en cinco hojas, una lanza se bifurca, un golpe se reparte en varios impactos, una grieta se ramifica como un rayo. Mucho volumen de ataque. Para no pisarse con la Hana Hana de Robin, no hace brotar brazos. | Cuantas más ramas, más finas y frágiles | Ramificar estructuras enteras: un mástil que se vuelve un bosque de lanzas | Verde con espirales que se bifurcan |
 
-**Por qué 15 y no 12:**
-- con 12 el jugador repite combinaciones antes;
-- con 15 cada tipo tiene variedad;
-- y no cuesta mucho más diseñar tres frutas.
+**Obsidiana, Paramecia y no Logia:**
+- ya hay cuatro Logias y la sal es otra de cristal: se pisarían;
+- como Paramecia, romperse y rearmarse le cuesta algo, y eso la hace más interesante;
+- es coherente con el canon: el diamante de Jozu es Paramecia.
 
-### Cuentas del sorteo con 15 frutas
-Supuesto: 9 Paramecia, 3 Zoan, 2 Logia y 1 Zoan mítica.
-
-| Resultado | Probabilidad aproximada |
+### Fuera o guardadas para otros personajes
+| Fruta | Motivo |
 |---|---|
-| La mítica sale entre las tres | 1,6 %, alrededor de 1 de cada 60 partidas |
-| Al menos una Logia entre las tres | 17 % |
-| Ninguna Logia ni mítica | 82 % |
+| Polaridad | Es el despertar de Kid en Wano |
+| Uranio | Lenta en pelea, choca con el tono de la época y es demasiado oscura |
+| Brea | Se pisa con el pantano de Caribou |
+| Azufre | Absorbido por la erupción |
+| Tela | Nivel medio |
+| Tinta y arcilla | Nivel medio. Quedan para personajes posteriores. |
+| Primera ronda: nudos, eco, aceleración, cajas, olfato, giro y pegamento | Descartadas |
 
-Las cifras salen de simular 200.000 sorteos de tres frutas sin repetir. Si queremos la mítica más cerca del 1 %, bajamos su peso a 0,04.
+### Candidatas para completar 15 (faltan 2)
+| Fruta | Tipo | Qué hace | Por qué |
+|---|---|---|---|
+| **Kyū Kyū no Mi** (absorción) — recomendada | Paramecia | Toma las propiedades del material que toca: piedra, acero, madera. Con el dominio, combina varias a la vez. | La más "de protagonista": versátil y crece con la creatividad |
+| **Tori Tori no Mi, modelo Fororraco** — recomendada | Zoan antigua | El ave del terror prehistórica: corredora veloz, con un pico que es un hacha | Equilibra la fuerza bruta del catálogo con velocidad |
+| Hen Hen no Mi (estados de la materia) | Paramecia | Derrite, solidifica o evapora lo que toca: un muro que se vuelve líquido, una espada que se vuelve vapor | Muy creativa y muy poderosa; habría que acotarla |
+| Kae Kae no Mi (intercambio) | Paramecia | Cambia de lugar dos cosas que tocó | Táctica pura; roza el Shambles de Law |
+| Hebi Hebi no Mi, modelo Titanoboa | Zoan antigua | La serpiente gigante prehistórica: constricción que aplasta | Buena para un rival pesado |
+| Nue | Zoan mítica | La quimera: mono, tanuki, tigre y serpiente | Muy original, pero sería la cuarta mítica |
+| Tori Tori no Mi, modelo Grifo | Zoan mítica | Vuelo y fuerza de león | Ídem |
 
-## Catálogo propuesto para la subasta: 15 originales, para aprobar
-- **Nivel:** todas de media a media-alta. Ninguna rota ni icónica.
-- **Diseños:** los de la fruta (forma, color y espirales) los dibujo después de que apruebes la lista. La columna "Aspecto" es la idea de partida.
-- **Nombres:** provisionales, hay que verificar que no existan en el canon.
+### Rareza del sorteo
+Propuesta: Paramecia, 1; Zoan antigua, 0,6; Logia, 0,2; Zoan mítica, 0,03.
 
-| # | Nombre | Tipo | Poder | Nivel | Aspecto de la fruta |
-|---|---|---|---|---|---|
-| 1 | Kasumi Kasumi no Mi | Logia | Niebla: se vuelve bruma, ciega zonas enteras, aparece donde no estaba | media-alta | Gris perla, espirales que se deshacen en los bordes |
-| 2 | Shio Shio no Mi | Logia | Sal: cuerpo de sal, cristales cortantes, seca y agrieta lo que toca | media-alta | Blanca y cristalina, espirales en facetas |
-| 3 | Kame Kame no Mi, modelo Genbu | Zoan mítica | La tortuga negra con cola de serpiente: caparazón casi irrompible y mordida de serpiente | alta, la del 1 % | Verde negra, caparazón hexagonal y una espiral que es una serpiente |
-| 4 | Tako Tako no Mi | Zoan | Pulpo: ocho brazos, agarre y tinta para escapar | media | Rojo coral con ventosas en relieve |
-| 5 | Kani Kani no Mi | Zoan | Cangrejo: pinzas que cortan hierro, coraza, movimiento lateral rapidísimo | media | Naranja con borde dentado, espirales en pinza |
-| 6 | Kaba Kaba no Mi | Zoan | Hipopótamo: peso, embestida y mordida | media | Gris violácea, redonda y pesada |
-| 7 | Sumi Sumi no Mi | Paramecia | Tinta: la crea y la mueve; ciega, pinta trampas pegajosas, escribe en el aire | media | Negra violeta, espirales como pinceladas blancas |
-| 8 | Musu Musu no Mi | Paramecia | Nudos: todo lo que toca se puede anudar, sea cuerda, barrotes o brazos | media | Color cáñamo, espirales trenzadas |
-| 9 | Hibi Hibi no Mi | Paramecia | Eco: guarda golpes y sonidos, y los devuelve después | media-alta | Azul pálido, espirales en ondas concéntricas |
-| 10 | Neru Neru no Mi | Paramecia | Arcilla: cuerpo moldeable; se estira, se aplana y toma formas | media | Terracota, espirales con huellas de dedos |
-| 11 | Kaso Kaso no Mi | Paramecia | Aceleración: acelera lo que lanza o a sí mismo durante un instante | media-alta | Amarilla con espirales estiradas como estelas |
-| 12 | Hako Hako no Mi | Paramecia | Cajas: crea cubos en el aire que sirven de escalones, muros o jaulas | media | Marrón claro, espirales cuadradas |
-| 13 | Kagu Kagu no Mi | Paramecia | Olfato: huele todo, incluso el miedo y las mentiras, y suelta olores que atraen, calman o espantan | media | Verde menta, espirales como volutas de humo |
-| 14 | Kuru Kuru no Mi | Paramecia | Giro: hace girar partes de su cuerpo o lo que toca como una peonza | media-alta | Turquesa, una sola espiral que da muchas vueltas |
-| 15 | Nori Nori no Mi | Paramecia | Pegamento: lo crea y pega lo que sea; fija pies al suelo y sella puertas | media | Ámbar translúcido, espirales que gotean |
+Cuentas con las 13 confirmadas más las dos recomendadas: 6 Paramecia, 2 antiguas, 4 Logias y 3 míticas. Las cifras salen de simular 300.000 sorteos de tres frutas sin repetir.
+
+| Resultado | Probabilidad |
+|---|---|
+| Alguna mítica entre las tres | 3,8 % |
+| Alguna Logia | 30 % |
+| Alguna antigua | 43 % |
+| Las tres Paramecia | 34 % |
+
+### Quién podría quedarse cada una
+- El protagonista come la que elige.
+- El rival se queda otra. Le quedan bien la tormenta, la erupción, la hiena o el Genbu, pero cualquiera sirve.
+- La tercera vuelve más adelante.
+- Detalle: si la fortuna no la come nadie, Nerea, que es tahúr, es una candidata natural para el futuro.
 
 ## Próximos pasos
-1. **Aprobar o cambiar** el catálogo (nombres, poderes, niveles).
-2. **Diseñar las 15 frutas** como sprites y como ilustración grande para la subasta, junto con la Kurage no Hinotama.
-3. **Sistema en el juego:**
+1. **Cerrar las dos que faltan.**
+2. **Ficha de cada fruta:** técnicas por nivel de dominio (al comerla, avanzado y despertar).
+3. **Diseñar las frutas:** sprite e ilustración grande para la subasta, junto con la Kurage no Hinotama.
+4. **Sistema en el juego:**
    - comerla en la subasta;
    - la prueba torpe;
    - el despertar en la pelea final;
    - las técnicas según el tipo;
-   - las dos frutas que vuelven más tarde.
+   - la fruta del rival y la que vuelve más tarde.
