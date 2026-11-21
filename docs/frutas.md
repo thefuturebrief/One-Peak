@@ -42,14 +42,14 @@ Decidido por el usuario.
 - **Todas originales:** así no chocan con nadie del canon y el jugador no las reconoce por el dibujo. Las frutas menores del canon aparecerán en otros personajes.
 - **Nombres:** provisionales. Hay que verificar que ninguno exista en el canon.
 
-### Confirmadas (13)
+### Confirmadas (15)
 | # | Fruta | Tipo | Qué hace | Contra qué le cuesta | Techo (dominio máximo) | Aspecto de la fruta |
 |---|---|---|---|---|---|---|
 | 1 | **Kasumi Kasumi no Mi** (niebla) | Logia | Se vuelve bruma y se mueve como niebla. Ciega zonas, crea siluetas falsas, aparece y desaparece. Pelea de sigilo e inteligencia. | El viento fuerte la dispersa | Un banco de niebla que cubre una isla, lleno de figuras que no existen | Gris perla, con espirales que se deshacen en los bordes |
-| 2 | **Shio Shio no Mi** (sal) | Logia | Cuerpo de sal y cristales cortantes. Seca y agrieta lo que toca. | La humedad la vuelve pastosa | Deshidratar a distancia y levantar columnas de sal; dejar a alguien convertido en estatua de sal | Blanca y cristalina, con espirales en facetas |
+| 2 | **Shio Shio no Mi** (sal) | Logia | Cuerpo de sal y cristales cortantes. Seca y agrieta lo que toca. Conserva: limpia heridas y frena la podredumbre. Ironía: saca sal del mar que la hunde. | La humedad la vuelve pastosa | Deshidratar a distancia y levantar columnas de sal; dejar a alguien convertido en estatua de sal | Blanca y cristalina, con espirales en facetas |
 | 3 | **Arashi Arashi no Mi** (tormenta) | Logia | Se vuelve tormenta y maneja sus partes: viento, lluvia, presión y rayos. Al principio son síntomas: una racha, unas gotas, una chispa. | Cuanto más grande, más tarda en formarse y menos precisa es (puede dar a los suyos). Roza la Goro Goro de Enel solo en el rayo. | Una tormenta colosal que pone en peligro una isla entera | Gris pizarra con una veta eléctrica que la recorre |
 | 4 | **Funka Funka no Mi** (erupción) | Logia | Se vuelve material piroclástico: gas ardiente y ceniza. Avalanchas que avanzan a gran velocidad, golpes que estallan, nubes de ceniza que ciegan y rayos volcánicos dentro de la ceniza (pasa de verdad). Absorbe la idea del azufre: su firma son llamas azules. | Arrasa sin distinguir: en espacios cerrados o con aliados cerca es un problema | Una erupción continua que arrasa una costa | Negra con grietas naranjas y un brillo azul en el centro |
-| 5 | **Kame Kame no Mi, modelo Genbu** | Zoan mítica | La Tortuga Negra del Norte: placas negro verdosas, una serpiente que sale de la espalda y ataca sola, caparazón que bloquea casi todo, embestida pesada y resistencia que se recupera sin pausa. | Lenta | Una tortuga gigante envuelta en vaho helado; la serpiente lucha como un segundo guerrero | Verde negra con relieve hexagonal y una espiral que es una serpiente |
+| 5 | **Kame Kame no Mi, modelo Genbu** | Zoan mítica | La Tortuga Negra del Norte: placas negro verdosas, una serpiente que sale de la espalda y ataca sola, caparazón que bloquea casi todo y embestida pesada. Vaho helado: lo que lo toca se entumece. No regenera, porque eso es de Anteo. | Lenta | Una tortuga gigante envuelta en vaho helado; la serpiente lucha como un segundo guerrero | Verde negra con relieve hexagonal y una espiral que es una serpiente |
 | 6 | **Uma Uma no Mi, modelo Hipocampo** | Zoan mítica | Torso de caballo y cola de pez. "Nada" en corrientes propias por tierra y aire a velocidad extrema, con saltos enormes, coletazos y embestidas montado en la corriente. La corriente arrastra al rival. | Como todo usuario, en el mar real se hunde: la ironía es parte del personaje | Corrientes que se quedan en el aire y forman rutas para él (y para quien elija) | Verde agua con escamas y una espiral que ondula |
 | 7 | **Hito Hito no Mi, modelo Anteo** | Zoan mítica | El gigante hijo de la Tierra: musculatura enorme, marcas de roca en el cuerpo. Mientras toca el suelo recupera resistencia y fuerza sin parar. | Si lo levantan o lo separan del suelo pierde la ventaja. El rival tiene que ingeniárselas. | Un coloso que no se cansa mientras pise tierra | Marrón tierra con vetas de roca |
 | 8 | **Inu Inu no Mi, modelo Pachycrocuta** | Zoan antigua | La hiena gigante prehistórica: mandíbula que tritura hueso, cuello grueso, presión constante con mordidas y arrastres. Forma híbrida intimidante, de cabeza enorme y postura encorvada. | Poco alcance: todo es cuerpo a cuerpo | Una mordida que parte acero | Pardo manchado, con espirales como dentelladas |
@@ -58,6 +58,8 @@ Decidido por el usuario.
 | 11 | **Un Un no Mi** (fortuna) | Paramecia | Mueve probabilidades pequeñas por contacto: que algo sencillo le salga bien o que al rival se le escape la espada. No hace milagros ni controla el destino. En nuestro combate mueve las probabilidades del golpe y se ve: hilos dorados, tréboles, monedas que giran. | Lo imposible sigue siendo imposible; la suerte que da, la toma de algún lado | Encadenar golpes de suerte que parecen un plan | Dorada con un trébol en la espiral |
 | 12 | **Kokuyō Kokuyō no Mi** (obsidiana) | Paramecia | Cuerpo de vidrio volcánico: filos extremos, se rompe en mil esquirlas cortantes y se vuelve a armar. | Cada vez que se rompe se cansa, y sí siente el golpe | Una tormenta de esquirlas que se rearma en otro sitio | Negra con reflejos violeta |
 | 13 | **Eda Eda no Mi** (ramificaciones) | Paramecia | Ramifica lo que toca y sus golpes: una espada se abre en cinco hojas, una lanza se bifurca, un golpe se reparte en varios impactos, una grieta se ramifica como un rayo. Mucho volumen de ataque. Para no pisarse con la Hana Hana de Robin, no hace brotar brazos. | Cuantas más ramas, más finas y frágiles | Ramificar estructuras enteras: un mástil que se vuelve un bosque de lanzas | Verde con espirales que se bifurcan |
+| 14 | **Mushi Mushi no Mi, modelo Meganeura** | Zoan antigua | La libélula gigante del Carbonífero, de unos 70 cm de envergadura. Vuelo rapidísimo con cambios de dirección imposibles, reflejos excepcionales, visión casi en redondo y caza de precisión: de las libélulas actuales se cita que aciertan alrededor del 95 % de sus ataques. Ofensiva en todo. | Liviana: si la atrapan o la tiran al suelo, pierde casi todo | Ataques en picado encadenados que el ojo no sigue | Verde metálica iridiscente, con espirales como nervaduras de ala |
+| 15 | **Tori Tori no Mi, modelo búho nival** | Zoan (carnívora) | Búho de las nieves: vuelo silencioso, visión nocturna, gira la cabeza casi entera y ataca con garras de precisión. Menos destructiva, más sigilosa y certera: golpes pensados, uno por vez. | En pelea abierta y de frente pierde su ventaja | Cazar sin ser visto ni oído: el rival no sabe de dónde vino el golpe | Blanca con motas negras y una espiral como un ojo |
 
 **Obsidiana, Paramecia y no Logia:**
 - ya hay cuatro Logias y la sal es otra de cristal: se pisarían;
@@ -74,29 +76,37 @@ Decidido por el usuario.
 | Tela | Nivel medio |
 | Tinta y arcilla | Nivel medio. Quedan para personajes posteriores. |
 | Primera ronda: nudos, eco, aceleración, cajas, olfato, giro y pegamento | Descartadas |
+| Absorción y fororraco | Descartadas |
 
-### Candidatas para completar 15 (faltan 2)
-| Fruta | Tipo | Qué hace | Por qué |
-|---|---|---|---|
-| **Kyū Kyū no Mi** (absorción) — recomendada | Paramecia | Toma las propiedades del material que toca: piedra, acero, madera. Con el dominio, combina varias a la vez. | La más "de protagonista": versátil y crece con la creatividad |
-| **Tori Tori no Mi, modelo Fororraco** — recomendada | Zoan antigua | El ave del terror prehistórica: corredora veloz, con un pico que es un hacha | Equilibra la fuerza bruta del catálogo con velocidad |
-| Hen Hen no Mi (estados de la materia) | Paramecia | Derrite, solidifica o evapora lo que toca: un muro que se vuelve líquido, una espada que se vuelve vapor | Muy creativa y muy poderosa; habría que acotarla |
-| Kae Kae no Mi (intercambio) | Paramecia | Cambia de lugar dos cosas que tocó | Táctica pura; roza el Shambles de Law |
-| Hebi Hebi no Mi, modelo Titanoboa | Zoan antigua | La serpiente gigante prehistórica: constricción que aplasta | Buena para un rival pesado |
-| Nue | Zoan mítica | La quimera: mono, tanuki, tigre y serpiente | Muy original, pero sería la cuarta mítica |
-| Tori Tori no Mi, modelo Grifo | Zoan mítica | Vuelo y fuerza de león | Ídem |
+### Roles: cómo queda repartido el catálogo
+| Rol | Frutas |
+|---|---|
+| Control del terreno, a gran escala | Niebla, Sal, Tormenta, Erupción |
+| Aguante y fuerza | Genbu, Anteo, Pachycrocuta, Acumulación |
+| Velocidad y aire | Hipocampo, Meganeura, búho nival |
+| Técnica y precisión | Resonancia, Obsidiana, Ramificaciones |
+| Astucia | Fortuna (y la Niebla) |
+
+### En reserva (por si queremos ampliar o cambiar alguna)
+| Fruta | Tipo | Qué hace |
+|---|---|---|
+| Kidō Kidō no Mi (órbita) | Paramecia | Hace que lo que toca orbite a su alrededor: escudos de escombros que giran y lanzamientos desde la órbita |
+| Nue | Zoan mítica | La quimera: mono, tanuki, tigre y serpiente |
+| Hen Hen no Mi (estados de la materia) | Paramecia | Derrite, solidifica o evapora lo que toca |
+| Kae Kae no Mi (intercambio) | Paramecia | Cambia de lugar dos cosas que tocó |
 
 ### Rareza del sorteo
-Propuesta: Paramecia, 1; Zoan antigua, 0,6; Logia, 0,2; Zoan mítica, 0,03.
+Propuesta: Paramecia, 1; Zoan carnívora, 0,8; Zoan antigua, 0,6; Logia, 0,2; Zoan mítica, 0,03.
 
-Cuentas con las 13 confirmadas más las dos recomendadas: 6 Paramecia, 2 antiguas, 4 Logias y 3 míticas. Las cifras salen de simular 300.000 sorteos de tres frutas sin repetir.
+Cuentas con las 15 confirmadas: 5 Paramecia, 1 Zoan carnívora, 2 antiguas, 4 Logias y 3 míticas. Las cifras salen de simular 300.000 sorteos de tres frutas sin repetir.
 
 | Resultado | Probabilidad |
 |---|---|
-| Alguna mítica entre las tres | 3,8 % |
-| Alguna Logia | 30 % |
+| Alguna mítica entre las tres | 3,7 % |
+| Alguna Logia | 31 % |
 | Alguna antigua | 43 % |
-| Las tres Paramecia | 34 % |
+| El búho | 31 % |
+| Las tres Paramecia | 19 % |
 
 ### Quién podría quedarse cada una
 - El protagonista come la que elige.
@@ -105,7 +115,7 @@ Cuentas con las 13 confirmadas más las dos recomendadas: 6 Paramecia, 2 antigua
 - Detalle: si la fortuna no la come nadie, Nerea, que es tahúr, es una candidata natural para el futuro.
 
 ## Próximos pasos
-1. **Cerrar las dos que faltan.**
+1. **Catálogo cerrado en 15.** Falta verificar los nombres contra el canon.
 2. **Ficha de cada fruta:** técnicas por nivel de dominio (al comerla, avanzado y despertar).
 3. **Diseñar las frutas:** sprite e ilustración grande para la subasta, junto con la Kurage no Hinotama.
 4. **Sistema en el juego:**
