@@ -64,23 +64,59 @@ function tinte(a) { const im = atlasArma(a.tipo); if (!im || !a.hoja) return im;
     if (todo || (mx > 70 && (mx - mn) / mx < .16)) { const t = Math.min(2.999, l * 3.2), k0 = Math.floor(t), f = t - k0, A = ramp[k0], B = ramp[k0 + 1]; d[i] = A[0] + (B[0] - A[0]) * f; d[i + 1] = A[1] + (B[1] - A[1]) * f; d[i + 2] = A[2] + (B[2] - A[2]) * f; } }
   g.putImageData(id, 0, 0); return ARMA_TINTE[k] = c; }
 function drawArma(g, a, x, y, dir, anim, frame, tras) {
-  if (TIPO[a.tipo] && TIPO[a.tipo][2] === 'fuego') return tras ? null : drawFuego(g, a, x, y, dir, anim, frame);
+  if (TIPO[a.tipo] && TIPO[a.tipo][2] === 'fuego') return drawFuego(g, a, x, y, dir, anim, frame, tras);
   if (anim === 'hurt') return; const e = (ARMA_MAN[a.tipo] || {})[anim]; if (!e) return; const L = e[tras ? 'b' : 'f']; if (!L) return; const im = tinte(a); if (!im) return;
   const [y0, c, n] = L, f = Math.min(frame | 0, n - 1), off = (c - 64) / 2;
   g.drawImage(im, f * c, y0 + ROW[dir] * c, c, c, Math.round(x - 32 - off), Math.round(y - 60 - off), c, c);
 }
-// pistola y mosquete: en la cadera al caminar; con el brazo extendido en la pose de disparar (cuadros 4 en adelante)
-function drawFuego(g, a, x, y, dir, anim, f) {
-  const H = HOJA[a.hoja || 'acero'], largo = a.tipo === 'mosquete' ? 20 : 9, s = dir === 'left' ? -1 : 1;
-  g.save(); g.translate(Math.round(x), Math.round(y - 60));
-  const arma = (px, py, ang) => { g.save(); g.translate(px, py); g.rotate(ang); g.fillStyle = '#2a1a12'; g.fillRect(-2, -2, largo + 3, 4); g.fillStyle = H[1]; g.fillRect(-1, -1, largo + 1, 2); g.fillStyle = H[3]; g.fillRect(0, -1, largo, 1);
-    g.fillStyle = '#6a4228'; g.fillRect(-4, -1, 4, 5); g.fillStyle = '#3a2414'; g.fillRect(-4, 3, 4, 1); g.restore(); };
-  if (anim === 'shoot' && f >= 4) {
-    if (dir === 'left' || dir === 'right') { const hx = 32 + s * 18, hy = 31; arma(hx, hy, dir === 'left' ? Math.PI : 0);
-      if (f >= 6 && f <= 7) { g.fillStyle = '#fff3b0'; g.beginPath(); g.arc(hx + s * (largo + 4), hy, 4, 0, 7); g.fill(); g.fillStyle = '#ff9a3a'; g.beginPath(); g.arc(hx + s * (largo + 6), hy, 2.5, 0, 7); g.fill(); }
-      if (f >= 7) { g.fillStyle = 'rgba(220,220,220,.5)'; g.beginPath(); g.arc(hx + s * (largo + 8 + (f - 7) * 3), hy - (f - 7) * 2, 3 + (f - 7), 0, 7); g.fill(); } }
-    else if (dir === 'down') { g.fillStyle = '#2a1a12'; g.fillRect(29, 34, 6, 6); g.fillStyle = H[2]; g.fillRect(30, 35, 4, 4); g.fillStyle = '#111'; g.fillRect(31, 36, 2, 2); if (f >= 6 && f <= 7) { g.fillStyle = '#fff3b0'; g.beginPath(); g.arc(32, 41, 5, 0, 7); g.fill(); } }
-  } else if (dir !== 'up') arma(dir === 'left' ? 26 : dir === 'right' ? 38 : 40, 42, a.tipo === 'mosquete' ? -1.2 : 1.4);
+// ---------- armas de fuego: un solo diseño de pistola y uno de mosquete, para todos ----------
+// Se dibujan una vez (mirando a la derecha) y se colocan en la mano según el cuadro de la animación de disparo.
+// La mano adelantada del cuerpo LPC en la pose de disparo (medida en las hojas base): x 50-51, y de 34 a 30 y vuelta a 34.
+const MANO_DISP = [[38, 36], [38, 36], [46, 41], [49, 41], [49, 34], [50, 32], [50, 30], [50, 31], [50, 33], [50, 34], [50, 34], [50, 34], [50, 34]];
+const FUEGO_SPR = {};
+function spriteFuego(tipo, hoja) { const k = tipo + hoja; if (FUEGO_SPR[k]) return FUEGO_SPR[k]; const M = HOJA[hoja || 'acero'], O = '#140c08', W = ['#3a2214', '#6a4024', '#8e5a32', '#b07a48'], B = ['#6a4a14', '#b08a2a', '#e8c860'];
+  let c, g, info; const px = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(x, y, w, h); };
+  if (tipo === 'mosquete') { [c, g] = mkCanvas(42, 10); // culata, llave, caja, cañón largo con abrazaderas y baqueta
+    px(1, 3, 13, 5, O); px(0, 4, 2, 4, O); px(1, 4, 12, 3, W[1]); px(2, 4, 10, 1, W[2]); px(1, 7, 3, 1, O); px(1, 4, 1, 3, B[1]);   // culata con cantonera
+    px(11, 3, 6, 4, O); px(12, 4, 4, 2, M[2]); px(12, 4, 4, 1, M[3]); px(14, 2, 2, 2, O); px(14, 2, 1, 1, M[2]);                    // llave y pedernal
+    px(13, 6, 4, 3, O); px(14, 7, 2, 1, B[1]);                                                                                       // guardamonte
+    px(16, 4, 16, 3, O); px(16, 5, 15, 1, W[1]); px(16, 4, 15, 1, W[2]);                                                            // caja de madera
+    px(15, 2, 27, 3, O); px(16, 3, 25, 1, M[1]); px(16, 3, 25, 1, M[2]); px(16, 3, 24, 1, M[2]); px(17, 3, 22, 1, M[3]);             // cañón
+    px(16, 6, 20, 1, '#2a1a10');                                                                                                     // baqueta
+    for (const x of [22, 29]) { px(x, 2, 2, 5, O); px(x, 3, 1, 3, B[2]); } px(40, 1, 1, 2, M[3]); px(41, 2, 1, 3, O);              // abrazaderas, mira, boca
+    info = { c, mano: [24, 4], boca: [41, 3], atras: 13 }; }
+  else { [c, g] = mkCanvas(20, 11); // pistola de chispa: empuñadura curva con pomo, llave, cañón corto
+    px(1, 4, 6, 7, O); px(2, 5, 4, 5, W[1]); px(2, 5, 2, 5, W[2]); px(0, 8, 4, 3, O); px(1, 9, 2, 1, B[1]);                     // empuñadura y pomo
+    px(5, 2, 5, 5, O); px(6, 3, 3, 3, M[2]); px(6, 3, 3, 1, M[3]); px(7, 1, 2, 2, O);                                               // llave
+    px(6, 6, 4, 3, O); px(7, 7, 2, 1, B[1]);                                                                                         // guardamonte
+    px(8, 2, 12, 4, O); px(9, 3, 10, 2, M[1]); px(9, 3, 10, 1, M[2]); px(10, 3, 8, 1, M[3]); px(18, 2, 1, 1, M[3]);                 // cañón
+    px(8, 5, 6, 1, W[1]);
+    info = { c, mano: [3, 5], boca: [19, 4], atras: 0 }; }
+  return FUEGO_SPR[k] = info; }
+// coloca el arma con la mano en (hx, hy), mirando a la derecha (s = 1) o a la izquierda (s = -1)
+function ponFuego(g, sp, hx, hy, s, ang = 0) { g.save(); g.translate(hx, hy); g.scale(s, 1); g.rotate(ang); g.drawImage(sp.c, -sp.mano[0], -sp.mano[1]); g.restore(); }
+function fogonazo(g, x, y, s, k) { // k: 0 al disparar, 1 cuando se apaga
+  if (k < .5) { const r = 6 * (1 - k * 1.6); g.fillStyle = 'rgba(255,240,170,.95)'; g.beginPath(); for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2, rr = i % 2 ? r * .45 : r; g.lineTo(x + s * (Math.cos(a) * rr + r * .6), y + Math.sin(a) * rr * .7); } g.fill();
+    g.fillStyle = 'rgba(255,150,50,.9)'; g.beginPath(); g.arc(x + s * 2, y, 2.2, 0, 7); g.fill(); }
+  for (let i = 0; i < 3; i++) { const kk = Math.max(0, k - i * .12); if (kk <= 0) continue; g.fillStyle = `rgba(225,225,225,${.5 * (1 - kk)})`; g.beginPath(); g.arc(x + s * (4 + kk * 10 + i * 3), y - kk * 8 - i, 2 + kk * 4, 0, 7); g.fill(); } }
+// tras: capa de detrás del cuerpo (mosquete colgado a la espalda)
+function drawFuego(g, a, x, y, dir, anim, f, tras) {
+  const sp = spriteFuego(a.tipo, a.hoja), rifle = a.tipo === 'mosquete', s = dir === 'left' ? -1 : 1, fr = Math.min(12, f | 0);
+  g.save(); g.translate(Math.round(x - 32), Math.round(y - 60)); // coordenadas del cuadro de 64 x 64
+  if (anim === 'shoot' && !tras) {
+    if (dir === 'left' || dir === 'right') { const [mx, my] = MANO_DISP[fr], hx = s > 0 ? mx - 1 : 64 - mx, hy = my + 1, retro = fr === 8 ? 2 : fr === 9 ? 1 : 0, ang = fr < 4 ? .9 - fr * .22 : fr === 8 ? -.12 : fr === 9 ? -.05 : 0;
+      ponFuego(g, sp, hx - s * retro, hy, s, ang);
+      if (fr >= 8) { const bx = hx + s * (sp.boca[0] - sp.mano[0]), by = hy + (sp.boca[1] - sp.mano[1]) - (fr === 8 ? 2 : 0); fogonazo(g, bx, by, s, (fr - 8) / 5); } }
+    else if (dir === 'down' && fr >= 4) { const cx = 27, cy = 33; g.fillStyle = '#140c08'; g.fillRect(cx - 3, cy - 3, 7, rifle ? 8 : 6); g.fillStyle = HOJA[a.hoja || 'acero'][2]; g.fillRect(cx - 2, cy - 2, 5, 4); g.fillStyle = '#050505'; g.beginPath(); g.arc(cx + .5, cy, 1.4, 0, 7); g.fill();
+      if (rifle) { g.fillStyle = '#6a4024'; g.fillRect(cx - 2, cy + 2, 5, 3); }
+      if (fr >= 8 && fr < 10) { const r = fr === 8 ? 5 : 3; g.fillStyle = 'rgba(255,240,170,.9)'; g.beginPath(); for (let i = 0; i < 10; i++) { const an = i / 10 * Math.PI * 2, rr = i % 2 ? r * .4 : r; g.lineTo(cx + .5 + Math.cos(an) * rr, cy + 1 + Math.sin(an) * rr); } g.fill(); } }
+  } else if (anim !== 'shoot' && anim !== 'hurt') {
+    if (rifle) { // colgado a la espalda, en diagonal; de frente asoma por encima del hombro
+      const detras = dir !== 'up'; if (tras === detras) { g.save(); if (dir === 'left' || dir === 'right') { g.translate(32 - s * 10, 32); g.scale(s, 1); g.rotate(-1.75); } else { g.translate(dir === 'up' ? 31 : 30, dir === 'up' ? 33 : 30); g.rotate(dir === 'up' ? -1.1 : -2.25); } g.drawImage(sp.c, -21, -4); g.restore(); } }
+    else if (!tras && dir !== 'up') { // pistola en la funda: cuero en la cadera y la culata asomando
+      const hx = dir === 'down' ? 39 : 32 - s * 2, hy = 41; g.fillStyle = '#140c08'; g.fillRect(hx - 2, hy - 1, 5, 7); g.fillStyle = '#5a3a20'; g.fillRect(hx - 1, hy, 3, 5); g.fillStyle = '#7a5030'; g.fillRect(hx - 1, hy, 1, 5);
+      g.fillStyle = '#140c08'; g.fillRect(hx - 2 + (dir === 'left' ? -1 : 1), hy - 5, 3, 5); g.fillStyle = '#8e5a32'; g.fillRect(hx - 1 + (dir === 'left' ? -1 : 1), hy - 4, 1, 3); }
+  }
   g.restore();
 }
 
