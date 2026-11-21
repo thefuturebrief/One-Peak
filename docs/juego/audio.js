@@ -1,4 +1,4 @@
-// Sonido generado en el navegador, sin archivos: ambiente (mar, viento, gaviotas, grillos, crujidos), efectos y temas cortos.
+// Sonido generado en el navegador, sin archivos: ambiente (mar, viento, grillos, crujidos), efectos y temas cortos.
 // Arranca con el primer clic o tecla (los navegadores no dejan sonar antes). Música y efectos se apagan por separado.
 const PREFS = (() => { try { return { musica: true, efectos: true, rapido: false, ...JSON.parse(localStorage.getItem('onepeak-prefs') || '{}') }; } catch (e) { return { musica: true, efectos: true, rapido: false }; } })();
 const guardarPrefs = () => { try { localStorage.setItem('onepeak-prefs', JSON.stringify(PREFS)); } catch (e) {} aplicarPrefs(); };
@@ -57,13 +57,13 @@ function sfx(nom) { if (!AU.ctx || !PREFS.efectos) return; const c = AU.ctx, t =
   if (nom === 'tiza') ruido(.06 + Math.random() * .05, 2500 + Math.random() * 2000, 1800, .05, 'highpass');
   if (nom === 'ui') tono(880, 880, .05, .05, 'triangle');
 }
-// ---------- cada 120 ms: ambiente según el sitio y la hora, gaviotas, grillos, crujidos y el tema que toca ----------
+// ---------- cada 120 ms: ambiente según el sitio y la hora, grillos, crujidos y el tema que toca ----------
 function audioTick() {
   if (!AU.ctx) return; const c = AU.ctx, t = c.currentTime, jugando = typeof G !== 'undefined' && !cv.hidden, h = jugando ? hourNow() : 12, noche = jugando && isNight(h), dentro = jugando && G.scene !== 'town', barco = jugando && /^(corneja|gaviota):cubierta/.test(G.scene), amar = jugando && F.navegando;
   const mar = !jugando ? .25 : barco ? (amar ? .9 : .55) : dentro ? .08 : .45, viento = !jugando ? .05 : barco && amar ? .3 : dentro ? 0 : noche ? .12 : .08;
   AU.mar.g.gain.setTargetAtTime(mar * (.75 + .25 * Math.sin(t * .5)), t, .5); AU.mar.f.frequency.setTargetAtTime(dentro && !barco ? 280 : 520 + 200 * Math.sin(t * .23), t, .5); AU.viento.g.gain.setTargetAtTime(viento * (.6 + .4 * Math.sin(t * .37)), t, .8);
   if (jugando && PREFS.efectos) { const r = Math.random();
-    if (!dentro && !noche && r < .012) { const o = c.createOscillator(), g = c.createGain(), f0 = 1300 + Math.random() * 500; o.type = 'triangle'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f0 * .7, t + .3); o.frequency.setValueAtTime(f0 * .95, t + .35); o.frequency.exponentialRampToValueAtTime(f0 * .6, t + .7); o.connect(g); g.connect(AU.amb); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05, t + .03); g.gain.linearRampToValueAtTime(.0001, t + .75); o.start(t); o.stop(t + .8); }
+    
     if (!dentro && noche && r < .25) { const o = c.createOscillator(), g = c.createGain(), at = t + Math.random() * .1; o.frequency.value = 4400 + Math.random() * 300; o.connect(g); g.connect(AU.amb); for (let k = 0; k < 3; k++) { g.gain.setValueAtTime(0, at + k * .05); g.gain.linearRampToValueAtTime(.012, at + k * .05 + .01); g.gain.linearRampToValueAtTime(0, at + k * .05 + .03); } o.start(at); o.stop(at + .2); }
     if ((barco || amar) && r < .02) { const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(); s.buffer = AU.ruido; f.type = 'bandpass'; f.Q.value = 12; f.frequency.setValueAtTime(220, t); f.frequency.linearRampToValueAtTime(140, t + .6); s.connect(f); f.connect(g); g.connect(AU.amb); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.5, t + .2); g.gain.linearRampToValueAtTime(0, t + .7); s.start(t); s.stop(t + .75); } }
   const tiza = document.querySelector('.tiza'); sonarTema(tiza ? 'tiza' : !jugando ? 'kale' : (F.campana && !F.invitacion) || (F.stHuida && !F.stFin) || (F.stDentro && !F.stHuida) ? 'plaza' : amar || barco ? 'mar' : noche ? 'noche' : 'kale'); programar();

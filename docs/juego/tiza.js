@@ -56,8 +56,6 @@ const ESC = {
   zarpa_pirata: (o) => [tzS([[30, 250], [210, 250]], { w: 2 }), ...[50, 110, 170].map(x => tzS([[x, 250], [x, 290]], { w: 2 })), tzS(tz.blob(90, 240, 120, 22, 7), { w: 1, h: .9 }), ...faro(60, 230, 40, 150),
     ...(o.promesa ? persona(150, 250, 40, { saluda: true }) : persona(150, 250, 40)), ...persona(124, 250, 52, { falda: true }), ...barcoT(330, 250, .9, 'balandra'), tzS(tz.wave(300, 270, 560, 3, 10), { w: 1 }), tzS(tz.wave(320, 284, 580, 3, 12), { w: 1 }),
     ...luna(540, 64, 20), ...estrella(420, 40, 2), ...estrella(470, 90, 2), ...estrella(280, 60, 3)],
-  zarpa_marina: (o) => [tzS([[30, 250], [190, 250]], { w: 2 }), ...[50, 110, 170].map(x => tzS([[x, 250], [x, 290]], { w: 2 })), ...faro(70, 236, 40, 140), ...(o.promesa ? persona(140, 250, 40, { saluda: true }) : persona(140, 250, 40)),
-    ...barcoT(290, 250, 1.05, 'marina'), ...persona(430, 236, 26, { gorra: true }), tzS(tz.wave(270, 272, 600, 3, 10), { w: 1 }), ...luna(560, 60, 18), ...estrella(250, 50, 2), ...estrella(520, 120, 2)],
   noche: (o) => [...luna(320, 90, 42), ...Array.from({ length: 7 }, (_, k) => tzS([[300 - k * 4, 168 + k * 14], [340 + k * 4, 168 + k * 14]], { w: 1, c: 'a' })), ...olas(200, 6, 30, 610),
     ...barcoT(150, 196, .45, o.tipo), ...rosa(560, 300, 24, o.tipo === 'balandra' ? -.4 : -.1), ...[[80, 60], [140, 30], [470, 40], [520, 100], [600, 60], [220, 70]].flatMap(([x, y]) => estrella(x, y, 2))],
   shells: () => [...olas(300, 3), tzS([[40, 236], [150, 176], [300, 156], [460, 170], [600, 226]], { w: 2 }),

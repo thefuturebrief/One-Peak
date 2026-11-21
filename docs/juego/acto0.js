@@ -312,7 +312,7 @@ function atardecer() {
 }
 function atardecerEstado() {
   for (const n of PEOPLE) n.nextBark = performance.now() + 9000 + Math.random() * 8000;
-  for (const [id, at] of [['mar2', [9, 4.4]], ['mar3', [16, 9]]]) { const n = P(id); if (n) { n.goal = null; moveNpc(n, 'gaviota:cubierta', at, 'down'); n.greet = () => pick(['Sin órdenes de la teniente, nada.', '¿Vienes a alistarte? Habla con la teniente.']); n.topics = []; } }
+  for (const [id, at] of [['mar2', [9, 4.4]], ['mar3', [16, 9]]]) { const n = P(id); if (n) { n.goal = null; moveNpc(n, 'gaviota:cubierta', at, 'down'); n.greet = () => pick(['Sin órdenes de la teniente, nada.', 'Esta noche zarpamos. La teniente quiere a Dorne entre rejas.']); n.topics = []; } }
   learn(['gente', 'El forastero', 'Encapuchado, de negro. No le vi la cara. Dorne retrocedió solo con verlo. Dice que zarpa esta noche y que hay sitio para mí.']);
   learn(['gente', 'Teniente Breda Nisi', 'Oficial de la Marina de Loguetown. Me ofreció alistarme. Su barco sale esta noche.']);
   const fo0 = P('forastero'); fo0.fijo = false; moveNpc(fo0, 'town', [9.6, 21.9], 'left'); moveNpc(P('teniente'), 'town', [44.5, 14.6], 'down');
@@ -328,7 +328,7 @@ function atardecerEstado() {
     { id: 'vamos', ask: 'Me voy contigo.', a: () => ['Bien. Despídete de quien tengas que despedirte. Cuando subas, no hay vuelta atrás.'], aff: () => 0 }];
   te.greet = () => pick(['¿Y bien?', 'El barco no esperará toda la noche.']); te.barks = ['...'];
   te.topics = [{ id: 'marina', once: true, ask: '¿Qué es la Marina para usted?', a: () => ['Orden. Y a veces justicia, cuando las dos coinciden.', 'Cuando no coinciden, uno tiene que elegir. Esa parte no sale en los carteles.'] },
-    { id: 'alistar', ask: 'Quiero alistarme.', a: () => ['Bien. Despídete de tu familia. A medianoche soltamos amarras.'] }];
+    { id: 'alistar', once: true, ask: 'No voy a alistarme.', a: () => ['(Te mira un buen rato.) Lo suponía. Se te ve en la cara.', 'Ten cuidado con quien te lleve. Los que hacen retroceder a un pirata con solo mirarlo no suelen regalar nada.'] }];
   const marla = P('marla'), corso = P('corso');
   marla.topics = [{ id: 'adios', once: true, ask: 'Mamá... me voy de Kalé. Esta noche.', a: () => {
     const lines = []; if (F.dorneCofre) lines.push('Dorne sabe lo del cofre, ¿verdad? Lo he visto en tu cara.');
@@ -343,9 +343,8 @@ function atardecerEstado() {
 // confirmación al elegir camino: el juego pregunta aquí antes de responder un tema
 function actoChoose(t, i) {
   if (t.conv.opts) return false; if (duelChoose(t, i)) return true; const tp = topicsOf(t.npc)[i];
-  if (!tp || !((t.npc.id === 'forastero' && tp.id === 'vamos') || (t.npc.id === 'teniente' && tp.id === 'alistar'))) return false;
-  const path = t.npc.id === 'forastero' ? 'pirata' : 'marine';
-  G.talking = { npc: t.npc, conv: { lines: [path === 'pirata' ? '¿Seguro? Cuando subas, no hay vuelta atrás.' : '¿Seguro? Una vez firmes, eres de la Marina.'], opts: [{ t: path === 'pirata' ? 'Sí. Zarpemos.' : 'Sí. Quiero alistarme.', then: () => viaje(path) }, { t: 'Todavía no.', then: () => { } }] }, i: 0 };
+  if (!tp || t.npc.id !== 'forastero' || tp.id !== 'vamos') return false;
+  G.talking = { npc: t.npc, conv: { lines: ['¿Seguro? Cuando subas, no hay vuelta atrás.'], opts: [{ t: 'Sí. Zarpemos.', then: () => viaje('pirata') }, { t: 'Todavía no.', then: () => { } }] }, i: 0 };
   renderTalk(); return true;
 }
 // =====================================================================

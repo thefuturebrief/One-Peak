@@ -272,6 +272,8 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
       - la huida tiene campanas, disparos y gente corriendo, y saltas a la Tortuga Parda cuando ya se separa del muelle.
     - **La brújula** apunta a lo que toca hacer.
     - **Frutas:** la propuesta de cuáles quedan reservadas está en `docs/frutas.md`.
+  - **Solo camino pirata (decidido):** se quita la opción de alistarse en la Marina. Es lo más común y lo más entretenido, y evita mantener dos caminos. En Kalé, la teniente Nisi sigue existiendo y te ofrece alistarte, pero solo se le puede decir que no. Se quitaron el viaje en la Gaviota Blanca y su tiza.
+  - **Sonido:** se quitó el graznido de gaviota, que sonaba raro.
   - **Versión 3 de Shells Town (después de la segunda prueba):**
     - **Nadie queda tapado:** ningún mueble ni puesto tapa a un tendero o vecino. Un chequeo automático (`herramientas/pruebas/tapados.js`) recorre todas las horas y avisa si alguien queda tapado, pisa un mueble o se amontona con otro.
     - **Diseños propios:** 16 personajes nuevos para quienes repetían el sprite de Kalé (Pipo, Lalo, Marta, la viuda Amaro, doña Celes, la marinera, Bruto, el sargento Pardo, el cabo Ruiz, cinco marines distintos, Clara y Goyo).
