@@ -41,18 +41,46 @@ Decidido por el usuario.
 - **El catálogo se parte en dos:**
   - **Sorteo del protagonista:** solo frutas "de protagonista", pensadas como respuesta a la tormenta. Una sola figura contra la tormenta entera, con estéticas opuestas.
   - **Frutas del mundo:** las 15 de abajo, menos la Tormenta, existen y aparecen en otros personajes (tripulación, aliados, rivales, secundarios).
-- **El cofre (propuesta):** cuatro frutas. Severin, encapuchado, salta y se lleva la suya sin que se vea bien. Tú eliges entre las otras tres.
+- **El cofre (decidido):** cuatro frutas. Severin, encapuchado, salta y se lleva la suya sin que se vea bien. Tú eliges entre las otras tres.
 - **Candidata confirmada para el protagonista:** la **Aurora**. Su contraste: el caos de la tormenta contra una luz constante y serena.
 - **Rasgos de la creación:** no deciden la fruta. Como mucho, son un matiz en cómo te "llama" cada una en la subasta.
 
 ## Sorteo del protagonista (en construcción)
-| Fruta | Tipo | Qué es | La imagen contra la tormenta | Estado |
-|---|---|---|---|---|
-| **Aurora** (Kyokkō Kyokkō no Mi) | Logia | Cortinas de luz de colores que envuelven, atan, queman y deslumbran. Lenta y constante. Siente los campos magnéticos. Hay que separarla de la luz de Kizaru: la aurora no es un láser, es una marea de luz. | Una luz serena que se abre paso en el centro de la tormenta | Candidata |
-| **Quietud** (Tome Tome no Mi) | Paramecia | Fija en el sitio lo que toca o lo que entra en su zona: gotas, balas, un rayo a medio caer, él mismo en medio del viento. Tiene que separarse del tiempo (reservado): no detiene el tiempo, detiene el movimiento. | Una persona de pie, inmóvil, en medio del huracán; alrededor, la lluvia y los rayos quietos en el aire | Propuesta |
-| **Rumbo** (Muki Muki no Mi) | Paramecia | Cambia la dirección de lo que toca o de lo que entra en su alcance: la lluvia que sube, el viento que gira, el rayo que vuelve. Es el pirata que tiene rumbo en medio del caos. | Una figura que avanza contra la tormenta y la tuerce a su paso | Propuesta |
-| **Qilin** (Ushi Ushi no Mi, modelo Qilin) | Zoan mítica | La bestia benévola de Oriente: escamas, melena de fuego sagrado, camina sobre el aire y las nubes, aparece en tiempos de justicia y no daña al inocente. Guiño: en japonés "kirin" es también la jirafa de Kaku. | Una bestia luminosa que trepa por las nubes de la tormenta, pisándolas | Propuesta |
-| Niebla, Erupción | Logia | Del catálogo de 15 | Sin pensar todavía el contraste | En duda |
+- **Confirmada:** la Aurora.
+- **Descartadas para el protagonista:** Quietud, Rumbo, Qilin, Cometa, Garuda y Color. La Niebla pasa a las frutas del mundo: es atmosférica como la tormenta, así que no contrasta, y recuerda a Smoker.
+
+### 20 ideas para elegir
+Criterio: una figura sola contra la tormenta, con mística y belleza propias. Los nombres en japonés son provisionales.
+
+| # | Fruta | Tipo | Qué hace | La imagen contra la tormenta | Ojo con |
+|---|---|---|---|---|---|
+| 1 | **Arcoíris** (Niji Niji) | Logia | Puentes y arcos de luz por donde corre; siete franjas, cada una con un efecto | Lo que llega después de la tormenta, en medio de ella | Que no se vuelva la de Color |
+| 2 | **Luz de luna** (Gekkō Gekkō) | Logia | Luz plateada, reflejos y mareas; su fuerza cambia con las fases de la luna (el juego ya tiene día y noche) | La luna llena que asoma entre las nubes negras | Familia de la luz de Kizaru |
+| 3 | **Mar luminoso** (Yakō Yakō) | Logia | La bioluminiscencia del mar de noche: chispas azules que se pegan, ciegan, guían y queman frío | Un mar que brilla azul bajo un cielo negro | Que se lea distinto de la Aurora |
+| 4 | **Polvo de estrellas** (Hoshi Hoshi) | Logia | Cuerpo de cielo nocturno con estrellas; traza constelaciones que golpean, atan o protegen | El cielo estrellado que queda por encima de las nubes | — |
+| 5 | **Pétalos** (Sakura Sakura) | Logia | Se deshace en pétalos que cortan, envuelven y esconden | Una lluvia de pétalos que no se rompe con el viento | Recuerda a Senbonzakura (Bleach) |
+| 6 | **Ámbar** (Kohaku Kohaku) | Logia | Resina dorada que fluye como miel y se endurece: atrapa y conserva para siempre | El caos de la tormenta congelado en una gota dorada | — |
+| 7 | **Kintsugi** (Kin Kin) | Paramecia | Repara lo roto con vetas de oro y lo deja más fuerte que antes: armas, barcos, heridas, también a sí mismo | Él repara lo que la tormenta destruye | — |
+| 8 | **Juramento** (Chikai Chikai) | Paramecia | Las promesas que hace se vuelven poder; cumplirlas lo fortalece y romperlas lo hiere | Alguien que no se mueve porque prometió llegar | Poco visual: necesita un símbolo |
+| 9 | **Hilo rojo** (En En) | Paramecia | El hilo rojo del destino: une personas y cosas, tira de ellas, encuentra a quien busca y comparte golpes | Un hilo rojo que atraviesa la tormenta hasta alguien | Hilos de Doflamingo: aquí es uno solo y no corta |
+| 10 | **Grullas de papel** (Tsuru Tsuru) | Paramecia | Bandadas de grullas de papel que vuelan, cortan, cargan y protegen; mil grullas, un deseo | Mil grullas blancas que vuelan contra el viento | — |
+| 11 | **Marea** (Shiosai Shiosai) | Paramecia | Ritmo de marea: atrae y empuja todo con un vaivén constante e imparable | La constancia contra el caos | — |
+| 12 | **Linternas** (Tōrō Tōrō) | Paramecia | Cientos de farolillos flotantes que iluminan, guían, revelan y queman | Farolillos que siguen encendidos en el viento | — |
+| 13 | **Fuegos artificiales** (Hanabi Hanabi) | Paramecia | Estallidos de color: golpes que florecen, cohetes y lluvias de chispas | Una fiesta que estalla contra el cielo negro; el espíritu pirata | Explosiones de la Bomu Bomu (lo distinto es la estética) |
+| 14 | **Caligrafía** (Moji Moji) | Paramecia | Escribe en el aire y la palabra se cumple: «escudo», «fuego», «alto» | Trazos de luz que dicen «no» a la tormenta | Pincel de Kanjuro (aquí son palabras, no dibujos) |
+| 15 | **Koi del Dragón** (Koi Koi, mítica) | Zoan | La leyenda de la carpa que remonta la cascada y se vuelve dragón. Empieza como un koi y en el despertar asciende. | Un koi que remonta la tormenta como si fuera una cascada | El dragón de Kaido: este sería dorado y de agua |
+| 16 | **Sun Wukong** (Saru Saru, mítica) | Zoan | El Rey Mono: bastón que se alarga, nube para volar y transformaciones; rebelde contra el cielo | El rebelde contra el cielo, ahora contra el marine de la tormenta | Mucho Dragon Ball |
+| 17 | **Mariposa del alma** (Chō Chō, modelo Psique, mítica) | Zoan | Alas de luz; cada aleteo pequeño desata consecuencias enormes | El efecto mariposa: un aleteo contra una tormenta | — |
+| 18 | **Mensajero del Dragón** (Ryūgū no Tsukai, mítica) | Zoan | El pez remo del folclore, mensajero del palacio del Rey Dragón: cinta plateada con cresta roja que nada en el aire | Una cinta de plata que corta la tormenta | — |
+| 19 | **Ciervo sagrado** (Shika Shika, mítica) | Zoan | El ciervo divino: astas de luz, vida a su paso y calma | La calma del bosque contra el caos del cielo | Espíritu del bosque de Ghibli |
+| 20 | **Unicornio** (Uma Uma, modelo Unicornio, mítica) | Zoan | Cuerno que purifica y cura, galope de luz | La pureza contra la furia | Muy visto |
+
+**Mis favoritas:**
+- Koi del Dragón: es la mejor curva de crecimiento.
+- Kintsugi: reparar contra destruir.
+- Arcoíris: lo que llega después de la tormenta.
+- Mariposa del alma: el efecto mariposa.
+- Luz de luna: se ve distinta de día y de noche.
 
 ## Frutas del mundo: el catálogo de 15 (en construcción)
 
