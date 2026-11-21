@@ -1,0 +1,156 @@
+<title>Tiza nueva</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Rammetto+One&display=swap">
+<style>
+/* Layout: pares antes/después, la pizarra nueva grande y la vieja chica al lado */
+:root { color-scheme: dark; --bg: #0f1311; --panel: #171d1a; --line: #27322c; --txt: #ece6d6; --dim: #9aa69e; --gold: #e3bc5c;
+  --display: 'Rammetto One', 'Arial Black', sans-serif; --body: 'Outfit', system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--txt); font-family: var(--body); font-size: 15px; line-height: 1.55; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 48px; }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 30px; }
+.kick { color: var(--gold); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; }
+h1 { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 4.4vw, 40px); line-height: 1.1; margin: 6px 0 8px; }
+.lead { color: var(--dim); max-width: 72ch; margin: 0; }
+.par { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1.2fr); gap: 14px; align-items: start; }
+@media (max-width: 760px) { .par { grid-template-columns: 1fr; } }
+figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+figcaption { color: var(--dim); font-size: 13px; }
+canvas, img { width: 100%; aspect-ratio: 16 / 9; display: block; border-radius: 8px; border: 1px solid var(--line); background: #1a201d; max-width: 100%; }
+.cap { font-family: Georgia, serif; font-style: italic; color: #e9e2cc; font-size: 15px; min-height: 1.6em; }
+h2 { margin: 0; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.notas { color: var(--dim); font-size: 14px; margin: 4px 0 0; padding-left: 18px; }
+button.re { justify-self: start; background: transparent; color: var(--txt); border: 1px solid var(--line); border-radius: 99px; padding: 4px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+button.re:focus-visible { outline: 2px solid var(--gold); }
+</style>
+<div class="wrap">
+  <header><div class="kick">One Peak · Rediseño de las escenas en tiza</div><h1>Tiza nueva</h1>
+    <p class="lead">Cuatro escenas rehechas con las reglas nuevas: lo de adelante tapa lo de atrás, todo apoya en el suelo o en el mar, un solo foco por escena y figuras con volumen en vez de palitos. A la derecha, cómo se ven hoy.</p></header>
+  <div id="lista" class="wrap" style="gap:34px"></div>
+</div>
+<script>
+const W = 640, H = 360, COL = { b: '245,240,228', a: '242,211,107', r: '232,130,110', z: '142,198,232' };
+const hash = (i, k = 1, s = 7) => { const v = Math.sin(i * 127.1 + k * 311.7 + s * 74.7) * 43758.5453; return v - Math.floor(v); };
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+// pizarra con polvo y borrones
+const PIZ = (() => { const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d'); g.fillStyle = '#1b211e'; g.fillRect(0, 0, W, H);
+  for (let k = 0; k < 30; k++) { const x = hash(k, 1, 13) * W, y = hash(k, 2, 13) * H, r = 40 + hash(k, 3, 13) * 130, gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, 'rgba(230,240,230,.035)'); gr.addColorStop(1, 'rgba(230,240,230,0)'); g.fillStyle = gr; g.fillRect(x - r, y - r, 2 * r, 2 * r); }
+  g.strokeStyle = 'rgba(230,240,230,.018)'; g.lineWidth = 28; g.lineCap = 'round'; for (let k = 0; k < 8; k++) { const y = 30 + hash(k, 5, 13) * 300, x = hash(k, 4, 13) * 400; g.beginPath(); g.moveTo(x, y); g.lineTo(x + 140 + hash(k, 6, 13) * 200, y + (hash(k, 7, 13) - .5) * 30); g.stroke(); }
+  for (let k = 0; k < 2600; k++) { g.fillStyle = `rgba(255,255,255,${hash(k, 8, 13) * .05})`; g.fillRect(hash(k, 9, 13) * W, hash(k, 10, 13) * H, 1, 1); } return c; })();
+// ---------- geometría ----------
+const circ = (cx, cy, rx, ry = rx, n = 28, a0 = 0, a1 = Math.PI * 2) => Array.from({ length: n + 1 }, (_, i) => { const a = a0 + (a1 - a0) * i / n; return [cx + Math.cos(a) * rx, cy + Math.sin(a) * ry]; });
+const ola = (x0, y, x1, amp = 3, paso = 16, fase = 0) => { const p = []; for (let x = x0; x <= x1; x += 4) p.push([x, y + Math.sin((x + fase) / paso * Math.PI) * amp]); return p; };
+const S = (p, o = {}) => ({ p, ...o });   // trazo: w grosor, c color, borra (tapa lo de atrás), h rayado (ángulo), denso, polvo, cerrar
+const cerrada = (p, o = {}) => S(p, { cerrar: true, borra: true, ...o });
+const curva = (a, b, c, n = 12) => Array.from({ length: n + 1 }, (_, i) => { const t = i / n, u = 1 - t; return [u * u * a[0] + 2 * u * t * b[0] + t * t * c[0], u * u * a[1] + 2 * u * t * b[1] + t * t * c[1]]; });
+// ---------- piezas ----------
+// figura con volumen: cabeza, cuerpo de abrigo o camisa, piernas y brazos; pose: quieto | saluda | señala | corre | salta
+function figura(x, y, h, o = {}) { const r = h * .13, hy = y - h + r, sh = y - h + r * 2.25, cin = y - h * .46, d = o.dir || 1, out = [];
+  const ancho = h * .16, falda = o.capa ? h * .24 : h * .15, bajo = o.capa ? y - h * .06 : cin;
+  // piernas
+  if (!o.capa) { const ab = o.pose === 'corre' ? h * .14 : o.pose === 'salta' ? h * .1 : h * .05; out.push(S([[x - h * .05, cin], [x - ab - h * .02, y]], { w: 4.2 }), S([[x + h * .05, cin], [x + ab * (o.pose === 'corre' ? 1.2 : 1) + h * .02, y - (o.pose === 'corre' ? h * .05 : 0)]], { w: 4.2 })); }
+  // cuerpo
+  out.push(cerrada([[x - ancho, sh], [x + ancho, sh], [x + falda, bajo], [x - falda, bajo]], { w: 2, h: o.oscuro ? .9 : 1.1, denso: !!o.oscuro }));
+  // brazos
+  const brazo = (lado, pose) => { const bx = x + lado * ancho * .9; if (pose === 'saluda') return S([[bx, sh + 2], [bx + lado * h * .12, sh - h * .1], [bx + lado * h * .14, sh - h * .24]], { w: 3.4 });
+    if (pose === 'señala') return S([[bx, sh + 2], [bx + lado * h * .3, sh + h * .02]], { w: 3.4 }); if (pose === 'corre') return S([[bx, sh + 2], [bx + lado * h * .14, sh + h * .14], [bx + lado * h * .2, sh + h * .06]], { w: 3.4 });
+    return S([[bx, sh + 2], [bx + lado * h * .04, sh + h * .3]], { w: 3.4 }); };
+  out.push(brazo(-1, o.izq || 'quieto'), brazo(1, o.der || 'quieto'));
+  // cabeza
+  out.push(cerrada(circ(x, hy, r, r * 1.05, 16), { w: 2, polvo: true }));
+  if (o.capucha) out.push(cerrada([[x - r * 1.5, sh + 6], ...circ(x, hy, r * 1.45, r * 1.55, 16, Math.PI * .95, Math.PI * 2.05), [x + r * 1.5, sh + 6], [x + r * .7, hy + r * .9], ...circ(x, hy + r * .2, r * .8, r * .8, 8, 0, Math.PI).reverse().slice(1, -1), [x - r * .7, hy + r * .9]], { w: 2, h: .8, denso: true }));
+  if (o.pelo === 'moño') out.push(cerrada(circ(x - d * r * .6, hy - r * .9, r * .45, r * .4, 10), { w: 1.5, polvo: true }));
+  if (o.gorra) out.push(cerrada([[x - r * 1.2, hy - r * .4], [x + r * 1.2, hy - r * .4], [x + r * .9, hy - r * 1.3], [x - r * .9, hy - r * 1.3]], { w: 1.5, c: o.gorra, polvo: true }));
+  if (o.pañuelo) out.push(S([[x - r, hy - r * .5], [x + r, hy - r * .5], [x - d * r * 1.6, hy - r * .1]], { w: 1.5, c: o.pañuelo }));
+  return out; }
+// barco de perfil con casco que tapa, velas hinchadas, jarcia y bandera
+function barco(x, y, L, o = {}) { const Hh = L * .13, out = [], dark = !!o.oscuro;
+  const casco = [[x, y - Hh * .95], [x + L * .9, y - Hh * .8], [x + L, y - Hh * 1.25], [x + L * .9, y + Hh * .25], [x + L * .12, y + Hh * .32], [x + L * .02, y - Hh * .2]];
+  const palos = o.palos || [.36, .66], alto = L * (o.alto || .78);
+  for (const f of palos) { const mx = x + L * f; out.push(S([[mx, y - Hh * .9], [mx, y - Hh - alto]], { w: 2.4 })); }
+  out.push(S([[x + L * palos[0], y - Hh - alto], [x + L * 1.12, y - Hh * 1.4]], { w: 1 }), S([[x + L * palos[palos.length - 1], y - Hh - alto], [x + L * .02, y - Hh * 1.1]], { w: 1 }));
+  palos.forEach((f, k) => { const mx = x + L * f, top = y - Hh - alto, n = o.velas || 2;
+    for (let v = 0; v < n; v++) { const a = top + alto * (.08 + v * .44), b = a + alto * .38, an = L * (.17 - v * .015) * (k === 0 && o.proa ? 1.05 : 1), bulge = L * .05;
+      const pts = [[mx - an, a], [mx + an, a], ...curva([mx + an, a], [mx + an + bulge, (a + b) / 2], [mx + an * 1.05, b], 8).slice(1), [mx - an * 1.05, b], ...curva([mx - an * 1.05, b], [mx - an + bulge * .6, (a + b) / 2], [mx - an, a], 8).slice(1)];
+      out.push(S([[mx - an - 4, a], [mx + an + 4, a]], { w: 2 }), cerrada(pts, { w: 1.6, h: dark ? .5 : null, denso: dark, polvo: !dark })); }
+    out.push(cerrada([[mx, top - 2], [mx + L * .08, top + 3 + Math.sin(k) * 2], [mx + L * .07, top + 8], [mx, top + 11]], { w: 1.4, c: o.bandera || 'b', polvo: true })); });
+  out.push(cerrada(casco, { w: 2.4, h: dark ? .45 : .45, denso: dark }));
+  if (!dark) for (let i = 0; i < 6; i++) { const px = x + L * (.2 + i * .12); out.push(cerrada([[px, y - Hh * .55], [px + 6, y - Hh * .55], [px + 6, y - Hh * .2], [px, y - Hh * .2]], { w: 1, polvo: true })); }
+  out.push(S([[x + L, y - Hh * 1.25], [x + L * 1.16, y - Hh * 1.7]], { w: 1.6 }));
+  return out; }
+// isla: contorno de colinas; devuelve trazo y función de altura para apoyar cosas encima
+function isla(x0, x1, base, picos) { const f = x => base - picos.reduce((m, [cx, h, w]) => m + h * Math.exp(-(((x - cx) / w) ** 2)), 0); const p = []; for (let x = x0; x <= x1; x += 6) p.push([x, Math.min(base, f(x) + (x - x0 < 30 ? (30 - (x - x0)) * .4 : 0) + (x1 - x < 30 ? (30 - (x1 - x)) * .4 : 0))]);
+  return { trazo: cerrada([...p, [x1, base + 4], [x0, base + 4]], { w: 2.2, h: -.5 }), y: f }; }
+const casa = (x, y, w, h, o = {}) => [cerrada([[x - w / 2, y], [x - w / 2, y - h], [x + w / 2, y - h], [x + w / 2, y]], { w: 1.8 }), cerrada([[x - w / 2 - 4, y - h], [x, y - h - h * .75], [x + w / 2 + 4, y - h]], { w: 1.8, h: o.paja ? -.6 : .6 }),
+  ...(o.luz ? [cerrada([[x - w * .3, y - h * .7], [x - w * .08, y - h * .7], [x - w * .08, y - h * .4], [x - w * .3, y - h * .4]], { w: 1, c: 'a', polvo: true })] : []), cerrada([[x + w * .08, y], [x + w * .08, y - h * .55], [x + w * .3, y - h * .55], [x + w * .3, y]], { w: 1 })];
+const faro = (x, y, h, haz) => [cerrada([[x - 9, y], [x - 6, y - h], [x + 6, y - h], [x + 9, y]], { w: 2 }), S([[x - 8, y - h * .35], [x + 8, y - h * .35]], { w: 1.2, c: 'r' }), S([[x - 7, y - h * .68], [x + 7, y - h * .68]], { w: 1.2, c: 'r' }),
+  cerrada([[x - 7, y - h], [x - 7, y - h - 10], [x + 7, y - h - 10], [x + 7, y - h]], { w: 1.2, c: 'a', polvo: true }), cerrada([[x - 9, y - h - 10], [x, y - h - 19], [x + 9, y - h - 10]], { w: 2 }),
+  ...(haz ? [cerrada([[x + 7, y - h - 5], [x + haz, y - h - 30], [x + haz, y - h + 16]], { w: 1, c: 'a', polvo: true, borra: false })] : [])];
+const pajaro = (x, y, k = 1) => S([[x - 8 * k, y - 3 * k], [x - 3 * k, y], [x, y - 2 * k], [x + 3 * k, y], [x + 8 * k, y - 3 * k]], { w: 1.2 });
+const luna = (x, y, r) => [cerrada(circ(x, y, r, r, 30), { w: 2, polvo: true }), S(circ(x + r * .3, y - r * .15, r * .18, r * .18, 10), { w: 1 }), S(circ(x - r * .35, y + r * .3, r * .1, r * .1, 8), { w: 1 })];
+const estrellas = n => Array.from({ length: n }, (_, i) => { const x = 30 + hash(i, 4) * 580, y = 20 + hash(i, 5) * 120, r = 2 + hash(i, 6) * 2; return S([[x - r, y], [x + r, y], [x, y], [x, y - r], [x, y + r]], { w: 1 }); });
+const mar = (y0, n, x0 = 0, x1 = W) => Array.from({ length: n }, (_, k) => S(ola(x0 + (k % 2) * 18, y0 + k * (12 + k * 2), x1 - (k % 2) * 24, 3 - k * .3, 14 + k * 3, k * 30), { w: k ? 1.1 : 1.8, ola: true }));
+const sol = (x, y, r, rayos = true) => [cerrada(circ(x, y, r, r, 26, Math.PI, Math.PI * 2), { w: 2, c: 'a', polvo: true }), ...(rayos ? Array.from({ length: 7 }, (_, i) => { const a = Math.PI + (i + .5) / 7 * Math.PI; return S([[x + Math.cos(a) * (r + 6), y + Math.sin(a) * (r + 6)], [x + Math.cos(a) * (r + 18), y + Math.sin(a) * (r + 18)]], { w: 1.4, c: 'a' }); }) : [])];
+// ---------- dibujo ----------
+const largo = p => p.reduce((L, q, i) => i ? L + Math.hypot(q[0] - p[i - 1][0], q[1] - p[i - 1][1]) : 0, 0);
+function relleno(g, st, col, k, seed) { const xs = st.p.map(q => q[0]), ys = st.p.map(q => q[1]), x0 = Math.min(...xs) - 6, x1 = Math.max(...xs) + 6, y0 = Math.min(...ys) - 6, y1 = Math.max(...ys) + 6;
+  if (st.polvo) { g.fillStyle = `rgba(${col},.13)`; g.fillRect(x0, y0, x1 - x0, y1 - y0); for (let i = 0; i < (x1 - x0) * (y1 - y0) / 30; i++) { g.fillStyle = `rgba(${col},.2)`; g.fillRect(x0 + hash(i, k, seed) * (x1 - x0), y0 + hash(k, i, seed) * (y1 - y0), 2, 1); } }
+  if (st.h != null) { const a = st.h, step = st.denso ? 3 : 6, dx = Math.cos(a), dy = Math.sin(a), R0 = Math.hypot(x1 - x0, y1 - y0), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2; g.strokeStyle = `rgba(${col},${st.denso ? .5 : .32})`; g.lineWidth = 1;
+    for (let o = -R0; o < R0; o += step) { const j = (hash(o | 0, k, seed) - .5) * 1.4; g.beginPath(); g.moveTo(cx - dx * R0 - dy * (o + j), cy - dy * R0 + dx * (o + j)); g.lineTo(cx + dx * R0 - dy * (o - j), cy + dy * R0 + dx * (o - j)); g.stroke(); } } }
+function dibujar(g, trazos, prog, seed, t) { const Ls = trazos.map(s => largo(s.p)), total = Ls.reduce((a, b) => a + b, 0) || 1; let hecho = prog * total; g.lineCap = 'round'; g.lineJoin = 'round';
+  trazos.forEach((st, k) => { const L = Ls[k]; if (hecho <= 0) return; const f = Math.min(1, hecho / (L || 1)); hecho -= L; const col = COL[st.c || 'b'], w = st.w || 2;
+    // tapar: lo que está detrás desaparece donde va esta forma (con la textura de la pizarra)
+    if (st.cerrar && st.borra !== false) { g.save(); g.beginPath(); st.p.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); g.clip(); g.globalAlpha = Math.min(1, f * 3); g.drawImage(PIZ, 0, 0); g.globalAlpha = 1; if (f >= 1) relleno(g, st, col, k, seed); g.restore(); }
+    else if (st.cerrar && f >= 1) { g.save(); g.beginPath(); st.p.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); g.clip(); relleno(g, st, col, k, seed); g.restore(); }
+    let acc = 0; const lim = f * L, pts = [st.p[0]]; for (let i = 1; i < st.p.length; i++) { const a = st.p[i - 1], b = st.p[i], l = Math.hypot(b[0] - a[0], b[1] - a[1]); if (acc + l <= lim) { pts.push(b); acc += l; } else { const u = (lim - acc) / (l || 1); pts.push([a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]); break; } }
+    const mov = st.ola && prog >= 1 ? Math.sin(t * 1.5 + k) * 2 : 0;
+    for (let pass = 0; pass < 2; pass++) { g.strokeStyle = `rgba(${col},${pass ? .32 : .9})`; g.lineWidth = pass ? w * .45 : w * 1.15; g.beginPath(); pts.forEach(([x, y], i) => { const j = (hash(i, pass + k * 3, seed) - .5) * (pass ? 1.5 : .8); i ? g.lineTo(x + j + mov, y - j) : g.moveTo(x + j + mov, y - j); }); if (st.cerrar && f >= 1) g.closePath(); g.stroke(); } });
+}
+// ---------- escenas ----------
+const ESC = {
+  kale: { t: 'Kalé. Una isla pequeña del East Blue que no sale en ningún mapa.', d: () => { const I = isla(130, 520, 238, [[250, 64, 70], [360, 44, 60], [460, 58, 46]]), on = x => I.y(x) + 2; return [
+    S([[24, 238], [616, 238]], { w: 1 }), ...[[90, 70], [126, 82], [540, 62]].map(([x, y]) => pajaro(x, y)),
+    cerrada(circ(78, 66, 22, 22, 24), { w: 1.4 }), S([[78, 38], [78, 94]], { w: 1 }), S([[50, 66], [106, 66]], { w: 1 }), S([[66, 80], [90, 52]], { w: 2, c: 'r' }),
+    I.trazo, ...[[176, 'arbol'], [196, 'arbol']].flatMap(([x]) => [S([[x, on(x)], [x, on(x) - 12]], { w: 2 }), cerrada(circ(x, on(x) - 18, 9, 8, 14), { w: 1.6, h: .9 })]),
+    ...casa(236, on(236), 26, 18, { paja: true, luz: true }), ...casa(272, on(272), 24, 16), ...casa(306, on(306), 22, 15, { luz: true }),
+    S([[352, on(352)], [352, on(352) - 16]], { w: 2 }), S(circ(352, on(352) - 7, 6, 4, 10, 0, Math.PI), { w: 2 }), S([[347, on(352) - 13], [357, on(352) - 13]], { w: 1.5 }),
+    ...faro(476, on(476), 46, 590), ...mar(246, 4, 0, W), ...barco(64, 272, 46, { palos: [.5], velas: 1 })]; } },
+  negro: { t: 'Tienes diecisiete años. Y anoche entró en el puerto un barco con bandera negra.', d: () => [
+    ...luna(110, 78, 30), ...estrellas(12), S([[20, 232], [620, 232]], { w: 1 }),
+    ...barco(260, 236, 250, { oscuro: true, bandera: 'r', velas: 2, alto: .6 }),
+    cerrada(circ(395, 128, 13, 11, 16), { w: 1.6, c: 'r', borra: true }), ...[-8, -3, 2, 7].map((dx, i) => S([[395 + dx, 137], [395 + dx + Math.sin(i) * 3, 152 + i % 2 * 4]], { w: 1.4, c: 'r' })),
+    ...mar(244, 4),
+    cerrada([[0, 290], [190, 290], [190, 300], [0, 300]], { w: 2, h: 0 }), ...[40, 100, 160].map(x => S([[x, 300], [x, 352]], { w: 2.4 })),
+    S([[176, 290], [176, 256]], { w: 2 }), cerrada([[169, 256], [183, 256], [183, 242], [169, 242]], { w: 1.4, c: 'a', polvo: true }),
+    ...figura(112, 290, 62, { dir: 1 })] },
+  shells: { t: 'Al amanecer, la Medusa Gris remó contigo hasta una cala escondida, detrás de Shells Town.', d: () => { const L = isla(250, 650, 248, [[430, 104, 120], [560, 60, 80]]), on = x => L.y(x) + 2; return [
+    ...sol(560, on(560) - 6, 34), S([[20, 248], [620, 248]], { w: 1 }), L.trazo,
+    cerrada([[370, on(430) - 34], [370, on(370) + 4], [490, on(490) + 4], [490, on(430) - 34]], { w: 2, h: .5 }), ...Array.from({ length: 7 }, (_, i) => cerrada([[374 + i * 17, on(430) - 34], [374 + i * 17, on(430) - 42], [384 + i * 17, on(430) - 42], [384 + i * 17, on(430) - 34]], { w: 1.2 })),
+    S([[430, on(430) - 42], [430, on(430) - 74]], { w: 2 }), cerrada([[430, on(430) - 74], [456, on(430) - 68], [430, on(430) - 62]], { w: 1.4, c: 'z', polvo: true }), S([[436, on(430) - 68], [442, on(430) - 71], [448, on(430) - 68]], { w: 1.2, c: 'z' }),
+    ...casa(312, on(312), 24, 17, { luz: true }), ...casa(520, on(520), 22, 15), ...casa(548, on(548), 20, 14, { luz: true }),
+    ...mar(256, 4),
+    cerrada([[0, 296], [0, 360], [250, 360], [220, 322], [130, 304]], { w: 2, polvo: true }),
+    ...barco(40, 300, 70, { palos: [.5], velas: 1, alto: .5 }).slice(-4),
+    cerrada([[34, 306], [124, 306], [112, 320], [44, 320]], { w: 2, h: .5 }), S([[60, 306], [74, 290]], { w: 2 }), S([[98, 306], [90, 288]], { w: 2 }),
+    ...figura(166, 322, 78, { capa: true, capucha: true, oscuro: true }), ...figura(214, 326, 60, { der: 'señala' })]; } },
+  huida: { t: 'La Tortuga Parda salió del puerto con la Marina en el muelle. Desde la borda veías al cadete, quieto al final del muelle.', d: () => [
+    S([[20, 226], [620, 226]], { w: 1 }), isla(-30, 230, 226, [[60, 70, 90], [170, 30, 50]]).trazo,
+    cerrada([[0, 170], [100, 170], [100, 140], [0, 140]], { w: 1.6, h: .5 }), S([[60, 140], [60, 118]], { w: 1.6 }), cerrada([[60, 118], [78, 122], [60, 126]], { w: 1.2, c: 'z', polvo: true }),
+    ...barco(330, 266, 230, { velas: 2 }), ...mar(240, 4),
+    cerrada([[0, 300], [230, 300], [230, 310], [0, 310]], { w: 2, h: 0 }), ...[30, 90, 150, 210].map(x => S([[x, 310], [x, 360]], { w: 2.4 })),
+    ...figura(206, 300, 60, { gorra: 'z', der: 'señala' }), ...figura(398, 236, 30, { der: 'saluda' }), ...figura(424, 237, 34, { izq: 'saluda' }),
+    pajaro(520, 80), pajaro(548, 96, .8)] },
+};
+// ---------- página ----------
+const lista = document.getElementById('lista'), vivos = [];
+for (const [id, e] of Object.entries(ESC)) { const sec = document.createElement('section'); sec.innerHTML = `<h2>${{ kale: 'Kalé', negro: 'El barco negro', shells: 'Llegada a Shells Town', huida: 'La huida' }[id]}</h2>
+  <div class="par"><figure><canvas width="${W}" height="${H}" role="img" aria-label="Escena en tiza nueva: ${id}"></canvas><p class="cap"></p><button class="re" type="button">Volver a dibujar</button></figure>
+  <figure><img src="antes-${id}.png" alt="Cómo se ve hoy la escena ${id}"><figcaption>Hoy, en el juego</figcaption></figure></div>`;
+  lista.appendChild(sec); const cv = sec.querySelector('canvas'), cap = sec.querySelector('.cap'), v = { e, g: cv.getContext('2d'), cap, t0: performance.now(), trazos: e.d(), seed: Object.keys(ESC).indexOf(id) + 3 }; vivos.push(v);
+  sec.querySelector('button').onclick = () => { v.t0 = performance.now(); cap.textContent = ''; }; }
+const DUR = 3600, quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(now) { for (const v of vivos) { const prog = quieto ? 1 : Math.min(1, (now - v.t0) / DUR), t = (now - v.t0) / 1000, z = 1 + Math.min(1, t / 9) * .035;
+  v.g.setTransform(z, 0, 0, z, -W * (z - 1) / 2, -H * (z - 1) / 2); v.g.drawImage(PIZ, 0, 0); dibujar(v.g, v.trazos, ease(prog), v.seed, t); if (prog >= 1 && !v.cap.textContent) v.cap.textContent = v.e.t; } requestAnimationFrame(frame); }
+const ease = k => k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+requestAnimationFrame(frame);
+</script>

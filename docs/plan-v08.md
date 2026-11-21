@@ -111,3 +111,11 @@ El bote del Acto 1 no cruza Reverse Mountain. En Loguetown hace falta un barco d
 - **Rareza por tipo:** la Logia es rara y la Zoan mítica rarísima.
 
 El diseño completo del Acto 1 está en `docs/shells-town.md`.
+
+## Lo que sigue (después de Shells Town v3)
+- **Tiza nueva:** diagnóstico, reglas y guion en `docs/tiza.md`; prototipo en `docs/tiza-prototipo/`. Se implementa con el visto bueno del autor.
+- **Mapa del mundo y periódico:** diseño en `docs/mapa-periodico.md`. La carta la da Quill y Kalé no figura en ella; el periódico cuesta 10 berries.
+- **Acto 2, Goa:** diseño a fondo en `docs/goa.md`, con el esquema del plano en `docs/goa-plano.png`.
+- **Orden:** tiza, después mapa y periódico, después Goa. Goa usa los tres.
+- **Frutas:** en espera. La del protagonista se decide antes de Loguetown.
+
