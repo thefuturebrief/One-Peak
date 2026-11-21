@@ -139,7 +139,7 @@ Las frutas que no te tocan existen en el mundo: algunas las tendrán personajes 
 - **Despertar:** **Mandíbula de hierro**: la mordida parte acero, y la forma completa es una bestia del tamaño de un caballo.
 - **Fuera de pelea:** rastrear por el olor, comer cualquier cosa e intimidar.
 
-### 14. Meganeura (Mushi Mushi no Mi, modelo Meganeura)
+### 9. Meganeura (Mushi Mushi no Mi, modelo Meganeura)
 - **Prueba torpe:** te salen alas transparentes, zumbas, chocas contra una lámpara y te quedas pegado al techo.
 - **Rasgo:** ves casi en redondo; es difícil sorprenderte.
 - **Nivel 1:**
@@ -157,7 +157,7 @@ Las frutas que no te tocan existen en el mundo: algunas las tendrán personajes 
 
 ## Zoan carnívora
 
-### 15. Búho nival (Tori Tori no Mi, modelo búho nival)
+### 10. Búho nival (Tori Tori no Mi, modelo búho nival)
 - **Prueba torpe:** giras la cabeza casi entera para mirar a quien está detrás. La señora de al lado se desmaya.
 - **Rasgo:** de noche y en la oscuridad, tus golpes aciertan más.
 - **Nivel 1:**
@@ -174,7 +174,7 @@ Las frutas que no te tocan existen en el mundo: algunas las tendrán personajes 
 
 ## Paramecia
 
-### 9. Acumulación (Chiku Chiku no Mi)
+### 11. Acumulación (Chiku Chiku no Mi)
 - **Prueba torpe:** alguien te pisa sin querer y, al apartarte, rompes la silla de un manotazo. Te brillan las grietas de los nudillos.
 - **Rasgo (el centro de la fruta):** cada golpe que recibes llena una carga, visible como grietas doradas en el cuerpo.
 - **Nivel 1:**
@@ -188,7 +188,7 @@ Las frutas que no te tocan existen en el mundo: algunas las tendrán personajes 
 - **Límite:** la carga tiene tope y se va perdiendo con el tiempo. Si te pasas, las grietas te lastiman a ti.
 - **Fuera de pelea:** romper puertas con la energía de una caída y aguantar golpes para guardarlos.
 
-### 10. Resonancia (Kyō Kyō no Mi)
+### 12. Resonancia (Kyō Kyō no Mi)
 - **Prueba torpe:** tocas tu copa y todas las copas de la sala estallan a la vez.
 - **Rasgo:** notas a la gente por la vibración del suelo; las emboscadas no te pillan.
 - **Nivel 1:**
@@ -201,7 +201,7 @@ Las frutas que no te tocan existen en el mundo: algunas las tendrán personajes 
 - **Despertar:** **Resonancia mayor**: haces vibrar una estructura entera (un barco, una torre) hasta desarmarla.
 - **Fuera de pelea:** encontrar paredes huecas y pasadizos, y oír a través de muros.
 
-### 11. Fortuna (Un Un no Mi)
+### 13. Fortuna (Un Un no Mi)
 - **Prueba torpe:** te tropiezas, te caes encima de un camarero y su bandeja aterriza, sin derramar nada, en tus manos. Todos aplauden.
 - **Rasgo:** tus acciones arriesgadas aciertan un poco más; se ven hilos dorados.
 - **Nivel 1:**
@@ -215,7 +215,7 @@ Las frutas que no te tocan existen en el mundo: algunas las tendrán personajes 
 - **Límite:** lo imposible sigue siendo imposible, y la suerte que das la quitas de algún lado.
 - **Fuera de pelea:** juegos de azar, encontrar objetos y que una puerta cerrada justo esté abierta. Es la candidata natural para Nerea.
 
-### 12. Obsidiana (Kokuyō Kokuyō no Mi)
+### 14. Obsidiana (Kokuyō Kokuyō no Mi)
 - **Prueba torpe:** se te pone la mano negra y brillante; das un golpe en la mesa y la cortas en dos.
 - **Rasgo:** los cortes y golpes con filo te hacen menos daño.
 - **Nivel 1:**
@@ -228,7 +228,7 @@ Las frutas que no te tocan existen en el mundo: algunas las tendrán personajes 
 - **Despertar:** **Tormenta de esquirlas**: te vuelves una nube de fragmentos que corta todo y te rearmas en otro sitio.
 - **Fuera de pelea:** cortar cualquier cosa y hacer herramientas.
 
-### 13. Ramificaciones (Eda Eda no Mi)
+### 15. Ramificaciones (Eda Eda no Mi)
 - **Prueba torpe:** coges el tenedor y se abre en seis puntas. Lo intentas con la cuchara y te sale un ramillete de cucharas.
 - **Rasgo:** tu arma puede abrirse en varias puntas: más golpes, cada uno más débil.
 - **Nivel 1:**
