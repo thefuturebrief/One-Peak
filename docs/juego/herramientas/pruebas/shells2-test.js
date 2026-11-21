@@ -25,6 +25,10 @@ process.on('unhandledRejection', e => { console.log(JSON.stringify(log, null, 0)
   await elegir(/Volveré/); await auto(() => F.stMedusaFuera, 100); log.push(['tras la cala', await ev(() => [berries(), P('medusa').scene, !!F.stMedusaFuera, hourNow().toFixed(2)])]);
   // control: andar por la senda hasta el cadete
   await ev(() => { G.x = 9.6 * T; G.y = 38.6 * T; }); await p.waitForTimeout(2500); await shot('2-control'); await elegir(/Goa/); await auto(() => F.stControl === true, 40); log.push(['control', await ev(() => [F.stControl, F.stTono])]);
+  // el mercado: los tres candidatos juntos y después Lalo
+  await ev(() => { G.x = 15 * T; G.y = 37.6 * T; }); await auto(() => !!document.querySelector('.dlg .ch:not(.wait)'), 260); await shot('2b-mercado'); await elegir(/Goa/);
+  await auto(() => !!document.querySelector('.dlg .ch:not(.wait)') && /Lalo/.test(document.querySelector('.dlg').innerText), 200); await elegir(/Shells Town/); await elegir(/mañana/); await elegir(/Gracias, Lalo/);
+  await auto(() => F.stPresenta === true, 60); log.push(['mercado', await ev(() => [F.stPresenta, DIARY.shells.map(e => e.title)])]);
   // el candidato
   if (compa === 'rufo') { await hora(0, 9.5); await hablar('rufo'); await elegir(/trabajo/); await hablar('marta'); await elegir(/Rufo/); await hablar('rufo'); await elegir(/pescado/); await hablar('rufo'); await elegir(/Vente/); }
   if (compa === 'nerea') { await hora(0, 15); await hablar('nerea'); await elegir(/dedicas/); await elegir(/enseñó/); await elegir(/perder/); await elegir(/manos/); await elegir(/manga/); await elegir(/carta en la manga/); await auto(() => F.stNereaHecho, 40); await shot('3-cartas'); await hablar('nerea'); await elegir(/Vente/); }

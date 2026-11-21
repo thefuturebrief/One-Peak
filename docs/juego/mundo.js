@@ -103,6 +103,13 @@ function buildBuilding(b) {
   if (e.pilotes) for (let px = 4; px < w; px += 30) { g.fillStyle = '#3a2418'; g.fillRect(ox + px, base - top - 4, 6, extra + 4); g.fillStyle = '#6a4228'; g.fillRect(ox + px + 1, base - top - 4, 2, extra + 4); }
   const fy = roofH - 10, gy = fy + EX; // gy: arriba de la planta baja
   drawFacade(g, ox, fy, w, FH, e.fachada, e.color);
+  // paredes laterales bajo el alero: la misma fachada, en sombra y fugando hacia atrás, para que la casa tenga volumen
+  const sw = Math.round(over * .8);
+  for (const s of [-1, 1]) { const x0 = s < 0 ? ox : ox + w, pts = [[x0, fy], [x0, fy + FH], [x0 + s * sw, fy + FH - sw * .6], [x0 + s * sw, fy]];
+    g.save(); poly(g, pts); g.clip(); drawFacade(g, s < 0 ? x0 - sw : x0, fy, sw, FH, e.fachada, e.color); g.fillStyle = s < 0 ? 'rgba(20,14,30,.38)' : 'rgba(20,14,30,.5)'; g.fillRect(x0 - sw, fy, 2 * sw, FH); g.restore();
+    g.fillStyle = 'rgba(20,14,30,.55)'; g.fillRect(s < 0 ? x0 - 1 : x0, fy, 1, FH); }
+  // sombra del alero sobre la fachada
+  const ga = g.createLinearGradient(0, fy, 0, fy + 16); ga.addColorStop(0, 'rgba(20,14,30,.35)'); ga.addColorStop(1, 'rgba(20,14,30,0)'); g.fillStyle = ga; g.fillRect(ox, fy, w, 16);
   // cornisas entre plantas
   for (let k = 1; k < P; k++) { const yy = fy + k * 2 * T - 2; g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(ox, yy + 4, w, 3); g.fillStyle = e.fachada === 'madera' ? '#5a3a22' : '#b8b0a2'; g.fillRect(ox, yy, w, 5); g.fillStyle = 'rgba(255,255,255,.35)'; g.fillRect(ox, yy, w, 1); }
   const { ridgeY } = drawRoof(g, 0, 0, w + 2 * over, roofH, e.techo);
@@ -243,6 +250,8 @@ function buildIsland(P) {
     if (o.t === 'banco') pon(banco(), 28, 30, [50, 10]);
     if (o.t === 'redes') pon(secaderoRedes(), 44, 56, [80, 10]);
     if (o.t === 'fanal') pon(fanal(), 18, 116, [24, 10]);
+    if (o.t === 'maceta') pon(maceta(o.c || 'rojo', o.x * 7 + o.y), 12, 30, [18, 8]);
+    if (o.t === 'nasas') pon(nasas(), 22, 34, [40, 10]);
     if (o.t === 'gradas') { const by = (o.y + o.h) * T; WORLD.sprites.push({ canvas: gradas(o.w * T), x: o.x * T, y: by - 62, key: by }); WORLD.blocks.push([o.x * T, by - 50, o.w * T, 50]); }
     if (o.t === 'tendedero') WORLD.sprites.push({ canvas: tendedero(o.len * T), x: o.x * T, y: o.y * T - (o.alto || 70), key: (o.y + 4) * T });
     if (o.t === 'canon') { for (const n of [false, true]) WORLD.sprites.push({ canvas: canonSaludo(n), x: o.x * T - 48, y: o.y * T - 54, key: o.y * T, visible: () => !!WORLD.canonNorte === n }); WORLD.blocks.push([o.x * T - 26, o.y * T - 16, 52, 18]); WORLD.canonPos = [o.x * T, o.y * T]; }
@@ -648,5 +657,16 @@ function banco() { return spr(56, 34, g => { g.fillStyle = 'rgba(0,0,0,.22)'; g.
 function secaderoRedes() { return spr(88, 60, g => { g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(4, 54, 82, 4); for (const x of [6, 80]) { g.fillStyle = OL; g.fillRect(x - 2, 6, 6, 50); g.fillStyle = '#6a4228'; g.fillRect(x - 1, 7, 4, 48); } g.fillStyle = OL; g.fillRect(4, 6, 80, 4);
   g.fillStyle = 'rgba(110,100,70,.85)'; g.beginPath(); g.moveTo(8, 10); g.lineTo(80, 10); g.lineTo(76, 44); g.quadraticCurveTo(44, 52, 12, 44); g.closePath(); g.fill(); g.strokeStyle = 'rgba(50,40,20,.6)'; g.lineWidth = 1; for (let x = 8; x < 80; x += 6) { g.beginPath(); g.moveTo(x, 10); g.lineTo(x - 3, 46); g.stroke(); } for (let y = 14; y < 46; y += 6) { g.beginPath(); g.moveTo(10, y); g.lineTo(78, y); g.stroke(); }
   g.fillStyle = '#c8b070'; for (const x of [20, 44, 66]) { g.beginPath(); g.arc(x, 26 + (x % 3) * 4, 3, 0, 7); g.fill(); } }); }
+// maceta de barro con geranios (el color de la flor y la forma cambian con la semilla)
+function maceta(c, seed) { const F = { rojo: ['#c8402e', '#ee6a50'], rosa: ['#d0507a', '#f08aa8'], blanco: ['#e8e2d4', '#ffffff'], amarillo: ['#d8a020', '#f4d050'], lila: ['#8a5ab8', '#b88ae0'] }[c] || ['#c8402e', '#ee6a50'];
+  return spr(24, 32, g => { g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.ellipse(12, 29, 10, 3, 0, 0, 7); g.fill();
+    g.fillStyle = OL; g.fillRect(4, 16, 16, 14); g.fillStyle = '#b8603a'; g.fillRect(5, 17, 14, 12); g.fillStyle = '#d07a4a'; g.fillRect(5, 17, 14, 3); g.fillStyle = '#8a4428'; g.fillRect(5, 26, 14, 3);
+    for (let i = 0; i < 9; i++) { const x = 4 + hash(i, seed, 41) * 16, y = 4 + hash(i, seed, 42) * 12; g.fillStyle = i % 2 ? '#3f7a3a' : '#5a9a48'; g.fillRect(x - 2, y, 5, 4); }
+    for (let i = 0; i < 6; i++) { const x = 5 + hash(i, seed, 43) * 14, y = 3 + hash(i, seed, 44) * 10; g.fillStyle = OL; g.fillRect(x - 2, y - 2, 5, 5); g.fillStyle = F[0]; g.fillRect(x - 1, y - 1, 3, 3); g.fillStyle = F[1]; g.fillRect(x - 1, y - 1, 1, 1); } }); }
+// nasas: trampas de mimbre para langostas, apiladas, con una boya
+function nasas() { return spr(44, 36, g => { g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(3, 31, 38, 4);
+  for (const [x, y] of [[2, 16], [20, 16], [11, 2]]) { g.fillStyle = OL; g.beginPath(); g.ellipse(x + 11, y + 8, 11, 9, 0, 0, 7); g.fill(); g.fillStyle = '#b8945a'; g.beginPath(); g.ellipse(x + 11, y + 8, 10, 8, 0, 0, 7); g.fill();
+    g.strokeStyle = '#7a5a32'; g.lineWidth = 1; for (let k = -8; k <= 8; k += 3) { g.beginPath(); g.moveTo(x + 11 + k, y + 1); g.lineTo(x + 11 + k * .8, y + 15); g.stroke(); } g.beginPath(); g.ellipse(x + 11, y + 8, 4, 3, 0, 0, 7); g.fillStyle = '#3a2814'; g.fill(); }
+  g.fillStyle = OL; g.beginPath(); g.arc(38, 26, 5, 0, 7); g.fill(); g.fillStyle = '#e0503a'; g.beginPath(); g.arc(38, 26, 4, 0, 7); g.fill(); g.fillStyle = '#f4ecd8'; g.fillRect(34, 25, 8, 2); }); }
 function fanal() { return spr(36, 120, g => { g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.ellipse(18, 114, 14, 4, 0, 0, 7); g.fill(); g.fillStyle = OL; g.fillRect(8, 30, 20, 86); g.fillStyle = '#e8e2d4'; g.fillRect(10, 32, 16, 82); g.fillStyle = '#c8402e'; for (const y of [48, 78]) g.fillRect(10, y, 16, 10);
   g.fillStyle = OL; g.fillRect(6, 10, 24, 22); g.fillStyle = '#ffd98a'; g.fillRect(9, 13, 18, 16); g.fillStyle = OL; g.beginPath(); g.moveTo(4, 12); g.lineTo(18, 0); g.lineTo(32, 12); g.fill(); }); }

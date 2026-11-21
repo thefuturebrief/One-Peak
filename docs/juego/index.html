@@ -263,6 +263,10 @@ input.name:focus{border-color:var(--gold)}
 @media (max-width:700px){.lista li{grid-template-columns:44px 1fr auto}.lista li .btn{grid-column:2/4;grid-row:auto}.lista .pr{grid-row:1;grid-column:3}}
 @media (max-width:700px){.bolsa{display:flex;flex-direction:column;overflow:auto}.slots{overflow:visible;grid-template-columns:repeat(4,1fr)}.slot.vacio:nth-child(n+9){display:none}.det{border-left:0;border-top:1px solid var(--edge);overflow:visible}.det .ic{height:110px}.det .ic canvas{width:96px;height:96px}.diario{grid-template-columns:1fr;grid-template-rows:auto 1fr}.diario .sub{flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid var(--edge)}#brujula{width:120px;height:120px;top:30%}}
 @media (prefers-reduced-motion:reduce){#bg,.screen,.bubble{animation:none}.mi,.opt,.btn{transition:none}}
+.escenas{padding:4px 20px;max-height:54vh;overflow:auto;width:min(720px,92vw);font-size:14px}
+.esc{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08)}.esc:last-child{border:0}
+.esc b{display:block;color:var(--txt)}.esc small{color:var(--dim);line-height:1.4}.esc-b{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;flex:none}
+@media (max-width:560px){.esc{flex-direction:column;align-items:flex-start}.esc-b{justify-content:flex-start}}
 </style>
 <div id="app">
   <canvas id="bg" class="px" width="640" height="360" aria-hidden="true"></canvas>
@@ -297,4 +301,5 @@ input.name:focus{border-color:var(--gold)}
 <script src="cine.js"></script>
 <script src="vecinos.js"></script>
 <script src="shells.js"></script>
+<script src="escenas.js"></script>
 <script src="juego.js"></script>

@@ -1,9 +1,9 @@
 // Menú, prólogo, conversaciones, diario y el bucle del juego. El mundo lo construye mundo.js desde plano.json.
-const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata', 'sargento', 'capitanm', 'rufo', 'iria', 'tobi', 'severin', 'brisco', 'quill', 'v_pescador', 'v_panadera', 'v_anciana', 'v_herrero', 'v_comerciante', 'v_moza', 'v_estibador'];
+const PERSONAJES = ['grumete', 'madre', 'nino', 'viejo', 'navegante', 'pescadora', 'vecina', 'marine', 'tabernera', 'capitan', 'maton', 'padre', 'hermano', 'hermana', 'forastero', 'teniente', 'pirata', 'sargento', 'capitanm', 'rufo', 'iria', 'tobi', 'severin', 'brisco', 'quill', 'v_pescador', 'v_panadera', 'v_anciana', 'v_herrero', 'v_comerciante', 'v_moza', 'v_estibador', 's_pipo', 's_lalo', 's_marta', 's_amaro', 's_celes', 's_marinera', 's_bruto', 's_pardo', 's_ruiz', 's_marine_a', 's_marine_b', 's_marine_c', 's_marine_d', 's_marine_e', 's_clara', 's_goyo'];
 const SHEETS = {}, ROW = { up: 0, left: 1, down: 2, right: 3 };
 const loadImg = s => new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ko(new Error('No se pudo cargar ' + s)); i.src = s; });
 // animaciones de la hoja: fila inicial y cuadros; la caída tiene una sola fila (mira hacia abajo)
-const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'], sargento: ['shoot'], rufo: ['shoot'], v_herrero: ['shoot'], v_estibador: ['shoot'] };
+const ANIM = { walk: [0, 9], slash: [4, 6], thrust: [8, 8], shoot: [12, 13], hurt: [16, 6] }, SIN_ANIM = { nino: ['slash', 'thrust', 'shoot', 'hurt'], maton: ['shoot'], sargento: ['shoot'], rufo: ['shoot'], v_herrero: ['shoot'], v_estibador: ['shoot'], s_pipo: ['slash', 'thrust', 'shoot', 'hurt'], s_bruto: ['shoot'], s_pardo: ['shoot'] };
 const animOk = (id, a) => a === 'walk' || (SHEETS[id] && SHEETS[id].anims ? SHEETS[id].anims.has(a) : !(SIN_ANIM[id] || []).includes(a));
 function drawLPC(g, id, x, y, dir, frame, scale = 1, anim = 'walk') { const im = SHEETS[id]; if (!im) return; if (!animOk(id, anim)) { anim = 'walk'; frame = 0; }
   const [r0, n] = ANIM[anim], row = r0 + (anim === 'hurt' ? 0 : ROW[dir]); g.drawImage(im, Math.min(frame | 0, n - 1) * 64, row * 64, 64, 64, Math.round(x - 32 * scale), Math.round(y - 60 * scale), 64 * scale, 64 * scale); }
@@ -81,8 +81,8 @@ function menu() {
   attract.on = true; requestAnimationFrame(attractFrame);
   show(`<div class="col"><h1 class="logo"><span>One</span><span>Peak</span></h1><nav class="menu" aria-label="Menú principal">
     <button class="mi" data-a="new" type="button">${ANCHOR}Nueva partida</button><button class="mi" data-a="cont" type="button"${leerGuardado() ? '' : ' disabled'}>${ANCHOR}Continuar</button>
-    <button class="mi" data-a="opt" type="button">${ANCHOR}Opciones</button><button class="mi" data-a="cred" type="button">${ANCHOR}Créditos</button></nav></div><div class="ver">v0.7</div>`, false);
-  const items = [...root.querySelectorAll('.mi:not(:disabled)')]; items.forEach(b => b.onclick = () => ({ new: create, cont: continuar, opt: options, cred: credits })[b.dataset.a]());
+    <button class="mi" data-a="esc" type="button">${ANCHOR}Escenas</button><button class="mi" data-a="opt" type="button">${ANCHOR}Opciones</button><button class="mi" data-a="cred" type="button">${ANCHOR}Créditos</button></nav></div><div class="ver">v0.8</div>`, false);
+  const items = [...root.querySelectorAll('.mi:not(:disabled)')]; items.forEach(b => b.onclick = () => ({ new: create, cont: continuar, esc: escenasMenu, opt: options, cred: credits })[b.dataset.a]());
   keys(e => { const i = items.indexOf(document.activeElement); if (e.key === 'ArrowDown') { items[(i + 1) % items.length].focus(); e.preventDefault(); } if (e.key === 'ArrowUp') { items[(i - 1 + items.length) % items.length].focus(); e.preventDefault(); } });
 }
 function options() { show(`<div class="col"><div class="kick">Opciones</div><div class="glass" style="padding:8px 22px"><div class="tog">Música<button class="sw" type="button" aria-pressed="true" aria-label="Música"></button></div><div class="tog">Efectos de sonido<button class="sw" type="button" aria-pressed="true" aria-label="Efectos"></button></div><div class="tog" style="border:0">Textos rápidos<button class="sw" type="button" aria-pressed="false" aria-label="Textos rápidos"></button></div></div><div class="row"><button class="btn ghost" type="button" id="back">Volver</button></div></div>`);
@@ -201,7 +201,7 @@ function makePeople() {
         { id: 'quien', once: true, ask: '¿Quién es el del rincón?', a: () => ['"Garra" Dorne. El capitán del barco negro. Paga bien y mira mal.'] },
         { id: 'cocina', once: true, need: () => S.of.cocinero >= 3, ask: 'Si necesitas ayuda en la cocina...', a: () => ['Siempre fuiste el mejor pinche que tuve.', 'Hoy no, que hay mucho pirata suelto. Mañana, si el pueblo sigue en pie.'], aff: () => 1 },
       ] },
-    { id: 'dorne', scene: 'taberna', at: [14.2, 11.2], sprite: 'capitan', dir: 'left', name: '"Garra" Dorne',
+    { id: 'dorne', scene: 'taberna', at: [14, 10.5], sprite: 'capitan', dir: 'left', name: '"Garra" Dorne',
       barks: { dia: ['Krakaka...', 'Esta isla huele a pescado y a miedo.'], tarde: ['Krakaka...'], noche: ['La noche es de los piratas, mocosos.'] },
       greet: c => c.n === 0 ? `Krakaka... ¿Y tú qué miras, mocoso? Espera. Esa cara... ¿Eres un ${fam}?` : pick(['Krakaka... ¿Otra vez tú?', `El mocoso de los ${fam}. Siéntate, si te atreves.`]),
       first: L('gente', '"Garra" Dorne', 'Capitán de la bandera de la medusa. Me reconoció por la cara.'),
@@ -212,7 +212,7 @@ function makePeople() {
           learn: c => [...L('familia', 'Dorne conoce a mamá', 'Dorne me reconoció por la cara y dijo que mamá sabría quién es.'), ...(c.tone === 'temerario' ? L('familia', 'Dorne conoció a papá', 'Dorne dijo que tengo los mismos dientes que mi padre.') : [])] },
         { id: 'porque', once: true, need: () => knows('El del garfio pregunta'), ask: '¿Por qué preguntas por mi familia?', a: () => ['Porque tu familia tiene algo mío.', 'Y si no me lo devuelven por las buenas... Krakaka. Kalé es una isla muy pequeña.'] },
       ] },
-    { id: 'gaspar', scene: 'tienda', at: [4, 4.45], sprite: 'maton', dir: 'down', name: 'Gaspar',
+    { id: 'gaspar', scene: 'tienda', at: [4, 6], sprite: 'maton', dir: 'down', name: 'Gaspar',
       barks: { dia: ['¡No toques eso!', 'Brea, cuerda, anzuelos...'], tarde: ['Se acerca la hora de cerrar.'], noche: ['Cerrado.'] },
       greet: c => c.n === 0 ? 'Aparejos Gaspar. Si no compras, no toques.' : pick(['¿Qué quieres?', 'Tú otra vez.']),
       first: L('gente', 'Gaspar', 'Dueño de la tienda de aparejos. Gruñón, pero sabe todo lo que se compra y se vende en Kalé.'),
@@ -235,7 +235,7 @@ function makePeople() {
         { id: 'ayudar', once: true, need: () => S.of.medico >= 3, ask: '¿Necesitas ayuda?', a: () => ['Siempre. Pásame esas vendas. (Trabajáis un rato.)', 'Tienes buen pulso. Ojalá te quedaras en Kalé.'], aff: () => 2 },
         { id: 'padre', once: true, need: () => knows('Papá y la medusa'), ask: '¿Conociste a mi padre?', a: () => ['(El doctor deja la pluma.)', 'Le curé una mano la noche antes de que se fuera. Una herida de garfio.', 'No me preguntes más. Le prometí a tu madre que no hablaría.'], learn: L('familia', 'La herida de papá', 'El doctor le curó a papá una herida de garfio la noche antes de que se fuera.') },
       ] },
-    { id: 'nell', scene: 'panaderia', at: [3.2, 2.2], sprite: 'hermana', dir: 'down', name: 'Nell',
+    { id: 'nell', scene: 'panaderia', at: [3, 1.9], sprite: 'hermana', dir: 'down', name: 'Nell',
       barks: { dia: ['¡Pan recién hecho!', '¡Cuidado, que quema!'], tarde: ['Hoy lo he vendido todo.'], noche: [''] },
       greet: c => c.n === 0 ? '¡Hola! ¿Pan del día? Es lo último que queda.' : pick(['¡Hola otra vez!', '¿Vienes a por más?']),
       first: L('gente', 'Nell', 'La hija del panadero. Lo sabe todo, y lo cuenta todo.'),
@@ -300,7 +300,7 @@ function walkableTown(x, y) {
 }
 function segDist(a, b, x, y) { const dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / (dx * dx + dy * dy || 1))); return Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy); }
 function blocked(x, y) {
-  const crowd = PEOPLE.some(n => n.scene === G.scene && Math.abs(n.x - x) < 10 && Math.abs(n.y - y) < 6);
+  const crowd = PEOPLE.some(n => n.scene === G.scene && !n.goal && !n.route && !(n.camino && n.camino.length) && Math.abs(n.x - x) < 10 && Math.abs(n.y - y) < 6); // quien camina no te corta el paso
   if (G.scene === 'town') return !walkableTown(x, y) || crowd;
   const I = interior(G.scene); if (I.dentro) return !I.dentro(x, y) || hit(I.blocks, x, y) || crowd; return x < WALL + 2 || x > I.w - WALL - 2 || y > I.h - WALL || hit(I.blocks, x, y) || crowd;
 }
@@ -570,4 +570,4 @@ function attractFrame(now) { if (!attract.on) return; const t = now / 1000, cam 
   const [x, y, d] = where([[12, 22.2], [24, 22.2]].map(([a, b]) => [a * T, b * T]), 40, t); ppl.push(['marine', x, y, d, 1 + Math.floor(t * 9) % 8]);
   drawTown(bgg, cam, 640, 360, ppl.map(([id, x, y, dir, f]) => ({ id, x, y, dir, f })), now, 17.2); requestAnimationFrame(attractFrame); }
 fitBg();
-listo.then(menu).catch(e => { root.innerHTML = `<section class="screen"><div class="col"><h2 class="t">No se pudo cargar Kalé</h2><p class="lead">${e.message}</p></div></section>`; });
+listo.then(() => { const q = new URLSearchParams(location.search); if (q.get('escena')) jugarEscena(q.get('escena'), q.get('compa') || 'nerea'); else if (window.ARRANQUE === 'escenas') escenasMenu(); else menu(); }).catch(e => { root.innerHTML = `<section class="screen"><div class="col"><h2 class="t">No se pudo cargar Kalé</h2><p class="lead">${e.message}</p></div></section>`; });

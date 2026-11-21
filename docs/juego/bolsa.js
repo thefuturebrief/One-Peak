@@ -130,7 +130,7 @@ function toggleBrujula(on = !BRU.on) { if (on && !tiene('brujula')) return; BRU.
 function rumbo() { // ángulo en pantalla hacia el objetivo (0 = arriba); null si no hay
   const o = objetivo(); if (!o) return null; let tx, ty;
   if (G.scene === 'town') { if (o.scene && o.scene !== 'town') { const b = WORLD.doors.find(s => s.id === o.scene.split(':')[0]); if (!b) return null; [tx, ty] = b.door; } else [tx, ty] = [o.x, o.y]; }
-  else { const I = interior(G.scene); if (o.scene === G.scene) [tx, ty] = [o.x, o.y]; else { const d = I.doors.find(d => d.to === 'town') || I.doors[0]; [tx, ty] = [d.r[0] + d.r[2] / 2, d.r[1] + d.r[3] / 2]; } }
+  else { const I = interior(G.scene); if (o.scene === G.scene) [tx, ty] = [o.x, o.y]; else { const d = I.doors.find(d => d.to === o.scene) || I.doors.find(d => d.to === 'town') || I.doors[0]; [tx, ty] = [d.r[0] + d.r[2] / 2, d.r[1] + d.r[3] / 2]; } }
   if (Math.hypot(tx - G.x, ty - G.y) < 40) return 'aqui'; return Math.atan2(tx - G.x, -(ty - G.y)); }
 function drawBrujula(now) {
   if (!BRU.on) return; const cv = document.getElementById('bruCv'), g = cv.getContext('2d'), S2 = cv.width, c = S2 / 2, dt = Math.min(.05, (now - (BRU.t || now)) / 1000); BRU.t = now;

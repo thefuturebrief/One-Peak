@@ -272,6 +272,26 @@ La fidelidad es al **mundo** (sus reglas, sus dinámicas y su construcción), no
       - la huida tiene campanas, disparos y gente corriendo, y saltas a la Tortuga Parda cuando ya se separa del muelle.
     - **La brújula** apunta a lo que toca hacer.
     - **Frutas:** la propuesta de cuáles quedan reservadas está en `docs/frutas.md`.
+  - **Versión 3 de Shells Town (después de la segunda prueba):**
+    - **Nadie queda tapado:** ningún mueble ni puesto tapa a un tendero o vecino. Un chequeo automático (`herramientas/pruebas/tapados.js`) recorre todas las horas y avisa si alguien queda tapado, pisa un mueble o se amontona con otro.
+    - **Diseños propios:** 16 personajes nuevos para quienes repetían el sprite de Kalé (Pipo, Lalo, Marta, la viuda Amaro, doña Celes, la marinera, Bruto, el sargento Pardo, el cabo Ruiz, cinco marines distintos, Clara y Goyo).
+    - **Casas con volumen:** paredes laterales en sombra bajo el alero y sombra del alero en la fachada.
+    - **Presentación de los candidatos:**
+      - al entrar al pueblo, en el mercado, el cabo Ruiz le quita pan a Inés;
+      - Rufo protesta, Niklas se planta y Nerea apuesta;
+      - Severin hace pagar al cabo;
+      - los tres se presentan y dicen dónde encontrarlos;
+      - después, Lalo explica la isla.
+    - **Recordatorios:** cuando un encargo está pendiente, el candidato te recuerda qué falta y dónde está. Dentro de la base, tu compañero dice dónde buscar la llave y el almacén, y la brújula apunta allí.
+    - **Vecinos:**
+      - quien camina no te corta el paso;
+      - van por las calles, sin atravesar casas;
+      - cada uno anda a su ritmo.
+    - **Más vida:** macetas en las puertas, nasas, más carga en el puerto, gatos, gaviotas que se espantan, un perro y gallinas.
+    - **Escenas sueltas:** en el menú, "Escenas" deja jugar cada momento de Shells Town con un personaje de prueba (y con el compañero que elijas), sin tocar la partida guardada. También por enlace: `index.html?escena=canon&compa=nerea`.
+    - **Frutas:**
+      - la Medusa Gris tiene la Kurage no Hinotama (Zoan mitológica): ropa oscura y, transformado, azul con fuego rojizo dentro;
+      - la propuesta para la subasta son 15 frutas originales, una de ellas la mítica (catálogo para aprobar en `docs/frutas.md`).
   - **Detalles:**
     - el nombre de la tripulación se elige con Corso en el desayuno;
     - las cubiertas de los barcos se dibujan con detalle y la escotilla ya no traba.

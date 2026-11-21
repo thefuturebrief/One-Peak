@@ -14,7 +14,9 @@ function grafoCalles(M) {
   // la plaza es espacio abierto: los nodos de su borde se unen entre sí
   const pz = M.plaza; if (pz && pz.w) { const en = [...N.keys()].filter(q => { const [x, y] = N.get(q).p; return x > pz.x - .7 && x < pz.x + pz.w + .7 && y > pz.y - .7 && y < pz.y + pz.h + .7; }); for (const u of en) for (const v of en) une(u, v); }
   return N; }
-function rutaCalles(desde, hasta) { const N = CALLES, cerca = p => [...N.keys()].reduce((m, q) => { const d = Math.hypot(N.get(q).p[0] - p[0], N.get(q).p[1] - p[1]); return d < m[1] ? [q, d] : m; }, [null, 1e9])[0];
+// línea recta sin atravesar casas ni muros (en casillas)
+const libre = (a, b) => { const n = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / .25); for (let i = 1; i < n; i++) if (!walkableTown((a[0] + (b[0] - a[0]) * i / n) * T, (a[1] + (b[1] - a[1]) * i / n) * T)) return false; return true; };
+function rutaCalles(desde, hasta) { const N = CALLES, cerca = p => { const qs = [...N.keys()].map(q => [q, Math.hypot(N.get(q).p[0] - p[0], N.get(q).p[1] - p[1])]).sort((a, b) => a[1] - b[1]); return (qs.slice(0, 8).find(([q]) => libre(p, N.get(q).p)) || qs[0] || [null])[0]; }; // el cruce más cercano al que se llega en línea recta
   const a = cerca(desde), b = cerca(hasta); if (!a || !b) return [hasta]; const dist = new Map([[a, 0]]), prev = new Map(), abiertos = new Set([a]);
   while (abiertos.size) { let u = null; for (const q of abiertos) if (u === null || dist.get(q) < dist.get(u)) u = q; abiertos.delete(u); if (u === b) break;
     for (const v of N.get(u).ad) { const nd = dist.get(u) + Math.hypot(N.get(u).p[0] - N.get(v).p[0], N.get(u).p[1] - N.get(v).p[1]); if (nd < (dist.get(v) ?? 1e9)) { dist.set(v, nd); prev.set(v, u); abiertos.add(v); } } }
@@ -26,7 +28,7 @@ const mismoLugar = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 function vecinosTick(force) {
   if (!CALLES) CALLES = grafoCalles(PLANO.mapa);
   for (const n of PEOPLE) { if (!n.agenda || n.quieto) continue; const L = lugarActual(n);
-    if (n.camino && n.camino.length && !n.goal) { const [x, y] = n.camino.shift(); n.goal = { x: x * T, y: y * T, speed: n.vel || 60, done: () => { if (!n.camino.length) llega(n); } }; }
+    if (n.camino && n.camino.length && !n.goal) { const [x, y] = n.camino.shift(); n.goal = { x: x * T, y: y * T, speed: n.vel || 50 + [...n.id].reduce((k, c) => k + c.charCodeAt(0), 0) % 19, done: () => { if (!n.camino.length) llega(n); } }; }
     if (mismoLugar(L, n.lugar)) continue;
     const cerca = n.scene === G.scene && Math.hypot(n.x - G.x, n.y - G.y) < 300 && G.scene !== 'town'; if (cerca && !force) continue; // no desaparece delante tuyo dentro de un cuarto
     n.lugar = L; n.route = null; n.goal = null;

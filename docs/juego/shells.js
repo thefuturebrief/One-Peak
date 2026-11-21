@@ -25,7 +25,7 @@ Object.assign(OBJETOS, {
 const GENTE_SHELLS = () => [
   { id: 'medusa', scene: 'town', at: [8, 41.6], sprite: 'forastero', dir: 'left', name: 'La Medusa Gris', barks: [], greet: () => 'El bote no espera. Yo tampoco.' },
   // la Marina
-  { id: 'severin', casa: 'barracon', agenda: AG([0, 'casa'], [5, ['calle', 11.4, 36.2, 'down']], [9.5, ['calle', 35.4, 21.4, 'left']], [13, ['dentro', 'cuartel', 9.8, 6.6, 'down']], [17, ['calle', 30.4, 38.4, 'right']], [21, 'casa']),
+  { id: 'severin', casa: 'barracon', agenda: AG([0, 'casa'], [5, ['calle', 11.4, 36.2, 'down']], [9.5, ['calle', 35.4, 21.4, 'left']], [13, ['dentro', 'cuartel', 9.8, 6.6, 'down']], [17, ['calle', 30.9, 38.4, 'right']], [21, 'casa']),
     scene: 'town', at: [11.4, 36.2], sprite: 'severin', dir: 'down', name: 'Cadete Darío Severin', arma: 'reglamento', vel: 70,
     barks: { dia: ['Circulen.', 'Documentos, por favor.'], tarde: ['Todo en orden. De momento.'], noche: ['Ronda de noche. Sin novedad.'] },
     greet: c => F.stSeverinGolpe ? '...' : c.n <= 1 ? 'Sigues aquí. Bien: así sé dónde estás.' : pick(['¿Otra vez tú?', 'Si vas a preguntar algo, que sea rápido.']),
@@ -34,23 +34,24 @@ const GENTE_SHELLS = () => [
       { id: 'niklas', once: true, need: () => asked('niklas', 'marina'), ask: '¿Conoces a Niklas Brand?', a: () => ['(Se le endurece la cara.)', 'Fuimos compañeros de litera en la academia. Él hizo lo que creía correcto y yo hice lo que era correcto.', 'No siempre es lo mismo. Ya lo aprenderás.'], learn: L('shells', 'Severin y Niklas', 'Severin y Niklas fueron compañeros en la academia. Severin firmó el parte que echó a Niklas.') },
       { id: 'estatua', once: true, ask: '¿Qué tapan en lo alto de la base?', a: () => ['El capitán Brisco. En bronce. Tres metros de capitán Brisco, mirando al pueblo desde el tejado.', '(Lo dice sin cambiar la cara, pero se le escapa un suspiro.)'] },
     ] },
-  { id: 'guardia_cala', casa: 'barracon', agenda: AG([0, 'casa'], [5, ['calle', 12.4, 36.6, 'down']], [9.5, 'casa']), scene: 'town', at: [12.4, 36.6], sprite: 'marine', dir: 'down', name: 'Marine', arma: 'mosquete', barks: { dia: ['Bostezo... digo, sin novedad.'], tarde: [], noche: [] }, greet: () => 'Habla con el cadete. Yo solo sujeto el mosquete.' },
-  { id: 'guardia1', casa: 'barracon', agenda: AG([0, ['calle', 31.6, 16.9, 'down']]), scene: 'town', at: [31.6, 16.9], sprite: 'marine', dir: 'down', name: 'Guardia del portón', arma: 'mosquete', barks: { dia: ['Portón de la base. Paso restringido.'], tarde: ['Mañana desfile. Llevo una semana sacando brillo a botones.'], noche: ['...'] }, greet: () => 'La base no es un paseo. Sigue tu camino.' },
-  { id: 'guardia2', casa: 'barracon', agenda: AG([0, ['calle', 34.4, 16.9, 'down']]), scene: 'town', at: [34.4, 16.9], sprite: 'marine', dir: 'down', name: 'Guardia del portón', arma: 'pistola', barks: { dia: ['¿Has visto la lona del tejado? Yo tampoco sé lo que hay debajo.'], tarde: [], noche: ['...'] }, greet: () => 'Sigue tu camino.' },
-  { id: 'patrulla1', casa: 'barracon', agenda: AG([0, 'casa'], [8, ['ruta', [[27.6, 24.8], [38.6, 24.8], [38.6, 18.4], [27.6, 18.4]]]], [20, 'casa']), scene: 'town', at: [27.6, 24.8], sprite: 'marine', dir: 'right', name: 'Marine de patrulla', arma: 'reglamento', barks: { dia: ['Circulen, circulen.'], tarde: ['¿Ese de ahí lleva permiso de pesca?'], noche: [] } },
-  { id: 'patrulla2', casa: 'barracon', agenda: AG([0, 'casa'], [9, ['ruta', [[14, 37.6], [52, 37.6]]]], [19, 'casa']), scene: 'town', at: [14, 37.6], sprite: 'marine', dir: 'right', name: 'Marine de patrulla', arma: 'mosquete', barks: { dia: ['Nada que declarar, ¿verdad?'], tarde: [], noche: [] } },
-  { id: 'ruiz', casa: 'barracon', agenda: AG([0, 'casa'], [14, ['dentro', 'cantina', 11.4, 4.9, 'down']], [22, 'casa']), scene: 'cantina', at: [11.4, 4.9], sprite: 'marine', dir: 'down', name: 'Cabo Ruiz', barks: { dia: [], tarde: ['¡Otra mano! Esta vez sí que pierdes, Calma.', '(El cabo Ruiz se rasca la oreja y sonríe.)'], noche: [] }, greet: () => '¿Juegas? No, tú no tienes cara de tener dinero.' },
-  { id: 'pardo', casa: 'cuartel', agenda: AG([0, ['dentro', 'cuartel', 3.2, 6.9, 'down']]), scene: 'cuartel', at: [3.2, 6.9], sprite: 'sargento', dir: 'down', name: 'Sargento Pardo', arma: 'reglamento',
+  { id: 'guardia_cala', casa: 'barracon', agenda: AG([0, 'casa'], [5, ['calle', 12.4, 36.6, 'down']], [9.5, 'casa']), scene: 'town', at: [12.4, 36.6], sprite: 's_marine_a', dir: 'down', name: 'Marine', arma: 'mosquete', barks: { dia: ['Bostezo... digo, sin novedad.'], tarde: [], noche: [] }, greet: () => 'Habla con el cadete. Yo solo sujeto el mosquete.' },
+  { id: 'guardia1', casa: 'barracon', agenda: AG([0, ['calle', 31.6, 16.9, 'down']]), scene: 'town', at: [31.6, 16.9], sprite: 's_marine_c', dir: 'down', name: 'Guardia del portón', arma: 'mosquete', barks: { dia: ['Portón de la base. Paso restringido.'], tarde: ['Mañana desfile. Llevo una semana sacando brillo a botones.'], noche: ['...'] }, greet: () => 'La base no es un paseo. Sigue tu camino.' },
+  { id: 'guardia2', casa: 'barracon', agenda: AG([0, ['calle', 34.4, 16.9, 'down']]), scene: 'town', at: [34.4, 16.9], sprite: 's_marine_d', dir: 'down', name: 'Guardia del portón', arma: 'pistola', barks: { dia: ['¿Has visto la lona del tejado? Yo tampoco sé lo que hay debajo.'], tarde: [], noche: ['...'] }, greet: () => 'Sigue tu camino.' },
+  { id: 'patrulla1', casa: 'barracon', agenda: AG([0, 'casa'], [8, ['ruta', [[28.6, 24.6], [37.6, 24.6], [37.6, 18.8], [28.6, 18.8]]]], [20, 'casa']), scene: 'town', at: [28.6, 24.6], sprite: 's_marine_b', dir: 'right', name: 'Marine de patrulla', arma: 'reglamento', barks: { dia: ['Circulen, circulen.'], tarde: ['¿Ese de ahí lleva permiso de pesca?'], noche: [] } },
+  { id: 'patrulla2', casa: 'barracon', agenda: AG([0, 'casa'], [9, ['ruta', [[14, 37.6], [52, 37.6]]]], [19, 'casa']), scene: 'town', at: [14, 37.6], sprite: 's_marine_e', dir: 'right', name: 'Marine de patrulla', arma: 'mosquete', barks: { dia: ['Nada que declarar, ¿verdad?'], tarde: [], noche: [] } },
+  { id: 'ruiz', casa: 'barracon', agenda: AG([0, 'casa'], [14, ['dentro', 'cantina', 11.4, 4.9, 'down']], [22, 'casa']), scene: 'cantina', at: [11.4, 4.9], sprite: 's_ruiz', dir: 'down', name: 'Cabo Ruiz', barks: { dia: [], tarde: ['¡Otra mano! Esta vez sí que pierdes, Calma.', '(El cabo Ruiz se rasca la oreja y sonríe.)'], noche: [] }, greet: () => '¿Juegas? No, tú no tienes cara de tener dinero.' },
+  { id: 'pardo', casa: 'cuartel', agenda: AG([0, ['dentro', 'cuartel', 1.8, 6.9, 'down']]), scene: 'cuartel', at: [1.8, 6.9], sprite: 's_pardo', dir: 'down', name: 'Sargento Pardo', arma: 'reglamento',
     barks: { dia: ['¡Firmes! ...Ah, eres un civil.'], tarde: ['Papeles, papeles y más papeles.'], noche: ['Zzz...'] },
     greet: () => F.stDentro ? 'Zzz... ¿el desfile? ...cinco minutos más, mamá...' : '¿Asuntos con la base? Aquí no se te ha perdido nada, salvo que vengas a alistarte.' },
-  { id: 'brisco', casa: 'cuartel', agenda: AG([0, 'casa'], [9, ['dentro', 'cuartel', 8.5, 1.1, 'down']], [11.5, ['calle', 34.6, 21.2, 'left']], [13, ['dentro', 'cuartel', 8.5, 1.1, 'down']], [19, 'casa']), scene: 'cuartel', at: [8.5, 1.1], sprite: 'brisco', dir: 'down', name: 'Capitán Pelayo Brisco', arma: 'sable',
+  { id: 'brisco', casa: 'cuartel', agenda: AG([0, 'casa'], [9, ['dentro', 'cuartel', 8.8, 0.9, 'down']], [11.5, ['calle', 34.6, 21.2, 'left']], [13, ['dentro', 'cuartel', 8.8, 0.9, 'down']], [19, 'casa']), scene: 'cuartel', at: [8.8, 0.9], sprite: 'brisco', dir: 'down', name: 'Capitán Pelayo Brisco', arma: 'sable',
     barks: { dia: ['¡Mañana, la historia!', '¿Ese botón está torcido? ¡Ese botón está torcido!'], tarde: ['El vicealmirante quedará conmovido. Conmovido.'], noche: [] },
     greet: c => c.n === 0 ? '¿Ha visto usted lo que hay en lo alto de la base? ¡Todavía no! Nadie lo ha visto. Mañana, mañana todo Shells Town lo verá.' : '¿Otra vez usted? Admiro su interés por el arte.',
     topics: [{ id: 'estatua', once: true, ask: '¿Qué hay debajo de la lona del tejado?', a: () => ['¡Yo! En bronce. Tres meses de trabajo del mejor escultor del East Blue.', 'Mirando a Shells Town desde lo alto, para que nadie olvide quién lo protege.', 'Me costó la paga de un año. Pero el reconocimiento no tiene precio.', '(Lo piensa.) Bueno, sí. El de la estatua.'] }] },
   // los candidatos
   { id: 'rufo', casa: 'cantina', agenda: AG([0, 'casa'], [7, ['dentro', 'cantina', 8.6, 1.5, 'down']], [23.5, 'casa']), scene: 'cantina', at: [8.6, 1.5], sprite: 'rufo', dir: 'down', name: 'Rufo Brasa',
     barks: { dia: ['¡Guiso de almejas, recién hecho!', '¡Ese caldo no se remueve solo!'], tarde: ['Hoy hay pulpo. Ayer también. Mañana, quién sabe.'], noche: ['Última ronda y a la cama.'] },
-    greet: c => F.stCompa === 'rufo' ? '¡Mañana a las once menos cuarto en la puerta! Con hambre, que en las misiones se piensa mejor comido.' : F.stCompa ? '¡Buena suerte en Goa! Si vuelves, tu plato te espera.' : c.n === 0 ? '¡Eh, tú! Tienes cara de no haber desayunado. Siéntate, que esto no muerde.' : pick(['¡Mi pinche favorito!', '¿Hambre? Siempre hay hambre.']),
+    greet: c => F.stCompa === 'rufo' ? '¡Mañana a las once menos cuarto en la puerta! Con hambre, que en las misiones se piensa mejor comido.' : F.stCompa ? '¡Buena suerte en Goa! Si vuelves, tu plato te espera.'
+      : F.stRufoEnc && !F.stRufoHecho ? (tiene('cajas_pescado') ? '¡Ese olor! ¿Eso que traes es mi pescado?' : '¿Y mis cajas? Marta, la pelirroja del delantal: hasta las dos tiene el puesto en el mercado del muelle; por la tarde, en la Ribera, delante de los almacenes del este.') : c.n === 0 ? '¡Eh, tú! Tienes cara de no haber desayunado. Siéntate, que esto no muerde.' : pick(['¡Mi pinche favorito!', '¿Hambre? Siempre hay hambre.']),
     first: L('gente', 'Rufo Brasa', 'Cocinero y dueño de la cantina El Caldero. Grande como una puerta, se ríe como un trueno. No soporta ver a nadie con hambre.'),
     topics: [
       { id: 'sitio', once: true, ask: '¿Qué sitio es este?', a: () => ['El Caldero. La mejor cantina de Shells Town.', 'Bueno, la única. Pero si hubiera otra, seguiría siendo la mejor.'] },
@@ -67,7 +68,8 @@ const GENTE_SHELLS = () => [
     ] },
   { id: 'nerea', casa: 'practico', agenda: AG([0, 'casa'], [7, ['calle', 33.1, 42.2, 'right']], [13, 'casa'], [14, ['dentro', 'cantina', 12.4, 6.9, 'up']], [22, 'casa']), scene: 'town', at: [33.1, 42.2], sprite: 'iria', dir: 'right', name: 'Nerea Calma',
     barks: { dia: ['¡Dos cuartas a babor! ¡Más! ¡Así!', '(Nerea silba una señal larga al pesquero que entra.)'], tarde: ['Pago. Y subo.', '(Nerea baraja sin mirar las cartas.)'], noche: [] },
-    greet: c => F.stCompa === 'nerea' ? 'Mañana, a las once menos cuarto, en el portón. Cara de ayudante de práctico: es decir, de no entender nada.' : F.stCompa ? 'Que el mar te sea leve. Lo será: lo he mirado.' : c.n === 0 ? (hourNow() < 13.5 ? 'Si vas a cruzar el muelle, no pises la cuerda. Estoy metiendo un pesquero entre los arrecifes.' : '¿Vienes a jugar o a mirar? Si es a mirar, siéntate detrás de mí. Da suerte.') : pick(['¿Qué hay?', '(Nerea te guiña un ojo sin dejar de mirar el mar.)']),
+    greet: c => F.stCompa === 'nerea' ? 'Mañana, a las once menos cuarto, en el portón. Cara de ayudante de práctico: es decir, de no entender nada.' : F.stCompa ? 'Que el mar te sea leve. Lo será: lo he mirado.'
+      : asked('nerea', 'tadeo') && !F.stNereaHecho && !G.scene.startsWith('cantina') ? '¿Vienes a mirarle las manos al cabo? En El Caldero, desde las dos. Siéntate a mi lado y fíjate bien.' : c.n === 0 ? (hourNow() < 13.5 ? 'Si vas a cruzar el muelle, no pises la cuerda. Estoy metiendo un pesquero entre los arrecifes.' : '¿Vienes a jugar o a mirar? Si es a mirar, siéntate detrás de mí. Da suerte.') : pick(['¿Qué hay?', '(Nerea te guiña un ojo sin dejar de mirar el mar.)']),
     first: L('gente', 'Nerea Calma', 'La práctica del puerto: guía los barcos entre los arrecifes de Shells Town. Por las tardes gana a las cartas en El Caldero. Nunca parece tener prisa.'),
     topics: [
       { id: 'que', once: true, ask: '¿A qué te dedicas?', a: () => ['Soy la práctica del puerto. Cuando un barco quiere entrar en Shells Town, lo guío entre los arrecifes. Sin mí, la mitad acabaría en el fondo.', 'Y por las tardes juego a las cartas. Se me da mejor que guiar barcos. Y paga más.'] },
@@ -79,9 +81,10 @@ const GENTE_SHELLS = () => [
       { id: 'cartas_info', need: () => asked('nerea', 'tadeo') && !F.stNereaHecho && !G.scene.startsWith('cantina'), ask: '¿Dónde juegas a las cartas?', a: () => ['En El Caldero, a partir de las dos. Contra el cabo Ruiz, que gana siempre.', 'Nadie gana siempre. Ven a mirar y me dices qué ves.'] },
       { id: 'unete', need: () => F.stNereaHecho && !F.stCompa, ask: 'Vente conmigo. Mañana zarpo a Goa.', a: () => ['(Nerea baraja sin mirar las cartas.)', '¿Un barco que todavía no existe, con alguien al mando que no sabe ni hacer un nudo?', '...Las mejores apuestas son las que todo el mundo da por perdidas.', 'Pero el Libro de Tadeo viene conmigo. Mañana tengo que llevar a la base la tabla de mareas para el barco del vicealmirante: me dejan pasar por el portón.', 'Te espero en el portón a las once menos cuarto. Y trae cara de ayudante de práctico. Es decir: de no entender nada.'], then: () => unirse('nerea') },
     ] },
-  { id: 'niklas', casa: 'almacen_c', agenda: AG([0, 'casa'], [7, ['calle', 26.4, 37.9, 'down']], [13.5, ['calle', 36.4, 35, 'right']], [20, ['dentro', 'cantina', 9.6, 8.6, 'up']], [23, 'casa']), scene: 'town', at: [26.4, 37.9], sprite: 'tobi', dir: 'down', name: 'Niklas Brand',
+  { id: 'niklas', casa: 'almacen_c', agenda: AG([0, 'casa'], [7, ['calle', 26.3, 37.6, 'down']], [13.5, ['calle', 36.4, 35, 'right']], [20, ['dentro', 'cantina', 9.7, 9.1, 'up']], [23, 'casa']), scene: 'town', at: [26.3, 37.6], sprite: 'tobi', dir: 'down', name: 'Niklas Brand',
     barks: { dia: ['¡Una! ¡Dos! ¡Arriba!', 'Esta caja pesa como un remordimiento.'], tarde: ['¡Siguiente! ¿Nadie?', '¡Pago doble al que me tumbe!'], noche: ['...'] },
-    greet: c => F.stCompa === 'niklas' ? 'Mañana, muralla oeste, junto a la leña, a las once menos cuarto. Trae ropa vieja: el desagüe no perdona.' : F.stCompa ? 'Si un día necesitas un puño de más, ya sabes dónde estoy.' : c.n === 0 ? '¿Qué miras? Si vienes a por pelea, es por la tarde y en el Foso. Si vienes a por cajas, ayúdame a cargar.' : pick(['¡Eh!', '¿Qué hay?']),
+    greet: c => F.stCompa === 'niklas' ? 'Mañana, muralla oeste, junto a la leña, a las once menos cuarto. Trae ropa vieja: el desagüe no perdona.' : F.stCompa ? 'Si un día necesitas un puño de más, ya sabes dónde estoy.'
+      : F.stFosoPeleado && !F.stNiklasHecho ? (enFoso() ? 'Bruto ya está. ¿Y conmigo? Cuando quieras.' : 'El Foso abre otra vez esta tarde. Quiero pelear contigo, que lo sepas.') : c.n > 0 && !F.stFosoPeleado && !enFoso() ? 'El Foso abre a la una y media, entre los almacenes del puerto. Te espero.' : c.n === 0 ? '¿Qué miras? Si vienes a por pelea, es por la tarde y en el Foso. Si vienes a por cajas, ayúdame a cargar.' : pick(['¡Eh!', '¿Qué hay?']),
     first: L('gente', 'Niklas Brand', 'Estibador por la mañana y luchador del Foso por la tarde. Fue recluta de la Marina hasta que lo echaron. Se ríe fuerte y pega más fuerte.'),
     topics: [
       { id: 'marina', once: true, ask: '¿Es verdad que fuiste marine?', a: () => ['Seis meses en la academia. Me echaron por darle un puñetazo a un teniente.', 'El teniente le estaba pegando a un pescador viejo por no apartarse. Yo me aparté para pegarle a él.', 'Mi compañero de litera, Darío Severin, me dijo que había hecho lo correcto. Y después firmó el parte. Así es la Marina.'] },
@@ -92,7 +95,7 @@ const GENTE_SHELLS = () => [
       { id: 'contra', once: true, need: () => F.stFosoPeleado && enFoso(), ask: 'Pelea conmigo tú, Niklas.', a: () => ['(Se le ilumina la cara.)', 'Por fin alguien con agallas. Si me tumbas, te escucho. Si te tumbo, también. Hoy estoy de buenas.'], then: () => pelearNiklas() },
       { id: 'unete', need: () => F.stNiklasHecho && !F.stCompa, ask: 'Vente conmigo. Mañana zarpo a Goa.', a: () => ['(Niklas se queda callado. Después se ríe, fuerte.)', '¿Pirata? ¿Yo? Mi padre me mataría. Bueno, si estuviera vivo.', 'Vale. Pero la lanza de mi padre viene conmigo.', 'Sé de un desagüe que pasa por debajo de la muralla, por el lado oeste. Mañana, con el desfile, la base estará medio vacía.', 'Nos vemos en la muralla oeste, junto al montón de leña, a las once menos cuarto.'], then: () => unirse('niklas') },
     ] },
-  { id: 'bruto', casa: 'almacen_e', agenda: AG([0, 'casa'], [13.5, ['calle', 41.2, 35, 'left']], [20, ['dentro', 'cantina', 4.6, 8.8, 'up']], [23, 'casa']), scene: 'town', at: [41.2, 35], sprite: 'maton', dir: 'left', name: 'Bruto', barks: { dia: [], tarde: ['¡Al Foso! ¡Al Foso!', '(Bruto hace crujir el cuello.)'], noche: [] }, greet: () => '¿Peleas o miras? Mirar es gratis. Pelear, también, pero duele.' },
+  { id: 'bruto', casa: 'almacen_e', agenda: AG([0, 'casa'], [13.5, ['calle', 41.2, 35, 'left']], [20, ['dentro', 'cantina', 4.6, 8.8, 'up']], [23, 'casa']), scene: 'town', at: [41.2, 35], sprite: 's_bruto', dir: 'left', name: 'Bruto', barks: { dia: [], tarde: ['¡Al Foso! ¡Al Foso!', '(Bruto hace crujir el cuello.)'], noche: [] }, greet: () => '¿Peleas o miras? Mirar es gratis. Pelear, también, pero duele.' },
   // la gente del puerto y de la ciudad
   { id: 'quill', casa: 'almacen_e', agenda: AG([0, 'fuera'], [7, ['calle', 42.8, 47.5, 'down']], [20, ['dentro', 'cantina', 12.6, 8.8, 'left']], [23, 'fuera']), scene: 'town', at: [42.8, 47.5], sprite: 'quill', dir: 'down', name: 'Capitana Hesper Quill',
     barks: { dia: ['¡Ese barril, con cuidado, que es aceite!', '¡Estiba, no tiro al blanco!'], tarde: ['Mañana con la marea. Ni un minuto más.'], noche: [] },
@@ -101,8 +104,8 @@ const GENTE_SHELLS = () => [
       { id: 'pasaje', once: true, ask: '¿Vas a Goa?', a: () => (encargo('Pasaje a Goa', 'La Tortuga Parda zarpa mañana a mediodía hacia Goa. La capitana Quill cobra trescientos berries por persona, al subir.'), ['Mañana a mediodía, con la marea. Trescientos berries por cabeza, se paga al subir.', 'No pregunto nombres ni de dónde viene nadie. Pregunto si el dinero es de verdad.']) },
       { id: 'barco', once: true, ask: '¿Qué lleva la Tortuga?', a: () => ['Sal, aceite, telas y paciencia. Mucha paciencia: no es rápida, pero llega.', 'Treinta años navegando y nunca me han hundido. Me han robado dos veces, eso sí.'] },
     ] },
-  { id: 'marinero', casa: 'almacen_e', agenda: AG([0, 'fuera'], [7, ['calle', 39.4, 47.5, 'down']], [20, 'fuera']), scene: 'town', at: [39.4, 47.5], sprite: 'navegante', dir: 'down', name: 'Marinera de la Tortuga', barks: { dia: ['¡Cabo listo!', 'Otra caja de sal. Siempre sal.'], tarde: [], noche: [] }, greet: () => 'Sin pasaje no se sube. Habla con la capitana.' },
-  { id: 'celes', casa: 'posada', agenda: AG([0, ['dentro', 'posada', 8.4, 1.2, 'down']]), scene: 'posada', at: [8.4, 1.2], sprite: 'tabernera', dir: 'down', name: 'Doña Celes',
+  { id: 'marinero', casa: 'almacen_e', agenda: AG([0, 'fuera'], [7, ['calle', 39.4, 47.5, 'down']], [20, 'fuera']), scene: 'town', at: [39.4, 47.5], sprite: 's_marinera', dir: 'down', name: 'Marinera de la Tortuga', barks: { dia: ['¡Cabo listo!', 'Otra caja de sal. Siempre sal.'], tarde: [], noche: [] }, greet: () => 'Sin pasaje no se sube. Habla con la capitana.' },
+  { id: 'celes', casa: 'posada', agenda: AG([0, ['dentro', 'posada', 6.6, 1.2, 'down']]), scene: 'posada', at: [6.6, 1.2], sprite: 's_celes', dir: 'down', name: 'Doña Celes',
     barks: { dia: ['¡La Concha, camas limpias y sin pulgas! Casi.'], tarde: ['¿Cama? ¿Cena? ¿Las dos?'], noche: ['Silencio, que hay gente durmiendo.'] },
     greet: c => c.n === 0 ? 'Bienvenido a La Concha. Cama, veinte berries. Rumores, gratis.' : pick(['¿Qué te pongo, cielo?', 'Aquí estoy, como siempre.']),
     topics: [
@@ -111,27 +114,27 @@ const GENTE_SHELLS = () => [
         learn: L('rumores', 'El desfile', 'Mañana viene un vicealmirante a Shells Town. Habrá desfile y se destapará una estatua del capitán Brisco en lo alto de la base.') },
       { id: 'comer', ask: '¿Qué hay de cenar?', tienda: 'celes' },
     ] },
-  { id: 'ulloa', casa: 'casa_a5', agenda: AG([0, 'casa'], [9, ['dentro', 'pertrechos', 4, 4.2, 'down']], [13, ['calle', 37, 20.8, 'down']], [16, ['dentro', 'pertrechos', 4, 4.2, 'down']], [20, 'casa']), scene: 'pertrechos', at: [4, 4.2], sprite: 'v_comerciante', dir: 'down', name: 'Don Anselmo Ulloa',
+  { id: 'ulloa', casa: 'casa_a5', agenda: AG([0, 'casa'], [9, ['dentro', 'pertrechos', 4, 6, 'down']], [13, ['calle', 37, 20.8, 'down']], [16, ['dentro', 'pertrechos', 4, 6, 'down']], [20, 'casa']), scene: 'pertrechos', at: [4, 6], sprite: 'v_comerciante', dir: 'down', name: 'Don Anselmo Ulloa',
     barks: { dia: ['Cabos, lonas, anzuelos. Lo que el mar pide.'], tarde: [], noche: [] }, greet: () => 'Lo que un barco necesita, y lo que no sabe que necesita.', topics: [{ id: 'tienda', ask: 'Quiero ver lo que tienes.', tienda: 'ulloa' }] },
-  { id: 'marta', casa: 'casa_b5', agenda: AG([0, 'casa'], [7, ['calle', 13.6, 38.6, 'right']], [14, 'casa'], [18, ['calle', 44.6, 32.6, 'down']], [21, 'casa']), scene: 'town', at: [13.6, 38.6], sprite: 'pescadora', dir: 'right', name: 'Marta',
+  { id: 'marta', casa: 'casa_b5', agenda: AG([0, 'casa'], [7, ['calle', 13.6, 38.6, 'right']], [14, ['calle', 44.6, 32.6, 'down']], [21, 'casa']), scene: 'town', at: [13.6, 38.6], sprite: 's_marta', dir: 'right', name: 'Marta',
     barks: { dia: ['¡Sardinas, que saltan solas!', '¡Pescado fresco, del de hoy!'], tarde: [], noche: [] }, greet: () => '¿Qué te pongo? Si es fiado, ni lo pidas.',
     topics: [{ id: 'rufo', once: true, need: () => F.stRufoEnc && !F.stRufoHecho, ask: 'Vengo de parte de Rufo.', a: () => (darObjeto('cajas_pescado'), ['¿Rufo? ¿Otra vez fiado?', '(Suspira y te carga tres cajas.) Dile que ya me debe media ballena.']) }] },
-  { id: 'lalo', casa: 'casa_a6', agenda: AG([0, 'casa'], [6, ['calle', 9.6, 39.2, 'down']], [9, ['calle', 29.2, 21, 'down']], [18, ['dentro', 'cantina', 2.6, 8.8, 'up']], [22, 'casa']), scene: 'town', at: [9.6, 39.2], sprite: 'viejo', dir: 'down', name: 'Lalo',
+  { id: 'lalo', casa: 'casa_a6', agenda: AG([0, 'casa'], [6, ['calle', 9.6, 39.2, 'down']], [9, ['calle', 29.2, 21, 'down']], [18, ['dentro', 'cantina', 2.6, 8.8, 'up']], [22, 'casa']), scene: 'town', at: [9.6, 39.2], sprite: 's_lalo', dir: 'down', name: 'Lalo',
     barks: { dia: ['¡Un barco negro! ¡En la cala! ¡Lo he visto con estos ojos!', '¡Con un gigante encapuchado, os lo juro!'], tarde: ['Nadie me cree. Nunca nadie me cree.'], noche: ['¿Has oído eso? ...Nada. Será el mar.'] },
     greet: () => '¿Tú también vienes a reírte de mí?',
     topics: [{ id: 'barco', once: true, ask: '¿Qué viste exactamente?', a: () => ['Un barco negro como el carbón, con velas de humo. Y un gigante con capucha, de tres metros. ¡Y un crío!', '(Te mira de arriba abajo.) ...Un crío más o menos como tú, ahora que lo pienso.', '(Entorna los ojos.) No, no. El crío era más feo.'], learn: L('shells', 'El pirata de la cala', 'Lalo vio la Corneja en la cala y se lo ha contado a todo el pueblo. Por suerte, nadie le cree... del todo.') }] },
-  { id: 'amaro', casa: 'casa_a3', agenda: AG([0, 'casa'], [8, ['calle', 21.6, 38.7, 'up']], [12, 'casa'], [16, ['calle', 36.8, 21.3, 'down']], [19, 'casa']), scene: 'town', at: [21.6, 38.7], sprite: 'vecina', dir: 'up', name: 'Viuda Amaro', barks: { dia: ['Este pescado ayer valía la mitad.', '¿Has visto qué cara traía el capitán?'], tarde: ['Una estatua. Con lo que hace falta un tejado nuevo en la escuela.'], noche: [] }, greet: () => 'Buenos días. Si es que lo son.' },
-  { id: 'pipo', casa: 'casa_b4', agenda: AG([0, 'casa'], [9, ['ruta', [[30.4, 21.4], [35.6, 21.4], [35.6, 24], [30.4, 24]]]], [13, 'casa'], [15, ['ruta', [[30.4, 21.4], [35.6, 21.4], [35.6, 24], [30.4, 24]]]], [19, 'casa']), scene: 'town', at: [30.4, 21.4], sprite: 'nino', dir: 'right', name: 'Pipo Vidal', barks: { dia: ['¡Bum! ¡Te he dado!', '¡Yo seré vicealmirante!'], tarde: ['¿Tú has visto un pirata de verdad?'], noche: [] }, greet: () => '¿Eres un pirata? Lalo dice que hay un pirata en la cala.' },
+  { id: 'amaro', casa: 'casa_a3', agenda: AG([0, 'casa'], [8, ['calle', 21.8, 39.5, 'up']], [12, 'casa'], [16, ['calle', 36.8, 21.3, 'down']], [19, 'casa']), scene: 'town', at: [21.8, 39.5], sprite: 's_amaro', dir: 'up', name: 'Viuda Amaro', barks: { dia: ['Este pescado ayer valía la mitad.', '¿Has visto qué cara traía el capitán?'], tarde: ['Una estatua. Con lo que hace falta un tejado nuevo en la escuela.'], noche: [] }, greet: () => 'Buenos días. Si es que lo son.' },
+  { id: 'pipo', casa: 'casa_b4', agenda: AG([0, 'casa'], [9, ['ruta', [[30.4, 21.4], [35.6, 21.4], [35.6, 24], [30.4, 24]]]], [13, 'casa'], [15, ['ruta', [[30.4, 21.4], [35.6, 21.4], [35.6, 24], [30.4, 24]]]], [19, 'casa']), scene: 'town', at: [30.4, 21.4], sprite: 's_pipo', dir: 'right', name: 'Pipo Vidal', barks: { dia: ['¡Bum! ¡Te he dado!', '¡Yo seré vicealmirante!'], tarde: ['¿Tú has visto un pirata de verdad?'], noche: [] }, greet: () => '¿Eres un pirata? Lalo dice que hay un pirata en la cala.' },
   // vecinos de paso (algunos saludan)
-  { id: 'tomas', casa: 'casa_a1', agenda: AG([0, 'casa'], [6, ['calle', 26.8, 40.4, 'down']], [12, 'casa'], [14, ['calle', 23.8, 41.8, 'down']], [18, ['dentro', 'cantina', 2.4, 6.2, 'right']], [21.5, 'casa']), scene: 'town', at: [26.8, 40.4], sprite: 'v_pescador', dir: 'down', name: 'Tomás Llanes', barks: { dia: ['Esta red tiene más agujeros que mi bolsillo.'], tarde: ['Hoy no pican.'], noche: [] }, greet: () => 'Buen día. Si buscas trabajo, aquí sobra red y falta pescado.' },
-  { id: 'lucia', casa: 'casa_a1', agenda: AG([0, 'casa'], [8, ['calle', 19.4, 38.8, 'up']], [12, 'casa'], [16, ['calle', 29.2, 23.8, 'up']], [19, 'casa']), scene: 'town', at: [19.4, 38.8], sprite: 'v_moza', dir: 'up', name: 'Lucía Llanes', barks: { dia: ['¿Y este precio? ¿Es broma?'], tarde: ['Tomás, ¿has visto qué hora es?'], noche: [] } },
-  { id: 'ines', casa: 'casa_b1', agenda: AG([0, 'casa'], [6, ['calle', 17.2, 38.8, 'up']], [13, 'casa'], [17, ['dentro', 'posada', 3.2, 7.6, 'up']], [21, 'casa']), scene: 'town', at: [17.2, 38.8], sprite: 'v_panadera', dir: 'up', name: 'Inés Oria', barks: { dia: ['¡Pan del día! ¡Calentito!'], tarde: [], noche: [] }, greet: () => '¿Pan? Del de esta mañana, tierno todavía.' },
+  { id: 'tomas', casa: 'casa_a1', agenda: AG([0, 'casa'], [6, ['calle', 26.6, 39.6, 'down']], [12, 'casa'], [14, ['calle', 23.8, 41.8, 'down']], [18, ['dentro', 'cantina', 2.4, 6.2, 'right']], [21.5, 'casa']), scene: 'town', at: [26.6, 39.6], sprite: 'v_pescador', dir: 'down', name: 'Tomás Llanes', barks: { dia: ['Esta red tiene más agujeros que mi bolsillo.'], tarde: ['Hoy no pican.'], noche: [] }, greet: () => 'Buen día. Si buscas trabajo, aquí sobra red y falta pescado.' },
+  { id: 'lucia', casa: 'casa_a1', agenda: AG([0, 'casa'], [8, ['calle', 19.6, 39.5, 'up']], [12, 'casa'], [16, ['calle', 29.2, 23.8, 'up']], [19, 'casa']), scene: 'town', at: [19.6, 39.5], sprite: 'v_moza', dir: 'up', name: 'Lucía Llanes', barks: { dia: ['¿Y este precio? ¿Es broma?'], tarde: ['Tomás, ¿has visto qué hora es?'], noche: [] } },
+  { id: 'ines', casa: 'casa_b1', agenda: AG([0, 'casa'], [6, ['calle', 17.4, 39.5, 'up']], [13, 'casa'], [17, ['dentro', 'posada', 3.4, 8.2, 'up']], [21, 'casa']), scene: 'town', at: [17.4, 39.5], sprite: 'v_panadera', dir: 'up', name: 'Inés Oria', barks: { dia: ['¡Pan del día! ¡Calentito!'], tarde: [], noche: [] }, greet: () => '¿Pan? Del de esta mañana, tierno todavía.' },
   { id: 'abuela', casa: 'casa_b4', agenda: AG([0, 'casa'], [10, ['calle', 29.2, 23.9, 'up']], [13, 'casa'], [16, ['calle', 36.8, 23.9, 'up']], [19, 'casa']), scene: 'town', at: [29.2, 23.9], sprite: 'v_anciana', dir: 'up', name: 'Abuela Vidal', barks: { dia: ['Pipo, no corras.', 'En mis tiempos el capitán no tenía estatua.'], tarde: ['Pipo, ¡a casa!'], noche: [] }, greet: () => 'Siéntate, joven. Las piernas ya no me aguantan las colas del mercado.' },
   { id: 'ramon', casa: 'casa_b3', agenda: AG([0, 'casa'], [7, ['calle', 25.4, 31.6, 'down']], [13, 'casa'], [15, ['calle', 25.4, 31.6, 'down']], [20, ['dentro', 'cantina', 6, 8.6, 'up']], [23, 'casa']), scene: 'town', at: [25.4, 31.6], sprite: 'v_herrero', dir: 'down', name: 'Ramón Pons', arma: 'martillo', barks: { dia: ['(¡Clang! ¡Clang!)', 'Hierro caliente, palabras frías.'], tarde: ['(¡Clang!)'], noche: [] }, greet: () => 'Herraduras, anclas, clavos. Espadas no: eso es cosa de la Marina.' },
-  { id: 'jaime', casa: 'casa_b6', agenda: AG([0, 'casa'], [7, ['calle', 24.6, 37.2, 'down']], [13, 'casa'], [15, ['calle', 44.8, 35.2, 'left']], [20, ['dentro', 'cantina', 4.6, 6.2, 'right']], [23, 'casa']), scene: 'town', at: [24.6, 37.2], sprite: 'v_estibador', dir: 'down', name: 'Jaime Sastre', barks: { dia: ['¡Arriba esa caja!'], tarde: ['Me duele la espalda hasta en sueños.'], noche: [] } },
-  { id: 'goyo', casa: 'almacen_o', agenda: AG([0, 'casa'], [7, ['calle', 16.6, 37.2, 'down']], [14, ['calle', 43.6, 35.4, 'left']], [19, ['dentro', 'cantina', 8.2, 6.2, 'left']], [23, 'casa']), scene: 'town', at: [16.6, 37.2], sprite: 'v_estibador', dir: 'down', name: 'Goyo', barks: { dia: ['Sal, sal y más sal.'], tarde: [], noche: [] } },
-  { id: 'clara', casa: 'casa_b6', agenda: AG([0, 'casa'], [9, ['calle', 52.6, 31.8, 'down']], [12, 'casa'], [17, ['calle', 36.6, 23.9, 'up']], [20, 'casa']), scene: 'town', at: [52.6, 31.8], sprite: 'v_moza', dir: 'down', name: 'Clara Sastre', barks: { dia: ['Si llueve hoy, me tiro al mar.'], tarde: [], noche: [] } },
-  { id: 'artillero', casa: 'barracon', agenda: AG([0, 'casa']), scene: 'town', at: [36, 14], sprite: 'marine', dir: 'down', name: 'Artillero', barks: [] },
+  { id: 'jaime', casa: 'casa_b6', agenda: AG([0, 'casa'], [7, ['calle', 24.6, 37.2, 'down']], [13, 'casa'], [15, ['calle', 44.6, 34.6, 'left']], [20, ['dentro', 'cantina', 4.6, 6.2, 'right']], [23, 'casa']), scene: 'town', at: [24.6, 37.2], sprite: 'v_estibador', dir: 'down', name: 'Jaime Sastre', barks: { dia: ['¡Arriba esa caja!'], tarde: ['Me duele la espalda hasta en sueños.'], noche: [] } },
+  { id: 'goyo', casa: 'almacen_o', agenda: AG([0, 'casa'], [7, ['calle', 16.6, 37.2, 'down']], [14, ['calle', 43.4, 34.6, 'left']], [19, ['dentro', 'cantina', 8.2, 6.2, 'left']], [23, 'casa']), scene: 'town', at: [16.6, 37.2], sprite: 's_goyo', dir: 'down', name: 'Goyo', barks: { dia: ['Sal, sal y más sal.'], tarde: [], noche: [] } },
+  { id: 'clara', casa: 'casa_b6', agenda: AG([0, 'casa'], [9, ['calle', 52.6, 31.8, 'down']], [12, 'casa'], [17, ['calle', 31.4, 24.2, 'up']], [20, 'casa']), scene: 'town', at: [52.6, 31.8], sprite: 's_clara', dir: 'down', name: 'Clara Sastre', barks: { dia: ['Si llueve hoy, me tiro al mar.'], tarde: [], noche: [] } },
+  { id: 'artillero', casa: 'barracon', agenda: AG([0, 'casa']), scene: 'town', at: [36, 14], sprite: 's_marine_b', dir: 'down', name: 'Artillero', barks: [] },
 ];
 const enFoso = () => hourNow() >= 13.5 && hourNow() < 20 && diaS() === 0;
 const openBase = () => !!F.stDentro;
@@ -180,6 +183,56 @@ async function control() { const s = P('severin'), g1 = P('guardia_cala'); F.stC
 function controlFin(tono, lineas) { F.stTono = tono; const s = P('severin');
   say(s, { lines: [...lineas, '(Saca una libreta y apunta algo sin dejar de mirarte.)', 'Me llamo Darío Severin, cadete de la base. Si en Shells Town pasa algo raro mientras estás aquí, iré a buscarte a ti primero.'], done: () => { F.stControl = true; s.quieto = false; G.foco = null; s.lugar = null;
     learn(['gente', 'Darío Severin', 'Cadete de la Marina en Shells Town. Rubio, recto, con cara de no haber sonreído nunca. Me paró al llegar, apuntó algo en una libreta y se quedó con mi cara.']); guardarAuto(); } }); }
+
+// ---------- el mercado: los tres candidatos juntos (cinemática) y Lalo te explica la isla ----------
+const fijo = n => { n.quieto = true; n.camino = null; n.goal = null; n.route = null; };
+const suelta = n => { n.quieto = false; n.lugar = null; };
+async function presentacion() { F.stPresenta = 'en curso'; const ines = P('ines'), r = P('ruiz'), ru = P('rufo'), ni = P('niklas'), ne = P('nerea'), s = P('severin');
+  for (const n of [ines, r, ru, ni, ne, s]) fijo(n);
+  moveNpc(ines, 'town', [18.6, 37.4], 'right'); moveNpc(r, 'town', [24, 37.4], 'left'); moveNpc(ru, 'town', [15.8, 36.9], 'right'); moveNpc(ni, 'town', [26.3, 37.6], 'down'); moveNpc(ne, 'town', [29, 38], 'left'); moveNpc(s, 'town', [11.8, 37], 'right');
+  cineOn(); await camara(aPx(19.4, 37.2), 900);
+  await anda(r, aPx(19.6, 37.4), 80); r.dir = 'left'; ines.dir = 'right';
+  await dialogo(r, ['(El cabo coge una hogaza del cesto de Inés y le da un mordisco.)', 'Para la tropa. Apúntalo en la cuenta de la Marina.']);
+  await dialogo(ines, ['¡La Marina ya me debe cuarenta hogazas, cabo Ruiz!']);
+  await anda(ru, aPx(17.6, 37), 110); ru.dir = 'right'; emote(ru, '!');
+  await dialogo(ru, ['¡Eh, eh, eh! ¡Ese pan se paga! Hasta en la Marina se come pagando.']);
+  await dialogo(r, ['¿Y quién me va a cobrar? ¿Tú, barrigón?']);
+  emote(ni, '!'); await anda(ni, aPx(20.8, 36.9), 120); ni.dir = 'left'; r.dir = 'right';
+  await dialogo(ni, ['(Deja una caja en el suelo, sin prisa.)', 'Yo, si hace falta. Esta tarde en el Foso, o aquí mismo. Tú eliges, cabo.']);
+  await dialogo(r, ['Brand. El expulsado. ¿Sigues pegando a tus superiores?', '(Se le nota que no quiere averiguarlo.)']);
+  await anda(ne, aPx(21.4, 38.1), 70); ne.dir = 'left';
+  await dialogo(ne, ['(Una mujer que pasaba hacia el muelle se para a mirar, barajando sin mirar las cartas.)', 'Dos a uno a que el cabo suelta el pan antes de que cuente hasta tres. ¿Alguien apuesta?', 'Uno...']);
+  await anda(s, aPx(17.2, 37.8), 120); s.dir = 'right'; r.dir = 'left'; emote(r, '!');
+  await dialogo(s, ['Cabo Ruiz. Pague el pan.']);
+  await dialogo(r, ['...Sí, mi cadete.', '(Deja unas monedas en el cesto, de mala gana, y se va calle arriba.)']); sfx('moneda');
+  anda(r, aPx(26, 37.4), 80).then(() => { r.scene = 'none'; suelta(r); });
+  s.dir = dirTo(s, G); await dialogo(s, ['(Te mira a ti.) No te has metido. Bien. Sigue así hasta que zarpe tu barco.']);
+  anda(s, aPx(11.6, 36.6), 80).then(() => suelta(s));
+  await dialogo(ne, ['...Dos. Lástima, nadie apostó.']);
+  await dialogo(ines, ['(Inés reparte una hogaza a cada uno. A ti también.) Gracias, chicos. Y tú, forastero, bienvenido a Shells Town.', '(El pan está caliente y cruje. Te lo comes en cuatro bocados.)']); S.comido = Math.max(S.comido || 0, 6);
+  for (const n of [ru, ni, ne]) n.dir = dirTo(n, G); G.dir = 'right'; cineOff(); G.foco = aPx(19.2, 37.4);
+  await dialogo(ru, ['¡Una cara nueva! Rufo Brasa, cocinero. La cantina El Caldero, en la Calle Mayor, es mía. Bueno: mía y del banco.', 'Si tienes hambre o buscas trabajo, allí estoy de la mañana a la noche.']);
+  await dialogo(ni, ['Niklas Brand. Por las mañanas cargo cajas en los almacenes del puerto, aquí detrás.', 'Por la tarde, desde la una y media, peleo en el Foso, entre los almacenes. Ven si tienes agallas.']);
+  await dialogo(ne, ['Nerea Calma, la práctica del puerto. Por la mañana, en el muelle, metiendo barcos entre los arrecifes.', 'Por la tarde, en El Caldero, ganándole a las cartas a ese cabo. Cuando no hace trampas. Que es nunca.']);
+  const o = await elige(ru, ['¿Y tú qué te cuentas? Por aquí no vemos caras nuevas desde... (piensa) ...desde nunca.'], ['Encantado. Busco cómo llegar a Goa.', '¿Siempre es así de animado esto?']);
+  await dialogo(ne, o === 0 ? ['A Goa va la Tortuga Parda, mañana a mediodía. La capitana Quill no pregunta nada a nadie. Una virtud.'] : ['Mañana es peor: hay desfile. Viene un vicealmirante y el capitán está de los nervios.']);
+  await dialogo(ru, ['Bueno, ¡a trabajar! Que el caldo no se remueve solo.']);
+  learn(['shells', 'Los tres del mercado', 'Rufo Brasa (cocinero, en la cantina El Caldero de la Calle Mayor todo el día), Niklas Brand (por la mañana en los almacenes del puerto; desde la una y media, en el Foso) y Nerea Calma (por la mañana en el muelle; desde las dos, a las cartas en El Caldero).']);
+  for (const n of [ru, ni, ne, ines]) suelta(n); G.foco = null; vecinosTick(false);
+  later(1200, lalo); }
+async function lalo() { const l = P('lalo'); fijo(l); moveNpc(l, 'town', [G.x / T - 1.2, G.y / T + .2], 'right'); l.x -= 60; G.dir = 'left';
+  cineOn(); await anda(l, [G.x - 34, G.y + 4], 80); l.dir = 'right'; cineOff();
+  await dialogo(l, ['¡Pst! ¡Tú! Sí, tú, el de la cala. (Mira a los lados.)', 'Me llamo Lalo. Setenta años en Shells Town. Lo sé todo. Todo. Pregunta.']);
+  const vistos = new Set();
+  for (;;) { const ops = [['¿Qué hay en Shells Town?', 'isla'], ['¿Cómo llego a Goa?', 'goa'], ['¿Qué pasa mañana?', 'manana'], ['¿Qué viste en la cala?', 'cala']].filter(([, k]) => !vistos.has(k));
+    const i = await elige(l, ['¿Y bien?'], [...ops.map(([t]) => t), 'Gracias, Lalo. Ya me apaño.']); if (i >= ops.length) break; const k = ops[i][1]; vistos.add(k);
+    if (k === 'isla') await dialogo(l, ['Arriba del todo, la base de la Marina. La manda el capitán Brisco, que se cree el rey del East Blue.', 'Debajo, la plaza de la fuente. Alrededor, la Calle Mayor: El Caldero, que es la cantina de Rufo; La Concha, la posada de doña Celes; y los pertrechos de don Anselmo Ulloa.', 'Y aquí abajo, el puerto: el mercado, los almacenes, el Foso y el muelle grande.']);
+    if (k === 'goa') await dialogo(l, ['La Tortuga Parda, de la capitana Quill. Está amarrada en el muelle grande, al final del paseo.', 'Zarpa mañana a mediodía. Trescientos berries por cabeza. Y no pregunta. Nunca pregunta.']);
+    if (k === 'manana') await dialogo(l, ['¡El desfile! Viene un vicealmirante. A las once, todo el pueblo en la plaza.', 'Y el capitán va a destapar lo que tiene en el tejado, bajo esa lona. Yo digo que es un cañón gigante. Mi mujer decía que era él, en bronce. Mi mujer siempre tenía razón.']);
+    if (k === 'cala') { await dialogo(l, ['Un barco negro como el carbón, con velas de humo. Y un gigante con capucha, de tres metros. ¡Y un crío!', '(Te mira de arriba abajo.) ...Un crío más o menos como tú, ahora que lo pienso.', '(Entorna los ojos.) No, no. El crío era más feo.']); S.asked.lalo = { ...(S.asked.lalo || {}), barco: 1 }; } }
+  await dialogo(l, ['Si necesitas algo, por la mañana estoy en la plaza y por la noche en El Caldero. Contando historias que nadie se cree.']);
+  learn(['shells', 'La isla según Lalo', 'Arriba, la base de la Marina (capitán Brisco). En medio, la plaza y la Calle Mayor: la cantina El Caldero, la posada La Concha y los pertrechos de Ulloa. Abajo, el puerto: mercado, almacenes, el Foso y el muelle grande, donde la Tortuga Parda zarpa a Goa mañana a mediodía.']);
+  suelta(l); F.stPresenta = true; guardarAuto(); }
 
 // ---------- encargos: el Foso y las cartas ----------
 function pelearFoso() { const b = P('bruto'); b.quieto = true; G.x = 37 * T; G.y = 35 * T; b.x = 40.2 * T; b.y = 35 * T; b.scene = 'town';
@@ -232,10 +285,15 @@ function empiezaDesfile() { F.stDesfile = true; F.noGuardar = true; WORLD.estatu
 function eleccionForzada() { const c = Object.keys(COMPA).sort((a, b) => aff(b) - aff(a))[0], n = P(c); unirse(c); n.quieto = true; Object.assign(n, { scene: G.scene, x: G.x + 30, y: G.y, dir: 'left', goal: null, camino: null });
   say(n, { lines: ['¡Eh! Te estaba buscando.', 'Lo de Goa... he estado pensando. Si te vas, me voy contigo. Pero antes tengo que recuperar ' + COMPA[c].cosa + ' del almacén de la base.', 'Hoy, con el desfile, es la única ocasión. A las once menos cuarto, ¿vale?'], done: () => { n.quieto = false; n.lugar = null; } }); }
 function entrarBase() { const id = F.stCompa, c = P(id); F.stDentro = true; F.stSigue = true; G.paused = true;
+  guiaDentro(c); const pista = `${COMPA[id].n}, en voz baja: «${DONDE().join(' ')}»`;
   fade(() => {
-    if (id === 'niklas') { enter('town', aPx(19.2, 13.4), 'right'); moveNpc(c, 'town', [18.6, 13.6], 'right'); G.paused = false; narr(['Salís del desagüe al patio de armas, cubiertos de barro hasta las rodillas. El patio está vacío: todos están en la plaza, al otro lado de la muralla.']); }
-    else if (id === 'nerea') { enter('town', aPx(33.6, 14.2), 'up'); moveNpc(c, 'town', [32.6, 14.4], 'up'); G.paused = false; narr(['El guardia del portón mira el pase de Nerea, te mira a ti, mira el pase otra vez. «Práctica y ayudante. Adelante. Y rapidito.»']); }
-    else { const [sc, [x, y]] = place('cuartel', [8.4, 8.2]); enter(sc, [x, y], 'up'); moveNpc(c, 'cuartel', [7.4, 8.2], 'up'); G.paused = false; narr(['Entráis por la puerta de servicio empujando el carro del banquete. El sargento de guardia duerme como un tronco.']); } }); }
+    if (id === 'niklas') { enter('town', aPx(19.2, 13.4), 'right'); moveNpc(c, 'town', [18.6, 13.6], 'right'); G.paused = false; narr(['Salís del desagüe al patio de armas, cubiertos de barro hasta las rodillas. El patio está vacío: todos están en la plaza, al otro lado de la muralla.', pista]); }
+    else if (id === 'nerea') { enter('town', aPx(33.6, 14.2), 'up'); moveNpc(c, 'town', [32.6, 14.4], 'up'); G.paused = false; narr(['El guardia del portón mira el pase de Nerea, te mira a ti, mira el pase otra vez. «Práctica y ayudante. Adelante. Y rapidito.»', pista]); }
+    else { const [sc, [x, y]] = place('cuartel', [8.4, 8.2]); enter(sc, [x, y], 'up'); moveNpc(c, 'cuartel', [7.4, 8.2], 'up'); G.paused = false; narr(['Entráis por la puerta de servicio empujando el carro del banquete. El sargento de guardia duerme como un tronco.', pista]); } }); }
+const DONDE = () => tiene('llave_almacen') ? ['Ya tenemos la llave. En la sala de guardia del cuartel, la puerta de la derecha del fondo: el almacén de decomisos.']
+  : ['El almacén de decomisos está en el cuartel, el edificio grande del fondo del patio: en la sala de guardia, la puerta de la derecha del fondo. Tiene candado.', 'La llave la guarda el capitán en el cajón de su despacho: la puerta del medio.'];
+function guiaDentro(c) { c.greet = () => F.stTengo ? 'Ya lo tenemos. ¡Al desagüe del oeste, por el patio, pegados a la muralla!' : 'Rápido, que el sargento se despierta.';
+  c.topics = [{ id: 'donde', need: () => !F.stTengo, ask: '¿Dónde buscamos?', a: DONDE }]; }
 function recuperar() { const id = F.stCompa, c = P(id); F.stTengo = true; quitarObjeto('llave_almacen'); darObjeto(COMPA[id].obj);
   const lin = { rufo: ['(Entre cajas de botellas y redes, un trapo atado. Rufo lo abre con cuidado: tres cuchillas que brillan.)', '¡Mis niñas! ¿Os han tratado bien? ¿Os han dado de comer?', '...Les hablo. Ya lo sé. No me mires así.'],
     nerea: ['(En un cajón con la etiqueta «Material pirata», un libro de tapas azules hinchado de humedad. Nerea lo abre: páginas y páginas de corrientes dibujadas a lápiz.)', 'Es su letra. Treinta años de mar en un libro.', '(Se lo guarda contra el pecho.) Vámonos.'],
@@ -260,7 +318,7 @@ async function canonazo() { F.stCanon = 'escena'; const c = P(F.stCompa), b = P(
   await camara([s.x, s.y], 700); emote(s, '!!'); await globo(s, '¡El cañón del patio! ¡Hay alguien dentro! ¡Conmigo!', 1900);
   const m1 = P('patrulla1'), m2 = P('patrulla2'); for (const n of [s, m1, m2]) { n.quieto = true; n.camino = null; }
   anda(s, aPx(33, 15.4), 150); anda(m1, aPx(32.2, 15.6), 150); anda(m2, aPx(33.8, 15.6), 150); await camara([G.x, G.y - 30], 900);
-  await Promise.all([anda(s, [G.x + 70, G.y + 4], 150), anda(m1, [G.x + 90, G.y + 40], 150), anda(m2, [G.x + 96, G.y - 30], 150)]);
+  await Promise.all([anda(s, [G.x + 70, G.y + 4], 150), anda(m1, [G.x + 100, G.y - 20], 150), anda(m2, [G.x + 98, G.y + 30], 150)]);
   s.dir = 'left'; G.dir = 'right'; cineOff(); G.foco = [G.x + 30, G.y]; F.stCanon = true; rivalEnElPatio(); }
 function rivalEnElPatio() { const s = P('severin');
   say(s, { lines: [F.stTono === 'broma' ? 'El pirata más temido del East Blue, ¿no? Ya decía yo que no era una broma.' : 'Tú. Sabía que te volvería a ver. No sabía que tan pronto.', ...(F.stCompa === 'niklas' ? ['(Mira a Niklas.) ...Y tú. Claro. Siempre tú.'] : []), 'Esa estatua le costó al capitán la paga de un año. A mí me va a costar el ascenso.', 'Ríndete.'],
@@ -315,14 +373,15 @@ function shellsBloquea(d) { if (!String(d.to).startsWith('cuartel:')) return nul
 // la brújula apunta a lo que toca hacer
 function shellsObjetivo() { const at = id => { const n = P(id); return n && n.scene !== 'none' ? { scene: n.scene, x: n.x, y: n.y } : null; };
   if (F.stHuida) return { scene: 'town', x: 41 * T, y: 47 * T };
-  if (F.stDentro) return F.stTengo ? { scene: 'town', x: WORLD.canonPos[0], y: WORLD.canonPos[1] } : null;
+  if (F.stDentro) { if (F.stTengo) return { scene: 'town', x: WORLD.canonPos[0], y: WORLD.canonPos[1] }; const [sc, [x, y]] = place('cuartel', tiene('llave_almacen') ? [17.2, 2.6] : [10.6, 2.3]); return { scene: sc, x, y }; }
   if (F.stCompa) { if (diaS() >= 1) { const [x, y] = PUNTO[F.stCompa]; return { scene: 'town', x: x * T, y: y * T }; } return { scene: 'town', x: 41 * T, y: 47 * T }; }
   if (tiene('cajas_pescado')) return at('rufo'); if (F.stRufoEnc && !F.stRufoHecho) return at('marta');
-  if (!F.stControl) return at('severin'); return at('rufo') || at('nerea') || at('niklas'); }
+  if (!F.stControl) return at('severin'); if (!F.stPresenta && diaS() === 0) return { scene: 'town', x: 19 * T, y: 37.4 * T }; return at('rufo') || at('nerea') || at('niklas'); }
 function shellsInit() { WORLD.estatua = F.estatua || 'tapada'; WORLD.canonNorte = !!F.stCanon;
   WORLD.sprites.push({ ...barcoSprite('marina', 50 * T, 49.9 * T, 12 * T), visible: () => F.stDesfile && !F.tortugaFuera });
   for (const n of PEOPLE) { n.lugar = null; n.dentroDe = null; } if (F.stMedusaFuera || !F.stLlegada) { const m = P('medusa'); if (m) m.scene = 'none'; } vecinosTick(true); }
-function shellsRestaurar() { WORLD.estatua = F.estatua || 'tapada'; for (const n of PEOPLE) n.lugar = null; const m = P('medusa'); if (m) m.scene = 'none'; F.stBote = false; vecinosTick(true); }
+// una escena que quedó a medias al guardar se repite
+function shellsRestaurar() { WORLD.estatua = F.estatua || 'tapada'; if (F.stPresenta === 'en curso') F.stPresenta = false; if (F.stControl === 'en curso') F.stControl = false; for (const n of PEOPLE) n.lugar = null; const m = P('medusa'); if (m) m.scene = 'none'; F.stBote = false; vecinosTick(true); }
 let lastS = 0;
 function shellsTick(now) {
   if (G.lapse) return;
@@ -337,6 +396,7 @@ function shellsTick(now) {
   const rm = P('ramon'); if (rm && rm.scene === 'town' && !rm.goal && !(rm.camino && rm.camino.length) && rm.lugar && rm.lugar[0] === 'calle' && Math.random() < .5 && Math.hypot(rm.x - G.x, rm.y - G.y) < 500) { rm.dir = 'down'; act(rm, 'slash', { fps: 12 }); }
   if (CINE.on) return;
   if (!F.stControl && !G.talking && !G.paused) { const s = P('severin'); if (s && s.scene === 'town' && G.scene === 'town' && Math.hypot(s.x - G.x, s.y - G.y) < 3.4 * T) control(); }
+  if (F.stControl === true && !F.stPresenta && d === 0 && h < 19 && G.scene === 'town' && !G.talking && !G.paused && G.x > 14.2 * T && G.y > 30 * T) presentacion();
   if (d >= 1 && h >= 9.5 && !F.stCompa && !G.talking && !G.paused) eleccionForzada();
   if (d >= 1 && h >= 10.5 && F.stCompa && !F.stDesfile) empiezaDesfile();
   // la base: nadie entra sin motivo
@@ -351,7 +411,40 @@ function shellsTick(now) {
     if (G.scene === 'town' && Math.hypot(G.x - 41 * T, G.y - 47 * T) < 2.6 * T) alMuelle(); }
 }
 // ---------- dibujos de la isla ----------
+// ---------- animales: a ras de suelo, debajo de casas y gente ----------
+const ANI = { vuelo: {} };
+function animales(g, cx, cy, now) { const A = PLANO.mapa.animales; if (!A) return; const t = now / 1000, px = v => Math.round(v), night = isNight(hourNow()), OLn = '#1a1210';
+  const cerca = (x, y, m = 80) => x > cx - m && x < cx + 2400 && y > cy - m && y < cy + 1600;
+  // gatos: sentados, mueven la cola y a veces se lamen una pata
+  for (const [x0, y0, col] of A.gatos || []) { const x = px(x0 * T - cx), y = px(y0 * T - cy); if (!cerca(x0 * T, y0 * T)) continue; const C = { naranja: ['#d0782e', '#f0a050'], negro: ['#26222a', '#4a4452'], gris: ['#7a7a86', '#a8a8b4'] }[col];
+    g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.ellipse(x, y + 1, 8, 2.5, 0, 0, 7); g.fill();
+    const cola = Math.sin(t * 2 + x0) * 3; g.strokeStyle = OLn; g.lineWidth = 3; g.beginPath(); g.moveTo(x + 5, y - 2); g.quadraticCurveTo(x + 11, y - 3, x + 10 + cola, y - 9); g.stroke(); g.strokeStyle = C[0]; g.lineWidth = 1.5; g.stroke();
+    g.fillStyle = OLn; g.fillRect(x - 6, y - 10, 12, 10); g.fillRect(x - 5, y - 16, 9, 7); g.fillStyle = C[0]; g.fillRect(x - 5, y - 9, 10, 8); g.fillRect(x - 4, y - 15, 7, 6); g.fillStyle = C[1]; g.fillRect(x - 4, y - 9, 3, 7);
+    g.fillStyle = OLn; g.fillRect(x - 5, y - 18, 2, 3); g.fillRect(x + 1, y - 18, 2, 3); const parpa = (t + x0) % 4 < .15; g.fillStyle = night ? '#e8e060' : '#2a3a1a'; if (!parpa) { g.fillRect(x - 3, y - 13, 1, 1); g.fillRect(x + 1, y - 13, 1, 1); } }
+  // gaviotas posadas en el muelle: saltitos; si te acercas, levantan el vuelo y vuelven al rato
+  (A.gaviotas || []).forEach(([x0, y0], i) => { const wx = x0 * T, wy = y0 * T, V = ANI.vuelo[i];
+    if (!V && Math.hypot(G.x - wx, G.y - wy) < 70 && G.scene === 'town') ANI.vuelo[i] = { t0: now, dir: G.x < wx ? 1 : -1 };
+    let x = wx - cx, y = wy - cy, alto = 0, alas = 0;
+    if (V) { const k = (now - V.t0) / 1000; if (k > 14 && Math.hypot(G.x - wx, G.y - wy) > 140) { delete ANI.vuelo[i]; } else { const ida = Math.min(k, 3), vuelta = k > 11 ? Math.min(1, (k - 11) / 3) : 0, d = ida * (1 - vuelta);
+        x += V.dir * d * 90; alto = d * 50; alas = Math.sin(now / 70) * 4; } }
+    else { y -= Math.abs(Math.sin(t * 1.3 + i * 2)) > .97 ? 2 : 0; }
+    x = px(x); y = px(y); g.fillStyle = 'rgba(0,0,0,.2)'; g.beginPath(); g.ellipse(x, y + 1, 5, 1.5, 0, 0, 7); g.fill(); y -= alto;
+    g.fillStyle = OLn; g.fillRect(x - 5, y - 7, 10, 6); g.fillRect(x + 3, y - 10, 5, 4); g.fillStyle = '#f4f4f0'; g.fillRect(x - 4, y - 6, 8, 4); g.fillRect(x + 4, y - 9, 3, 3); g.fillStyle = '#8a8a96'; g.fillRect(x - 4, y - 6, 5, 2); g.fillStyle = '#e8a020'; g.fillRect(x + 7, y - 8, 2, 1);
+    if (alto) { g.fillStyle = '#e8e8e4'; g.fillRect(x - 9, y - 7 - alas, 6, 2); g.fillRect(x + 3, y - 7 - alas, 6, 2); } else { g.fillStyle = '#e8a020'; g.fillRect(x - 1, y - 1, 1, 2); g.fillRect(x + 1, y - 1, 1, 2); } });
+  // un perro que pasea por el paseo del muelle y se para a olisquear
+  if (A.perro && !night) { const [[ax, ay], [bx, by]] = A.perro, L = (bx - ax) * T, per = L / 30 + 8, k = (t % (2 * per)) / per, ida = k < 1, f = ida ? k : 2 - k, para = Math.sin(t * .7) > .8;
+    const wx = ax * T + Math.min(1, Math.max(0, (f * per - 4) / (per - 8))) * L, x = px(wx - cx), y = px(ay * T - cy), paso = para ? 0 : Math.floor(t * 8) % 2, s = ida ? 1 : -1;
+    g.fillStyle = 'rgba(0,0,0,.22)'; g.beginPath(); g.ellipse(x, y + 1, 9, 2.5, 0, 0, 7); g.fill();
+    g.fillStyle = OLn; g.fillRect(x - 8, y - 11, 15, 8); g.fillRect(x + s * 6 - 3, y - (para ? 9 : 15), 7, 7); g.fillRect(x - 7, y - 4, 2, 4); g.fillRect(x + 4, y - 4, 2, 4);
+    g.fillStyle = '#a8743a'; g.fillRect(x - 7, y - 10, 13, 6); g.fillRect(x + s * 6 - 2, y - (para ? 8 : 14), 5, 5); g.fillStyle = '#e8d8b8'; g.fillRect(x - 5, y - 6, 9, 2);
+    g.fillStyle = '#a8743a'; g.fillRect(x - 7 + paso, y - 4, 2, 4); g.fillRect(x + 4 - paso, y - 4, 2, 4); g.fillStyle = OLn; g.fillRect(x - s * 8 - 1, y - 13 + Math.sin(t * 12) * 1.5, 3, 4); }
+  // gallinas que picotean junto al huerto
+  (A.gallinas || []).forEach(([x0, y0], i) => { const pic = Math.sin(t * 3 + i * 1.7) > .55, dx = Math.sin(t * .4 + i) * 10, x = px(x0 * T + dx - cx), y = px(y0 * T - cy), s = Math.cos(t * .4 + i) > 0 ? 1 : -1;
+    g.fillStyle = 'rgba(0,0,0,.2)'; g.beginPath(); g.ellipse(x, y + 1, 6, 2, 0, 0, 7); g.fill(); g.fillStyle = OLn; g.fillRect(x - 6, y - 9, 11, 8); g.fillRect(x + s * 4 - 2, y - (pic ? 6 : 13), 5, 6);
+    g.fillStyle = i % 2 ? '#f4ecd8' : '#b8743a'; g.fillRect(x - 5, y - 8, 9, 6); g.fillRect(x + s * 4 - 1, y - (pic ? 5 : 12), 3, 4); g.fillStyle = '#d83a2a'; g.fillRect(x + s * 4, y - (pic ? 7 : 14), 2, 2); g.fillStyle = '#e8a020'; g.fillRect(x + s * 7, y - (pic ? 3 : 10), 2, 1); });
+}
 function shellsDibujar(g, [cx, cy], now) {
+  animales(g, cx, cy, now);
   // el bote de la Medusa Gris, varado en la arena o alejándose
   if (F.stBote) { const k = F.stBoteT0 ? Math.min(1, (now - F.stBoteT0) / 6000) : 0, x = 5.2 * T - k * 240 - cx, y = 44.4 * T + k * 70 - cy;
     g.fillStyle = 'rgba(0,20,40,.3)'; g.beginPath(); g.ellipse(x + 4, y + 8, 34, 9, 0, 0, 7); g.fill(); g.fillStyle = '#1a1210'; g.beginPath(); g.moveTo(x - 34, y - 6); g.lineTo(x + 34, y - 6); g.lineTo(x + 24, y + 8); g.lineTo(x - 26, y + 8); g.closePath(); g.fill();

@@ -214,3 +214,66 @@ Esto alimenta el periódico y el cartel de después de Loguetown.
 - **Guardar y continuar** en Shells Town en cada etapa.
 - **Plano validado** con `docs/kale/validar.py`.
 - **Kalé sigue igual:** toda la regresión de la versión 0.7.
+
+## Versión 3 (después de la segunda prueba)
+
+### Qué cambió
+- **Interiores y calle:** ningún mueble ni puesto tapa a nadie. `herramientas/pruebas/tapados.js` lo comprueba a todas las horas y `hueco.js` busca el sitio libre más cercano cuando alguien queda tapado.
+- **Personajes:** 16 diseños nuevos, así que nadie de Shells Town repite el sprite de alguien de Kalé.
+- **Casas:** paredes laterales bajo el alero, para que no parezcan una sola pared.
+- **Puesto de Marta:** de 7 a 14 en el mercado del muelle; de 14 a 21 en la Ribera, delante de los almacenes del este.
+
+### La escena del mercado (día 0, al entrar al pueblo)
+1. El cabo Ruiz se lleva una hogaza del cesto de Inés "a cuenta de la Marina".
+2. Rufo protesta.
+3. Niklas deja una caja y se planta delante del cabo.
+4. Nerea, de paso hacia el muelle, apuesta a que el cabo suelta el pan.
+5. Llega Severin: «Cabo Ruiz. Pague el pan.» A ti te avisa de que sigas sin meterte en líos.
+6. Inés reparte pan.
+7. Los tres se presentan y dicen dónde encontrarlos:
+   - **Rufo:** El Caldero, todo el día;
+   - **Niklas:** los almacenes por la mañana y el Foso desde la una y media;
+   - **Nerea:** el muelle por la mañana y las cartas en El Caldero desde las dos.
+8. Se dispersan.
+9. Lalo se acerca y explica la isla con un menú de preguntas: la isla, Goa, el desfile y la cala.
+
+### Recordatorios
+| Quién | Cuándo | Qué dice |
+|---|---|---|
+| Rufo | Encargo del pescado pendiente | Dónde está Marta a cada hora |
+| Nerea | Ya te contó lo de Tadeo | La partida es en El Caldero desde las dos |
+| Niklas | Antes del Foso | La hora y el lugar del Foso |
+| Niklas | Después de Bruto | Que quiere pelear contigo |
+| Tu compañero | Dentro de la base | Dónde están la llave y el almacén (la brújula apunta allí) |
+
+### Vida
+- **Decoración:** macetas en las puertas, nasas en el puerto y más cajas, barriles y sacos.
+- **Animales:**
+  - tres gatos;
+  - gaviotas en los muelles que se espantan al acercarte y vuelven;
+  - un perro que pasea por el muelle;
+  - gallinas junto al huerto.
+- **Vecinos:**
+  - los que caminan no bloquean al jugador;
+  - entran y salen de las calles sin atravesar casas;
+  - cada uno anda a su velocidad.
+
+### Escenas sueltas
+- **Para qué:** cada momento de Shells Town se puede jugar suelto con un personaje de prueba y el compañero que elijas, sin tocar la partida guardada.
+- **Cómo:** desde el menú, en "Escenas", o por enlace con `?escena=<id>&compa=<rufo|nerea|niklas>`.
+- **Escenas disponibles:**
+
+| Escena | id |
+|---|---|
+| Llegada | `llegada` |
+| Control | `control` |
+| Mercado | `mercado` |
+| Cartas | `cartas` |
+| Foso contra Bruto | `foso` |
+| Foso contra Niklas | `niklas` |
+| Desfile | `desfile` |
+| Dentro de la base | `base` |
+| Cañonazo | `canon` |
+| Pelea con Severin | `severin` |
+| Huida | `huida` |
+
