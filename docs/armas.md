@@ -91,3 +91,20 @@ Si el grado fuera "más daño", contradiría al propio One Piece, donde el arma 
 3. Pistola y mosquete por código, con anclaje de mano automático.
 4. Grados, armas con nombre y aura.
 5. Más adelante, y solo si hace falta: dos espadas. El santōryū no se puede hacer limpio con LPC; la espada en la boca habría que dibujarla aparte.
+
+## Catálogo ordenado (v0.9, para la armería de Goa)
+- **Familias:**
+  - corte: daga, espada corta, sable, cimitarra, estoque, mandoble;
+  - golpe: garrote, martillo, maza, hacha;
+  - asta: lanza, bastón, alabarda;
+  - a distancia: arco, ballesta, tirachinas;
+  - fuego: pistola, mosquete.
+- **Calidad de forja** para las armas sin grado (comunes y de oficio):
+  - **tosca**: hoja oxidada, precio ×0,6, se mella;
+  - **corriente**: ×1;
+  - **fina**: acero pulido, ×2,5, aguanta y corta más.
+- **Grado** (Wazamono y superiores): solo armas con nombre. Una en la vitrina de la armería de Goa, como meta.
+- **No se venden:** las armas de personaje (katana, guadaña, tridente, lanza larga, lanza dragón, mangual, hacha de guerra, mandoble fino, látigo, bumerán) y las legendarias.
+- **Armas de fuego:** un solo diseño de pistola y uno de mosquete para todo el mundo, piratas y marines. Se dibujan por código:
+  - al disparar, en la mano según el cuadro, con retroceso, fogonazo y humo;
+  - al caminar, la pistola en una funda en la cadera y el mosquete colgado a la espalda.

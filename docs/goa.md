@@ -1,225 +1,203 @@
 # Acto 2: el Reino de Goa
 
-Diseño completo para aprobar antes de construir. El autor pidió que esta vez quede casi perfecto. Al verla, la ciudad tiene que sentirse cargada y viva:
+Versión final del diseño, con la devolución del autor. Pidió que esta vez quede casi perfecto. Al verla, la ciudad tiene que sentirse cargada y viva:
 - mucha gente, distinta entre sí;
 - tiendas y edificios de muchos tipos;
 - movimiento;
-- todos los efectos visuales que el motor permita.
+- todos los efectos visuales posibles;
+- un arco con peso propio, no solo «conseguir la entrada a la subasta».
 
 Esquema del plano: `docs/goa-plano.png`.
 
-## 1. Qué cuenta el Acto 2
-**En una frase:** llegás a Goa buscando a Ama Sel y te encontrás una ciudad partida en tres. Ayudás a la Terminal Gris a no desaparecer otra vez, construís tu primer barco con chatarra y le robás a un noble la invitación a la subasta clandestina de Loguetown. Te vas en tu barco, de noche, entre antorchas.
+## 1. El arco: qué pasa en Goa y por qué importa
 
-**Hilos que ata:**
-- **La Medusa Gris:** te mandó a buscar a Ama Sel. Ella cuenta lo que nadie sabe: la noche del incendio, un encapuchado sacó a gente del fuego, y después pagó la madera para levantar la Terminal. En la Terminal le dicen «el de gris».
-- **Tu padre (hilo secundario):** Ama Sel te mira raro el primer día: «Tenés la cara de alguien que pasó por acá hace muchos años». No dice más. Es solo una pieza.
-- **La subasta (lo que empuja al Acto 3):** el marqués Teodoro de Albamar viaja a Loguetown con una invitación a una subasta clandestina «de frutas que no se ven en el East Blue». Esa invitación es tu entrada.
-- **Severin:** tras el desastre de la estatua, Brisco lo castiga: escoltar al marqués hasta Loguetown. Así se explica que esté en la subasta, encapuchado, y que se lleve la Tormenta.
-- **El barco propio:** Ama Sel construye barcos con lo que el fuego y el mar dejaron. Si la ayudás, arma el tuyo.
+### Qué era el «edicto de desalojo» y por qué no alcanzaba
+Era una orden de la Ciudad Alta para vaciar la Terminal Gris en pocos días, que el jugador intentaba frenar. Tenía un problema: era un papel pegado en una pared, sin cara, sin un enemigo y sin un motivo que se pudiera descubrir. Por eso se sentía rápido y sin peso.
 
-**Duración:** unos cuatro días de juego. Lo importante tiene día y hora, pero entre medio se hace todo en el orden que quieras.
+### La versión nueva: el desalojo tiene dueño
+**La idea central:** el marqués Teodoro de Albamar quiere entrar a la subasta clandestina de Loguetown. La invitación no se compra con dinero: se paga con algo que la organización de la subasta necesita, **un puerto escondido fuera de la vista de la Marina.** El marqués les vende la costa de la Terminal Gris, que no es suya, y la Guardia Real va a desalojarla para entregarla.
+
+El desalojo deja de ser un papel: tiene un culpable (el marqués), un comprador (la subasta) y un ejecutor que da miedo.
+
+**El ejecutor, el personaje fuerte:** **Celso Vardán, «el Tasador».**
+- Es el hombre de la subasta que viene a cobrar la costa y a entregar la invitación. Elegante, tranquilo, educado, siempre con guantes. Habla de las personas como de mercancía: «¿Cuánto vale esto?».
+- **Tiene una fruta del catálogo del mundo, la Resonancia (Kyō Kyō no Mi):** encuentra la frecuencia de cualquier cosa y la rompe. Oye los latidos de la gente a través de las paredes. En una fiesta llena de cristal, es la peor persona con la que cruzarse.
+- **No se le puede ganar en Goa.** Hay que huir de él. Vuelve en Loguetown como guardián de la subasta, y ahí sí es la pelea con el usuario de fruta del Acto 3, cuando se despierta la tuya.
+
+Esto junta tu propuesta (alguien fuerte en la fiesta, con una fruta poderosa, que te ve robar y te obliga a escapar) con la subasta y con la Terminal. Así, todo lo que hacés en Goa apunta a lo mismo.
+
+**Lo que está en juego para vos:**
+- **Tu barco:** el astillero donde lo construyen está en la Terminal. Si desalojan, no hay barco.
+- **La gente:** la Terminal ya ardió una vez. Ama Sel, la Abuela Coque y los Gorriones lo perderían todo otra vez.
+- **El hilo del «de gris»:** en el incendio, la Medusa Gris sacó gente del fuego y pagó la madera para reconstruir. Ahora le debés a él lo que la Terminal le debe.
+
+### Cinco días
+| Día | Qué pasa | Qué hacés |
+|---|---|---|
+| **0** | La Tortuga entra en el puerto (cinemática panorámica). Quill se despide. En la Terminal acaban de pegar el **edicto: en cinco días, la costa debe quedar vacía**. Nadie sabe por qué. | Explorar la ciudad. Cruzar el puente a la Terminal: Bram no deja pasar a forasteros, y se entra por la Abuela Coque o por los Gorriones. |
+| **1** | **El astillero.** Ama Sel te desprecia por joven. Cuando nombrás a la Medusa Gris, todo cambia y te ofrece un barco (ver la sección 3). Pero si desalojan, el barco no se termina. | Elegir barco y piezas. Empezar a preguntar quién está detrás del edicto. |
+| **1–2** | **La investigación,** con pistas en los tres barrios:<br>- Fina, en la taberna: «el marqués vendió algo que no es suyo»;<br>- el Archivo Real: una escritura de venta de la costa a nombre de «Casa Vardán»;<br>- los Gorriones: un barco negro sin bandera que fondea de noche. | Encargos de cada barrio. |
+| **2** | **Llegan Vardán y Severin.** El barco negro trae al Tasador; el de la Marina, a Severin, castigado como escolta del marqués. Vardán **«tasa» la Terminal** delante de todos: toca una torre de chatarra y la deshace en polvo. Te mira a vos un segundo de más. | La Terminal tiene miedo. Tu compañero propone un plan. |
+| **3** | **Preparar la fiesta.** El marqués da una fiesta para despedirse antes de viajar a Loguetown. En su despacho están **la invitación y la escritura de la costa**. | Elegir cómo entrar: con ropa de la sastrería, como criado o por los tejados con los Gorriones. |
+| **3, noche** | **La fiesta.** Robás la invitación y la escritura. Vardán oye tu corazón a través de la pared. Rompe la lámpara de cristal, el suelo y las ventanas, y hay que **huir por la mansión y los tejados**. Severin te corta el paso en el jardín y es una decisión suya: pelear, o dejarte pasar para no deberle nada al Tasador. | Huida jugable, con sigilo, carrera y una pelea corta con Severin. |
+| **4, amanecer** | **El desalojo igual.** Vardán llega con la Guardia Real a recuperar la escritura y tomar la costa. La capitana Duval duda: sin escritura, la orden no vale. La Abuela Coque **quema la escritura en el Memorial del Fuego**. Vardán va por vos. Ama Sel suelta los calzos: **botadura del barco** por la grada, entre humo y antorchas. Escapás al mar. | Cinemática y pelea de escape. |
+| **Cierre** | Vardán, desde el muelle: «Entonces esa invitación es tuya. Nos vemos en Loguetown». El barco del marqués zarpa con Severin. Tiza: tu barco, con su nombre y su mascarón, rumbo a Loguetown. **Fin del Acto 2.** | — |
+
+**Si algo sale mal, la historia sigue:**
+- **Si no conseguís la escritura en la fiesta:** la consiguen los Gorriones, pero la Terminal sale peor parada.
+- **Si te atrapan en la huida:** tu compañero te saca.
+- **Si no terminaste de personalizar el barco:** sale igual, con las piezas de serie.
+
+### Los arcos de los compañeros en Goa
+| Compañero | Su arco |
+|---|---|
+| **Rufo** | Fina le ofrece la cocina de la taberna por un día: un plato con algo de cada barrio. En la fiesta entra de cocinero, y es tu forma de colarte. |
+| **Nerea** | Lee las corrientes de la bahía para la botadura. Le gana a un noble a las cartas en un salón de la Ciudad Alta, y así consigue un pase. |
+| **Niklas** | Pelea en la Fosa de Chatarra contra Mola. En la huida de la fiesta, frena a la Guardia en el puente. |
 
 ## 2. La isla y la ciudad
-Goa ocupa parte de la isla Dawn. El plano es mucho más grande que Shells Town: unos 110 × 80 casilleros, contra 64 × 50. La ciudad sube del puerto a la muralla, y arriba está la Ciudad Alta. La Terminal queda afuera, al este, separada por un barranco.
+El plano es mucho más grande que Shells Town: unos 110 × 80 casilleros, contra 64 × 50. La ciudad sube del puerto a la muralla. La Terminal queda afuera, al este, pasando un barranco.
 
-### Barrios
-| Barrio | Dónde | Carácter | Qué hay |
-|---|---|---|---|
-| **Ciudad Alta** | Arriba, dentro de la muralla | Piedra blanca, jardines, silencio, guardias. Luz fría y limpia. | Fachada del palacio (fondo, no se entra), la plaza alta con fuente y estatua del rey, la mansión del marqués con jardín, sastrería, joyería, perfumería, el Archivo Real, el cuartel de la Guardia Real, un campanario, mansiones con balcones y un paseo con faroles |
-| **Muralla y Puerta Real** | La franja que separa arriba de abajo | Piedra gruesa, torres, el único paso | Control de la Guardia Real: sin pase o sin ropa de la Ciudad Alta no se sube. Escaleras y un aljibe |
-| **Ciudad Central** | La ladera media | Ruidosa, colorida, apretada. Es el corazón del juego. | Calle Real (del puerto a la Puerta), la Plaza del Mercado con más de 12 puestos y mercado cubierto, taberna, posada, herrería, armería, velería, cartógrafa, botica, panadería, casa de empeño, teatro de títeres, baños públicos, lavaderos, molino en la colina oeste, oficina de la Marina y muchas viviendas |
-| **Puerto** | Abajo, sobre el mar | Trabajo y sal | Muelles largos, almacenes, lonja del pescado, grúas de madera, el faro en el cabo oeste, la Tortuga Parda amarrada y, desde el día 2, el barco de la Marina. Pesqueros que entran y salen |
-| **El barranco** | Entre la Central y la Terminal | Corte en la roca, un arroyo sucio | Un puente de tablas y cuerdas, el único camino a pie a la Terminal |
-| **Terminal Gris** | Al este, afuera, sobre la costa | Reconstruida sobre la chatarra. Óxido, humo, color robado. Luz cálida y sucia. | Montañas de chatarra, chabolas sobre pilotes, el **Memorial del Fuego** (vigas quemadas, flores y cintas), el mercado de chatarra, la Cantina de Lata, la Fosa de Chatarra (ring de peleas), el fuerte de los críos, chimeneas y el **astillero de Ama Sel** con su grada hasta el mar |
-| **Afueras** | Oeste | Camino al bosque | Un cartel: «Villa Foosha» y «Monte Colubo». No se va todavía; quizá más adelante |
+| Barrio | Carácter | Qué hay |
+|---|---|---|
+| **Ciudad Alta** | Piedra blanca, jardines, silencio, guardias. Luz fría. | Fachada del palacio (de fondo), plaza alta con fuente y estatua del rey, **mansión del marqués** con jardín, joyería, perfumería, Archivo Real, cuartel de la Guardia Real, campanario con reloj, paseo de faroles |
+| **Muralla y Puerta Real** | El único paso | Control de la Guardia: con ropa de la Ciudad Alta, un pase o por los tejados |
+| **Ciudad Central** | Ruidosa, colorida, apretada. El corazón del juego. | Calle Real, Plaza del Mercado con más de 12 puestos, mercado cubierto, **armería**, **sastrería y ropavejería**, taberna La Ballena Varada, posada, herrería, velería, cartógrafa, botica, panadería, casa de empeño, teatro de títeres, baños, lavaderos y molino |
+| **Puerto** | Trabajo y sal | Muelles, almacenes, lonja, grúas, faro, la Tortuga Parda y, desde el día 2, el barco de la Marina y el barco negro |
+| **Barranco y puente** | Corte en la roca | Puente de tablas, el único camino a la Terminal |
+| **Terminal Gris** | Chatarra, humo, color robado. Luz cálida y sucia. | Montañas de chatarra, chabolas sobre pilotes, Memorial del Fuego, mercado de chatarra, Cantina de Lata, Fosa de Chatarra, fuerte de los críos y **el astillero de Ama Sel** con su grada |
+| **Afueras** | Camino al bosque | Cartel a Villa Foosha y Monte Colubo (más adelante) |
 
-### Tipos de edificio nuevos
-**Arquitectura:**
-- mansión con jardín y verja;
-- palacio (fachada de fondo);
-- campanario;
-- mercado cubierto con arcos;
-- teatro de títeres con telón;
-- baños con columnas;
-- molino;
-- faro.
-
-**Tiendas con vidriera y cartel propio:** velería, cartógrafa, sastrería y joyería.
-
-**Puerto e industria:** grúa de puerto, lonja abierta y astillero con grada.
-
-**Terminal Gris:**
-- chabola sobre pilotes, hecha de tablas, chapas y mástiles;
-- montaña de chatarra (se dibuja como relieve, con objetos sueltos).
-
-**Ciudad Alta:** cuartel de la Guardia Real y Archivo Real.
-
-**Cada barrio tiene su paleta:**
+**Paletas por barrio:**
 | Barrio | Paleta |
 |---|---|
 | Ciudad Alta | Blanco, pizarra azul y oro |
-| Central | Ocres, rojos y toldos de colores |
+| Central | Ocres, rojos y toldos |
 | Puerto | Madera y piedra mojada |
-| Terminal | Óxido, verde de cobre, tablas grises y remiendos de colores |
+| Terminal | Óxido, cobre, tablas grises y remiendos |
 
-## 3. Gente: que la ciudad esté llena
-- **Cantidad:** de 80 a 90 vecinos con casa y horario, como en Shells Town pero mucho más. Unos 60 en la calle a la vez durante el día.
-- **Distintos entre sí:** un generador de variantes arma unos 45 diseños nuevos, combinando cuerpo, piel, pelo, ropa, sombrero y accesorios. Cada clase tiene su vestuario:
-  - **nobles:** levitas, chalecos, sombreros de copa y bastón;
-  - **Guardia Real:** casaca azul oscuro con tabardo y morrión; no es la Marina;
-  - **criados:** delantal y cofia;
-  - **marineros, pescadores y estibadores;**
-  - **mercaderes;**
-  - **gente de la Terminal:** remiendos, pañuelos y gafas de soldar, con la ropa más gastada.
-- **Qué hacen** (no todos hablan; casi todos hacen algo visible):
-  - en el mercado, compradores que van de puesto en puesto y se paran a regatear;
-  - estibadores que cargan cajas al hombro;
-  - pescadores que descargan en la lonja;
-  - críos que juegan a pillarse por las calles;
-  - un músico y un titiritero con público alrededor;
-  - lavanderas;
-  - la Guardia Real en ronda;
-  - en la Ciudad Alta, nobles que pasean y criados con recados;
-  - en la Terminal, chatarreros que suben y bajan de la montaña con cosas al hombro.
-- **Conversaciones de fondo:** parejas de vecinos que charlan solas, con globos alternados. Algunas dejan rumores y pistas.
-- **Hablan de verdad:** de 18 a 22 personajes con temas, encargos o tienda. El resto saluda, comenta o te ignora según la hora.
-- **Vida que no es gente:**
-  - carruajes con caballos que suben y bajan la Calle Real;
-  - palomas en la plaza alta que se espantan como las gaviotas de Shells Town;
-  - gatos en los tejados de la Terminal;
-  - perros;
-  - gaviotas en el puerto;
-  - el News Coo por la mañana.
+## 3. El astillero de Ama Sel: tu barco
+**El encuentro:**
+1. Ama Sel trabaja con gafas de soldar y no levanta la vista. «¿Un barco? ¿Vosotros? Volved cuando os salga barba. A los dos.»
+2. Si insistís, te echa.
+3. Cuando nombrás a la Medusa Gris, deja el soplete: «¿Quién te manda?». Te mira de arriba abajo, otra vez y despacio: «...Tenés su forma de pararse. No, la de otro. Da igual».
+4. Desde ahí cambia todo: «El de gris pagó la madera de media Terminal. Elegí. No me debés nada. Se lo debo yo a él».
 
-### Personajes con nombre (nueva generación, originales)
-| Personaje | Dónde | Quién es |
+**Los tres barcos (gratis, elegís uno):**
+| Barco | Cómo es | Navegando | En combate y carga |
+|---|---|---|---|
+| **Balandra «Liebre»** | Un palo, casco fino y vela grande | La más rápida y la que mejor gira | Poca bodega, 2 cañones |
+| **Goleta «Albatros»** | Dos palos y equilibrio | Media | Bodega media, 4 cañones |
+| **Carraca «Tortuga Vieja»** | Casco ancho y alto, de chatarra reforzada | Lenta | La más resistente, bodega grande, 6 cañones |
+
+**Lo gratis:** el barco de serie y **el nombre**, que escribís vos.
+
+**Lo que se paga, en el taller de Ama Sel:**
+| Pieza | Opciones | Precio orientativo |
 |---|---|---|
-| **Ama Sel** | Astillero de la Terminal | Sobreviviente del fuego. Constructora de barcos con chatarra, de unos 50 años, con cicatrices en los brazos y gafas de soldar. Desconfía de todos y tiene la lengua afilada. Conoció al «de gris». |
-| **Marqués Teodoro de Albamar** | Mansión, Ciudad Alta | Noble coleccionista, vanidoso y aburrido. Viaja a Loguetown con la invitación a la subasta. Da una fiesta la noche antes de irse. |
-| **Capitana Irene Duval** | Cuartel de la Guardia Real | Hace cumplir el Edicto de Limpieza: firme, cansada y no del todo convencida. |
-| **Severin** | Llega el día 2 en el barco de la Marina | Castigado: escolta del marqués. Más duro que en Shells Town y con algo que demostrar. |
-| **Fina Roble** | Taberna La Ballena Varada | Tabernera, sabe todo lo que se dice en el puerto. Ahí está el rumor de la subasta. |
-| **Isolda Mapp** | Cartografía | Cartógrafa. Vende cartas que revelan islas en el mapa. Le fascina que Kalé no exista. |
-| **Maese Teo Lona** | Velería | Velero. La vela de tu barco sale de ahí: se paga o se trabaja. |
-| **Bram el Tuerto** | Mercado de chatarra | Manda en la Terminal, a su manera. Duro con los de afuera. |
-| **Abuela Coque** | Memorial del Fuego | Cuida el memorial y cuenta la noche del incendio a quien quiera escuchar. |
-| **Los Gorriones** (Pina, Lucho y Totó) | Por toda la ciudad | Tres críos de la Terminal que roban, hacen recados y saben entrar en todas partes. Son tu llave a la Ciudad Alta por los tejados. |
-| **Mola** | La Fosa de Chatarra | Campeona del ring. Rival de Niklas si va con vos. |
-| **Otros con tienda** | En sus tiendas | Herrero, armera, boticaria, panadero, prestamista, sastre, joyero y el titiritero |
+| **Velas** | Crudo (de serie), blanco, rojo, negro, azul, a rayas | 150 a 400 ฿ |
+| **Casco** | Madera natural (de serie), negro, rojo, verde mar, azul | 200 a 500 ฿ |
+| **Mascarón** | Ninguno (de serie), ave, sirena, calavera, sol, medusa (Ama Sel lo comenta) | 300 a 800 ฿ |
+| **Refuerzo del casco** | Más resistencia | 600 ฿ |
+| **Cañones** | Más cañones, hasta el máximo del barco | 250 ฿ cada uno |
 
-## 4. La historia, día por día
-| Día | Qué pasa (fijo) | Qué se puede hacer |
-|---|---|---|
-| **0, mañana** | La Tortuga entra en el puerto (cinemática de llegada: panorámica del puerto a la muralla y a la Terminal humeando). Quill se despide y el compañero comenta. | Explorar el puerto y la Central. Preguntar por Ama Sel: nadie de la Central quiere hablar de la Terminal. |
-| **0, tarde** | Primer paso por el puente a la Terminal. Bram te corta el paso: «Los de afuera traen fuego». | Ganarse la entrada: la Abuela Coque te deja pasar si escuchás su historia, o los Gorriones si les hacés un favor. |
-| **1** | Conocés a Ama Sel. No te cree hasta que nombrás al «de gris». Te cuenta lo del incendio y te muestra el casco a medio hacer que tiene en la grada. **Encargo del barco.** | Conseguir materiales y la confianza de la Terminal. El rumor de la subasta en la taberna. |
-| **2** | Entra el barco de la Marina con Severin. Se pega el **Edicto de Limpieza**: en tres días, la Guardia Real despeja la Terminal «por salubridad». La Terminal se enciende. | Encargos de cada barrio. Severin patrulla la Central y hay riesgo de cruzártelo: escena de tensión, no pelea. |
-| **3, noche** | **La fiesta del marqués.** Te colás en la mansión (con ropa del sastre, con los Gorriones por los tejados o como criado) y robás la invitación. Severin está de escolta: un juego del gato y el ratón en los salones. | Elegís cómo entrar; cada camino tiene su escena. |
-| **4, amanecer** | **El Edicto.** La Guardia llega con antorchas. La Terminal resiste a su manera, tu compañero tiene su momento y Ama Sel suelta los calzos. **Botadura del barco** entre humo y gritos. Pelea corta en la grada. Salís al mar mientras el barco del marqués, con Severin, zarpa también hacia Loguetown. | — |
-| **Cierre** | Tiza: tu barco nuevo en mar abierto, con nombre y mascarón. «Fin del Acto 2.» | — |
+Todo se ve en el barco: en la grada mientras lo construyen y después en el mar. Es tu barco para el resto del juego, con cubierta, camarote y bodega, como la Corneja.
 
-**Si fallás o tardás:** la historia no se rompe. Si no conseguiste la invitación, los Gorriones la consiguen a medias y entrás a la subasta por una puerta peor. Si no terminaste el barco, Ama Sel lo bota igual, a medio hacer, y se nota.
+## 4. Tiendas nuevas
+### La armería «Hierro y Pólvora» (Ciudad Central)
+Vende de todo, con precios muy distintos según el tipo y la calidad.
+- **Ordena las armas por familia:**
+  - corte: daga, espada corta, sable, cimitarra, estoque, mandoble;
+  - golpe: garrote, martillo, maza, hacha;
+  - asta: lanza, bastón, alabarda;
+  - a distancia: arco, ballesta, tirachinas;
+  - fuego: pistola y mosquete.
+- **Cada arma común o de oficio viene en tres calidades:**
+| Calidad | Cómo se ve | Precio | Qué cambia |
+|---|---|---|---|
+| **Tosca** | Hoja oxidada | ×0,6 | Se mella con facilidad |
+| **Corriente** | Acero normal | ×1 | — |
+| **Fina** | Acero pulido | ×2,5 | Aguanta más y corta mejor |
+- **Una vitrina** con una espada con grado (Wazamono), a un precio que hoy no podés pagar: una meta para más adelante.
+- **No se venden:** las armas «de personaje» (katana, guadaña, tridente...) y las legendarias se encuentran, se ganan o se heredan.
+- **Las armas de fuego** usan siempre el mismo diseño de pistola y de mosquete: el que ya está arreglado.
 
-### El barco: cómo se arma
-Ama Sel pone el casco con chatarra y madera del fuego. Vos conseguís el resto:
-| Pieza | Dónde | Cómo |
-|---|---|---|
-| **Vela** | Velería de Teo Lona | Comprarla (cara) o trabajar un día cosiendo velas (minijuego corto) |
-| **Timón y aparejos** | Mercado de chatarra | Trato con Bram: un favor que tiene que ver con el Edicto |
-| **Clavos y herrajes** | Herrería | Comprarlos o traerle al herrero hierro de la Terminal |
-| **Mascarón de proa** | Lo elegís vos entre cinco tallas de la Terminal | Tu marca, igual que el nombre de la tripulación: un ave, una sirena, una calavera, un sol o una medusa (esta última con comentario de Ama Sel) |
-| **Nombre del barco** | Al final | Lo escribís vos, como el nombre de la tripulación |
+### La sastrería y ropavejería «La Aguja de Oro» (Ciudad Central)
+La primera tienda de ropa del juego:
+- **Prendas:** camisas, chalecos, levitas, pantalones, botas, pañuelos, sombreros y accesorios. Se puede elegir cada una en varios colores.
+- **Antes de comprar:** ves tu personaje probándose la prenda.
+- **Al comprar:** queda en tu ropero y te la cambiás cuando quieras desde la bolsa.
+- **Ropa de la Ciudad Alta (cara):** sirve para pasar por la Puerta Real sin que te paren, y es una de las formas de entrar a la fiesta.
 
-El barco aparece en la grada y cambia a la vista con cada pieza que llega. Es tu barco para el resto del juego, con cubierta, camarote y bodega, como la Corneja.
+### Otras tiendas
+- **Velería:** cuerda, lona y faroles.
+- **Cartógrafa:** cartas que revelan islas cuando esté el mapa.
+- **Botica:** curas.
+- **Panadería y taberna:** comida.
+- **Casa de empeño:** compra lo que no usás.
+- **Mercado de chatarra:** cosas raras y baratas.
 
-### Encargos (además de la historia)
-| Encargo | Qué | Para qué sirve |
-|---|---|---|
-| **La cometa de Totó** | Bajar una cometa enganchada en el tejado del mercado cubierto | Los Gorriones te deben una |
-| **La carta de Isolda** | Medir con ella la costa del faro | Te regala una carta: islas reveladas en el mapa |
-| **Hierro para el herrero** | Llevarle chatarra buena de la Terminal | Clavos para el barco y una mejora de arma |
-| **La pelea de la Fosa** | Ring de la Terminal; con Niklas, su arco contra Mola | Berries y respeto en la Terminal |
-| **La cocina de Fina** | Con Rufo: un plato con algo de cada barrio | El sueño de Rufo empieza a andar; un buen precio en la taberna |
-| **Las corrientes de Goa** | Con Nerea: leer la bahía para la botadura y ganarle a un noble a las cartas en un salón de la Ciudad Alta | Una salida más segura el último día; un pase a la Ciudad Alta |
-| **El memorial** | Llevar flores de la Ciudad Alta al Memorial del Fuego | La Abuela Coque cuenta lo del «de gris» completo |
-| **El sastre** | Comprar ropa de la Ciudad Alta | Entrás por la Puerta Real sin que te paren y cambiás tu aspecto (la ropa se ve en el personaje) |
-| **Empeño** | Vender lo que no usás | Plata para la vela |
+## 5. La gente
+- **Cantidad:** de 80 a 90 vecinos con casa y horario. Unos 60 en la calle a la vez de día.
+- **Diseños:** un generador de variantes arma unos 45 nuevos, con ropa según la clase (nobles, Guardia Real, criados, marineros, mercaderes, gente de la Terminal).
+- **Qué hacen:**
+  - compradores que van de puesto en puesto;
+  - estibadores con cajas;
+  - pescadores en la lonja;
+  - críos jugando;
+  - un músico y el titiritero con público;
+  - la Guardia en ronda;
+  - nobles paseando;
+  - chatarreros subiendo y bajando la montaña.
+- **Charlas de fondo** entre vecinos, y unos 20 personajes con los que se habla de verdad.
+- **Vida que no es gente:** carruajes con caballos, palomas que se espantan, gatos, perros, gaviotas y el News Coo.
 
-## 5. Lo visual: que dé gusto
-El motor dibuja en 2D sobre canvas. Propongo sumarle dos capas.
+**Personajes con nombre (originales):**
+| Personaje | Quién es |
+|---|---|
+| Ama Sel | La constructora de barcos |
+| Celso Vardán, «el Tasador» | El hombre de la subasta |
+| Marqués Teodoro de Albamar | El que vende la costa |
+| Capitana Irene Duval | Jefa de la Guardia Real |
+| Fina Roble | Tabernera de La Ballena Varada |
+| Isolda Mapp | Cartógrafa |
+| Maese Teo Lona | Velero |
+| Bram el Tuerto | Manda en el mercado de chatarra |
+| Abuela Coque | Cuida el Memorial del Fuego |
+| Los Gorriones: Pina, Lucho y Totó | Críos de la Terminal |
+| Mola | Campeona de la Fosa de Chatarra |
+| Dagoberto Ferro | Armero |
+| Madame Lis | Sastra |
 
-### A. Efectos en el propio dibujo (seguro, en todos los dispositivos)
-- **Agua viva:** reflejos de barcos y edificios del puerto en el agua (copia invertida con ondulación), destellos de sol que se mueven y espuma contra los muelles.
-- **Viento:** banderas, toldos, ropa tendida y estandartes de la Ciudad Alta que se mueven. Hojas y papeles que cruzan la calle.
-- **Humo y brasas** en la Terminal: chimeneas, hogueras de chatarra y chispas de noche. Humo de las panaderías por la mañana.
-- **Clima:**
+## 6. Lo visual
+**Aprobado: todo lo propuesto.**
+- **En el propio dibujo:**
+  - agua con reflejos y destellos;
+  - viento en banderas, toldos y ropa tendida;
+  - humo y brasas en la Terminal;
   - niebla matinal en el puerto;
-  - lluvia ocasional con charcos que reflejan las luces y gente que corre a resguardarse;
-  - después de la lluvia, todo brilla mojado.
-- **Luz de noche:**
-  - farolas en la Ciudad Alta;
-  - faroles de colores en el mercado;
-  - hogueras en la Terminal;
-  - ventanas que se encienden y apagan según la hora;
-  - el haz del faro barriendo la bahía.
-- **Pequeñas cosas:**
-  - polvo en los rayos de sol del mercado cubierto;
-  - palomas que se espantan;
-  - la fuente de la plaza alta con agua que brilla;
-  - el reloj del campanario con la hora real del juego.
+  - lluvia con charcos que reflejan;
+  - luces de noche, el haz del faro, polvo en el mercado cubierto, palomas, la fuente y el reloj del campanario.
+- **La capa con WebGL encima:**
+  - brillo de las luces;
+  - color por barrio y por hora;
+  - viñeta;
+  - aire que tiembla sobre las hogueras;
+  - ondulación del agua.
+  - Va con el interruptor «Efectos visuales: altos / bajos» en Opciones.
+- **Escenas de lucimiento:**
+  - la llegada;
+  - el mercado lleno;
+  - el Tasador deshaciendo la torre;
+  - la fiesta;
+  - la huida por los tejados;
+  - el amanecer y la botadura.
 
-### B. Una capa de "shaders" encima (lo que pediste)
-Un paso final con WebGL sobre la imagen del juego:
-- **Brillo de las luces:** halo suave en farolas, hogueras y ventanas de noche.
-- **Gradación de color por barrio y por hora:** la Ciudad Alta fría y limpia, la Terminal cálida y sucia, el atardecer dorado.
-- **Viñeta suave** y un grano muy leve de película.
-- **Calor:** el aire tiembla sobre las hogueras de la Terminal.
-- **Agua:** ondulación sobre las zonas de mar.
-
-Si el dispositivo no tiene WebGL, el juego se ve como hoy. En Opciones habrá «Efectos visuales: altos / bajos» por si un celular va lento.
-
-### Escenas de lucimiento
-Momentos pensados para la vista, con cinemática:
-1. **La llegada:** panorámica del puerto a la muralla, el palacio y el humo de la Terminal.
-2. **El mercado** a media mañana, en su punto más lleno.
-3. **La Terminal de noche:** hogueras, estrellas y la grada con tu barco iluminado.
-4. **La fiesta del marqués:** farolillos, música y salones.
-5. **El amanecer del Edicto:** antorchas, humo y la botadura.
-
-## 6. Cómo se construye (fases)
-1. **Plano:** distritos, calles, muralla, barranco y puente, costa y puerto. Edificios nuevos con sus interiores (los que se pueden visitar: unos 25). Pasa por el validador.
-2. **Gente:**
-   - el generador de variantes (unos 45 diseños nuevos);
-   - los personajes con nombre, dibujados uno a uno;
-   - 80 a 90 vecinos con agenda;
-   - charlas de fondo;
-   - carruajes, palomas y perros;
-   - el chequeo de que nadie quede tapado ni amontonado, como en Shells Town.
-3. **Efectos A:** agua, viento, humo, luz, clima.
-4. **Efectos B:** la capa de WebGL con su interruptor.
-5. **Historia:**
-   - la llegada;
-   - la entrada a la Terminal;
-   - Ama Sel y el barco;
-   - el Edicto;
-   - la fiesta;
-   - el amanecer y la botadura;
-   - el cierre en tiza.
-6. **Encargos y tiendas:** sastre con ropa visible, cartógrafa conectada al mapa, velería, empeño.
-7. **Pruebas:**
-   - el Acto 2 entero con los tres compañeros;
-   - guardar y continuar;
-   - los chequeos de tapados;
-   - escenas sueltas para probar cada momento.
-   - Entrega: el juego entero más las escenas, como siempre.
-
-Antes de Goa van la tiza nueva, el mapa y el periódico, porque Goa los usa: la llegada en la Tortuga, la carta y el primer diario.
-
-## 7. Lo que necesito del autor
-1. **El conflicto del Edicto:** la Ciudad Alta quiere despejar la Terminal otra vez. ¿Te cierra como motor del acto?
-2. **Severin como escolta castigado del marqués:** explica que esté en la subasta. ¿Va?
-3. **El barco por piezas, con mascarón y nombre elegidos:** ¿te gusta, o preferís otra forma de conseguirlo (ganarlo, robarlo o comprarlo)?
-4. **Los arcos de los compañeros en Goa** (Rufo cocina, Nerea cartas y corrientes, Niklas la Fosa): ¿algo que cambiar?
-5. **La capa de WebGL:** ¿la sumamos? Cuesta algo más en celulares; por eso lleva interruptor.
-6. **Villa Foosha:** ¿solo un cartel por ahora, o querés que se pueda visitar en un acto futuro?
+## 7. Cómo se construye
+1. Plano y edificios, con unos 25 interiores.
+2. Gente: generador, personajes con nombre y agendas.
+3. Tiendas: armería, sastrería y el resto.
+4. Astillero y barcos: los tres modelos, las piezas y el barco propio en el motor.
+5. Historia: los cinco días, la fiesta y la huida, el amanecer y la botadura, y los arcos de los compañeros.
+6. Efectos, con la capa de WebGL.
+7. Pruebas y entrega: el juego entero más escenas sueltas para cada momento.
