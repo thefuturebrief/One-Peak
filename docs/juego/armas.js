@@ -48,7 +48,13 @@ for (const [tipo, n] of Object.entries(DEL_PADRE)) ARMAS.push({ id: 'padre_' + t
 for (const tipo of INICIALES) ARMAS.push({ id: 'madera_' + tipo, n: TIPOS[tipo] + ' de madera', tipo, grado: 'sin', hoja: 'madera', desc: 'De entrenamiento. Duele igual, pero no corta.' });
 const DESC_TIPO = { comun: 'Un arma corriente, de las que se venden en cualquier puerto.', oficio: 'Un arma de oficio: hace falta saber usarla.', personaje: 'No es un arma que lleve cualquiera.' };
 for (const [tipo, [n, gr]] of Object.entries(TIPO)) if (!ARMAS.some(a => a.id === tipo)) ARMAS.push({ id: tipo, n, tipo, grado: 'sin', hoja: null, desc: DESC_TIPO[gr] });
+// calidades de las armas comunes y de oficio (armería de Goa): la corriente es el tipo a secas
+const CALIDAD = { tosca: ['Tosca', .6, 'oxido', 'Hoja con óxido y mellas. Sirve, pero no le pidas mucho.', -3], fina: ['Fina', 2.5, 'plata', 'Acero pulido y bien templado. Aguanta más y corta mejor.', 4] };
+for (const [tipo, [n, gr]] of Object.entries(TIPO)) if (gr !== 'personaje' && TIPO[tipo][2] !== 'fuego') for (const [c, [cn, , hoja, d]] of Object.entries(CALIDAD))
+  ARMAS.push({ id: tipo + '__' + c, n: `${n} ${cn.toLowerCase()}`, tipo, grado: 'sin', hoja, calidad: c, desc: d });
 const arma = id => ARMAS.find(a => a.id === id);
+// lo que suma el arma al daño: la calidad o el grado
+const bonoArma = id => { const a = id && arma(id); if (!a) return 0; return a.calidad ? CALIDAD[a.calidad][4] : { waza: 6, ryo: 9, o: 12, saijo: 16 }[a.grado] || 0; };
 
 // ---------- en el personaje ----------
 // assets/armas/<tipo>.png + armas.json: por animación, delante (f) y detrás (b): [y, celda, cuadros]

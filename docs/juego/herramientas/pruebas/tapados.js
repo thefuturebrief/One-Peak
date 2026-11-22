@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
   await p.click('.tiza .skip'); await p.waitForTimeout(600);
   const isla = process.argv[2] || 'shells';
   const out = await p.evaluate(async (isla) => {
-    if (isla !== 'kale') { F.zarpado = true; await irAIsla(isla); F.stD0 = Math.floor(G.minutes / 1440); F.stLlegada = F.stMedusaFuera = F.stControl = true; }
+    if (isla !== 'kale') { F.zarpado = true; await irAIsla(isla); F.stD0 = Math.floor(G.minutes / 1440); F.stLlegada = F.stMedusaFuera = F.stControl = true; F.goaD0 = F.stD0; F.goaTerminal = true; }
     const res = new Map();
     for (const h of [6, 8, 10, 12, 14, 16, 18, 20, 21, 22, 23]) { G.minutes = Math.floor(G.minutes / 1440) * 1440 + h * 60; for (const n of PEOPLE) n.lugar = null; vecinosTick(true);
       for (const n of PEOPLE) { if (n.scene === 'town' && n.sprite && !n.route) { // en la calle: lienzo de 96x96 alrededor de sus pies

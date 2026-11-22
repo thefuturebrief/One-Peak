@@ -20,7 +20,8 @@ const ISLA = () => ISLAS[S.isla || 'kale'];
 function poblar() { PEOPLE = ISLA().gente().map(n => { const [scene, [x, y]] = n.route ? ['town', [0, 0]] : place(n.scene, n.at); return { ...n, scene, x, y, frame: 0, nextBark: performance.now() + 3000 + rnd() * 6000 }; });
   OBJS = [...ISLA().objetos(), ...objetosBarcos()].map(o => { const [scene, [x, y]] = place(o.scene, o.at); return { ...o, scene, x, y }; }); }
 // cambiar de isla: se arma su mundo, se olvidan los interiores de la anterior (no los barcos) y se puebla
-async function irAIsla(id) { const I = ISLAS[id]; if (!I.datos) I.datos = await (await fetch(I.plano)).json(); PLANO = I.datos; S.isla = id; CALLES = null;
+async function irAIsla(id) { const I = ISLAS[id]; if (!I.datos) I.datos = await (await fetch(I.plano)).json(); if (I.sprites) await Promise.all(I.sprites.filter(k => !SHEETS[k]).map(k => loadImg('assets/personajes/' + k + '.png').then(i => SHEETS[k] = i)));
+  PLANO = I.datos; S.isla = id; CALLES = null; if (G.scene !== 'town' && !BARCOS[G.scene.split(':')[0]]) G.scene = 'town'; // los sprites de cada isla se cargan al llegar; el cuarto de la isla anterior ya no existe
   for (const k of Object.keys(BLD)) if (!BARCOS[k]) { BLD[k].scenes.forEach(s => delete SC[s.id]); delete BLD[k]; }
   buildIsland(PLANO); barcosEnPueblo(); poblar(); I.init && I.init(); }
 
@@ -115,7 +116,7 @@ function dream() { const list = DREAMS.map(x => ({ t: x.t, s: x.sc(S) })).sort((
 const knows = title => Object.values(DIARY).some(sec => sec.some(e => e.title === title));
 // tu rasgo más marcado decide cómo suenan tus preguntas
 function rasgo() { let best = 'neutro', bv = 0; for (const [k, p, n] of [['coraje', 'temerario', 'cauto'], ['corazon', 'compasivo', 'frio'], ['orgullo', 'orgulloso', 'humilde'], ['libertad', 'libre', 'disciplinado'], ['ambicion', 'ambicioso', 'sereno']]) { const v = S.ax[k]; if (Math.abs(v) > bv) { bv = Math.abs(v); best = v > 0 ? p : n; } } return best; }
-const voz = o => typeof o === 'string' ? o : (o[rasgo()] || o.def);
+const voz = o => typeof o === 'function' ? o() : typeof o === 'string' ? o : (o[rasgo()] || o.def);
 const aff = id => S.aff[id] || 0;
 const asked = (id, tp) => (S.asked[id] || {})[tp] || 0;
 const tod = () => { const h = hourNow(); return h < 12.5 ? 'dia' : h < 19.5 ? 'tarde' : 'noche'; };
@@ -263,9 +264,9 @@ const openNow = b => !b.ext.horario || b.ext.horario.some(([a, z]) => hourNow() 
 // =====================================================================
 // DIARIO
 // =====================================================================
-const DIARY = { yo: [], familia: [], gente: [], rumores: [], kale: [], shells: [], encargos: [] };
+const DIARY = { yo: [], familia: [], gente: [], rumores: [], kale: [], shells: [], goa: [], encargos: [] };
 function learn(e) { if (!e) return; const [sec, title, txt] = e; if (DIARY[sec].some(x => x.title === title)) return; DIARY[sec].push({ title, txt }); document.getElementById('openBag').classList.add('new-d'); }
-function diarioHTML(tab) { const TABS = [['yo', 'Yo'], ['familia', 'Familia'], ['gente', 'Gente'], ['rumores', 'Rumores'], ['kale', 'Kalé'], ['shells', 'Shells Town'], ['encargos', 'Encargos']].filter(([k]) => k !== 'shells' || DIARY.shells.length);
+function diarioHTML(tab) { const TABS = [['yo', 'Yo'], ['familia', 'Familia'], ['gente', 'Gente'], ['rumores', 'Rumores'], ['kale', 'Kalé'], ['shells', 'Shells Town'], ['goa', 'Goa'], ['encargos', 'Encargos']].filter(([k]) => !['shells', 'goa'].includes(k) || DIARY[k].length);
   const page = k => { if (k === 'yo') { const top = Object.entries(S.of).sort((a, b) => b[1] - a[1])[0], of = top[1] > 0 ? OFICIOS[top[0]] : 'Sin oficio fijo';
       return `<div class="entry"><b>${fullName()}</b><span>17 años. Nací en Kalé, en el East Blue. ${of}.</span></div><div class="entry"><b>Mi sueño</b><span>${S.dream}<br><i>${motive()}</i></span></div>
       <div class="axes">${Object.entries(AX).map(([k, [a, b]]) => { const v = Math.max(-4, Math.min(4, S.ax[k])); return `<div class="ax"><span class="${v < 0 ? 'on' : ''}">${a}</span><span class="tr"><i style="left:${50 + v * 12}%"></i></span><span class="${v > 0 ? 'on' : ''}">${b}</span></div>`; }).join('')}</div>
@@ -520,9 +521,9 @@ function drawTown(g, cam, VW, VH, chars, now, h) {
       const c = [[fx, fy], [fx + fw, fy], [fx + fw, fy + fh], [fx, fy + fh]]; poly(g, hull([...c, ...c.map(([x, y]) => [x + sn.dx * H, y + sn.dy * H])]).map(([x, y]) => [x - cx, y - cy])); g.fill(); }
     for (const [x, y] of WORLD.trees) { if (x < cx - 200 || x > cx + VW + 200 || y < cy - 100 || y > cy + VH + 200) continue; g.beginPath(); g.ellipse(x - cx + sn.dx * 70, y - cy + sn.dy * 50 - 6, 40, 18, 0, 0, 7); g.fill(); } }
   const night = isNight(h), list = [];
-  for (const sp of WORLD.sprites) { const w = sp.canvas ? sp.canvas.width : 140, hh = sp.canvas ? sp.canvas.height : 160; const x0 = sp.tree ? sp.x - 50 : sp.x, y0 = sp.tree ? sp.y - 140 : sp.y;
+  for (const sp of WORLD.sprites) { const w = sp.canvas ? sp.canvas.width : sp.w || 140, hh = sp.canvas ? sp.canvas.height : sp.h || 160; const x0 = sp.tree ? sp.x - 50 : sp.x, y0 = sp.tree ? sp.y - 140 : sp.y;
     if (sp.visible && !sp.visible()) continue; if (x0 > cx + VW || x0 + w < cx || y0 > cy + VH || y0 + hh < cy - 20) continue;
-    list.push({ key: sp.key, draw: (g, [cx, cy]) => { if (sp.canvas) g.drawImage(sp.canvas, Math.round(sp.x - cx + (sp.muneco && now > F.golpeMuneco && now - F.golpeMuneco < 320 ? Math.sin(now / 18) * 2 : 0)), Math.round(sp.y - cy)); else if (sp.img) put(g, sp.img, sp.x - cx, sp.y - cy); else if (sp.tree) drawTree(g, sp.x - cx, sp.y - cy); else if (sp.lamp) drawLamp(g, sp.x - cx, sp.y - cy, night); else if (sp.rect) { g.fillStyle = sp.rect[4]; g.fillRect(sp.rect[0] - cx, sp.rect[1] - cy, sp.rect[2], sp.rect[3]); } } }); }
+    list.push({ key: sp.key, draw: (g, [cx, cy]) => { if (sp.canvas) g.drawImage(sp.canvas, Math.round(sp.x - cx + (sp.muneco && now > F.golpeMuneco && now - F.golpeMuneco < 320 ? Math.sin(now / 18) * 2 : 0)), Math.round(sp.y - cy)); else if (sp.img) put(g, sp.img, sp.x - cx, sp.y - cy); else if (sp.tree) drawTree(g, sp.x - cx, sp.y - cy); else if (sp.lamp) drawLamp(g, sp.x - cx, sp.y - cy, night); else if (sp.anim) sp.anim(g, sp.x - cx, sp.y - cy, now); else if (sp.rect) { g.fillStyle = sp.rect[4]; g.fillRect(sp.rect[0] - cx, sp.rect[1] - cy, sp.rect[2], sp.rect[3]); } } }); }
   for (const c of chars) list.push({ key: c.y, draw: (g, [cx, cy]) => drawActor(g, c, cx, cy, now) });
   drawSorted(g, list, cam);
   vida(g, cam, now, VW, VH, h);

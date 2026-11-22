@@ -27,7 +27,10 @@ const berries = () => S.berries || 0;
 function cobrar(n) { S.berries = berries() + n; avisoDinero('+' + n); }
 function pagar(n) { if (berries() < n) return false; S.berries = berries() - n; avisoDinero('−' + n); return true; }
 function avisoDinero(t) { sfx('moneda'); const p = document.querySelector('.purse'); if (!p) return; p.classList.remove('pop'); void p.offsetWidth; p.classList.add('pop'); const el = document.createElement('i'); el.className = 'pdelta'; el.textContent = t + ' ฿'; p.appendChild(el); setTimeout(() => el.remove(), 1400); }
-const precioArma = a => a.id.startsWith('padre_') || a.id.startsWith('madera_') ? 0 : a.grado !== 'sin' ? { waza: 2000, ryo: 9000, o: 40000, saijo: 200000 }[a.grado] : { daga: 120, garrote: 60 }[a.id] || { comun: 90, oficio: 220, personaje: 600 }[TIPO[a.tipo][1]];
+// precio base de cada tipo (calidad corriente): de una honda a un mosquete
+const PRECIO_TIPO = { daga: 120, espada_corta: 150, sable: 190, cimitarra: 260, estoque: 300, mandoble: 380, garrote: 60, martillo: 110, hacha: 120, pico: 150, maza: 240,
+  baston: 50, lanza: 130, alabarda: 340, tirachinas: 25, arco: 160, ballesta: 320, pistola: 450, mosquete: 700 };
+const precioArma = a => a.calidad ? Math.round(precioArma(arma(a.tipo)) * CALIDAD[a.calidad][1] / 5) * 5 : a.id.startsWith('padre_') || a.id.startsWith('madera_') ? 0 : a.grado !== 'sin' ? { waza: 2000, ryo: 9000, o: 40000, saijo: 200000 }[a.grado] : PRECIO_TIPO[a.id] || { comun: 90, oficio: 220, personaje: 600 }[TIPO[a.tipo][1]];
 const precioDe = id => OBJETOS[id] ? OBJETOS[id].precio || 0 : arma(id) ? precioArma(arma(id)) : 0;
 const vendible = id => !(OBJETOS[id] && OBJETOS[id].noVende) && precioDe(id) > 0 && S.arma !== id;
 function comer(id) { const o = OBJETOS[id]; if (!cant(id)) return; S.cant[id]--; if (!S.cant[id]) quitarObjeto(id); S.comido = Math.max(S.comido || 0, o.comida); bubble({ x: G.x, y: G.y, scene: G.scene }, id === 'guiso' ? 'Esto sí que llena.' : 'Mmm. Recién hecho.', 2200); }

@@ -267,6 +267,45 @@ input.name:focus{border-color:var(--gold)}
 .esc{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08)}.esc:last-child{border:0}
 .esc b{display:block;color:var(--txt)}.esc small{color:var(--dim);line-height:1.4}.esc-b{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;flex:none}
 @media (max-width:560px){.esc{flex-direction:column;align-items:flex-start}.esc-b{justify-content:flex-start}}
+
+/* Goa: astillero, armería y sastrería */
+.fams button,.sas-r .sub button{font:inherit;font-size:13px;font-weight:700;color:var(--dim);background:rgba(255,255,255,.05);border:1px solid var(--edge);border-radius:999px;padding:6px 14px;cursor:pointer}
+.fams button.on,.sas-r .sub button.on{color:var(--ink);background:linear-gradient(180deg,var(--gold2),var(--gold));border-color:transparent}.fams button:hover:not(.on),.sas-r .sub button:hover:not(.on){background:rgba(255,255,255,.1);color:var(--txt)}
+.escenas .grupo{font-family:var(--fd);font-size:13px;letter-spacing:.06em;color:var(--gold2);padding:14px 4px 4px}
+.tt{align-self:center;font-family:var(--fd);font-size:15px;letter-spacing:.02em;color:var(--gold2);padding:0 6px}
+.asti,.armeria,.sastre{width:min(860px,100%)!important;max-height:min(720px,100%)}
+.modelos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:6px 16px 18px;overflow:auto}
+.modelo{display:grid;gap:6px;align-content:start;padding:10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--edge)}
+.modelo b{font-size:15px}.modelo small{color:var(--dim);font-size:12.5px;line-height:1.35;min-height:52px}
+.modelo dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:2px 0 6px;font-size:12.5px}.modelo dt{color:var(--mute)}.modelo dd{margin:0;color:var(--gold2);letter-spacing:2px}
+.lz canvas{width:100%;height:auto;display:block;border-radius:10px;image-rendering:auto}.lz.grande{margin:12px 16px 0}
+.nombre-b{display:flex;align-items:center;gap:10px;margin:8px 16px 4px;font-weight:700;font-size:13px;color:var(--dim)}
+.nombre-b input{flex:1;font:inherit;font-family:Georgia,serif;font-size:16px;color:var(--txt);background:rgba(0,0,0,.35);border:1px solid var(--edge);border-radius:10px;padding:8px 12px}
+.nombre-b input:focus{outline:2px solid var(--gold);outline-offset:1px}
+.pz{padding:8px 16px 4px}.pz>b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin-bottom:6px}
+.ops{display:flex;flex-wrap:wrap;gap:6px}
+.op{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;border:1px solid var(--edge);background:rgba(255,255,255,.04);color:var(--txt);font:inherit;font-size:13px;cursor:pointer}
+.op i{width:16px;height:16px;border-radius:5px;border:1px solid rgba(0,0,0,.5);flex:none}.op em{font-style:normal;color:var(--gold2);font-size:12px;font-weight:700}
+.op.on{border-color:var(--gold);background:rgba(245,183,58,.14)}.op:hover:not([disabled]){background:rgba(255,255,255,.09)}.op[disabled]{opacity:.5;cursor:default}
+.mc{background:#5a4a3a}.mc-ninguno{background:transparent;border-style:dashed!important}.mc-ave{background:#f0e6cc}.mc-sol{background:#d6a83a}.mc-sirena{background:#3a8a7a}.mc-calavera{background:#e8e2d0}.mc-medusa{background:#5a5a66}
+.fams{display:flex;gap:6px;padding:4px 16px 8px;flex-wrap:wrap}
+.lista.armas li.arm{grid-template-columns:52px 1fr auto}.lista.armas li.arm .cals{grid-row:1/3;grid-column:3;display:flex;gap:6px}
+.cal{display:grid;gap:1px;min-width:86px;padding:6px 10px;border-radius:10px;border:1px solid var(--edge);background:rgba(255,255,255,.04);color:var(--txt);font:inherit;cursor:pointer;text-align:center}
+.cal span{font-size:12px;font-weight:700}.cal em{font-style:normal;font-size:12px;color:var(--gold2);font-weight:800}.cal:hover:not([disabled]){background:rgba(255,255,255,.1)}.cal[disabled]{opacity:.45;cursor:default}
+.cal-tosca span{color:#c8a080}.cal-fina span{color:#cfe2ff}.cal-waza{border-color:rgba(245,183,58,.5)}
+.vt{padding:6px 18px 0}.vit{background:linear-gradient(90deg,rgba(245,183,58,.08),rgba(255,255,255,.02))!important}
+.nota{margin:4px 18px 16px;font-size:12.5px;color:var(--mute)}
+.sas{display:grid;grid-template-columns:220px 1fr;gap:6px;overflow:auto}
+.probador{display:grid;align-content:start;gap:10px;padding:14px}.probador canvas{width:192px;height:192px;image-rendering:pixelated;border-radius:16px;background:radial-gradient(circle at 50% 60%,rgba(255,214,150,.16),rgba(0,0,0,.2) 70%);justify-self:center}
+.clase{display:grid;gap:4px;font-size:12px}.clase span{color:var(--mute);text-transform:uppercase;letter-spacing:.08em}.clase i{height:6px;border-radius:3px;background:rgba(255,255,255,.1);position:relative;overflow:hidden}
+.clase i::after{content:"";position:absolute;inset:0;width:calc(var(--v)*100%);background:linear-gradient(90deg,#c88a3a,var(--gold2));border-radius:3px}.clase small{color:var(--dim)}
+.sas-r{display:grid;align-content:start;gap:8px;padding:0 14px 14px 0;min-width:0}.sas-r .hola{margin:14px 0 2px}.sas-r .sub{display:flex;flex-wrap:wrap;gap:6px}
+.prendas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.prenda{display:grid;gap:1px;text-align:left;padding:8px 10px;border-radius:10px;border:1px solid var(--edge);background:rgba(255,255,255,.04);color:var(--txt);font:inherit;cursor:pointer}
+.prenda b{font-size:13.5px}.prenda small{font-size:11.5px;color:var(--mute)}.prenda em{font-style:normal;font-size:12px;color:var(--gold2);font-weight:800}
+.prenda.on{border-color:var(--gold);background:rgba(245,183,58,.14)}.prenda:hover{background:rgba(255,255,255,.09)}
+.sas-r .sws{display:flex;flex-wrap:wrap;gap:5px}.fin{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:4px}.fin .tot{margin-right:auto;font-size:13px;color:var(--dim)}.fin .tot b{color:var(--gold2)}
+@media (max-width:700px){.modelos{grid-template-columns:1fr}.sas{grid-template-columns:1fr}.probador{grid-template-columns:auto 1fr;align-items:center}.probador canvas{width:128px;height:128px}.lista.armas li.arm{grid-template-columns:52px 1fr}.lista.armas li.arm .cals{grid-row:auto;grid-column:1/-1;flex-wrap:wrap}}
 </style>
 <div id="app">
   <canvas id="bg" class="px" width="640" height="360" aria-hidden="true"></canvas>
@@ -301,5 +340,9 @@ input.name:focus{border-color:var(--gold)}
 <script src="cine.js"></script>
 <script src="vecinos.js"></script>
 <script src="shells.js"></script>
+<script src="goa-mundo.js"></script>
+<script src="goa-tiendas.js"></script>
+<script src="goa-astillero.js"></script>
+<script src="goa.js"></script>
 <script src="escenas.js"></script>
 <script src="juego.js"></script>

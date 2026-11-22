@@ -201,3 +201,20 @@ La primera tienda de ropa del juego:
 5. Historia: los cinco días, la fiesta y la huida, el amanecer y la botadura, y los arcos de los compañeros.
 6. Efectos, con la capa de WebGL.
 7. Pruebas y entrega: el juego entero más escenas sueltas para cada momento.
+
+## 8. Estado (v0.9)
+**Ya en el juego:**
+- La ciudad entera (plano de 112 × 80):
+  - Ciudad Alta amurallada, con el palacio, la mansión del marqués y su jardín, la plaza alta, el campanario con reloj de verdad y el Archivo Real;
+  - la ciudad de en medio: el mercado de once puestos, la Calle Real, la armería, la sastrería, la taberna y las demás tiendas;
+  - el puerto, el barranco con su puente y la Terminal Gris: montañas de chatarra humeando, chabolas, el Memorial del Fuego, la Fosa, el fuerte de los Gorriones y el astillero con su grada.
+- 87 vecinos con casa y horario, 58 diseños nuevos y charlas de fondo.
+- La llegada en la Tortuga Parda y el edicto recién clavado.
+- Reglas de la ciudad:
+  - Bram no deja pasar el puente salvo de parte de la Medusa Gris o de los Gorriones;
+  - la Guardia de la Puerta Real mira la ropa.
+- Ama Sel: el desprecio, la Medusa Gris, los tres barcos gratis y las piezas pagas, que se ven en la grada.
+- La armería (cinco familias, tres calidades y la vitrina) y la sastrería (probador y ropero).
+- Efectos: humo y brasas, hogueras, palomas que se espantan, niebla matinal, destellos en el agua, tono por barrio y viñeta.
+
+**Lo que sigue:** los días 1 a 4: la investigación, Vardán, la fiesta y la huida, el desalojo y la botadura. Más adelante, la capa de WebGL.

@@ -101,7 +101,7 @@ function instinto() {
   const f = F.fight, st = S.st, top = Object.entries(S.of).sort((a, b) => b[1] - a[1])[0], of = top[1] > 0 ? top[0] : null, list = [], t = tipoDe(f.arma);
   const G0 = ARMA_GOLPE[t] || (TIPO[t] && FAMILIA_GOLPE[TIPO[t][2]]);
   if (G0 && TIPO[t][2] === 'fuego' && f.disparo) list.push({ id: 'culata', t: 'Golpear con la culata', p: chance(st.fuerza), dmg: 14, stun: true });
-  else if (G0) { const [tx, s, dmg, stun, dodge, b = 0] = G0; list.push({ id: 'arma', t: tx, p: chance(st[s], b), dmg: dmg + Math.floor(st[s] / 2), stun, dodge, fuego: TIPO[t][2] === 'fuego' }); }
+  else if (G0) { const [tx, s, dmg, stun, dodge, b = 0] = G0; list.push({ id: 'arma', t: tx, p: chance(st[s], b), dmg: dmg + Math.floor(st[s] / 2) + bonoArma(f.arma), stun, dodge, fuego: TIPO[t][2] === 'fuego' }); }
   else list.push({ id: 'golpe', t: 'Golpearlo', p: chance(st.fuerza), dmg: 20 + st.fuerza });
   list.push({ id: 'esquiva', t: 'Esquivar y responder', p: chance((st.agilidad + st.iq) / 2), dmg: 14, dodge: true });
   if (f.corso) list.push({ id: 'proteger', t: 'Ponerte delante de Corso', p: chance(st.voluntad, S.ax.corazon > 0 ? .15 : 0), protect: true });

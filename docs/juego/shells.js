@@ -363,8 +363,9 @@ async function alMuelle() { F.stFin = true; const q = P('quill'), c = P(F.stComp
 function finActo1() { const c = COMPA[F.stCompa];
   pizarra([{ d: ESC.huida, t: 'La Tortuga Parda salió del puerto con la Marina en el muelle. Desde la borda veías al cadete Severin, de pie al final del muelle, sin moverse.' },
     { d: ESC.goa, t: `Shells Town se hizo pequeña detrás. ${c.n} se sentó a tu lado en la cubierta, sin decir nada. Rumbo a Goa: ya erais dos.` }], null,
-    { cierre: `<b>Fin del Acto 1</b><span>${fullName()} · ${S.tripulacion ? S.tripulacion + ' · ' : ''}con ${c.nc}</span><small>El Acto 2 empieza en Goa.</small><button type="button" class="btn" id="finmenu">Volver al menú</button>`, semilla: 52 });
-  const b = document.getElementById('finmenu'); if (b) b.onclick = () => location.reload(); keyHandler = null; }
+    { cierre: `<b>Fin del Acto 1</b><span>${fullName()} · ${S.tripulacion ? S.tripulacion + ' · ' : ''}con ${c.nc}</span><small>El Acto 2 empieza en Goa.</small><div class="row"><button type="button" class="btn" id="acto2">Seguir: Acto 2</button><button type="button" class="btn ghost" id="finmenu">Volver al menú</button></div>`, semilla: 52 });
+  const b = document.getElementById('finmenu'); if (b) b.onclick = () => location.reload(); keyHandler = null;
+  const a2 = document.getElementById('acto2'); if (a2) a2.onclick = () => { document.querySelector('.tiza') && document.querySelector('.tiza').remove(); F.tortugaFuera = true; llegadaGoa(); }; }
 
 // ---------- reglas de la isla ----------
 function shellsBloquea(d) { if (!String(d.to).startsWith('cuartel:')) return null; const cuarto = interior(d.to).rooms.map(r => r.n);

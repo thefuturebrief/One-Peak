@@ -22,9 +22,20 @@ const ESCENAS = [
       for (const [n, dx, dy] of [[s, 66, 0], [m1, 100, -20], [m2, 98, 30]]) { n.quieto = true; n.camino = null; Object.assign(n, { scene: 'town', x: G.x + dx, y: G.y + dy, dir: 'left' }); } F.stSigue = false; rivalEnElPatio(); } },
   { id: 'huida', t: 'La huida', d: 'Campanas, disparos y la Tortuga Parda soltando amarras.', compa: true, F: TRAS_MERCADO, dia: 1, hora: 11.5,
     go: c => { enPatio(c, true); F.stCanon = true; WORLD.canonNorte = true; WORLD.estatua = F.estatua = 'rota'; F.stSeverin = 'ganaste'; F.stSeverinGolpe = true; const s = P('severin'); s.quieto = true; Object.assign(s, { scene: 'town', x: G.x + 60, y: G.y }); act(s, 'hurt', { hold: true, fps: 10 }); huida(); } },
+  // Goa (Acto 2)
+  { id: 'goa_llegada', t: 'Goa: la llegada', d: 'La Tortuga Parda entra en el puerto y Quill se despide.', isla: 'goa', compa: true, F: { goaD0: 0 }, hora: 9, go: () => llegadaGoa() },
+  { id: 'goa', t: 'Goa: la ciudad', d: 'Pasear libre por la ciudad a media mañana: el mercado, la Calle Real, el puerto.', isla: 'goa', compa: true, F: { goaD0: 0, goaLlegada: true, goaQuillAdios: true, goaSigue: true }, hora: 10, pos: ['town', 35, 58.6, 'up'] },
+  { id: 'goa_puente', t: 'Goa: el puente de Bram', d: 'Intentar pasar a la Terminal Gris (prueba con «Me manda la Medusa Gris»).', isla: 'goa', compa: true, F: { goaD0: 0, goaLlegada: true, goaQuillAdios: true, goaSigue: true }, hora: 11, pos: ['town', 66.4, 40, 'right'] },
+  { id: 'goa_astillero', t: 'Goa: Ama Sel', d: 'El astillero de la Terminal: el desprecio, la Medusa Gris y los tres barcos.', isla: 'goa', compa: true, F: { ...{ goaD0: 0, goaLlegada: true, goaQuillAdios: true, goaSigue: true }, goaTerminal: true }, hora: 10, pos: ['town', 90.6, 61.6, 'right'] },
+  { id: 'goa_barco', t: 'Goa: tu barco en la grada', d: 'Una goleta ya elegida y terminada, para ver cómo luce y cambiarle piezas.', isla: 'goa', compa: true, berries: 3000,
+    F: { ...{ goaD0: 0, goaLlegada: true, goaQuillAdios: true, goaSigue: true }, goaTerminal: true, goaSelMedusa: true }, S: { barco: { modelo: 'albatros', nombre: 'La Gaviota Terca', vela: 'rojo', casco: 'verdemar', mascaron: 'sirena', refuerzo: false, canones: 4, compras: { 'vela:rojo': true, 'casco:verdemar': true, 'mascaron:sirena': true }, desde: -99999 } },
+    asked: { ama_sel: { medusa: 1 } }, hora: 11, pos: ['town', 95, 61.6, 'down'] },
+  { id: 'goa_armeria', t: 'Goa: la armería', d: 'Hierro y Pólvora: familias, tres calidades y la vitrina. Con 3000 berries.', isla: 'goa', compa: true, berries: 3000, F: { goaD0: 0, goaLlegada: true, goaQuillAdios: true, goaSigue: true }, hora: 11, pos: ['armeria_goa', 4.5, 5.4, 'up'] },
+  { id: 'goa_sastreria', t: 'Goa: la sastrería', d: 'La Aguja de Oro: probador, colores y ropa de la Ciudad Alta. Con 2000 berries.', isla: 'goa', compa: true, berries: 2000, F: { goaD0: 0, goaLlegada: true, goaQuillAdios: true, goaSigue: true }, hora: 11, pos: ['sastreria', 2.5, 5.2, 'up'] },
+  { id: 'goa_noche', t: 'Goa: la Terminal de noche', d: 'Hogueras, brasas y humo al otro lado del barranco.', isla: 'goa', compa: true, F: { ...{ goaD0: 0, goaLlegada: true, goaQuillAdios: true, goaSigue: true }, goaTerminal: true }, hora: 20.6, pos: ['town', 84, 41.2, 'down'] },
 ];
 async function jugarEscena(id, c = 'nerea') { const e = ESCENAS.find(x => x.id === id); if (!e) return menu(); PRUEBA = true;
-  reset(); Object.assign(player, { name: 'Ilo', last: 'Arena', look: ajustar({ ...LOOK0 }) }); for (const k in DIARY) DIARY[k] = []; S.berries = 600;
+  reset(); Object.assign(player, { name: 'Ilo', last: 'Arena', look: ajustar({ ...LOOK0 }) }); for (const k in DIARY) DIARY[k] = []; S.berries = 600; if (e.berries) S.berries = e.berries; if (e.S) Object.assign(S, JSON.parse(JSON.stringify(e.S)));
   if (e.asked) Object.assign(S.asked, JSON.parse(JSON.stringify(e.asked)));
   const isla = e.isla || 'shells', dia = (e.F.stD0 || 0) + (e.dia || 0), [sc, x, y, dir] = e.pos || ['town', 33, 27, 'down'];
   const d = { S: { ...JSON.parse(JSON.stringify(S)), isla }, player, DIARY, F: { ...e.F, ...(e.compa ? { stCompa: c } : {}) }, G: { scene: 'town', x: 33 * T, y: 27 * T, dir, minutes: dia * 1440 + (e.hora ?? 8) * 60 } };
@@ -39,7 +50,7 @@ async function jugarEscena(id, c = 'nerea') { const e = ESCENAS.find(x => x.id =
 function aviso(txt) { const el = document.createElement('div'); el.className = 'guardado'; el.textContent = txt; document.getElementById('overlays').appendChild(el); setTimeout(() => el.classList.add('out'), 3200); setTimeout(() => el.remove(), 3800); }
 function escenasMenu() {
   const fila = e => `<div class="esc"><div><b>${e.t}</b><small>${e.d}</small></div><div class="esc-b">${e.compa ? Object.keys(COMPA).map(c => `<button class="btn sm" type="button" data-e="${e.id}" data-c="${c}">${COMPA[c].n}</button>`).join('') : `<button class="btn sm" type="button" data-e="${e.id}">Jugar</button>`}</div></div>`;
-  show(`<div class="col"><div class="kick">Escenas sueltas</div><h2 class="t">Shells Town</h2><p class="lead">Empieza justo antes de cada momento, con un personaje de prueba. No toca tu partida guardada.</p>
-    <div class="glass escenas">${ESCENAS.map(fila).join('')}</div><div class="row"><button class="btn ghost" type="button" id="back">Volver</button></div></div>`);
+  show(`<div class="col"><div class="kick">Escenas sueltas</div><h2 class="t">Shells Town y Goa</h2><p class="lead">Empieza justo antes de cada momento, con un personaje de prueba. No toca tu partida guardada.</p>
+    <div class="glass escenas"><div class="grupo">Shells Town</div>${ESCENAS.filter(e => !e.id.startsWith('goa')).map(fila).join('')}<div class="grupo">Goa</div>${ESCENAS.filter(e => e.id.startsWith('goa')).map(fila).join('')}</div><div class="row"><button class="btn ghost" type="button" id="back">Volver</button></div></div>`);
   root.querySelectorAll('[data-e]').forEach(b => b.onclick = () => jugarEscena(b.dataset.e, b.dataset.c));
   document.getElementById('back').onclick = menu; keys(e => { if (e.key === 'Escape') menu(); }); }

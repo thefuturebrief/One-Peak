@@ -48,7 +48,7 @@ function openPanel(tab = 'bolsa', sub) { sfx('pagina'); G.paused = true; G.keys 
   if (tab === 'bolsa') { d.querySelectorAll('button.slot').forEach(b => b.onclick = () => { PANEL.sel = b.dataset.id; openPanel('bolsa'); }); const sel = PANEL.sel && tiene(PANEL.sel) ? PANEL.sel : (S.bag || [])[0];
     d.querySelectorAll('button.slot').forEach(b => b.prepend(infoObjeto(b.dataset.id).icono(64)));
     const det = d.querySelector('.det .ic'); if (det && sel) det.appendChild(infoObjeto(sel).icono(128));
-    d.querySelectorAll('[data-act]').forEach(act => act.onclick = () => { const a = act.dataset.act; if (a === 'equipar') { S.arma = S.arma === sel ? null : sel; openPanel('bolsa'); } if (a === 'sacar') { closePanel(); toggleBrujula(true); } if (a === 'ver') { closePanel(); verObjeto(sel); } if (a === 'curar') openPanel('cuerpo'); if (a === 'comer') { comer(sel); openPanel('bolsa'); } }); }
+    d.querySelectorAll('[data-act]').forEach(act => act.onclick = () => { const a = act.dataset.act; if (a === 'equipar') { S.arma = S.arma === sel ? null : sel; openPanel('bolsa'); } if (a === 'sacar') { closePanel(); toggleBrujula(true); } if (a === 'ver') { closePanel(); verObjeto(sel); } if (a === 'curar') openPanel('cuerpo'); if (a === 'comer') { comer(sel); openPanel('bolsa'); } if (a === 'vestir') { closePanel(); abrirSastre('ropero'); } }); }
   (d.querySelector('.slot.on') || d.querySelector('.tabs .on')).focus(); }
 function closePanel() { const d = document.querySelector('.panelj'); d && d.remove(); G.paused = false; }
 const cant = id => (S.cant || {})[id] || 0;

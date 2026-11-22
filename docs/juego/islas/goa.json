@@ -1,0 +1,4506 @@
+{
+"tile": 32,
+"mapa": {
+"w": 112,
+"h": 80,
+"costa": [
+[
+0,
+0
+],
+[
+112,
+0
+],
+[
+112,
+62
+],
+[
+108,
+68
+],
+[
+100,
+72.5
+],
+[
+90,
+73
+],
+[
+80,
+71
+],
+[
+72,
+69
+],
+[
+68,
+67.5
+],
+[
+60,
+67
+],
+[
+50,
+67.2
+],
+[
+40,
+67
+],
+[
+30,
+67.3
+],
+[
+20,
+67
+],
+[
+12,
+67.5
+],
+[
+6,
+69
+],
+[
+2,
+72
+],
+[
+0,
+73
+]
+],
+"playa": [
+[
+100,
+72.5
+],
+[
+108,
+68
+],
+[
+112,
+62
+],
+[
+112,
+72
+],
+[
+104,
+74
+]
+],
+"acantilado": [
+[
+0,
+64
+],
+[
+2,
+64.4
+],
+[
+2.4,
+70
+],
+[
+0,
+72
+]
+],
+"bosque": [
+[
+96,
+0
+],
+[
+112,
+0
+],
+[
+112,
+10
+],
+[
+104,
+12
+],
+[
+96,
+6
+]
+],
+"arbolado": {
+"bosque": [
+96,
+0,
+16,
+12
+],
+"sueltos": [
+5.6,
+11.6,
+14,
+7.6
+],
+"n": 18
+},
+"caminos": [
+{
+"n": "Calle Alta",
+"p": [
+[
+6,
+21.8
+],
+[
+64,
+21.8
+]
+],
+"piedra": true
+},
+{
+"n": "Paseo de los Faroles",
+"p": [
+[
+47,
+12.4
+],
+[
+64,
+12.4
+]
+],
+"piedra": true
+},
+{
+"n": "Calle del Palacio",
+"p": [
+[
+35,
+9.8
+],
+[
+35,
+21.8
+]
+],
+"piedra": true
+},
+{
+"n": "Calle del Archivo",
+"p": [
+[
+48.8,
+12.4
+],
+[
+48.8,
+21.8
+]
+],
+"piedra": true
+},
+{
+"n": "Paseo del jardín",
+"p": [
+[
+12.5,
+19.5
+],
+[
+12.5,
+21.8
+]
+],
+"piedra": true
+},
+{
+"n": "Calle Real",
+"p": [
+[
+35,
+21.8
+],
+[
+35,
+66.6
+]
+],
+"piedra": true
+},
+{
+"n": "Calle de los Mercaderes",
+"p": [
+[
+3,
+31
+],
+[
+65,
+31
+]
+],
+"piedra": true
+},
+{
+"n": "Calle del Puente",
+"p": [
+[
+3,
+40
+],
+[
+64.8,
+40
+]
+],
+"piedra": true
+},
+{
+"n": "Calle del Molino",
+"p": [
+[
+3,
+49
+],
+[
+65,
+49
+]
+],
+"piedra": true
+},
+{
+"n": "Paseo del Puerto",
+"p": [
+[
+3,
+58
+],
+[
+65,
+58
+]
+],
+"piedra": true
+},
+{
+"n": "Calle de los Tintes",
+"p": [
+[
+12,
+31
+],
+[
+12,
+58
+]
+]
+},
+{
+"n": "Calle del Lavadero",
+"p": [
+[
+24,
+31
+],
+[
+24,
+58
+]
+]
+},
+{
+"n": "Calle de la Lonja",
+"p": [
+[
+46,
+31
+],
+[
+46,
+58
+]
+]
+},
+{
+"n": "Calle del Faro",
+"p": [
+[
+57,
+31
+],
+[
+57,
+58
+]
+]
+},
+{
+"n": "Muelle del oeste",
+"p": [
+[
+11,
+58
+],
+[
+11,
+66.6
+]
+]
+},
+{
+"n": "Muelle de pescadores",
+"p": [
+[
+23,
+58
+],
+[
+23,
+66.6
+]
+]
+},
+{
+"n": "Muelle del este",
+"p": [
+[
+53,
+58
+],
+[
+53,
+66.6
+]
+]
+},
+{
+"n": "Puente del Barranco",
+"p": [
+[
+64.6,
+40
+],
+[
+71.4,
+40
+]
+],
+"madera": true
+},
+{
+"n": "Camino de la chatarra",
+"p": [
+[
+71.4,
+40
+],
+[
+108,
+40
+]
+]
+},
+{
+"n": "Senda de las chabolas",
+"p": [
+[
+72,
+29.6
+],
+[
+106,
+29.6
+]
+]
+},
+{
+"n": "Senda de la Fosa",
+"p": [
+[
+72,
+50.4
+],
+[
+108,
+50.4
+]
+]
+},
+{
+"n": "Bajada al astillero",
+"p": [
+[
+88.6,
+14
+],
+[
+88.6,
+50.4
+],
+[
+88.6,
+61
+]
+]
+},
+{
+"n": "Senda del bosque",
+"p": [
+[
+88.6,
+14
+],
+[
+100,
+8
+],
+[
+108,
+4
+]
+]
+},
+{
+"n": "Senda de la Fosa",
+"p": [
+[
+104.6,
+40
+],
+[
+104.6,
+50.4
+]
+]
+}
+],
+"plaza": {
+"x": 25.4,
+"y": 41,
+"w": 19.2,
+"h": 7
+},
+"suelos": [
+{
+"t": "losas",
+"x": 4.4,
+"y": 1.6,
+"w": 61.2,
+"h": 22.2
+},
+{
+"t": "jardin",
+"x": 5.2,
+"y": 11.6,
+"w": 14.6,
+"h": 7.8
+},
+{
+"t": "plaza",
+"x": 23,
+"y": 10,
+"w": 24,
+"h": 5.2,
+"tono": "alta"
+},
+{
+"t": "chatarra",
+"x": 70.4,
+"y": 11,
+"w": 41.6,
+"h": 63
+},
+{
+"t": "plaza",
+"x": 80.6,
+"y": 42.6,
+"w": 7.4,
+"h": 5.2,
+"tono": "quemada"
+},
+{
+"t": "muelle_piedra",
+"x": 2,
+"y": 63.6,
+"w": 63,
+"h": 3.6
+},
+{
+"t": "barranco",
+"x": 66.2,
+"w": 4.4,
+"y0": 0,
+"y1": 69,
+"puente": 40
+}
+],
+"muelle": [
+[
+10,
+66.6,
+2,
+7.4
+],
+[
+22,
+66.6,
+2,
+6.6
+],
+[
+34,
+66.6,
+2,
+9
+],
+[
+52,
+66.6,
+2,
+7
+],
+[
+8,
+74,
+30,
+2
+]
+],
+"botes": [
+[
+16,
+71.6
+],
+[
+28,
+72.6
+],
+[
+46,
+71.8
+],
+[
+57,
+71.2
+]
+],
+"objetos": [
+{
+"n": "Muralla de la Ciudad Alta",
+"t": "muralla",
+"x": 4,
+"y": 1.5,
+"w": 62,
+"h": 22.5,
+"puerta": 35,
+"torres": true,
+"canones": [
+10,
+20,
+50,
+60
+],
+"suelo": false
+},
+{
+"n": "Verja del jardín",
+"t": "verja",
+"x": 5,
+"y": 11.4,
+"w": 15,
+"h": 8.1,
+"puerta": 12.5
+},
+{
+"n": "Estatua del rey",
+"t": "rey",
+"x": 35,
+"y": 12.4
+},
+{
+"n": "Fuente",
+"t": "fuente",
+"x": 28,
+"y": 13.6
+},
+{
+"n": "Fuente",
+"t": "fuente",
+"x": 42,
+"y": 13.6
+},
+{
+"n": "Fuente del jardín",
+"t": "fuente",
+"x": 12.5,
+"y": 16.4
+},
+{
+"n": "Campanario",
+"t": "campanario",
+"x": 61.4,
+"y": 13.8
+},
+{
+"n": "Molino",
+"t": "molino",
+"x": 7.4,
+"y": 55.2
+},
+{
+"n": "Lavaderos",
+"t": "lavadero",
+"x": 14,
+"y": 51.4,
+"w": 8,
+"h": 3.6
+},
+{
+"n": "Tendedero",
+"t": "tendedero",
+"x": 14.4,
+"y": 55.6,
+"len": 7
+},
+{
+"n": "Tendedero",
+"t": "tendedero",
+"x": 4.4,
+"y": 50.6,
+"len": 4
+},
+{
+"n": "Teatro de títeres",
+"t": "titeres",
+"x": 43.6,
+"y": 48.4
+},
+{
+"n": "Grúa",
+"t": "grua",
+"x": 20,
+"y": 65.6
+},
+{
+"n": "Grúa",
+"t": "grua",
+"x": 48.6,
+"y": 65.6
+},
+{
+"n": "Faro",
+"t": "fanal",
+"x": 2.6,
+"y": 69
+},
+{
+"n": "Redes",
+"t": "redes",
+"x": 28,
+"y": 65.4
+},
+{
+"n": "Nasas",
+"t": "nasas",
+"x": 31.4,
+"y": 65.6
+},
+{
+"n": "Redes",
+"t": "redes",
+"x": 6.6,
+"y": 65.6
+},
+{
+"n": "Banco",
+"t": "banco",
+"x": 30.4,
+"y": 15.8
+},
+{
+"n": "Banco",
+"t": "banco",
+"x": 39.6,
+"y": 15.8
+},
+{
+"n": "Tablón",
+"t": "tablon",
+"x": 37.4,
+"y": 30.2
+},
+{
+"n": "Barricada de Bram",
+"t": "barricada",
+"x": 72.6,
+"y": 37.6
+},
+{
+"n": "Barricada de Bram",
+"t": "barricada",
+"x": 72.6,
+"y": 42.8
+},
+{
+"n": "Montaña de chatarra",
+"t": "chatarra",
+"x": 80,
+"y": 15,
+"r": 6
+},
+{
+"n": "Montaña de chatarra",
+"t": "chatarra",
+"x": 98,
+"y": 14,
+"r": 7
+},
+{
+"n": "Montaña de chatarra",
+"t": "chatarra",
+"x": 108,
+"y": 30,
+"r": 4
+},
+{
+"n": "Montaña de chatarra",
+"t": "chatarra",
+"x": 76,
+"y": 56,
+"r": 3.6
+},
+{
+"n": "Memorial del Fuego",
+"t": "memorial",
+"x": 84.2,
+"y": 45.4
+},
+{
+"n": "Mercado de chatarra",
+"t": "puestos_chatarra",
+"x": 77,
+"y": 36.4
+},
+{
+"n": "Fosa de Chatarra",
+"t": "foso",
+"x": 96,
+"y": 52.4,
+"w": 9,
+"h": 6
+},
+{
+"n": "Fuerte de los Gorriones",
+"t": "fuerte",
+"x": 108,
+"y": 50
+},
+{
+"n": "Hoguera",
+"t": "hoguera",
+"x": 92.6,
+"y": 37.4
+},
+{
+"n": "Hoguera",
+"t": "hoguera",
+"x": 80.4,
+"y": 48.4
+},
+{
+"n": "Hoguera",
+"t": "hoguera",
+"x": 102,
+"y": 48.4
+},
+{
+"n": "Grada del astillero",
+"t": "gradagoa",
+"x": 87,
+"y": 63,
+"w": 17,
+"h": 7
+},
+{
+"n": "Grúa del astillero",
+"t": "grua",
+"x": 106,
+"y": 63.4
+},
+{
+"n": "Tendedero",
+"t": "tendedero",
+"x": 74,
+"y": 38.4,
+"len": 3.4
+},
+{
+"n": "Tendedero",
+"t": "tendedero",
+"x": 97,
+"y": 38.2,
+"len": 4
+},
+{
+"n": "Cartel del camino",
+"t": "cartel",
+"x": 104.6,
+"y": 6.6,
+"texto": "Villa Foosha · Monte Colubo"
+},
+{
+"n": "Edicto",
+"t": "edicto",
+"x": 74.6,
+"y": 41.4
+},
+{
+"n": "Puesto de fruta",
+"t": "puesto",
+"x": 26,
+"y": 41.6,
+"g": "fruta",
+"i": 0
+},
+{
+"n": "Puesto de verdura",
+"t": "puesto",
+"x": 28.8,
+"y": 41.6,
+"g": "verdura",
+"i": 1
+},
+{
+"n": "Puesto de pescado",
+"t": "puesto",
+"x": 31.6,
+"y": 41.6,
+"g": "pescado",
+"i": 2
+},
+{
+"n": "Puesto de telas",
+"t": "puesto",
+"x": 37,
+"y": 41.6,
+"g": "telas",
+"i": 3
+},
+{
+"n": "Puesto de especias",
+"t": "puesto",
+"x": 39.8,
+"y": 41.6,
+"g": "especias",
+"i": 4
+},
+{
+"n": "Puesto de cacharros",
+"t": "puesto",
+"x": 42.6,
+"y": 41.6,
+"g": "cacharros",
+"i": 5
+},
+{
+"n": "Puesto de flores",
+"t": "puesto",
+"x": 26,
+"y": 45,
+"g": "flores",
+"i": 6
+},
+{
+"n": "Puesto de pan",
+"t": "puesto",
+"x": 28.8,
+"y": 45,
+"g": "pan",
+"i": 7
+},
+{
+"n": "Puesto de quesos",
+"t": "puesto",
+"x": 31.6,
+"y": 45,
+"g": "quesos",
+"i": 8
+},
+{
+"n": "Puesto de pescado",
+"t": "puesto",
+"x": 37,
+"y": 45,
+"g": "pescado",
+"i": 9
+},
+{
+"n": "Puesto de fruta",
+"t": "puesto",
+"x": 39.8,
+"y": 45,
+"g": "fruta",
+"i": 10
+}
+],
+"props": [
+[
+"barrel",
+9.4,
+64.6
+],
+[
+"barrel",
+10.1,
+64.9
+],
+[
+"crate",
+15.2,
+64.8
+],
+[
+"crate",
+16.4,
+65
+],
+[
+"sacks",
+18,
+64.8
+],
+[
+"logs",
+25.2,
+64.9
+],
+[
+"crate",
+38.4,
+64.8
+],
+[
+"barrel",
+41.2,
+64.7
+],
+[
+"sacks",
+44,
+64.8
+],
+[
+"crate",
+55,
+64.9
+],
+[
+"barrel",
+57.6,
+64.7
+],
+[
+"tuna",
+60.4,
+65
+],
+[
+"cart",
+61.8,
+56.6
+],
+[
+"crate",
+63.4,
+56.8
+],
+[
+"barrel",
+23.4,
+47.6
+],
+[
+"crate",
+23.2,
+42.2
+],
+[
+"sacks",
+45.4,
+42.4
+],
+[
+"barrel",
+45.5,
+47.8
+],
+[
+"cart",
+10.6,
+38.6
+],
+[
+"woodpile",
+9.8,
+47.6
+],
+[
+"barrel",
+3.6,
+38.8
+],
+[
+"crate",
+33.6,
+37.8
+],
+[
+"barrel",
+52.6,
+38.9
+],
+[
+"crate",
+76.4,
+31.2
+],
+[
+"barrel",
+83.4,
+37.8
+],
+[
+"logs",
+86.4,
+58.8
+],
+[
+"logs",
+83,
+60.2
+],
+[
+"crate",
+90.6,
+58.4
+],
+[
+"barrel",
+102.8,
+37.8
+],
+[
+"woodpile",
+94.6,
+49.6
+]
+],
+"faroles": [
+[
+25,
+10.6
+],
+[
+45,
+10.6
+],
+[
+25,
+15.2
+],
+[
+45,
+15.2
+],
+[
+50,
+11.6
+],
+[
+56,
+11.6
+],
+[
+62,
+11.6
+],
+[
+8,
+22.6
+],
+[
+20,
+22.6
+],
+[
+44,
+22.6
+],
+[
+56,
+22.6
+],
+[
+33.8,
+24.8
+],
+[
+36.2,
+24.8
+],
+[
+8,
+31.8
+],
+[
+18,
+31.8
+],
+[
+30,
+31.8
+],
+[
+41,
+31.8
+],
+[
+52,
+31.8
+],
+[
+62,
+31.8
+],
+[
+8,
+40.8
+],
+[
+18,
+40.8
+],
+[
+52,
+40.8
+],
+[
+62.6,
+40.8
+],
+[
+25.4,
+40.6
+],
+[
+44.6,
+40.6
+],
+[
+25.4,
+48.4
+],
+[
+44.6,
+48.4
+],
+[
+8,
+49.8
+],
+[
+30,
+49.8
+],
+[
+41,
+49.8
+],
+[
+52,
+49.8
+],
+[
+62,
+49.8
+],
+[
+8,
+58.8
+],
+[
+18,
+58.8
+],
+[
+30,
+58.8
+],
+[
+41,
+58.8
+],
+[
+52,
+58.8
+],
+[
+62,
+58.8
+]
+],
+"margenN": 1.4,
+"animales": {
+"gatos": [
+[
+24.6,
+39.2,
+"naranja"
+],
+[
+46.6,
+57.4,
+"negro"
+],
+[
+87,
+40.6,
+"gris"
+],
+[
+14.6,
+30.6,
+"gris"
+]
+],
+"gaviotas": [
+[
+34.4,
+69.6
+],
+[
+35.6,
+71.8
+],
+[
+22.6,
+70.4
+],
+[
+11.4,
+72
+],
+[
+52.6,
+70.4
+],
+[
+44,
+70.8
+]
+],
+"perro": [
+[
+64,
+58.6
+],
+[
+96,
+40.6
+]
+],
+"gallinas": [
+[
+100,
+31
+],
+[
+101,
+31.4
+],
+[
+102.2,
+31
+]
+],
+"palomas": [
+[
+31,
+43.6
+],
+[
+32,
+44
+],
+[
+38,
+43.8
+],
+[
+39.2,
+44.2
+],
+[
+33.6,
+12
+],
+[
+36.6,
+12.2
+],
+[
+27,
+11.6
+],
+[
+43,
+11.4
+]
+]
+}
+},
+"edificios": [
+{
+"id": "mansion",
+"n": "Mansión del marqués de Albamar",
+"entrable": true,
+"ext": {
+"x": 5.5,
+"y": 3,
+"w": 14,
+"d": 8,
+"techo": "pizarra-azul",
+"fachada": "estuco",
+"puerta": 7,
+"ventanas": [
+1.6,
+4,
+10,
+12.4
+],
+"color": "blanco",
+"pisos": 3,
+"ventanasAlto": [
+1.6,
+4,
+7,
+10,
+12.4
+],
+"balcon": [
+7
+],
+"emblema": "corona",
+"chimenea": 11.6,
+"puertaColor": "azul"
+},
+"int": {
+"w": 16,
+"h": 11,
+"cuartos": [
+[
+"Despacho del marqués",
+0,
+0,
+5,
+4.5,
+"madera"
+],
+[
+"Salón de baile",
+5,
+0,
+11,
+6.5,
+"piedra"
+],
+[
+"Comedor",
+0,
+4.5,
+5,
+6.5,
+"madera"
+],
+[
+"Vestíbulo",
+5,
+6.5,
+6,
+4.5,
+"piedra"
+],
+[
+"Cocina",
+11,
+6.5,
+5,
+4.5,
+"piedra"
+]
+],
+"paredes": [
+[
+5,
+0,
+5,
+6.5
+],
+[
+0,
+4.5,
+5,
+4.5
+],
+[
+5,
+6.5,
+16,
+6.5
+],
+[
+11,
+6.5,
+11,
+11
+],
+[
+5,
+6.5,
+5,
+11
+]
+],
+"puertas": [
+[
+7.5,
+6.5,
+"h",
+1.5,
+"al salón"
+],
+[
+5,
+8,
+"v",
+1,
+"al comedor"
+],
+[
+2,
+4.5,
+"h",
+1,
+"al despacho"
+],
+[
+11,
+8.5,
+"v",
+1,
+"a la cocina"
+],
+[
+7.5,
+11,
+"h",
+1.5,
+"jardín"
+]
+],
+"ventanas": [
+[
+1.2,
+0,
+"h",
+1.5,
+"N"
+],
+[
+7,
+0,
+"h",
+1.5,
+"N"
+],
+[
+12,
+0,
+"h",
+1.5,
+"N"
+],
+[
+1,
+11,
+"h",
+1.5,
+"S"
+],
+[
+13,
+11,
+"h",
+1.5,
+"S"
+]
+],
+"muebles": [
+[
+"Escritorio",
+1,
+1.4,
+2.6,
+1.2
+],
+[
+"Libros",
+0.3,
+0.2,
+1.6,
+0.8
+],
+[
+"Cofre",
+3.5,
+0.3,
+1.2,
+0.9
+],
+[
+"Estante",
+2.1,
+0.2,
+1.3,
+0.8
+],
+[
+"Alfombra",
+7,
+1.5,
+7,
+3.5
+],
+[
+"Planta",
+5.4,
+0.3,
+0.7,
+0.7
+],
+[
+"Planta",
+15,
+0.3,
+0.7,
+0.7
+],
+[
+"Banco",
+5.6,
+5.4,
+2.4,
+0.7
+],
+[
+"Banco",
+13,
+5.4,
+2.4,
+0.7
+],
+[
+"Mesa",
+1,
+6.4,
+3,
+2.2
+],
+[
+"Silla",
+0.4,
+7,
+0.8,
+0.8
+],
+[
+"Silla",
+3.9,
+7,
+0.8,
+0.8
+],
+[
+"Alacena",
+0.3,
+4.7,
+1.6,
+0.8
+],
+[
+"Botellero",
+2.3,
+4.7,
+1.4,
+0.8
+],
+[
+"Alfombra",
+6.5,
+7.5,
+3,
+2.5
+],
+[
+"Planta",
+5.3,
+6.8,
+0.7,
+0.7
+],
+[
+"Planta",
+10.1,
+6.8,
+0.7,
+0.7
+],
+[
+"Fogón",
+11.3,
+6.8,
+1.8,
+0.9
+],
+[
+"Despensa",
+13.6,
+6.8,
+1.6,
+0.8
+],
+[
+"Mesa",
+12,
+8.6,
+2.6,
+1.2
+],
+[
+"Sacos",
+14.6,
+9.6,
+1.1,
+1
+]
+],
+"notas": "La mansión del marqués Teodoro de Albamar. En el despacho, la invitación a la subasta y la escritura de la costa."
+}
+},
+{
+"id": "palacio",
+"n": "Palacio Real de Goa",
+"entrable": false,
+"ext": {
+"x": 23,
+"y": 2.6,
+"w": 24,
+"d": 7,
+"techo": "pizarra-azul",
+"fachada": "columnas",
+"puerta": 12,
+"ventanas": [
+3,
+6.5,
+17.5,
+21
+],
+"pisos": 3,
+"ventanasAlto": [
+3,
+6.5,
+9.5,
+12,
+14.5,
+17.5,
+21
+],
+"balcon": [
+12
+],
+"emblema": "corona",
+"bandera": true,
+"puertaColor": "azul"
+}
+},
+{
+"id": "archivo",
+"n": "Archivo Real",
+"entrable": true,
+"ext": {
+"x": 50,
+"y": 3,
+"w": 9.5,
+"d": 6,
+"techo": "pizarra-azul",
+"fachada": "columnas",
+"puerta": 4.8,
+"ventanas": [
+1.6,
+7.9
+],
+"pisos": 2,
+"ventanasAlto": [
+1.6,
+4.75,
+7.9
+],
+"emblema": "corona",
+"puertaColor": "azul"
+},
+"int": {
+"w": 9,
+"h": 6,
+"cuartos": [
+[
+"Archivo Real",
+0,
+0,
+9,
+6,
+"piedra"
+]
+],
+"paredes": [],
+"puertas": [
+[
+4.0,
+6,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+6,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Estante",
+0.3,
+0.2,
+1.6,
+0.8
+],
+[
+"Libros",
+2.1,
+0.2,
+1.6,
+0.8
+],
+[
+"Libros",
+4,
+0.2,
+1.6,
+0.8
+],
+[
+"Estante",
+5.9,
+0.2,
+1.6,
+0.8
+],
+[
+"Libros",
+7.4,
+0.2,
+1.4,
+0.8
+],
+[
+"Escritorio",
+1,
+2.4,
+2.6,
+1.2
+],
+[
+"Mesa",
+5,
+2.6,
+3,
+1.2
+],
+[
+"Cofre",
+7.6,
+4.4,
+1.2,
+0.9
+],
+[
+"Planta",
+0.3,
+4.9,
+0.7,
+0.7
+]
+]
+}
+},
+{
+"id": "guardia_real",
+"n": "Cuartel de la Guardia Real",
+"entrable": true,
+"ext": {
+"x": 23.5,
+"y": 15.6,
+"w": 9.5,
+"d": 4.4,
+"techo": "pizarra-azul",
+"fachada": "piedra",
+"puerta": 4.8,
+"ventanas": [
+1.6,
+7.9
+],
+"emblema": "corona",
+"flores": false,
+"puertaColor": "marron"
+},
+"int": {
+"w": 9,
+"h": 6,
+"cuartos": [
+[
+"Armero",
+0,
+0,
+9,
+2.6,
+"piedra"
+],
+[
+"Cuerpo de guardia",
+0,
+2.6,
+9,
+3.4,
+"piedra"
+]
+],
+"paredes": [
+[
+0,
+2.6,
+9,
+2.6
+]
+],
+"puertas": [
+[
+6.5,
+2.6,
+"h",
+1,
+"al fondo"
+],
+[
+4.0,
+6,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+5.5,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Barriles",
+0.3,
+0.2,
+1.2,
+1.8
+],
+[
+"Cajas",
+1.8,
+0.3,
+1.5,
+1.1
+],
+[
+"Cofre",
+6.6,
+0.3,
+1.3,
+0.9
+],
+[
+"Mesa",
+1.2,
+3.6,
+2.6,
+1.2
+],
+[
+"Banco",
+1.2,
+5.1,
+2.6,
+0.6
+],
+[
+"Escritorio",
+5.6,
+3.5,
+2.4,
+1.1
+],
+[
+"Estante",
+4,
+2.8,
+1.4,
+0.8
+]
+]
+}
+},
+{
+"id": "joyeria",
+"n": "Joyería Oropel",
+"entrable": true,
+"ext": {
+"x": 37,
+"y": 15.6,
+"w": 5,
+"d": 4.4,
+"techo": "pizarra",
+"fachada": "estuco",
+"puerta": 2.5,
+"ventanas": [
+1.1,
+3.9
+],
+"color": "blanco",
+"letrero": "monedas",
+"toldo": "azul",
+"puertaColor": "azul"
+},
+"int": {
+"w": 5,
+"h": 4.4,
+"cuartos": [
+[
+"Joyería Oropel",
+0,
+0,
+5,
+4.4,
+"madera"
+]
+],
+"paredes": [],
+"puertas": [
+[
+2.0,
+4.4,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+2,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Mostrador",
+1,
+1.6,
+3,
+1
+],
+[
+"Estante",
+0.3,
+0.2,
+1.4,
+0.8
+],
+[
+"Cofre",
+3.4,
+0.3,
+1.2,
+0.9
+],
+[
+"Planta",
+4.1,
+3.4,
+0.7,
+0.7
+]
+]
+}
+},
+{
+"id": "perfumeria",
+"n": "Perfumería Violeta",
+"entrable": true,
+"ext": {
+"x": 42.6,
+"y": 15.6,
+"w": 5,
+"d": 4.4,
+"techo": "tejas-roja",
+"fachada": "estuco",
+"puerta": 2.5,
+"ventanas": [
+1.1,
+3.9
+],
+"color": "rosa",
+"letrero": "frasco",
+"toldo": "rojo",
+"puertaColor": "verde"
+},
+"int": {
+"w": 5,
+"h": 4.4,
+"cuartos": [
+[
+"Perfumería Violeta",
+0,
+0,
+5,
+4.4,
+"madera"
+]
+],
+"paredes": [],
+"puertas": [
+[
+2.0,
+4.4,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+2,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Mostrador",
+1,
+1.6,
+3,
+1
+],
+[
+"Botellero",
+0.3,
+0.2,
+1.4,
+0.8
+],
+[
+"Remedios",
+3.2,
+0.2,
+1.5,
+0.8
+],
+[
+"Planta",
+0.3,
+3.4,
+0.7,
+0.7
+]
+]
+}
+},
+{
+"id": "noble1",
+"n": "Casa noble",
+"entrable": false,
+"ext": {
+"x": 50,
+"y": 15.6,
+"w": 6.5,
+"d": 4.4,
+"techo": "pizarra",
+"fachada": "estuco",
+"puerta": 3.2,
+"ventanas": [
+1.4,
+5.1
+],
+"color": "celeste",
+"pisos": 2,
+"ventanasAlto": [
+1.4,
+3.25,
+5.1
+],
+"balcon": [
+3.25
+]
+}
+},
+{
+"id": "noble2",
+"n": "Casa noble",
+"entrable": false,
+"ext": {
+"x": 57.5,
+"y": 15.6,
+"w": 6.5,
+"d": 4.4,
+"techo": "tejas-roja",
+"fachada": "estuco",
+"puerta": 3.2,
+"ventanas": [
+1.4,
+5.1
+],
+"color": "ocre",
+"pisos": 2,
+"ventanasAlto": [
+1.4,
+3.25,
+5.1
+],
+"balcon": [
+3.25
+]
+}
+},
+{
+"id": "posada_goa",
+"n": "Posada El Farol Azul",
+"entrable": true,
+"ext": {
+"x": 13.4,
+"y": 25.2,
+"w": 9,
+"d": 5,
+"techo": "pizarra",
+"fachada": "piedra",
+"puerta": 4.5,
+"ventanas": [
+1.8,
+7.2
+],
+"pisos": 2,
+"ventanasAlto": [
+1.8,
+4.5,
+7.2
+],
+"letrero": "concha",
+"toldo": "azul",
+"chimenea": 7.6,
+"puertaColor": "azul"
+},
+"int": {
+"w": 9,
+"h": 6,
+"cuartos": [
+[
+"Cuartos",
+0,
+0,
+9,
+2.8,
+"madera"
+],
+[
+"Posada",
+0,
+2.8,
+9,
+3.2,
+"madera"
+]
+],
+"paredes": [
+[
+0,
+2.8,
+9,
+2.8
+]
+],
+"puertas": [
+[
+6.5,
+2.8,
+"h",
+1,
+"al fondo"
+],
+[
+4.0,
+6,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+5.5,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Cama",
+0.4,
+0.2,
+1.4,
+2.2
+],
+[
+"Cama",
+2.4,
+0.2,
+1.4,
+2.2
+],
+[
+"Cama",
+5.2,
+0.2,
+1.4,
+2.2
+],
+[
+"Baúl",
+7.4,
+0.3,
+1.2,
+0.9
+],
+[
+"Barra",
+1,
+3.6,
+3.4,
+1
+],
+[
+"Botellero",
+0.3,
+2.9,
+1.6,
+0.8
+],
+[
+"Mesa",
+5.6,
+4,
+1.8,
+1.1
+],
+[
+"Taburetes",
+5.4,
+5.2,
+2.2,
+0.6
+]
+]
+}
+},
+{
+"id": "banos",
+"n": "Baños de Goa",
+"entrable": false,
+"ext": {
+"x": 4.6,
+"y": 25.4,
+"w": 6.4,
+"d": 4.8,
+"techo": "tejas-ocre",
+"fachada": "arcos",
+"puerta": 3.2,
+"ventanas": []
+}
+},
+{
+"id": "casa_a0",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 25.4,
+"y": 25.4,
+"w": 3.2,
+"d": 4.8,
+"techo": "tejas-roja",
+"fachada": "estuco",
+"puerta": 1.6,
+"ventanas": [
+0.8,
+2.4
+],
+"color": "blanco",
+"pisos": 2,
+"ventanasAlto": [
+0.8,
+2.4
+],
+"balcon": []
+}
+},
+{
+"id": "casa_a1",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 29,
+"y": 25.4,
+"w": 3.4,
+"d": 4.8,
+"techo": "tejas",
+"fachada": "estuco",
+"puerta": 1.7,
+"ventanas": [
+0.8,
+2.5
+],
+"color": "ocre",
+"pisos": 2,
+"ventanasAlto": [
+0.8,
+2.5
+],
+"balcon": [
+2.5
+]
+}
+},
+{
+"id": "casa_a2",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 37.8,
+"y": 25.4,
+"w": 3.6,
+"d": 4.8,
+"techo": "tejas-roja",
+"fachada": "estuco",
+"puerta": 1.8,
+"ventanas": [
+0.9,
+2.7
+],
+"color": "rosa",
+"pisos": 2,
+"ventanasAlto": [
+0.9,
+2.7
+],
+"balcon": []
+}
+},
+{
+"id": "casa_a3",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 41.8,
+"y": 25.4,
+"w": 3.4,
+"d": 4.8,
+"techo": "tejas-ocre",
+"fachada": "estuco",
+"puerta": 1.7,
+"ventanas": [
+0.8,
+2.5
+],
+"color": "verde",
+"pisos": 2,
+"ventanasAlto": [
+0.8,
+2.5
+],
+"balcon": [
+2.5
+]
+}
+},
+{
+"id": "casa_a4",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 53,
+"y": 25.4,
+"w": 3.8,
+"d": 4.8,
+"techo": "pizarra",
+"fachada": "estuco",
+"puerta": 1.9,
+"ventanas": [
+0.9,
+2.8
+],
+"color": "celeste",
+"pisos": 2,
+"ventanasAlto": [
+0.9,
+2.8
+],
+"balcon": []
+}
+},
+{
+"id": "casa_a5",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 58.2,
+"y": 25.4,
+"w": 6,
+"d": 4.8,
+"techo": "tejas",
+"fachada": "estuco",
+"puerta": 3.0,
+"ventanas": [
+1.5,
+4.5
+],
+"color": "blanco",
+"pisos": 2,
+"ventanasAlto": [
+1.5,
+4.5
+],
+"balcon": [
+4.5
+]
+}
+},
+{
+"id": "botica",
+"n": "Botica del Puerto",
+"entrable": true,
+"ext": {
+"x": 47.4,
+"y": 25.4,
+"w": 5,
+"d": 4.8,
+"techo": "pizarra-verde",
+"fachada": "ladrillo",
+"puerta": 2.5,
+"ventanas": [
+1.0,
+4.0
+],
+"letrero": "frasco",
+"puertaColor": "verde"
+},
+"int": {
+"w": 5,
+"h": 4.8,
+"cuartos": [
+[
+"Botica",
+0,
+0,
+5,
+4.8,
+"madera"
+]
+],
+"paredes": [],
+"puertas": [
+[
+2.0,
+4.8,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+2,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Mostrador",
+1,
+1.6,
+3,
+1
+],
+[
+"Remedios",
+0.3,
+0.2,
+1.5,
+0.8
+],
+[
+"Remedios",
+3.2,
+0.2,
+1.5,
+0.8
+],
+[
+"Camilla",
+0.3,
+3.2,
+1,
+1.4
+]
+]
+}
+},
+{
+"id": "herreria",
+"n": "Herrería Yunque",
+"entrable": true,
+"ext": {
+"x": 4,
+"y": 33.4,
+"w": 7,
+"d": 5.8,
+"techo": "pizarra",
+"fachada": "ladrillo",
+"puerta": 3.5,
+"ventanas": [
+1.4,
+5.6
+],
+"chimenea": 1.6,
+"letrero": "martillo",
+"puertaColor": "marron"
+},
+"int": {
+"w": 7,
+"h": 5.8,
+"cuartos": [
+[
+"Herrería",
+0,
+0,
+7,
+5.8,
+"piedra"
+]
+],
+"paredes": [],
+"puertas": [
+[
+3.0,
+5.8,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+4,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Fogón",
+0.3,
+0.2,
+2.2,
+1
+],
+[
+"Estufa",
+3,
+0.2,
+1.4,
+1
+],
+[
+"Banco de aparejos",
+4.8,
+0.3,
+1.9,
+0.9
+],
+[
+"Barril",
+0.4,
+3.6,
+0.9,
+0.9
+],
+[
+"Mesa",
+2.2,
+2.6,
+2.6,
+1.2
+],
+[
+"Cajas",
+5.2,
+4,
+1.4,
+1
+]
+]
+}
+},
+{
+"id": "armeria_goa",
+"n": "Armería Hierro y Pólvora",
+"entrable": true,
+"ext": {
+"x": 13.5,
+"y": 33,
+"w": 9,
+"d": 6.2,
+"techo": "pizarra",
+"fachada": "piedra",
+"puerta": 4.5,
+"ventanas": [
+1.6,
+7.4
+],
+"pisos": 2,
+"ventanasAlto": [
+1.6,
+4.5,
+7.4
+],
+"letrero": "espadas",
+"toldo": "rojo",
+"chimenea": 1.4,
+"flores": false,
+"puertaColor": "roja"
+},
+"int": {
+"w": 9,
+"h": 6.2,
+"cuartos": [
+[
+"Taller",
+0,
+0,
+9,
+2.4,
+"piedra"
+],
+[
+"Armería",
+0,
+2.4,
+9,
+3.8000000000000003,
+"madera"
+]
+],
+"paredes": [
+[
+0,
+2.4,
+9,
+2.4
+]
+],
+"puertas": [
+[
+6.5,
+2.4,
+"h",
+1,
+"al fondo"
+],
+[
+4.0,
+6.2,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+5.5,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Banco de aparejos",
+0.4,
+0.3,
+2,
+0.9
+],
+[
+"Fogón",
+3,
+0.2,
+2,
+0.9
+],
+[
+"Barriles",
+7.3,
+0.2,
+1.2,
+1.8
+],
+[
+"Cajas",
+5.4,
+0.4,
+1.5,
+1
+],
+[
+"Mostrador",
+2.6,
+4,
+3.8,
+1
+],
+[
+"Cofre",
+7.4,
+5.1,
+1.2,
+0.9
+]
+]
+}
+},
+{
+"id": "sastreria",
+"n": "Sastrería La Aguja de Oro",
+"entrable": true,
+"ext": {
+"x": 25.4,
+"y": 33,
+"w": 8.4,
+"d": 6.2,
+"techo": "tejas-ocre",
+"fachada": "estuco",
+"puerta": 4.2,
+"ventanas": [
+1.6,
+6.8
+],
+"color": "ocre",
+"pisos": 2,
+"ventanasAlto": [
+1.6,
+4.2,
+6.8
+],
+"balcon": [
+4.2
+],
+"letrero": "aguja",
+"toldo": "verde",
+"puertaColor": "verde"
+},
+"int": {
+"w": 8.4,
+"h": 6.2,
+"cuartos": [
+[
+"Taller de costura",
+0,
+0,
+8.4,
+2.4,
+"madera"
+],
+[
+"Sastrería",
+0,
+2.4,
+8.4,
+3.8000000000000003,
+"madera"
+]
+],
+"paredes": [
+[
+0,
+2.4,
+8.4,
+2.4
+]
+],
+"puertas": [
+[
+1,
+2.4,
+"h",
+1,
+"al fondo"
+],
+[
+3.7,
+6.2,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+4.9,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Mesa",
+0.5,
+0.5,
+2.6,
+1.1
+],
+[
+"Estante",
+3.6,
+0.2,
+1.6,
+0.8
+],
+[
+"Lonas",
+5.6,
+0.3,
+1.6,
+1
+],
+[
+"Biombo",
+7.4,
+0.3,
+0.8,
+1.6
+],
+[
+"Mostrador",
+1,
+3.6,
+3,
+1
+],
+[
+"Alfombra",
+4.5,
+3.4,
+3,
+2
+],
+[
+"Biombo",
+7.3,
+3.2,
+0.8,
+1.6
+],
+[
+"Planta",
+0.3,
+5.3,
+0.7,
+0.7
+]
+]
+}
+},
+{
+"id": "ballena",
+"n": "Taberna La Ballena Varada",
+"entrable": true,
+"ext": {
+"x": 36.4,
+"y": 32.6,
+"w": 9.2,
+"d": 6.6,
+"techo": "tejas",
+"fachada": "entramado",
+"puerta": 4.6,
+"ventanas": [
+1.8,
+7.4
+],
+"pisos": 2,
+"ventanasAlto": [
+1.8,
+4.6,
+7.4
+],
+"chimenea": 1.8,
+"letrero": "jarra",
+"puertaColor": "marron"
+},
+"int": {
+"w": 9.2,
+"h": 6.6,
+"cuartos": [
+[
+"Cocina",
+0,
+0,
+3.6,
+2.8,
+"piedra"
+],
+[
+"La Ballena Varada",
+0,
+2.8,
+9.2,
+3.8,
+"madera"
+],
+[
+"Bodega",
+3.6,
+0,
+5.6,
+2.8,
+"piedra"
+]
+],
+"paredes": [
+[
+0,
+2.8,
+9.2,
+2.8
+],
+[
+3.6,
+0,
+3.6,
+2.8
+]
+],
+"puertas": [
+[
+1.3,
+2.8,
+"h",
+1,
+"a la cocina"
+],
+[
+6,
+2.8,
+"h",
+1,
+"a la bodega"
+],
+[
+4.1,
+6.6,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1,
+6.6,
+"h",
+1.5,
+"S"
+],
+[
+7,
+6.6,
+"h",
+1.5,
+"S"
+]
+],
+"muebles": [
+[
+"Fogón y pila",
+0.3,
+0.2,
+2.2,
+0.9
+],
+[
+"Despensa",
+2.6,
+0.2,
+0.9,
+0.8
+],
+[
+"Barriles",
+4,
+0.2,
+1.2,
+2
+],
+[
+"Barriles",
+5.4,
+0.2,
+1.2,
+2
+],
+[
+"Sacos",
+7.4,
+0.3,
+1.4,
+1.2
+],
+[
+"Barra",
+0.4,
+3.4,
+3.2,
+1
+],
+[
+"Botellero",
+4.2,
+2.9,
+1.6,
+0.8
+],
+[
+"Mesa",
+5.2,
+4,
+1.6,
+1.1
+],
+[
+"Mesa",
+7.2,
+4,
+1.6,
+1.1
+],
+[
+"Taburetes",
+5,
+5.3,
+4,
+0.6
+]
+]
+}
+},
+{
+"id": "panaderia_goa",
+"n": "Panadería del Molino",
+"entrable": true,
+"ext": {
+"x": 47.4,
+"y": 34,
+"w": 5,
+"d": 5.2,
+"techo": "tejas-roja",
+"fachada": "estuco",
+"puerta": 2.5,
+"ventanas": [
+1.0,
+4.0
+],
+"color": "blanco",
+"chimenea": 3.8,
+"letrero": "pan",
+"toldo": "rojo",
+"puertaColor": "azul"
+},
+"int": {
+"w": 5,
+"h": 5.2,
+"cuartos": [
+[
+"Panadería",
+0,
+0,
+5,
+5.2,
+"madera"
+]
+],
+"paredes": [],
+"puertas": [
+[
+2.0,
+5.2,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+2,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Mostrador",
+1,
+1.6,
+3,
+1
+],
+[
+"Estufa",
+0.3,
+0.2,
+1.5,
+1
+],
+[
+"Sacos",
+3.4,
+0.3,
+1.3,
+1
+],
+[
+"Cajas",
+0.3,
+3.8,
+1.2,
+1
+]
+]
+}
+},
+{
+"id": "casa_b0",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 53,
+"y": 34.2,
+"w": 3.8,
+"d": 5,
+"techo": "tejas",
+"fachada": "ladrillo",
+"puerta": 1.9,
+"ventanas": [
+1,
+2.8
+]
+}
+},
+{
+"id": "empeno",
+"n": "Casa de empeño La Segunda Vida",
+"entrable": true,
+"ext": {
+"x": 58.2,
+"y": 33.6,
+"w": 6,
+"d": 5.6,
+"techo": "pizarra",
+"fachada": "ladrillo",
+"puerta": 3.0,
+"ventanas": [
+1.2,
+4.8
+],
+"letrero": "monedas",
+"puertaColor": "roja"
+},
+"int": {
+"w": 6,
+"h": 5.6,
+"cuartos": [
+[
+"Casa de empeño",
+0,
+0,
+6,
+5.6,
+"madera"
+]
+],
+"paredes": [],
+"puertas": [
+[
+2.5,
+5.6,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+3,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Mostrador",
+1.4,
+1.8,
+3.2,
+1
+],
+[
+"Estante",
+0.3,
+0.2,
+1.6,
+0.8
+],
+[
+"Baúl",
+2.3,
+0.3,
+1.2,
+0.9
+],
+[
+"Cajas",
+4.2,
+0.3,
+1.5,
+1
+],
+[
+"Juguetes",
+0.3,
+3.6,
+1.2,
+1
+],
+[
+"Barril",
+5,
+4.4,
+0.8,
+0.8
+]
+]
+}
+},
+{
+"id": "cartografa",
+"n": "Cartografía Mapp",
+"entrable": true,
+"ext": {
+"x": 4,
+"y": 43,
+"w": 7,
+"d": 5.2,
+"techo": "pizarra-azul",
+"fachada": "entramado",
+"puerta": 3.5,
+"ventanas": [
+1.4,
+5.6
+],
+"letrero": "mapa",
+"puertaColor": "azul"
+},
+"int": {
+"w": 7,
+"h": 5.2,
+"cuartos": [
+[
+"Cartografía",
+0,
+0,
+7,
+5.2,
+"madera"
+]
+],
+"paredes": [],
+"puertas": [
+[
+3.0,
+5.2,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+4,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Mesa",
+1.6,
+1.8,
+3.6,
+1.4
+],
+[
+"Mapa",
+0.3,
+0.2,
+2.4,
+0.9
+],
+[
+"Mapa",
+3.4,
+0.2,
+2.4,
+0.9
+],
+[
+"Libros",
+5.6,
+0.2,
+1.2,
+0.8
+],
+[
+"Silla",
+1,
+2.1,
+0.8,
+0.8
+],
+[
+"Planta",
+6.1,
+4.3,
+0.7,
+0.7
+]
+]
+}
+},
+{
+"id": "mercado",
+"n": "Mercado cubierto",
+"entrable": true,
+"ext": {
+"x": 13.4,
+"y": 41.6,
+"w": 9.4,
+"d": 6.6,
+"techo": "tejas-roja",
+"fachada": "arcos",
+"puerta": 4.7,
+"ventanas": []
+},
+"int": {
+"w": 9.4,
+"h": 6.6,
+"cuartos": [
+[
+"Mercado cubierto",
+0,
+0,
+9.4,
+6.6,
+"piedra"
+]
+],
+"paredes": [],
+"puertas": [
+[
+4.2,
+6.6,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [],
+"muebles": [
+[
+"Mostrador",
+0.6,
+1.8,
+2.6,
+1
+],
+[
+"Mostrador",
+3.4,
+1.8,
+2.6,
+1
+],
+[
+"Mostrador",
+6.2,
+1.8,
+2.6,
+1
+],
+[
+"Cajas",
+0.3,
+0.2,
+1.4,
+1
+],
+[
+"Sacos",
+2.2,
+0.2,
+1.4,
+1.1
+],
+[
+"Barriles",
+7.6,
+0.2,
+1.2,
+1.4
+],
+[
+"Cajas",
+0.4,
+4.9,
+1.4,
+1
+],
+[
+"Sacos",
+7.4,
+4.9,
+1.4,
+1.1
+]
+]
+}
+},
+{
+"id": "veleria",
+"n": "Velería Teo Lona",
+"entrable": true,
+"ext": {
+"x": 47.4,
+"y": 42.4,
+"w": 8.6,
+"d": 5.8,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 4.3,
+"ventanas": [
+1.7,
+6.9
+],
+"letrero": "vela",
+"toldo": "azul",
+"puertaColor": "marron"
+},
+"int": {
+"w": 8.6,
+"h": 5.8,
+"cuartos": [
+[
+"Velería",
+0,
+0,
+8.6,
+5.8,
+"madera"
+]
+],
+"paredes": [],
+"puertas": [
+[
+3.8,
+5.8,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+5.6,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Lonas",
+0.3,
+0.3,
+2,
+1.1
+],
+[
+"Sogas",
+2.6,
+0.3,
+1.4,
+1
+],
+[
+"Redes",
+4.4,
+0.2,
+1.8,
+0.9
+],
+[
+"Mesa",
+1.2,
+2.6,
+4,
+1.4
+],
+[
+"Canas",
+7.2,
+0.2,
+1.2,
+1
+],
+[
+"Mostrador",
+5.6,
+3.8,
+2.6,
+1
+]
+]
+}
+},
+{
+"id": "casa_b1",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 58.2,
+"y": 43.2,
+"w": 6,
+"d": 5,
+"techo": "pizarra",
+"fachada": "piedra",
+"puerta": 3.0,
+"ventanas": [
+1.2,
+4.8
+],
+"chimenea": 4.6
+}
+},
+{
+"id": "casa_c0",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 25.4,
+"y": 52.2,
+"w": 4,
+"d": 5,
+"techo": "tejas-roja",
+"fachada": "estuco",
+"puerta": 2.0,
+"ventanas": [
+1.0,
+3.0
+],
+"chimenea": null,
+"color": "celeste"
+}
+},
+{
+"id": "casa_c1",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 29.6,
+"y": 52.2,
+"w": 4.2,
+"d": 5,
+"techo": "tejas",
+"fachada": "entramado",
+"puerta": 2.1,
+"ventanas": [
+1.1,
+3.2
+],
+"chimenea": 2.9
+}
+},
+{
+"id": "casa_c2",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 36.4,
+"y": 52.2,
+"w": 4.4,
+"d": 5,
+"techo": "tejas-ocre",
+"fachada": "estuco",
+"puerta": 2.2,
+"ventanas": [
+1.1,
+3.3
+],
+"chimenea": null,
+"color": "blanco"
+}
+},
+{
+"id": "casa_c3",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 41.2,
+"y": 52.2,
+"w": 4,
+"d": 5,
+"techo": "pizarra",
+"fachada": "ladrillo",
+"puerta": 2.0,
+"ventanas": [
+1.0,
+3.0
+],
+"chimenea": 2.8
+}
+},
+{
+"id": "casa_c4",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 47.4,
+"y": 52.2,
+"w": 4,
+"d": 5,
+"techo": "tejas-roja",
+"fachada": "estuco",
+"puerta": 2.0,
+"ventanas": [
+1.0,
+3.0
+],
+"chimenea": null,
+"color": "verde"
+}
+},
+{
+"id": "casa_c5",
+"n": "Casa",
+"entrable": false,
+"ext": {
+"x": 51.8,
+"y": 52.2,
+"w": 4.4,
+"d": 5,
+"techo": "tejas",
+"fachada": "madera",
+"puerta": 2.2,
+"ventanas": [
+1.1,
+3.3
+],
+"chimenea": 3.1
+}
+},
+{
+"id": "lonja",
+"n": "Lonja del pescado",
+"entrable": true,
+"ext": {
+"x": 58.2,
+"y": 51.6,
+"w": 6.6,
+"d": 5.6,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 3.3,
+"ventanas": [],
+"letrero": "concha",
+"toldo": "azul"
+},
+"int": {
+"w": 6.6,
+"h": 5.6,
+"cuartos": [
+[
+"Lonja",
+0,
+0,
+6.6,
+5.6,
+"piedra"
+]
+],
+"paredes": [],
+"puertas": [
+[
+2.8,
+5.6,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [],
+"muebles": [
+[
+"Mostrador",
+0.6,
+1.8,
+2.6,
+1
+],
+[
+"Mostrador",
+3.6,
+1.8,
+2.6,
+1
+],
+[
+"Barriles",
+0.3,
+0.2,
+1.2,
+1.4
+],
+[
+"Cajas",
+5,
+0.3,
+1.4,
+1
+],
+[
+"Redes",
+2,
+0.2,
+2,
+0.9
+]
+]
+}
+},
+{
+"id": "almacen0",
+"n": "Almacén",
+"entrable": false,
+"ext": {
+"x": 3.4,
+"y": 59.6,
+"w": 6.4,
+"d": 3.8,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 3.2,
+"ventanas": []
+}
+},
+{
+"id": "almacen1",
+"n": "Almacén",
+"entrable": false,
+"ext": {
+"x": 13.4,
+"y": 59.6,
+"w": 7.6,
+"d": 3.8,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 3.8,
+"ventanas": []
+}
+},
+{
+"id": "almacen2",
+"n": "Almacén",
+"entrable": false,
+"ext": {
+"x": 25.4,
+"y": 59.6,
+"w": 7.4,
+"d": 3.8,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 3.7,
+"ventanas": []
+}
+},
+{
+"id": "almacen3",
+"n": "Almacén",
+"entrable": false,
+"ext": {
+"x": 37,
+"y": 59.6,
+"w": 4.8,
+"d": 3.8,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 2.4,
+"ventanas": []
+}
+},
+{
+"id": "almacen4",
+"n": "Almacén",
+"entrable": false,
+"ext": {
+"x": 45,
+"y": 59.6,
+"w": 6.6,
+"d": 3.8,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 3.3,
+"ventanas": []
+}
+},
+{
+"id": "almacen5",
+"n": "Almacén",
+"entrable": false,
+"ext": {
+"x": 56,
+"y": 59.6,
+"w": 7,
+"d": 3.8,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 3.5,
+"ventanas": []
+}
+},
+{
+"id": "cantina_lata",
+"n": "Cantina de Lata",
+"entrable": true,
+"ext": {
+"x": 95,
+"y": 43.6,
+"w": 7,
+"d": 5,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 3.5,
+"ventanas": [
+1.4,
+5.6
+],
+"letrero": "jarra",
+"pilotes": true
+},
+"int": {
+"w": 7,
+"h": 5,
+"cuartos": [
+[
+"Almacén",
+0,
+0,
+7,
+2,
+"madera"
+],
+[
+"Cantina de Lata",
+0,
+2,
+7,
+3,
+"madera"
+]
+],
+"paredes": [
+[
+0,
+2,
+7,
+2
+]
+],
+"puertas": [
+[
+5.5,
+2,
+"h",
+1,
+"al fondo"
+],
+[
+3.0,
+5,
+"h",
+1,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+3.5,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Barriles",
+0.3,
+0.2,
+1.2,
+1.5
+],
+[
+"Cajas",
+1.8,
+0.3,
+1.4,
+1
+],
+[
+"Sacos",
+5.2,
+0.3,
+1.4,
+1
+],
+[
+"Barra",
+0.4,
+2.6,
+3,
+1
+],
+[
+"Mesa",
+4.4,
+3.2,
+1.6,
+1
+],
+[
+"Taburetes",
+4.2,
+4.3,
+2.4,
+0.5
+]
+]
+}
+},
+{
+"id": "taller_sel",
+"n": "Astillero de Ama Sel",
+"entrable": true,
+"ext": {
+"x": 84,
+"y": 53.6,
+"w": 9,
+"d": 5.4,
+"techo": "tablas",
+"fachada": "madera",
+"puerta": 4.5,
+"ventanas": [
+1.6,
+7.4
+],
+"letrero": "barco",
+"chimenea": 7.4
+},
+"int": {
+"w": 9,
+"h": 5.4,
+"cuartos": [
+[
+"Taller de Ama Sel",
+0,
+0,
+9,
+5.4,
+"madera"
+]
+],
+"paredes": [],
+"puertas": [
+[
+4,
+5.4,
+"h",
+1.2,
+"calle"
+]
+],
+"ventanas": [
+[
+1.5,
+0,
+"h",
+1.5,
+"N"
+],
+[
+6,
+0,
+"h",
+1.5,
+"N"
+]
+],
+"muebles": [
+[
+"Mesa",
+1,
+1.6,
+3.6,
+1.6
+],
+[
+"Banco de aparejos",
+5.4,
+0.3,
+2,
+0.9
+],
+[
+"Lonas",
+7.5,
+0.3,
+1.3,
+1.2
+],
+[
+"Sogas",
+0.3,
+0.3,
+1.3,
+0.9
+],
+[
+"Mapa",
+2.2,
+0.2,
+2.4,
+0.9
+],
+[
+"Cajas",
+7.4,
+3.8,
+1.4,
+1.1
+],
+[
+"Barril",
+0.4,
+4.3,
+0.8,
+0.8
+],
+[
+"Estufa",
+5.6,
+2.6,
+1.3,
+0.9
+]
+]
+}
+},
+{
+"id": "chabola0",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 73.6,
+"y": 33.6,
+"w": 4,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.2,
+"ventanas": [
+3.0
+],
+"pilotes": true
+}
+},
+{
+"id": "chabola1",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 78.6,
+"y": 33.4,
+"w": 4.4,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.3,
+"ventanas": [
+3.3
+],
+"pilotes": false
+}
+},
+{
+"id": "chabola2",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 84.6,
+"y": 33.8,
+"w": 3.8,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.1,
+"ventanas": [
+2.8
+],
+"pilotes": false
+}
+},
+{
+"id": "chabola3",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 90,
+"y": 33.4,
+"w": 4.4,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.3,
+"ventanas": [
+3.3
+],
+"pilotes": true
+}
+},
+{
+"id": "chabola4",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 96.6,
+"y": 33.6,
+"w": 4,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.2,
+"ventanas": [
+3.0
+],
+"pilotes": false
+}
+},
+{
+"id": "chabola5",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 101.6,
+"y": 33.4,
+"w": 4.6,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.4,
+"ventanas": [
+3.4
+],
+"pilotes": false
+}
+},
+{
+"id": "chabola6",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 73.6,
+"y": 44.4,
+"w": 4.2,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.3,
+"ventanas": [
+3.2
+],
+"pilotes": true
+}
+},
+{
+"id": "chabola7",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 106,
+"y": 44.4,
+"w": 4,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.2,
+"ventanas": [
+3.0
+],
+"pilotes": false
+}
+},
+{
+"id": "chabola8",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 78,
+"y": 22.6,
+"w": 4.2,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.3,
+"ventanas": [
+3.2
+],
+"pilotes": false
+}
+},
+{
+"id": "chabola9",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 90.4,
+"y": 22.4,
+"w": 4.6,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.4,
+"ventanas": [
+3.4
+],
+"pilotes": true
+}
+},
+{
+"id": "chabola10",
+"n": "Chabola",
+"entrable": false,
+"ext": {
+"x": 100.4,
+"y": 22.8,
+"w": 4,
+"d": 3.6,
+"techo": "tablas",
+"fachada": "chapas",
+"puerta": 1.2,
+"ventanas": [
+3.0
+],
+"pilotes": false
+}
+}
+]
+}
